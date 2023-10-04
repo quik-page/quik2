@@ -1,0 +1,36 @@
+.contextMenu{
+  position: absolute;
+  z-index: 9999;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: #888 0 1px 5px;
+  display: none;
+  overflow: hidden;
+}
+.contextMenu.show{
+  display: block;
+}
+.contextMenu .item{
+  min-width: 80px;
+  width: calc(100% - 10px);
+  height: 24px;
+  margin: 5px;
+  border-radius: 4px;
+}
+.contextMenu .item>*{
+  float: left;
+  font-size: 14px;
+  line-height: 24px;
+}
+.contextMenu .item>.icon{
+  width: 24px;
+  height: 24px;
+  text-align: center;
+}
+.contextMenu .item>.icon .material-symbols-outlined{
+  font-size: 14px;
+  line-height: 24px;
+}
+.contextMenu .item:hover{
+  background-color: #eee;
+}

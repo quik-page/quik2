@@ -1,0 +1,77 @@
+.links{
+  max-width: 800px;
+  margin: 0 auto;
+  height: calc(100% - 232px);
+  width: 100%;
+  overflow: auto;
+}
+.links li{
+  float: left;
+  width: 75px;
+  height: 100px;
+  position: relative;
+}
+.links li a{
+  text-decoration: none;
+  color: #000;
+  display: block;
+}
+.links li a img{
+  width: 35px;
+  height: 35px;
+  padding:10px 10px;
+  margin: 5px 10px;
+  border-radius: 10px;
+}
+.links li a p{
+  font-size: 12px;
+  text-align: center;
+}
+.links li:hover a img{
+  background-color: #eee;
+}
+.links li .editlinkbtn{
+  position: absolute;
+  top:10px;
+  right:10px;
+  font-size: 14px;
+  user-select: none;
+  display: none;
+  cursor: pointer;
+}
+.links li:hover .editlinkbtn{
+  display:block;
+}
+.links li.link-add a{
+  width: 43px;
+  height: 43px;
+  margin: 16px;
+  border-radius: 50%;
+  background-color: #eee;
+  line-height: 43px;
+  text-align: center;
+  color:#555;
+}
+.links li.link-add a:hover{
+  background-color: #e1e1e1;
+}
+
+@media(max-width:650px){
+  .links li .editlinkbtn{
+    display: block;
+  }
+  .links li{
+    width: 55px;
+    height: 75px;
+  }
+  .links li a img{
+    width: 25px;
+    height: 25px;
+    padding: 5px;
+    margin: 5px 7.5px;
+  }
+  .links li.link-add a{
+    margin: 6px;
+  }
+}
+

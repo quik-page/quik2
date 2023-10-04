@@ -1,0 +1,17 @@
+.topper .item,
+.bottomer .item{
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  user-select: none;
+  margin: 0 5px;
+  border-radius: 30px;
+}
+.topper .item:hover,
+.bottomer .item:hover{
+  background-color: #eee;
+}
+.bottomer .item .material-symbols-outlined{
+  font-size: 20px;
+  line-height: 30px;
+}

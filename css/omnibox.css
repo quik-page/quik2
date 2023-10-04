@@ -1,0 +1,148 @@
+.searchbox{
+  position: absolute;
+  z-index: 4;
+  top:170px;
+  left:50%;
+  transform: translateX(-50%);
+  width: 600px;
+  box-shadow: #aaa 0 1px 5px;
+  border-radius: 20px;
+  background-color: #fff;
+  overflow: hidden;
+  height: 40px;
+}
+.searchpadding{
+  width: 100%;
+  height: 60px;
+}
+.searchbox.active{
+  overflow:visible;
+  height: auto;
+}
+.searchbox .box{
+  width: 100%;
+  height: 40px;
+  overflow: hidden;
+}
+.searchbox .icon{
+  width: 40px;
+  height: 40px;
+  float: left;
+}
+.searchbox .icon img{
+  width: 20px;
+  height: 20px;
+  margin: 10px;
+}
+.searchbox .input{
+  width: calc(100% - 80px);
+  height: 40px;
+  float: left;
+}
+.searchbox .input input{
+  height: 40px;
+  font-size: 14px;
+  width: 100%;
+  border:0;
+  outline:0;
+}
+.searchbox .submit{
+  width: 40px;
+  height:40px;
+  float: left;
+}
+.searchbox .icon span,
+.searchbox .submit span{
+  line-height: 40px;
+  text-align: center;
+  width: 40px;
+  display: block;
+  user-select: none;
+  font-size: 18px;
+}
+.searchbox ul li{
+  width: calc(100% - 6px);
+  margin: 3px;
+  border-radius: 3px;
+  height: 24px;
+  overflow: hidden;
+}
+.searchbox ul li .saicon{
+  float: left;
+  width: 30px;
+  height:24px;
+}
+.searchbox ul li .saicon span{
+  text-align: center;
+  line-height: 24px;
+  width:30px;
+  display:block;
+  font-size: 16px;
+}
+.searchbox ul li .sa_text{
+  float: left;
+  font-size: 14px;
+  line-height: 24px;
+}
+.searchbox ul li:hover,
+.searchbox ul li.active
+{
+  background-color: #eee;
+}
+
+.searchcover{
+  z-index:3;
+  background-color: #333;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.searchcover.active{
+  pointer-events: all;
+  opacity: .7;
+}
+.searchtypeselector{
+  margin: 0 auto;
+  height: 0px;
+  overflow: hidden;
+  border-radius: 15px;
+  transition: height .3s;
+  border:0;
+}
+.searchtypeselector.active{
+  height: 30px;
+  border: #ccc solid 1px;
+}
+
+.searchtypeselector ul{
+  width: 100%;
+}
+.searchtypeselector li{
+  float: left;
+  width: 30px;
+  height: 30px;
+  margin: 0 3px;
+  border-radius: 50%;
+}
+.searchtypeselector li:hover{
+  background-color: #eee;
+}
+.searchtypeselector li.active{
+  background-color: #ddd;
+}
+.searchtypeselector li img{
+  width: 20px;
+  height: 20px;
+  display:block;
+  margin: 5px;
+}
+@media (max-width:600px){
+  .searchbox{
+    width: calc(100% - 20px);
+    top:140px;
+    transition: top .3s;
+  }
+  .searchbox.active{
+    top: 15px;
+  }
+}
