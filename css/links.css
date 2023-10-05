@@ -28,7 +28,7 @@
   text-align: center;
 }
 .links li:hover a img{
-  background-color: #eee;
+  background-color: rgba(220,220,220,.5);
 }
 .links li .editlinkbtn{
   position: absolute;

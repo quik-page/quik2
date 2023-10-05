@@ -1,0 +1,17 @@
+.toast{
+  position: absolute;
+  bottom:100px;
+  left:50%;
+  transform: translateX(-50%);
+  padding: 5px;
+  font-size: 15px;
+  color: #333;
+  background-color: #eee;
+  z-index:999;
+  box-shadow: #aaa 0 1px 5px;
+  border-radius: 5px;
+  display: none;
+}
+.toast.show{
+  display: block;
+}

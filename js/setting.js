@@ -1,57 +1,57 @@
-(function(){
-  var setting_icon=new iconc.icon({
-    content:util.getGoogleIcon('e8b8'),
-    offset:"bl"
+(function () {
+  var setting_icon = new iconc.icon({
+    content: util.getGoogleIcon('e8b8'),
+    offset: "bl"
   });
 
-  var setting_dia=new dialog({
-    content:`<div class="actionbar">
+  var setting_dia = new dialog({
+    content: `<div class="actionbar">
       <h1>设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
     </div>
     <ul></ul>`,
-    class:"setting_dia",
-    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN
+    class: "setting_dia",
+    mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN
   });
 
-  var d=setting_dia.getDialogDom()
-  util.query(d,'.closeBtn').onclick=function(){
+  var d = setting_dia.getDialogDom()
+  util.query(d, '.closeBtn').onclick = function () {
     setting_dia.close();
   }
 
-  setting_icon.getIcon().onclick=function(){
+  setting_icon.getIcon().onclick = function () {
     setting_dia.open();
   }
 
-  var setting_ul=util.query(d,"ul");
-  var isinit=false;
-  setting_dia.onopen=function(){
-    if(!isinit){
+  var setting_ul = util.query(d, "ul");
+  var isinit = false;
+  setting_dia.onopen = function () {
+    if (!isinit) {
       init();
     }
   }
 
-  function init(){
-    var flofunit={};
-    for(var k in selist){
-      var unit=selist[k].unit;
-      if(!flofunit[unit]){
-        flofunit[unit]=[];
+  function init() {
+    var flofunit = {};
+    for (var k in selist) {
+      var unit = selist[k].unit;
+      if (!flofunit[unit]) {
+        flofunit[unit] = [];
       }
       flofunit[unit].push(selist[k]);
     }
-    for(var k in flofunit){
-      flofunit[k].sort((a,b)=>{
-        return a.index-b.index;
+    for (var k in flofunit) {
+      flofunit[k].sort((a, b) => {
+        return a.index - b.index;
       })
     }
-    var str='';
-    for(var k in flofunit){
-      var ustr=`<li class="unit"><div class="title">${k}</div><ul>
-        ${(function(ses){
-          var str='';
-          for(var i=0;i<ses.length;i++){
-            var s=ses[i];
-            str+=`<li class="setting_item" data-hash="${s.hash}">
+    var str = '';
+    for (var k in flofunit) {
+      var ustr = `<li class="unit"><div class="title">${k}</div><ul>
+        ${(function (ses) {
+          var str = '';
+          for (var i = 0; i < ses.length; i++) {
+            var s = ses[i];
+            str += `<li class="setting_item" data-hash="${s.hash}">
               <div class="left-message">
                 <div class="name">${s.title}</div>
                 <div class="message">${s.message}</div>
@@ -64,59 +64,68 @@
           return str;
         })(flofunit[k])}
       </ul></li>`;
-      str+=ustr;
+      str += ustr;
     }
-    setting_ul.innerHTML=str;
-    isinit=true;
-    util.query(setting_ul,'li.setting_item',true).forEach(function(li){
-      var hash=li.getAttribute('data-hash');
-      var s=selist[hash];
-      function gi(){
-        var type=s.type;
-        var value=s.get();
-        if(type=='boolean'){
-          li.querySelector('.input').checked=value;
-        }else if(type=='string'||type=='number'){
-          li.querySelector('.input').value=value;
-        }else if(type=='range'){
-          var init=s.init(); //{max:n,min:n}
-          li.querySelector('.input').value=value;
-          li.querySelector('.input').max=init.max;
-          li.querySelector('.input').min=init.min;
-        }else if(type=='select'){
-          var init=s.init();
-          li.querySelector('.input').innerHTML=(function(){
-            var str='';
-            for(var k in init){
-              str+=`<option value="${k}">${init[k]}</option>`;
-            }
-            return str;
-          })();
-          li.querySelector('.input').value=value;
+    setting_ul.innerHTML = str;
+    isinit = true;
+    util.query(setting_ul, 'li.setting_item', true).forEach(function (li) {
+      var hash = li.getAttribute('data-hash');
+      var s = selist[hash];
+      function gi() {
+        var type = s.type;
+        if (type) {
+          var value = s.get();
+          if (type == 'boolean') {
+            li.querySelector('.input').checked = value;
+          } else if (type == 'string' || type == 'number') {
+            li.querySelector('.input').value = value;
+          } else if (type == 'range') {
+            var init = s.init(); //{max:n,min:n}
+            li.querySelector('.input').value = value;
+            li.querySelector('.input').max = init.max;
+            li.querySelector('.input').min = init.min;
+          } else if (type == 'select') {
+            var init = s.init();
+            li.querySelector('.input').innerHTML = (function () {
+              var str = '';
+              for (var k in init) {
+                str += `<option value="${k}">${init[k]}</option>`;
+              }
+              return str;
+            })();
+            li.querySelector('.input').value = value;
+          }
+        } else {
+          li.onclick = function () {
+            s.callback();
+          }
         }
+
       }
       gi();
-      li.querySelector('.input').onchange=function(){
-        if(this.type=='checkbox'){
-          if(s.check?s.check(this.checked):true){
-            s.callback(this.checked);
-          }else{
-            this.checked=s.get();
+      if (li.querySelector('.input')) {
+        li.querySelector('.input').onchange = function () {
+          if (this.type == 'checkbox') {
+            if (s.check ? s.check(this.checked) : true) {
+              s.callback(this.checked);
+            } else {
+              this.checked = s.get();
+            }
+          } else {
+            if (s.check ? s.check(this.value) : true) {
+              s.callback(this.value);
+            } else {
+              this.value = s.get();
+            }
           }
-        }else{
-          if(s.check?s.check(this.value):true){
-            s.callback(this.value);
-          }else{
-            this.value=s.get();
-          }
+
         }
-        
       }
     })
   }
-  
-  function getWidght(type){
-    switch(type){
+
+  function getWidght(type) {
+    switch (type) {
       case 'boolean':
         return `<div class="right_con_item_checkbox">
             <input type="checkbox" class="input" />
@@ -138,11 +147,11 @@
             <input type="range" class="input" />
           </div>`;
       default:
-        return '';
+        return util.getGoogleIcon('e5cc');
     }
   }
 
-  var selist={
+  var selist = {
 
   };
   /**
@@ -159,37 +168,37 @@
    * @param {Function} options.callback 设置设置内容
    * @returns {String} hash
    */
-  var registerSetting=function(options){
-    var hash='se_'+util.getRandomHashCache();
-    options.hash=hash;
-    selist[hash]=options;
+  var registerSetting = function (options) {
+    var hash = 'se_' + util.getRandomHashCache();
+    options.hash = hash;
+    selist[hash] = options;
     return hash;
   }
 
-  var updateSettingByHash=function(hash,options){
-    if(!selist[hash]){
+  var updateSettingByHash = function (hash, options) {
+    if (!selist[hash]) {
       console.warn('SETTING: 没有找到该hash对应的设置');
       return;
     }
-    for(var k in options){
-      selist[hash][k]=options[k];
+    for (var k in options) {
+      selist[hash][k] = options[k];
     }
   }
 
-  var recallSettingByHash=function(hash,fn){
-    if(!selist[hash]){
+  var recallSettingByHash = function (hash, fn) {
+    if (!selist[hash]) {
       console.warn('SETTING: 没有找到该hash对应的设置');
       return;
     }
-    if(typeof selist[hash][fn]!='function'){
+    if (typeof selist[hash][fn] != 'function') {
       console.warn('没有该方法');
     }
     selist[hash][fn]();
   }
 
   return {
-    registerSetting:registerSetting,
-    updateSettingByHash:updateSettingByHash,
-    recallSettingByHash:recallSettingByHash
+    registerSetting: registerSetting,
+    updateSettingByHash: updateSettingByHash,
+    recallSettingByHash: recallSettingByHash
   };
 })();

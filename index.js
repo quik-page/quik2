@@ -1,5 +1,6 @@
 (function(){
   var util=_REQUIRE_('./js/util.js');
+  var toast=_REQUIRE_('./js/toast.js');
   var storage=_REQUIRE_('./js/storage.js');
   var dialog=_REQUIRE_('./js/dialog.js');
   var menu=_REQUIRE_('./js/menu.js');
@@ -10,6 +11,7 @@
   var link=_REQUIRE_('./js/link.js');
   var linkUI=_REQUIRE_('./js/link_ui.js');
   var says=_REQUIRE_('./js/says.js');
+  var background=_REQUIRE_('./js/background.js');
 
   window.quik={
     storage:storage,
@@ -22,7 +24,8 @@
     says:says,
     menu:menu,
     setting:setting,
-    iconc:iconc
+    iconc:iconc,
+    background:background
   }
   document.querySelector("main").style.opacity='';
 })();

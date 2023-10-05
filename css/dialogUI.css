@@ -39,6 +39,11 @@
   color: #333;
   border-radius: 2px;
 }
+.dialog .d-c img,
+.dialog .d-c video
+{
+  max-width: 100%;
+}
 .dialog .d-c .btn:hover{
   background-color: #ddd;
 }
@@ -64,4 +69,33 @@
 }
 .dialog .d-c .btn.delete:active{
   background-color: #f30;
+}
+.dialog .d-c .actionbar{
+  width: 100%;
+  height: 40px;
+  border-bottom: #eee solid 1px;
+  position: relative;
+}
+.dialog .d-c .actionbar h1{
+  text-align: center;
+  line-height: 40px;
+  padding: 0;
+  font-size: 18px;
+}
+.dialog .d-c .actionbar .closeBtn{
+  position: absolute;
+  top:0;
+  right:0;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+.dialog .d-c .actionbar .closeBtn span{
+  font-size: 20px;
+  line-height: 40px;
+}
+.dialog .d-c .actionbar .closeBtn:hover{
+  background-color: #eee;
 }

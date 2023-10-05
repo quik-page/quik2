@@ -10,35 +10,7 @@
     height: 100%;
   }
 }
-.d-c.setting_dia .actionbar{
-  width: 100%;
-  height: 40px;
-  border-bottom: #eee solid 1px;
-  position: relative;
-}
-.d-c.setting_dia .actionbar h1{
-  text-align: center;
-  line-height: 40px;
-  padding: 0;
-  font-size: 18px;
-}
-.d-c.setting_dia .actionbar .closeBtn{
-  position: absolute;
-  top:0;
-  right:0;
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  cursor: pointer;
-  user-select: none;
-}
-.d-c.setting_dia .actionbar .closeBtn span{
-  font-size: 20px;
-  line-height: 40px;
-}
-.d-c.setting_dia .actionbar .closeBtn:hover{
-  background-color: #eee;
-}
+
 .d-c.setting_dia>ul{
   width: calc(100% - 40px);
   height: calc(100% - 60px);

@@ -77,6 +77,7 @@
         // 从文档中移除input元素
         document.body.removeChild(input);
       }
+      toast.show('复制成功');
     },
     getGoogleIcon:function(unicode){
       return '<span class="material-symbols-outlined">&#x'+unicode+';</span>'
