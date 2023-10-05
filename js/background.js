@@ -299,7 +299,7 @@
     }
 
     var str='';
-    for(var i=0;i<colorlist.length;i++){
+    for(var i=0;i<videolist.length;i++){
       str+=`<div class="item" data-l="video-${videolist[i]}"><div class="removebtn">${util.getGoogleIcon('E5CD')}</div>${videolist[i]}</div>`;
     }
     str+=`<div class="addbtn bg_video">${util.getGoogleIcon('e145')}</div>`;

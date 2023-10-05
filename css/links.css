@@ -59,6 +59,8 @@
 @media(max-width:650px){
   .links li .editlinkbtn{
     display: block;
+    font-size: 12px;
+    transform: scale(.6);
   }
   .links li{
     width: 55px;
@@ -68,7 +70,7 @@
     width: 25px;
     height: 25px;
     padding: 5px;
-    margin: 5px 7.5px;
+    margin: 5px 10px;
   }
   .links li.link-add a{
     margin: 6px;
