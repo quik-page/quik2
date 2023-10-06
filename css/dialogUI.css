@@ -99,3 +99,8 @@
 .dialog .d-c .actionbar .closeBtn:hover{
   background-color: #eee;
 }
+.dialog form a{
+  color: #09f;
+  text-decoration: none;
+  display: block;
+}

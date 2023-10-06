@@ -104,7 +104,7 @@
   <div class="scroll_con">
   <div class="bgfl">
     <div class="c">
-      <div class="item" data-l='def-0'>默认（无背景，跟随主题变化）</div>
+      <div class="item" data-l='def-0'>默认（无背景，简约风）</div>
     </div>
   </div>
   <div class="bgfl">
@@ -158,14 +158,24 @@
   util.query(d,'.closeBtn').onclick=function(){
     bg_set_d.close();
   }
-
+  util.query(d,'.cssbgsubmit').onclick=function(){
+    var css=util.query(d,'.cssbginput').value;
+    initsto.set('bg','ts-'+css);
+    chulibg('ts-'+css);
+    util.query(d,'.statu').innerHTML=util.getGoogleIcon('e5ca');
+    var oldselect=util.query(d,'.item.selected');
+      if(oldselect){
+        oldselect.classList.remove('selected');
+      }
+  }
   var adddialogs={
     img:new dialog({
       class:"bg_add_img",
       content:`<h1>添加图片背景</h1>
       <form>
       <div class="content">
-        <input type="url" required/>
+        <input type="url" required placeholder="输入图片URL，你也可以点击下方链接上传图片获取图片链接"/>
+        <a href="https://imgse.com/upload/" target="_blank">上传本地图片</a>
       </div>
       <img class="preview"/>
       <div class="footer">
@@ -318,6 +328,7 @@
       this.classList.add('selected');
       initsto.set('bg',this.getAttribute('data-l'));
       toast.show('设置背景成功');
+      util.query(d,'.statu').innerHTML='';
     }
     try{
       e.querySelector('.removebtn').onclick=function(e2){
@@ -345,6 +356,11 @@
     var toselect=util.query(d,'[data-l="'+initsto.get('bg')+'"]');
     if(toselect){
       toselect.classList.add('selected');
+    }
+
+    if(initsto.get('bg').indexOf('ts-')==0){
+      util.query(d,'.i .statu').innerHTML=util.getGoogleIcon('e5ca');
+      util.query(d,'.i input').value=initsto.get('bg').slice(3);
     }
   }
   initbgdia();

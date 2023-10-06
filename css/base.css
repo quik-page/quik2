@@ -18,9 +18,9 @@ main{
 main .topper,
 main .bottomer
 {
-  width: calc(100% - 40px);
+  width: calc(100% - 20px);
   height: 40px;
-  padding: 0 20px;
+  padding: 0 10px;
 }
 main .topper .left,
 main .bottomer .left,

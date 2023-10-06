@@ -99,6 +99,17 @@
   color: #888;
   line-height: 30px;
 }
+.d-c.bg_d .bgfl .i{
+  overflow: hidden;
+}
+.d-c.bg_d .bgfl .i>*{
+  float: left;
+  margin: 5px;
+  padding: 5px;
+}
+.d-c.bg_d .bgfl .i .statu{
+  color: #00f;
+}
 @media (max-width:600px){
   .dialog.mobile-show-full .d-c.bg_d{
     width: 100%;
