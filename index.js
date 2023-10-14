@@ -29,5 +29,5 @@
     background:background,
     mainmenu:mainmenu,
   }
-  document.querySelector("main").style.opacity='';
+  document.querySelector("main").style.display='';
 })();

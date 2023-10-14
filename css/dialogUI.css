@@ -5,7 +5,7 @@
 }
 .dialog .d-c .content{
   padding: 10px;
-  color: #333;
+  color: inherit;
 }
 .dialog .d-c .content p{
   line-height: 30px;
@@ -16,6 +16,8 @@
   border:0;
   outline: 0;
   border-bottom: #e6e6e6 solid 1px;
+  background-color: transparent;
+  color: inherit;
 }
 @media(max-width:650px) {
   .dialog .d-c .content input{
@@ -76,6 +78,9 @@
   border-bottom: #eee solid 1px;
   position: relative;
 }
+body.dark .dialog .d-c .actionbar{
+  border-color: #666;
+}
 .dialog .d-c .actionbar h1{
   text-align: center;
   line-height: 40px;
@@ -98,6 +103,9 @@
 }
 .dialog .d-c .actionbar .closeBtn:hover{
   background-color: #eee;
+}
+body.dark .dialog .d-c .actionbar .closeBtn:hover{
+  background-color: #666;
 }
 .dialog form a{
   color: #09f;

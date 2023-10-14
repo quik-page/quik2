@@ -1,7 +1,7 @@
 .links{
   max-width: 800px;
   margin: 0 auto;
-  height: calc(100% - 232px);
+  height: calc(100% - 202px);
   width: 100%;
   overflow: auto;
 }
@@ -13,7 +13,7 @@
 }
 .links li a{
   text-decoration: none;
-  color: #000;
+  color: inherit;
   display: block;
 }
 .links li a img{
@@ -74,6 +74,11 @@
   }
   .links li.link-add a{
     margin: 6px;
+  }
+}
+@media (max-height:400px){
+  .links{
+    height: calc(100% - 172px);
   }
 }
 

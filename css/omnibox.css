@@ -11,6 +11,9 @@
   overflow: hidden;
   height: 40px;
 }
+body.dark .searchbox{
+  background-color: #222;
+}
 .searchpadding{
   width: 100%;
   height: 60px;
@@ -45,6 +48,8 @@
   width: 100%;
   border:0;
   outline:0;
+  background-color: transparent;
+  color: inherit;
 }
 .searchbox .submit{
   width: 40px;
@@ -89,7 +94,10 @@
 {
   background-color: #eee;
 }
-
+body.dark .searchbox ul li:hover,
+body.dark .searchbox ul li.active{
+  background-color: #666;
+}
 .searchcover{
   z-index:3;
   background-color: #333;
@@ -144,5 +152,10 @@
   }
   .searchbox.active{
     top: 15px;
+  }
+}
+@media (max-height:400px){
+  .searchbox{
+    top:110px;
   }
 }

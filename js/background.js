@@ -19,29 +19,140 @@
   bgf.appendChild(bgi);
 
   var initsto=storage('background');
-  if(!initsto.get('bg')){
-    initsto.set('bg','def-0')
-  }
+  // if(!initsto.get('bg')){
+  //   initsto.set('bg','def-0')
+  // }
 
-  if(!initsto.get('imglist')){
-    initsto.set('imglist',[])
-  }
+  // if(!initsto.get('imglist')){
+  //   initsto.set('imglist',[])
+  // }
 
-  if(!initsto.get('videolist')){
-    initsto.set('videolist',[])
-  }
+  // if(!initsto.get('videolist')){
+  //   initsto.set('videolist',[])
+  // }
 
-  if(!initsto.get('colorlist')){
-    initsto.set('colorlist',[])
-  }
+  // if(!initsto.get('colorlist')){
+  //   initsto.set('colorlist',[])
+  // }
 
   var bg=initsto.get('bg');
-  var imglist=initsto.get('imglist');
-  var videolist=initsto.get('videolist');
-  var colorlist=initsto.get('colorlist');
+  // var imglist=initsto.get('imglist');
+  // var videolist=initsto.get('videolist');
+  // var colorlist=initsto.get('colorlist');
   var intervals=[];
 
-  chulibg(bg);
+  var INIT_SHOWTYPE={
+    full:0,
+    half:1,
+    def:2,
+  }
+  var initalBgs=[{
+    tab:"图片/视频",
+    content:{
+      "自定义":[
+        {
+          showtype:INIT_SHOWTYPE.full,
+          img:function(){
+            return new Promise((r,j)=>{
+
+            })
+          },
+          select:'user-upload',
+          title:"上传你喜欢的图片或视频作为背景",
+          text:"点击左边图片设置背景，点击<a class=\"updateImgOrVideo\" href=\"javascript:;\">此处</a>上传图片或视频，你可以通过输入图片或视频URL的方式设置，也可以从你的设备本地上传"
+        }
+      ],
+      "内置":[
+        {
+          showtype:INIT_SHOWTYPE.def,
+          img:"https://image.gumengya.com/thumbnails/06470348c93db185e44f8acd87c5b683.png",
+          select:"img-https://image.gumengya.cn/i/2023/10/13/65294cf55ef7d.png",
+        },
+        {
+          showtype:INIT_SHOWTYPE.def,
+          img:"https://image.gumengya.com/thumbnails/5e6200d4552394e722967ef96addd06a.png",
+          select:"img-https://image.gumengya.cn/i/2023/10/13/65294c34841b4.jpg",
+        },
+        {
+          showtype:INIT_SHOWTYPE.def,
+          img:"https://image.gumengya.com/thumbnails/7ee6991ee0f43be59c28d183597e0cca.png",
+          select:"img-https://image.gumengya.cn/i/2023/10/13/65294c30563b7.jpg",
+        },
+        {
+          showtype:INIT_SHOWTYPE.def,
+          img:"https://image.gumengya.com/thumbnails/ff674343879116e22e3cf713358f2cb5.png",
+          select:"img-https://image.gumengya.com/thumbnails/ff674343879116e22e3cf713358f2cb5.png",
+        },
+        {
+          showtype:INIT_SHOWTYPE.def,
+          img:"https://image.gumengya.com/thumbnails/c9c187157ca050044a6589f230e8ddbf.png",
+          select:"img-https://image.gumengya.cn/i/2023/10/13/65294c2d8aae1.png",
+        }
+      ],
+      "API":[
+        {
+          showtype:INIT_SHOWTYPE.half,
+          img:function(){
+            return "https://bing.shangzhenyang.com/api/1080p";
+          },
+          select:"api-bing",
+          title:"必应壁纸",
+          text:"获取必应首页的壁纸作为背景"
+        },
+        {
+          showtype:INIT_SHOWTYPE.half,
+          img:function(){
+            return erciyuanbg.getImg(1).url;
+          },
+          select:"api-2cy",
+          title:"随机二次元壁纸",
+          text:"获取随机二次元壁纸作为背景，背景提供：loliapi.com"
+        },
+        {
+          showtype:INIT_SHOWTYPE.half,
+          img:function(){
+            return fenjibg.getImg(1).url;
+          },
+          select:"api-fj",
+          title:"随机风景壁纸",
+          text:"获取随机风景壁纸作为背景，背景提供：imgapi.cn"
+        },
+      ]
+    }
+  },{
+    tab:"纯色",
+    content:{
+      "自定义":[
+        {
+          showtype:INIT_SHOWTYPE.full,
+          color:function(){
+            return new Promise((r,j)=>{
+              
+            })
+          },
+          select:"color-custom",
+          title:"将你喜欢的颜色作为背景",
+          text:"点击左边的方块设置背景，点击<a class=\"updateColor\" href=\"javascript:;\">此处</a>编辑颜色",
+        }
+      ],
+      "内置":[
+        {
+          showtype:INIT_SHOWTYPE.def,
+          color:"#fff-#333",
+          select:"color-#fff-#333"
+        },{
+          showtype:INIT_SHOWTYPE.def,
+          color:"#f1f1fe-#3e3e31",
+          select:"color-#f1f1fe-#3e3e31"
+        }
+      ]
+    }
+  },{
+    tab:"高级自定义",
+    content:`zidiyi`
+  }]
+
+  // chulibg(bg);
 
 
   function chulibg(bgv){
@@ -101,276 +212,168 @@
     content:`<div class="actionbar">
     <h1>背景设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
   </div>
-  <div class="scroll_con">
-  <div class="bgfl">
-    <div class="c">
-      <div class="item" data-l='def-0'>默认（无背景，简约风）</div>
-    </div>
-  </div>
-  <div class="bgfl">
-    <div class="bgfl_title">图片背景</div>
-    <div class="c img">
-    </div>
-  </div>
-  <div class="bgfl">
-    <div class="bgfl_title">纯色背景</div>
-    <div class="c color">/div>
-  </div>
-  <div class="bgfl">
-    <div class="bgfl_title">视频背景</div>
-    <div class="c video"></div>
-  </div>
-  <div class="bgfl">
-    <div class="bgfl_title">API背景</div>
-    <div class="c">
-      <div class="item" data-l='api-0'>
-        <div class="api-title">二次元壁纸</div>
-        <div class="api-desc">随机二次元壁纸背景</div>
-      </div>
-      <div class="item" data-l='api-1'>
-        <div class="api-title">风景壁纸</div>
-        <div class="api-desc">随机风景壁纸背景</div>
-      </div>
-      <div class="item" data-l='api-2'>
-        <div class="api-title">Bing每日壁纸</div>
-        <div class="api-desc">把Bing首页的每日壁纸设为背景</div>
-      </div>
-      <div class="item" data-l='api-3'>
-        <div class="api-title">时间的颜色</div>
-        <div class="api-desc">根据时间和主题变化的纯色背景</div>
-      </div>
-    </div>
-  </div>
-  <div class="bgfl">
-    <div class="bgfl_title">高级自定义背景</div>
-    <div class="i">
-      <input type="text" class="cssbginput"/><button class="cssbgsubmit">设置</button><div class="statu"></div>
-    </div>
-    <div class="fl_tip">参见 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/background" target="_blank">CSS | Background 属性</a></div>
-  </div>
-  </div>
+  <div class="tab_con"></div>
+  <div class="scroll_con"></div>
   `,
     class:"bg_d",
     mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN
   });
 
+
   var d=bg_set_d.getDialogDom();
   util.query(d,'.closeBtn').onclick=function(){
     bg_set_d.close();
   }
-  util.query(d,'.cssbgsubmit').onclick=function(){
-    var css=util.query(d,'.cssbginput').value;
-    initsto.set('bg','ts-'+css);
-    chulibg('ts-'+css);
-    util.query(d,'.statu').innerHTML=util.getGoogleIcon('e5ca');
-    var oldselect=util.query(d,'.item.selected');
-      if(oldselect){
-        oldselect.classList.remove('selected');
-      }
-  }
-  var adddialogs={
-    img:new dialog({
-      class:"bg_add_img",
-      content:`<h1>添加图片背景</h1>
-      <form>
-      <div class="content">
-        <input type="url" required placeholder="输入图片URL，你也可以点击下方链接上传图片获取图片链接"/>
-        <a href="https://imgse.com/upload/" target="_blank">上传本地图片</a>
-      </div>
-      <img class="preview"/>
-      <div class="footer">
-        <button class="cancel btn">取消</button>
-        <button class="preview btn">预览</button>
-        <button class="ok btn">确定</button>
-      </div>
-      </form>`
-    }),
-    color:new dialog({
-      class:"bg_add_color",
-      content: `<h1>添加纯色背景</h1>
-      <form>
-      <div class="content">
-        <input type="color" required/>
-      </div>
-      <div class="footer">
-        <button class="cancel btn">取消</button>
-        <button class="ok btn">确定</button>
-      </div>
-      </form>`
-    }),
-    video:new dialog({
-      class:"bg_add_video",
-      content:`<h1>添加视频背景</h1>
-      <form>
-        <div class="content">
-          <input type="url" required/>
-        </div>
-        <video class="preview" controls style="display:none;"></video>
-        <div class="footer">
-          <button class="cancel btn">取消</button>
-          <button class="preview btn">预览</button>
-          <button class="ok btn">确定</button>
-        </div>
-      </form>`
-    }),
-  };
-
-  function initadddialogEvent(){
-    var imgd=adddialogs.img.getDialogDom();
-    util.query(imgd,'form').onsubmit=function(e){
-      e.preventDefault();
-      var imgurl=util.query(imgd,'input').value;
-      var imgl=initsto.get('imglist');
-      imgl.push(imgurl);
-      initsto.set('imglist',imgl);
-      imglist=imgl;
-      initsto.set('bg','img-'+imgurl);
-      chulibg('img-'+imgurl)
-      initbgdia();
-      adddialogs.img.close();
-      toast.show('设置背景成功');
+  var tab_con=util.query(d,'div.tab_con');
+  var scroll_con=util.query(d,'div.scroll_con');
+  initalBgs.forEach(function(item,i){
+    var tab=item.tab;
+    var tabitem=util.element('div',{
+      class:'tabitem',
+      'data-tab':i
+    });
+    tab_con.appendChild(tabitem);
+    tabitem.innerHTML=tab;
+    tabitem.onclick=function(){
+      activeTab(this.getAttribute('data-tab'));
     }
-    util.query(imgd,'.cancel.btn').onclick=function(e){
-      e.preventDefault();
-      adddialogs.img.close();
+    var scrollitem=util.element('div',{
+      class:'scrollitem',
+      'data-tab':i
+    });
+    scroll_con.appendChild(scrollitem);
+    if(typeof item.content=='string'){
+      scrollitem.innerHTML=item.content;
+      return;
     }
-    util.query(imgd,'.preview.btn').onclick=function(e){
-      e.preventDefault();
-      util.query(imgd,'.preview').src=util.query(imgd,'input').value;
-    }
-
-    var colord=adddialogs.color.getDialogDom();
-    util.query(colord,'form').onsubmit=function(e){
-      e.preventDefault();
-      var color=util.query(colord,'input').value;
-      var colorl=initsto.get('colorlist');
-      colorl.push(color);
-      initsto.set('colorlist',colorl);
-      colorlist=colorl;
-      initsto.set('bg','color-'+color);
-      chulibg('color-'+color)
-      initbgdia();
-      adddialogs.color.close();
-      toast.show('设置背景成功');
-    }
-    util.query(colord,'.cancel.btn').onclick=function(e){
-      e.preventDefault();
-      adddialogs.color.close();
-    }
-
-    var videod=adddialogs.video.getDialogDom();
-    util.query(videod,'form').onsubmit=function(e){
-      e.preventDefault();
-      var videourl=util.query(videod,'input').value;
-      var videol=initsto.get('videolist');
-      videol.push(videourl);
-      initsto.set('videolist',videol);
-      videolist=videol;
-      initsto.set('bg','video-'+videourl);
-      chulibg('video-'+videourl)
-      initbgdia();
-      adddialogs.video.close();
-      util.query(videod,'.preview').style.display='none';
-      util.query(videod,'.preview').src='';
-      toast.show('设置背景成功');
-    }
-    util.query(videod,'.cancel.btn').onclick=function(e){
-      e.preventDefault();
-      adddialogs.video.close();
-      util.query(videod,'.preview').style.display='none';
-      util.query(videod,'.preview').src='';
-    }
-    util.query(videod,'.preview.btn').onclick=function(e){
-      e.preventDefault();
-      util.query(videod,'.preview').style.display='block';
-      util.query(videod,'.preview').src=util.query(videod,'input').value;
-    }
-  }
-  initadddialogEvent();
-  function initbgdia(){
-    var str='';
-    for(var i=0;i<imglist.length;i++){
-      str+=`<div class="item" style="background-image:url(${imglist[i]});" data-l="img-${imglist[i]}"><div class="removebtn">${util.getGoogleIcon('E5CD')}</div></div>`;
-    }
-    str+=`<div class="addbtn bg_image">${util.getGoogleIcon('e145')}</div>`;
-    util.query(d,'.bgfl .c.img').innerHTML=str;
-    util.query(d,'.addbtn.bg_image').onclick=function(){
-      adddialogs.img.open();
-    }
-
-    var str='';
-    for(var i=0;i<colorlist.length;i++){
-      str+=`<div class="item" style="background-color:${colorlist[i]};" data-l="color-${colorlist[i]}"><div class="removebtn">${util.getGoogleIcon('E5CD')}</div></div>`;
-    }
-    str+=`<div class="addbtn bg_color">${util.getGoogleIcon('e145')}</div>`;
-    util.query(d,'.bgfl .c.color').innerHTML=str;
-    util.query(d,'.addbtn.bg_color').onclick=function(){
-      adddialogs.color.open();
-    }
-
-    var str='';
-    for(var i=0;i<videolist.length;i++){
-      str+=`<div class="item" data-l="video-${videolist[i]}"><div class="removebtn">${util.getGoogleIcon('E5CD')}</div>${videolist[i]}</div>`;
-    }
-    str+=`<div class="addbtn bg_video">${util.getGoogleIcon('e145')}</div>`;
-    util.query(d,'.bgfl .c.video').innerHTML=str;
-    util.query(d,'.addbtn.bg_video').onclick=function(){
-      adddialogs.video.open();
-    }
-
-    util.query(d,'.bgfl .c .item',true).forEach(function(e){
-      e.onclick=function(){
-      chulibg(this.getAttribute('data-l'));
-      var oldselect=util.query(d,'.item.selected');
-      if(oldselect){
-        oldselect.classList.remove('selected');
-      }
-      this.classList.add('selected');
-      initsto.set('bg',this.getAttribute('data-l'));
-      toast.show('设置背景成功');
-      util.query(d,'.statu').innerHTML='';
-    }
-    try{
-      e.querySelector('.removebtn').onclick=function(e2){
-        e2.stopPropagation();
-        if(e.parentElement.classList.contains('img')){
-          imglist.splice(imglist.indexOf(e.getAttribute('data-l').slice(4)),1);
-          initsto.set('imglist',imglist);
-        }else if(e.parentElement.classList.contains('color')){
-          colorlist.splice(colorlist.indexOf(e.getAttribute('data-l').slice(6)),1);
-          initsto.set('colorlist',colorlist);
-        }else if(e.parentElement.classList.contains('video')){
-          videolist.splice(videolist.indexOf(e.getAttribute('data-l').slice(6)),1);
-          initsto.set('videolist',videolist);
+    for(var k in item.content){
+      var unititem=util.element('div',{
+        class:"unititem"
+      });
+      unititem.innerHTML=`<div class="unit-title">${k}</div><div class="unit-content"></div>`;
+      item.content[k].forEach(function(it,i){
+        var bgitem=util.element('div',{
+          class:"bgitem "+['full','half','def'][it.showtype],
+          'data-select':it.select,
+        });
+        if(it.showtype==INIT_SHOWTYPE.def){
+          if(it.img){
+            if(typeof it.img=='string'){
+              bgitem.innerHTML=`<div class="fk"><img src="${it.img}"></div>`
+            }else{
+              var src=it.img();
+              if(src instanceof Promise){
+                bgitem.innerHTML=`<div class="fk"></div>`;
+                src.then(function(url){
+                  util.query(bgitem,'.fk').innerHTML=`<img src="${url}"/>`;
+                })
+              }else{
+                bgitem.innerHTML=`<div class="fk"><img src="${src}"></div>`
+              }
+            }
+          }else if(it.color){
+            if(typeof it.color=='string'){
+              var colors=it.color.split('-');
+              bgitem.innerHTML= `<div class="fk">
+              <div class="leftcolorbox" style="background:${colors[0]}"></div>
+              <div class="rightcolorbox" style="background:${colors[1]}"></div>
+              </div>`;
+            }else{
+              var colors=it.color();
+              if(colors instanceof Promise){
+                bgitem.innerHTML=`<div class="fk"></div>`;
+                colors.then(function(colors){
+                  util.query(bgitem,'.fk').innerHTML= `<div class="fk">
+                  <div class="leftcolorbox" style="background:${colors[0]}"></div>
+                  <div class="rightcolorbox" style="background:${colors[1]}"></div>
+                  </div>`;
+                })
+              }else{
+                bgitem.innerHTML= `<div class="fk">
+                <div class="leftcolorbox" style="background:${colors[0]}"></div>
+                <div class="rightcolorbox" style="background:${colors[1]}"></div>
+                </div>`;
+              }
+            }
+          }
+        }else if(it.showtype==INIT_SHOWTYPE.full||it.showtype==INIT_SHOWTYPE.half){
+          if(it.img){
+            if(typeof it.img=='string'){
+              bgitem.innerHTML=`<div class="fk"><img src="${it.img}"></div>${getMessage(it)}`
+            }else{
+              var src=it.img();
+              if(src instanceof Promise){
+                bgitem.innerHTML=`<div class="fk"></div>${getMessage(it)}`;
+                src.then(function(url){
+                  util.query(bgitem,'.fk').innerHTML=`<img src="${url}"/>`;
+                })
+              }else{
+                bgitem.innerHTML=`<div class="fk"><img src="${src}"></div>${getMessage(it)}`
+              }
+            }
+          }else if(it.color){
+            if(typeof it.color=='string'){
+              var colors=it.color.split('-');
+              bgitem.innerHTML= `<div class="fk">
+              <div class="leftcolorbox" style="background:${colors[0]}"></div>
+              <div class="rightcolorbox" style="background:${colors[1]}"></div>
+              </div>${getMessage(it)}`;
+            }else{
+              var colors=it.color();
+              if(colors instanceof Promise){
+                bgitem.innerHTML=`<div class="fk"></div>${getMessage(it)}`;
+                colors.then(function(colors){
+                  util.query(bgitem,'.fk').innerHTML= `<div class="fk">
+                  <div class="leftcolorbox" style="background:${colors[0]}"></div>
+                  <div class="rightcolorbox" style="background:${colors[1]}"></div>
+                  </div>`;
+                })
+              }else{
+                bgitem.innerHTML= `<div class="fk">
+                <div class="leftcolorbox" style="background:${colors[0]}"></div>
+                <div class="rightcolorbox" style="background:${colors[1]}"></div>
+                </div>${getMessage(it)}`;
+              }
+            }
+          }
         }
-        if(e.classList.contains('selected')){
-          util.query(d,'.item').click();
+        util.query(unititem,'.unit-content').append(bgitem);
+        util.query(bgitem,'.fk').onclick=function(){
+          changeBg(this.parentElement.getAttribute('data-select'));
         }
-        e.remove();
-  
-      }
-    }catch(e){}
-    
+      })
+      scrollitem.append(unititem);
+    }
+
   });
-
-    var toselect=util.query(d,'[data-l="'+initsto.get('bg')+'"]');
-    if(toselect){
-      toselect.classList.add('selected');
-    }
-
-    if(initsto.get('bg').indexOf('ts-')==0){
-      util.query(d,'.i .statu').innerHTML=util.getGoogleIcon('e5ca');
-      util.query(d,'.i input').value=initsto.get('bg').slice(3);
-    }
+  function getMessage(it){
+    return `<div class="bg-message">
+      <div class="bg-message-title">${it.title}</div>
+      <div class="bg-message-text">${it.text}</div>
+    </div>`
   }
-  initbgdia();
+  function changeBg(select){
+    initsto.set('bg',select);
+  }
 
+  function activeTab(i){
+    util.query(d,'.tabitem',true).forEach(function(t){
+      t.classList.remove('active');
+    });
+    util.query(d,'.scrollitem',true).forEach(function(t){
+      t.style.display='';
+    });
+    util.query(d,'.tabitem[data-tab="'+i+'"]').classList.add('active');
+    util.query(d,'.scrollitem[data-tab="'+i+'"]').style.display='block';
+  }
+  activeTab('0');
   setting.registerSetting({
     title:"设置背景",
     unit:"背景",
     message:"",
     callback:function(){
       bg_set_d.open();
+      alert('注意！背景当前不可用！')
     }
   });
 

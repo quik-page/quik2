@@ -7,6 +7,9 @@
   display: none;
   overflow: hidden;
 }
+body.dark .contextMenu{
+  background-color: #333;
+}
 .contextMenu.show{
   display: block;
 }
@@ -33,4 +36,7 @@
 }
 .contextMenu .item:hover{
   background-color: #eee;
+}
+body.dark .contextMenu  .item:hover{
+  background-color: #666;
 }

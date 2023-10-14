@@ -11,6 +11,10 @@
 .bottomer .item:hover{
   background-color: #eee;
 }
+body.dark .topper .item:hover,
+body.dark .bottomer .item:hover{
+  background-color: #666;
+}
 .topper .item .material-symbols-outlined,
   .bottomer .item .material-symbols-outlined{
   font-size: 20px;

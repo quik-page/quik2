@@ -19,8 +19,8 @@
     }
   }]
   return {
-    getImg:function(){
-      return apis[parseInt(Math.random()*apis.length)]
+    getImg:function(apiindex){
+      return apis[typeof apiindex=='number'&&apiindex<apis.length?apiindex:parseInt(Math.random()*apis.length)]
     }
   }
 })();

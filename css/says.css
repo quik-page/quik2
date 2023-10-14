@@ -18,7 +18,7 @@
   padding: 0 30px;
   line-height: 30px;
   height: 30px;
-  color: #000;
+  color: inherit;
 }
 .says .say-control{
   position: absolute;
@@ -32,6 +32,9 @@
 .says .say-control:hover{
   background-color: #eee;
   cursor: pointer;
+}
+body.dark .says .say-control:hover{
+  background-color: #888;
 }
 .says:hover .say-control{
   display: block;

@@ -69,7 +69,12 @@
     setting_ul.innerHTML = str;
     isinit = true;
     util.query(setting_ul, 'li.setting_item', true).forEach(function (li) {
-      var hash = li.getAttribute('data-hash');
+      uplise(li);
+    })
+  }
+
+  function uplise(li){
+    var hash = li.getAttribute('data-hash');
       var s = selist[hash];
       function gi() {
         var type = s.type;
@@ -103,6 +108,8 @@
 
       }
       gi();
+      li.querySelector('.name').innerHTML=s.title;
+      li.querySelector('.message').innerHTML=s.message;
       if (li.querySelector('.input')) {
         li.querySelector('.input').onchange = function () {
           if (this.type == 'checkbox') {
@@ -121,7 +128,13 @@
 
         }
       }
-    })
+    if(s.show){
+      if(!s.show()){
+        li.style.display = 'none';
+      }else{
+        li.style.display = 'block';
+      }
+    }
   }
 
   function getWidght(type) {
@@ -161,18 +174,59 @@
    * @param {String} options.unit 设置属于的单元
    * @param {String} options.title 设置标题
    * @param {String} options.message? 设置说明
-   * @param {'boolean'||'string'||'number'||'range'||'select'} options.type 设置内容类型
+   * @param {'boolean'|'string'|'number'|'range'|'select'} options.type 设置内容类型
    * @param {Function} options.init 返回设置初始化内容
    * @param {Function} options.check? 检查用户输入的内容
+   * @param {Function} options.show? 是否显示该设置
    * @param {Function} options.get 获取设置内容
    * @param {Function} options.callback 设置设置内容
    * @returns {String} hash
    */
   var registerSetting = function (options) {
-    var hash = 'se_' + util.getRandomHashCache();
+    var hash = 'se_' + util.getRandomHashCache()+Object.keys(selist).length;
     options.hash = hash;
     selist[hash] = options;
+    if(isinit){
+      hmr(options);
+    }
     return hash;
+  }
+
+  function hmr(options){
+    var unit=options.hash;
+    var unit_dom=util.query(setting_ul,'li.unit',true);
+    var a=false;
+    var sli=get_setting_li(options);
+    unit_dom.forEach(function(e){
+      if(util.query(e,'.title').innerHTML==unit){
+        a=true;
+        util.query(e,'ul').append(sli);
+      }
+    });
+    if(!a){
+      var unit_li=util.element('li',{
+        class:"unit"
+      });
+      unit_li.innerHTML=`<div class="title">${options.unit}</div><ul></ul>`;
+      util.query(unit_li,'ul').append(sli);
+    }
+
+    function get_setting_li(){
+      var li=util.element('li',{
+        class:"setting_item"
+      });
+      li.setAttribute('data-hash',options.hash);
+      li.innerHTML=`<div class="left-message">
+      <div class="name">${options.title}</div>
+      <div class="message">${options.message}</div>
+    </div>
+    <div class="right_con">
+      ${getWidght(options.type)}
+    </div>`;
+      return li;
+    }
+
+    uplise(li);
   }
 
   var updateSettingByHash = function (hash, options) {
@@ -183,19 +237,77 @@
     for (var k in options) {
       selist[hash][k] = options[k];
     }
+    if(isinit){
+      uplise(util.query(setting_ul,'li[data-hash="'+hash+'"]'));
+    }
   }
 
-  var recallSettingByHash = function (hash, fn) {
+  var recallSettingByHash = function (hash, fnname) {
     if (!selist[hash]) {
       console.warn('SETTING: 没有找到该hash对应的设置');
       return;
     }
-    if (typeof selist[hash][fn] != 'function') {
-      console.warn('没有该方法');
+    var li=util.query(setting_ul,'li[data-hash="'+hash+'"]');
+    if(fnname=='get'){
+      var value=selist[hash].get();
+      var type=selist[hash].type;
+      if (type == 'boolean') {
+        li.querySelector('.input').checked = value;
+      } else if (type == 'string' || type == 'number'||type == 'range'||type == 'select') {
+        li.querySelector('.input').value = value;
+      }
+    }else if(fnname=='show'){
+      if(selist[hash].show){
+        if(!selist[hash].show()){
+          li.style.display='none';
+        }else{
+          li.style.display='block';
+        }
+      }
+    }else if(fnname=='callback'){
+      selist[hash].callback(selist[hash].get());
     }
-    selist[hash][fn]();
+  }
+  var initsto=storage('setting');
+  if(!initsto.get('theme')){
+    initsto.set('theme','a');
+  }
+  registerSetting({
+    index:0,
+    unit:"通用",
+    title:"主题颜色",
+    type:"select",
+    message:'',
+    get:function(){
+      
+      return initsto.get('theme');
+    },
+    callback:function(v){
+      initsto.set('theme',v);
+      checkTheme(v);
+    },
+    init:function(){
+      return {
+        a:'浅色',b:'深色',c:'自适应'
+      }
+    }
+  });
+
+  function checkTheme(v){
+    if(v=='b'){
+      document.body.classList.add('dark');
+    }else if(v=='a'){
+      document.body.classList.remove('dark');
+    }else if(v=='c'){
+      if(new Date().getHours()>=18||new Date().getHours()<6){
+        document.body.classList.add('dark');
+      }else{
+        document.body.classList.remove('dark');
+      }
+    }
   }
 
+  checkTheme(initsto.get('theme'));
   return {
     registerSetting: registerSetting,
     updateSettingByHash: updateSettingByHash,
