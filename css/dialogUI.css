@@ -10,7 +10,10 @@
 .dialog .d-c .content p{
   line-height: 30px;
 }
-.dialog .d-c .content input{
+.dialog .d-c .content input[type=text],
+.dialog .d-c .content input[type=url],
+.dialog .d-c .content input[type=number]
+{
   height: 24px;
   width: 250px;
   border:0;
@@ -20,12 +23,21 @@
   color: inherit;
 }
 @media(max-width:650px) {
-  .dialog .d-c .content input{
+    .dialog .d-c .content input[type=text],
+        .dialog .d-c .content input[type=url],
+        .dialog .d-c .content input[type=number]
+  {
     width: 100%;
   }
 }
-.dialog .d-c .content input:focus{
+.dialog .d-c .content input[type=text]:focus,
+.dialog .d-c .content input[type=url]:focus,
+.dialog .d-c .content input[type=number]:focus{
   border-color: #09f;
+}
+.dialog .d-c .content .tip{
+  font-size: 12px;
+  color: #888;
 }
 .dialog .d-c .footer{
   float: right;

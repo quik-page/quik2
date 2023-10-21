@@ -33,8 +33,13 @@
   background-color: #eee;
   cursor: pointer;
 }
-body.dark .says .say-control:hover{
-  background-color: #888;
+body.dark .says .say-control:hover,
+body.t-dark .says .say-control:hover
+{
+  background-color: rgba(136, 136, 136, 0.533);
+}
+body.t-dark .says{
+  color: #fff;
 }
 .says:hover .say-control{
   display: block;

@@ -19,26 +19,8 @@
   bgf.appendChild(bgi);
 
   var initsto=storage('background');
-  // if(!initsto.get('bg')){
-  //   initsto.set('bg','def-0')
-  // }
-
-  // if(!initsto.get('imglist')){
-  //   initsto.set('imglist',[])
-  // }
-
-  // if(!initsto.get('videolist')){
-  //   initsto.set('videolist',[])
-  // }
-
-  // if(!initsto.get('colorlist')){
-  //   initsto.set('colorlist',[])
-  // }
 
   var bg=initsto.get('bg');
-  // var imglist=initsto.get('imglist');
-  // var videolist=initsto.get('videolist');
-  // var colorlist=initsto.get('colorlist');
   var intervals=[];
 
   var INIT_SHOWTYPE={
@@ -46,6 +28,9 @@
     half:1,
     def:2,
   }
+
+  var rthebg=null;
+
   var initalBgs=[{
     tab:"图片/视频",
     content:{
@@ -54,9 +39,11 @@
           showtype:INIT_SHOWTYPE.full,
           img:function(){
             return new Promise((r,j)=>{
-
+              rthebg=r;
+              gq();
             })
           },
+          out:"userzdyi",
           select:'user-upload',
           title:"上传你喜欢的图片或视频作为背景",
           text:"点击左边图片设置背景，点击<a class=\"updateImgOrVideo\" href=\"javascript:;\">此处</a>上传图片或视频，你可以通过输入图片或视频URL的方式设置，也可以从你的设备本地上传"
@@ -145,6 +132,17 @@
           color:"#f1f1fe-#3e3e31",
           select:"color-#f1f1fe-#3e3e31"
         }
+      ],
+      "API":[
+        {
+          showtype:INIT_SHOWTYPE.half,
+          color:function(){
+            return [getNowColor(0),getNowColor(1)];
+          },
+          select:"api-time",
+          title:"时间的颜色",
+          text:"获取当前时间的颜色作为背景，详情<a class=\"timeColorInfo\" href=\"javascript:;\">此处</a>"
+        }
       ]
     }
   },{
@@ -152,9 +150,26 @@
     content:`zidiyi`
   }]
 
+  function getNowColor(a){
+    var date=new Date();
+    if(typeof a=='number'){
+      if(a==0){
+       return `rgb(${256-date.getHours()},${256-date.getMinutes()},${256-date.getSeconds()})`;
+      }else{
+       return `rgb(${date.getHours()},${date.getMinutes()},${date.getSeconds()})`;
+      }
+    }else{
+     if(document.body.classList.contains('dark')){
+       return `rgb(${date.getHours()},${date.getMinutes()},${date.getSeconds()})`;
+     }else{
+       return `rgb(${256-date.getHours()},${256-date.getMinutes()},${256-date.getSeconds()})`;
+     }
+    }
+  }
   // chulibg(bg);
 
-
+  var styleElement=util.element('style');
+  document.head.append(styleElement);
   function chulibg(bgv){
     bgv=bgv.split('-');
     var lx=bgv[0];
@@ -164,41 +179,69 @@
     });
     intervals=[];
     var value=bgv.join('-');
-      bgi.style.background='';
-      bgi.innerHTML='';
+    bgi.innerHTML='';
+    styleElement.innerHTML='';
+    document.body.classList.remove('t-dark');
     if(lx=='def'){
       return;
     }else if(lx=='img'){
-      bgi.innerHTML=`<img src="${value}"/>`
+      bgi.innerHTML=`<img src="${value}"/>`;
+      document.body.classList.add('t-dark');
     }else if(lx=='video'){
-      bgi.innerHTML=`<video src="${value}" autoplay loop muted></video>`
+      bgi.innerHTML=`<video src="${value}" autoplay loop muted></video>`;
+      document.body.classList.add('t-dark');
     }else if(lx=='color'){
-      bgi.innerHTML='';
-      bgi.style.backgroundColor=value;
+      styleElement.innerHTML=`.bgi{background:${value.split('-')[0]};}body.dark .bgi{background:${value.split('-')[1]};}`
     }else if(lx=='ts'){
-      bgi.innerHTML='';
-      bgi.style.background=value;
+      styleElement.innerHTML=`.bgi{background:${value.split('-{}-')[0]};}body.dark .bgi{background:${value.split('-{}-')[1]};}`
     }else if(lx=='api'){
-      if(value=='0'){
+      if(value=='2cy'){
         bgi.innerHTML=`<img src="${urlnocache(erciyuanbg.getImg().url)}"/>`
         util.query(bgi,'img').onerror=function(){
           this.src=urlnocache(erciyuanbg.getImg().url);
         }
-      }else if(value=='1'){
+      document.body.classList.add('t-dark');
+      }else if(value=='fj'){
         bgi.innerHTML=`<img src="${urlnocache(fenjibg.getImg().url)}"/>`
         util.query(bgi,'img').onerror=function(){
           this.src=urlnocache(fenjibg.getImg().url);
         }
-      }else if(value=='2'){
+        document.body.classList.add('t-dark');
+      }else if(value=='bing'){
         bgi.innerHTML=`<img src="${urlnocache("https://bing.shangzhenyang.com/api/1080p")}"/>`
         util.query(bgi,'img').onerror=function(){
           this.src=urlnocache("https://bing.shangzhenyang.com/api/1080p");
         }
-      }else if(value=='3'){
+      document.body.classList.add('t-dark');
+      }else if(value=='time'){
         intervals.push(setInterval(function(){
-          var n=new Date();
-          bgi.style.backgroundColor='#'+(0xff-n.getHours()).toString(16)+(0xff-n.getMinutes()).toString(16)+(0xff-n.getSeconds()).toString(16);
+          bgi.style.backgroundColor=getNowColor();
         },1000))
+      }
+    }else if(lx=='user'){
+      if(bgv=='upload'){
+        var a=initsto.get('userbg');
+        if(!a) return;
+        document.body.classList.add('t-dark');
+        if(a.type=='video'){
+          var b=a.upasdb;
+          if(b){
+            initsto.get('useruploaderbg',true,function(blob){
+              bgi.innerHTML=`<video src="${URL.createObjectURL(blob)}" autoplay loop muted></video>`;
+            })
+          }else{
+            bgi.innerHTML=`<video src="${a.url}" autoplay loop muted></video>`;
+          }
+        }else if(a.type=='image'){
+          var b=a.upasdb;
+          if(b){
+            initsto.get('useruploaderbg',true,function(blob){
+              bgi.innerHTML=`<img src="${URL.createObjectURL(blob)}"/>`;
+            })
+          }else{
+            bgi.innerHTML=`<img src="${a.url}"/>`;
+          }
+        }
       }
     }
   }
@@ -253,7 +296,7 @@
       unititem.innerHTML=`<div class="unit-title">${k}</div><div class="unit-content"></div>`;
       item.content[k].forEach(function(it,i){
         var bgitem=util.element('div',{
-          class:"bgitem "+['full','half','def'][it.showtype],
+          class:"bgitem "+['full','half','def'][it.showtype]+" "+it.out??'',
           'data-select':it.select,
         });
         if(it.showtype==INIT_SHOWTYPE.def){
@@ -346,6 +389,10 @@
     }
 
   });
+
+  util.query(scroll_con,'.updateImgOrVideo').onclick=function(){
+    iovuploader.open();
+  }
   function getMessage(it){
     return `<div class="bg-message">
       <div class="bg-message-title">${it.title}</div>
@@ -354,6 +401,12 @@
   }
   function changeBg(select){
     initsto.set('bg',select);
+    chulibg(select);
+    var setbgi= util.query(scroll_con,'.bgitem.selected');
+    setbgi&&setbgi.classList.remove('selected');
+
+    var ybgi=util.query(scroll_con,'.bgitem[data-select="'+select+'"');
+    ybgi&&ybgi.classList.add('selected');
   }
 
   function activeTab(i){
@@ -373,11 +426,128 @@
     message:"",
     callback:function(){
       bg_set_d.open();
-      alert('注意！背景当前不可用！')
     }
   });
 
+  var iovuploader=new dialog({
+    content:`
+    <form>
+      <h1>上传背景</h1>
+      <div class="content">
+        <p>背景类型：<input type="radio" class="uploadi" name="uploadiov" checked/> 图片 
+        <input type="radio" class="uploadv" name="uploadiov"/> 视频 </p>
+        <p>背景URL：<input type="url" placeholder="URL"/></p>
+        <p>从本地选择文件：<input type="file"/></p>
+        <p class="tip">URL和文件只需填写一个即可，优先选择本地文件</p>
+      </div>
+      <div class="footer">
+        <button class="cancel btn">取消</button>
+        <button class="ok btn">确定</button>
+      </div>
+    </form>
+  `,
+    class:"iovuploader",
+  })
+  var iovuploaderf=iovuploader.getDialogDom();
+  util.query(iovuploaderf,'.cancel').onclick=function(e){
+    e.preventDefault();
+    iovuploader.close();
+  }
+  util.query(iovuploaderf,'form').onsubmit=function(e){
+    e.preventDefault();
+    var type=util.query(iovuploaderf,'.uploadi').checked?'image':'video';
+    var url=util.query(iovuploaderf,'input[type="url"]').value;
+    var file=util.query(iovuploaderf,'input[type="file"]').files[0];
+    if(file){
+      initsto.set('useruploaderbg',file,true,function(){
+        iovuploader.close();
+        gq();
+        getUserUploadUrl(function(r){
+          util.query(d,'.userzdyi .fk img').src=r;
+        })
+      });
+      initsto.set('userbg',{
+        type:type,
+        upasdb:true
+      })
+    }else{
+      initsto.set('userbg',{
+        type:type,
+        url:url
+      })
+      iovuploader.close();
+      gq();
+    }
+    if(initsto.get('bg')=='user-upload'){
+      chulibg('user-upload')
+    }
+      util.query(d,'.userzdyi .fk img').src='';
+    
+  }
 
+  function gq(){
+    getUserUploadUrl(function(res){
+      if(res) rthebg(res);
+    })
+  }
+
+  function getUserUploadUrl(cb){
+    var a=initsto.get('userbg');
+    if(!a) cb(false);
+    if(a.type=='video'){
+      var b=a.upasdb;
+      if(b){
+        initsto.get('useruploaderbg',true,function(blob){
+          getVideoCaptrue(URL.createObjectURL(blob),function(c){
+            cb(c);
+          });
+        })
+      }else{
+        try{
+          getVideoCaptrue(a.url,function(c){
+            cb(c);
+          });
+        }catch(e){
+          cb(false);
+        }
+      }
+    }else if(a.type=='image'){
+      var b=a.upasdb;
+      if(b){
+        initsto.get('useruploaderbg',true,function(blob){
+          console.log(blob);
+          cb(URL.createObjectURL(blob));
+        })
+      }else{
+        cb(a.url);
+      }
+    }
+  }
+
+  function getVideoCaptrue(url,cb){
+    var video=util.element('video',{
+      src:url,
+      style:"display:none"
+    });
+    document.body.append(video);
+    video.onloadeddata=function(){
+      var canvas=document.createElement('canvas');
+      canvas.width=video.videoWidth;
+      canvas.height=video.videoHeight;
+      var ctx=canvas.getContext('2d');
+      ctx.drawImage(video,0,0,video.videoWidth,video.videoHeight);
+      var u=canvas.toDataURL('image/png');
+      cb(u);
+    }
+    
+  }
+
+  if(!initsto.get('bg')){
+    initsto.set('bg','color-#fff-#333');
+  }
+  chulibg(initsto.get('bg'));
+  var setbgi=util.query(scroll_con,'.bgitem[data-select="'+initsto.get('bg')+'"');
+  setbgi&&setbgi.classList.add('selected');
 
   return{
 

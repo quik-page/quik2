@@ -114,8 +114,8 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   transition: opacity .3s;
   color: #fff;
 }
-.d-c.bg_d .scroll_con .bgitem .fk.selected::after{
-  content:'\e5cd';
+.d-c.bg_d .scroll_con .bgitem.selected .fk::after{
+  content:'\e876';
   font-family: 'Material Symbols Outlined';
   opacity: .3;
   display: flex;
@@ -200,4 +200,8 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   .d-c.bg_d .scroll_con .bgitem.half .bg-message{
     width: calc(66% - 10px);
   }
+}
+body.t-dark .bgcover{
+  background-color: #333;
+  opacity: .3;
 }

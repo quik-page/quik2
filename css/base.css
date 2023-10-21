@@ -12,7 +12,9 @@ body.dark{
   color: #fff;
   color-scheme: dark;
 }
-body.dark main .logo{
+body.dark main .logo,
+body.t-dark main .logo
+{
   filter: invert(1);
 }
 main{

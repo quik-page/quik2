@@ -82,3 +82,10 @@
   }
 }
 
+body.dark .links li.link-add a{
+  background-color: #555;
+  color:#eee;
+}
+body.dark .links li.link-add a:hover{
+  background-color: #333;
+}

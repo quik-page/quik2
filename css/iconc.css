@@ -9,12 +9,19 @@
 }
 .topper .item:hover,
 .bottomer .item:hover{
-  background-color: #eee;
+  background-color: rgb(238, 238, 238,.5);
 }
 body.dark .topper .item:hover,
-body.dark .bottomer .item:hover{
-  background-color: #666;
+body.dark .bottomer .item:hover,
+body.t-dark .topper .item:hover,
+body.t-dark .bottomer .item:hover{
+  background-color: rgba(102, 102, 102, 0.4);
 }
+body.t-dark .topper .item,
+body.t-dark .bottomer .item{
+  color: #fff;
+}
+
 .topper .item .material-symbols-outlined,
   .bottomer .item .material-symbols-outlined{
   font-size: 20px;

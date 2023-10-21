@@ -3,18 +3,52 @@
     localStorage.quik2='{}';
   }
 
+  var isidbready=false;
+  var readyfn=[];
+  localforage.ready(function(){
+    setTimeout(function(){
+      isidbready=true;
+      readyfn.forEach(function(fn){
+        fn();
+      })
+    },200)
+
+  })
+
   var filerecv={
     get:function(hash,cb){
-      localforage.getItem(hash,cb);
+      if(!isidbready){
+        readyfn.push(function(){
+          localforage.getItem(hash).then(cb);
+        })
+      }else{
+        localforage.getItem(hash).then(cb);
+      }
     },
     set:function(file,cb){
-      var hash='^'+util.getRandomHashCache();
-      localforage.setItem(hash,file,function(){
-        callback(hash);
+      if(!isidbready){
+        readyfn.push(function(){
+          var hash='^'+util.getRandomHashCache();
+          localforage.setItem(hash,file).then(function(){
+            cb(hash);
+          });
+        })
+      }else{
+        var hash='^'+util.getRandomHashCache();
+      localforage.setItem(hash,file).then(function(){
+        cb(hash);
       });
+      }
+      
     },
     delete:function(hash,cb){
-      localforage.removeItem(hash,cb);
+      if(!isidbready){
+        readyfn.push(function(){
+          localforage.removeItem(hash).then(cb);
+        })
+      }else{
+        localforage.removeItem(hash).then(cb);
+      }
     }
   }
 
@@ -27,6 +61,7 @@
         if(!useidb){
           return getAll()[ck][k];
         }else{
+
           filerecv.get(getAll()[ck][k],function(file){
             callback(file);
           });
@@ -38,6 +73,9 @@
           a[ck][k]=v;
           setAll(a[ck]);
         }else{
+          if(get(k)){
+           filerecv.delete(get(k)); 
+          }
           filerecv.set(v,function(hash){
             var a=getAll();
             a[ck][k]=hash;
