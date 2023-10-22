@@ -14,8 +14,9 @@
       })
       li.innerHTML=`<a href="${l.url}" target="_blank" rel="noopener noreferer">
         <img src="${util.getFavicon(l.url,true)}" onerror='this.src=quik.util.getFavicon(this.parentElement.src)'/>
-        <p>${l.title}</p>
+        <p></p>
       </a><div class="material-symbols-outlined editlinkbtn">&#xe3c9;</div>`;
+      li.querySelector('p').innerText=l.title;
       ul.append(li);
       util.query(li,'.editlinkbtn').onclick=function(){
         openLinkEditDialog(this.parentElement.getAttribute('data-index')-0);
