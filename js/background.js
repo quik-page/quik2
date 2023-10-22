@@ -20,7 +20,18 @@
 
   var initsto=storage('background');
 
-  var bg=initsto.get('bg');
+  if(!initsto.get('bg')){
+    initsto.set('bg','color-#fff-#333');
+  }
+  if(!initsto.get('usercolor')){
+    initsto.set('usercolor','#fff-#333');
+  }
+  if(!initsto.get('usergjzdy')){
+    initsto.set('usergjzdy',{
+      light:'',
+      dark:""
+    })
+  }
   var intervals=[];
 
   var INIT_SHOWTYPE={
@@ -114,10 +125,11 @@
           showtype:INIT_SHOWTYPE.full,
           color:function(){
             return new Promise((r,j)=>{
-              
+              r(initsto.get('usercolor').split('-'))
             })
           },
-          select:"color-custom",
+          out:"userzdyc",
+          select:"user-color",
           title:"将你喜欢的颜色作为背景",
           text:"点击左边的方块设置背景，点击<a class=\"updateColor\" href=\"javascript:;\">此处</a>编辑颜色",
         }
@@ -147,7 +159,14 @@
     }
   },{
     tab:"高级自定义",
-    content:`zidiyi`
+    content:`
+    <p>浅色模式：</p><br>
+    <textarea class="gjzdytlight textarea"></textarea>
+    <p>深色模式：</p><br>
+    <textarea class="gjzdytdark textarea"></textarea>
+    <button class="gjzdysetbtn">设置</button>
+    <p class="tip">参见 CSS | background属性</p>
+    `
   }]
 
   function getNowColor(a){
@@ -192,8 +211,6 @@
       document.body.classList.add('t-dark');
     }else if(lx=='color'){
       styleElement.innerHTML=`.bgi{background:${value.split('-')[0]};}body.dark .bgi{background:${value.split('-')[1]};}`
-    }else if(lx=='ts'){
-      styleElement.innerHTML=`.bgi{background:${value.split('-{}-')[0]};}body.dark .bgi{background:${value.split('-{}-')[1]};}`
     }else if(lx=='api'){
       if(value=='2cy'){
         bgi.innerHTML=`<img src="${urlnocache(erciyuanbg.getImg().url)}"/>`
@@ -242,6 +259,12 @@
             bgi.innerHTML=`<img src="${a.url}"/>`;
           }
         }
+      }else if(bgv=='color'){
+        var value=initsto.get('usercolor');
+        styleElement.innerHTML=`.bgi{background:${value.split('-')[0]};}body.dark .bgi{background:${value.split('-')[1]};}`
+      }else if(bgv=='gjzdy'){
+        var value=initsto.get('usergjzdy');
+        styleElement.innerHTML=`.bgi{background:${value.light};}body.dark .bgi{background:${value.dark};}`
       }
     }
   }
@@ -366,10 +389,8 @@
               if(colors instanceof Promise){
                 bgitem.innerHTML=`<div class="fk"></div>${getMessage(it)}`;
                 colors.then(function(colors){
-                  util.query(bgitem,'.fk').innerHTML= `<div class="fk">
-                  <div class="leftcolorbox" style="background:${colors[0]}"></div>
-                  <div class="rightcolorbox" style="background:${colors[1]}"></div>
-                  </div>`;
+                  util.query(bgitem,'.fk').innerHTML= `<div class="leftcolorbox" style="background:${colors[0]}"></div>
+                  <div class="rightcolorbox" style="background:${colors[1]}"></div>`;
                 })
               }else{
                 bgitem.innerHTML= `<div class="fk">
@@ -458,6 +479,7 @@
     var type=util.query(iovuploaderf,'.uploadi').checked?'image':'video';
     var url=util.query(iovuploaderf,'input[type="url"]').value;
     var file=util.query(iovuploaderf,'input[type="file"]').files[0];
+    util.query(d,'.userzdyi .fk img').src='';
     if(file){
       initsto.set('useruploaderbg',file,true,function(){
         iovuploader.close();
@@ -477,12 +499,11 @@
       })
       iovuploader.close();
       gq();
+      getUserUploadUrl(function(r){
+        util.query(d,'.userzdyi .fk img').src=r;
+      })
     }
-    if(initsto.get('bg')=='user-upload'){
-      chulibg('user-upload')
-    }
-      util.query(d,'.userzdyi .fk img').src='';
-    
+    changeBg('user-upload');
   }
 
   function gq(){
@@ -527,10 +548,11 @@
   function getVideoCaptrue(url,cb){
     var video=util.element('video',{
       src:url,
-      style:"display:none"
+      crossOrigin:'anonymous',
+      autoplay:"autoplay"
     });
     document.body.append(video);
-    video.onloadeddata=function(){
+    video.oncanplay=function(){
       var canvas=document.createElement('canvas');
       canvas.width=video.videoWidth;
       canvas.height=video.videoHeight;
@@ -538,13 +560,63 @@
       ctx.drawImage(video,0,0,video.videoWidth,video.videoHeight);
       var u=canvas.toDataURL('image/png');
       cb(u);
+      video.remove();
     }
     
   }
 
-  if(!initsto.get('bg')){
-    initsto.set('bg','color-#fff-#333');
+  var colorchanger=new dialog({
+    content:`
+    <form>
+      <h1>自定义背景颜色</h1>
+      <div class="content">
+        <p>浅色模式：<input type="color" class="lightbgcolor"/></p>
+        <p>深色模式：<input type="color" class="darkbgcolor"/></p>
+      </div>
+      <div class="footer">
+        <button class="cancel btn">取消</button>
+        <button class="ok btn">确定</button>
+      </div>
+    </form>
+    `
+  });
+  var colorchangerf=colorchanger.getDialogDom();
+  util.query(colorchangerf,'.cancel').onclick=function(e){
+    e.preventDefault();
+    colorchanger.close();
   }
+  util.query(colorchangerf,'form').onsubmit=function(e){
+    e.preventDefault();
+    var lightc=util.query(colorchangerf,'.lightbgcolor').value;
+    var darkc=util.query(colorchangerf,'.darkbgcolor').value;
+    initsto.set('usercolor',lightc+'-'+darkc);
+    util.query(d,'.userzdyc .fk').innerHTML=`
+    <div class="leftcolorbox" style="background:${lightc}"></div>
+    <div class="rightcolorbox" style="background:${darkc}"></div>`;
+    changeBg('user-color');
+    colorchanger.close();
+  }
+
+  util.query(d,'a.updateColor').onclick=function(){
+    var colors=initsto.get('usercolor');
+    var lightc=colors.split('-')[0];
+    var darkc=colors.split('-')[1];
+    util.query(colorchangerf,'.lightbgcolor').value=lightc;
+    util.query(colorchangerf,'.darkbgcolor').value=darkc;
+    colorchanger.open();
+  }
+
+  util.query(d,'.gjzdysetbtn').onclick=function(){
+    var lr=util.query(d,'.gjzdytlight').value;
+    var dr=util.query(d,'.gjzdytdark').value;
+    initsto.set('usergjzdy',{
+      light:lr,
+      dark:dr
+    });
+    changeBg('user-gjzdy');
+  }
+
+
   chulibg(initsto.get('bg'));
   var setbgi=util.query(scroll_con,'.bgitem[data-select="'+initsto.get('bg')+'"');
   setbgi&&setbgi.classList.add('selected');

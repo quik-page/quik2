@@ -12,7 +12,8 @@
 }
 .dialog .d-c .content input[type=text],
 .dialog .d-c .content input[type=url],
-.dialog .d-c .content input[type=number]
+.dialog .d-c .content input[type=number],
+.dialog .d-c .content input[type=color]
 {
   height: 24px;
   width: 250px;
@@ -25,14 +26,16 @@
 @media(max-width:650px) {
     .dialog .d-c .content input[type=text],
         .dialog .d-c .content input[type=url],
-        .dialog .d-c .content input[type=number]
+        .dialog .d-c .content input[type=number],
+        .dialog .d-c .content input[type=color]
   {
     width: 100%;
   }
 }
 .dialog .d-c .content input[type=text]:focus,
 .dialog .d-c .content input[type=url]:focus,
-.dialog .d-c .content input[type=number]:focus{
+.dialog .d-c .content input[type=number]:focus,
+.dialog .d-c .content input[type=color]:focus{
   border-color: #09f;
 }
 .dialog .d-c .content .tip{
