@@ -616,6 +616,10 @@
     changeBg('user-gjzdy');
   }
 
+  var _gjzdy=initsto.get('usergjzdy');
+  util.query(d,'.gjzdytlight').value=_gjzdy.light;
+  util.query(d,'.gjzdytdark').value=_gjzdy.dark;
+
 
   chulibg(initsto.get('bg'));
   var setbgi=util.query(scroll_con,'.bgitem[data-select="'+initsto.get('bg')+'"');
