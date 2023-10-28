@@ -1,0 +1,78 @@
+.d-c.search_editor{
+  width: 600px;
+  height: 400px;
+  padding: 0;
+  overflow: hidden;
+}
+@media (max-width:600px){
+  .dialog.mobile-show-full .d-c.search_editor{
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.d-c.search_editor .searchlist{
+  overflow-y: auto;
+  height: calc(100% - 95px);
+  padding: 10px;
+}
+.d-c.search_editor .searchlist .item{
+  overflow: hidden;
+  width: 100%;
+  height: 30px;
+}
+.d-c.search_editor .searchlist .item>*{
+  float: left;
+}
+.d-c.search_editor .searchlist .item .icon{
+  width: 30px;
+  height: 30px;
+}
+.d-c.search_editor .searchlist .item .icon img{
+  width: 24px;
+  height: 24px;
+  margin: 3px;
+}
+.d-c.search_editor .searchlist .item .url{
+  width: calc(100% - 60px);
+  height: 30px;
+}
+.d-c.search_editor .searchlist .item .url input{
+  border:0;outline: 0;
+  height: 30px;
+  width: 100%;
+  color: #666;
+  background-color: transparent;
+}
+.d-c.search_editor .searchlist .item .url input:focus{
+  color: #000;
+}
+.d-c.search_editor .searchlist .item .remove{
+  line-height: 30px;
+  text-align: center;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+}
+.d-c.search_editor .searchlist .item .remove:hover{
+  background-color: #eee;
+}
+.d-c.search_editor .searchlist .item .remove .material-symbols-outlined{
+  font-size: 16px;
+}
+
+.d-c.search_editor .searchlist .addnewitem{
+  width: 100%;
+  height: 30px;
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+}
+.d-c.search_editor .searchlist .addnewitem .material-symbols-outlined{
+  font-size: inherit;
+}
+.d-c.search_editor .searchlist .addnewitem:hover{
+  background-color: #eee;
+}

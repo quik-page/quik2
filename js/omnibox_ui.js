@@ -215,12 +215,13 @@
   
 
   omnibox.searchUtil.addEventListener('nowtypechange',function(){
-    console.log('d');
     if(icon.getAttribute('data-teshu')==':searchtype'){
       chulitype(input.value);
     }
   })
-
+  omnibox.searchUtil.addEventListener('typelistchange',function(){
+    chuliSearchTypeSelector();
+  })
   chuliSearchTypeSelector();
 
   // 初始化处理（默认是搜索模式）

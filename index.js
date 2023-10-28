@@ -12,7 +12,8 @@
   var linkUI=_REQUIRE_('./js/link_ui.js');
   var says=_REQUIRE_('./js/says.js');
   var background=_REQUIRE_('./js/background.js');
-  var mainmenu=_REQUIRE_('./js/mainmenu.js')
+  var mainmenu=_REQUIRE_('./js/mainmenu.js');
+  var searchEditor=_REQUIRE_('./js/search_editor.js');
 
   window.quik={
     storage:storage,
