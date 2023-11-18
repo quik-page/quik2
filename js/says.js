@@ -127,10 +127,10 @@
   function initSays(saytype){
     nowsaystype=saytype;
     if(saytype=='user'){
-      sayI.innerHTML=initsto.get('usersay');
+      sayI.innerText=initsto.get('usersay');
       sjp={};
     }else if(saytype=='jinrishici'){
-      sayI.innerHTML='...';
+      sayI.innerText='...';
       jinrishici.load(function(res){
         sayI.innerHTML=res.data.content;
         sjp={
@@ -143,9 +143,9 @@
         }
       })
     }else if(saytype=='hitokoto'){
-      sayI.innerHTML='...';
+      sayI.innerText='...';
       hitokoto.load(function(res){
-        sayI.innerHTML=res.hitokoto;
+        sayI.innerText=res.hitokoto;
         sjp={
           'API':"hitokoto",
           '内容':res.hitokoto,
