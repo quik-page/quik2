@@ -195,7 +195,7 @@
         class:"sayseditordialog",
         content:`<h1>修改一言</h1>
 <div class="content">
-  <p><input class="says-input"/></p>
+  <p><input class="says-input" type="text"/></p>
 </div>
 <div class="footer">
   <button class="cancel btn">取消</button>

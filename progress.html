@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QUIK2 开发进度</title>
+  <style>
+    .wait,.progressing{
+      display: inline-block;
+      position: relative;
+      width: 1em;
+      height: 1em;
+    }
+    .wait::before,
+    .progressing::before{
+      content:'';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #f90;
+      display: block;
+      position: absolute;
+      top: calc(50% - 4px);
+      left: calc(50% - 4px);
+    }
+
+    .progressing::after{
+      content:'';
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
+      border: rgb(253, 231, 201) solid 2px;
+      border-top: #f90 solid 1px;
+      position: absolute;
+      top: calc(50% - 9px);
+      left: calc(50% - 9px);
+      animation: rotate 1s linear infinite;
+    }
+
+    @keyframes rotate {
+      0%{
+        transform: rotate(0deg);
+      }100%{
+        transform:rotate(360deg);
+      }
+    }
+    .progress {
+      width: 300px;
+      height: 3px;
+      background-color: #eee;
+      border-radius: 2px;
+      border: #ddd solid 1px;
+      overflow: hidden;
+    }
+    .progress span{
+      width: 3%;
+      background-color: #f90;
+      height:3px;
+      display: block;
+    }
+    .container{
+      
+    }
+    body{
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>QUIK2 开发进度</h2>
+    <div class="progress"><span></span></div>
+    <ol>
+      <li><span class="progressing"></span> 项目底层设计</li>
+      <li><span class="wait"></span> 项目基础功能开发</li>
+      <li><span class="wait"></span> 项目基础功能测试</li>
+      <li><span class="wait"></span> 项目必要扩展开发</li>
+      <li><span class="wait"></span> 项目功能性扩展开发</li>
+      <li><span class="wait"></span> 第一次公测</li>
+    </ol>
+  </div>
+</body>
+</html>

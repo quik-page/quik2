@@ -82,6 +82,12 @@
   }
 }
 
+body.t-dark .links li a{
+  color: #eee;
+}
+body.t-dark .links li.link-add a{
+  color: #555;
+}
 body.dark .links li.link-add a{
   background-color: #555;
   color:#eee;
