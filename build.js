@@ -50,7 +50,7 @@ qjs(path.join(__dirname,'index.js'), function (code) {
 });
 
 var css=fs.readFileSync(path.join(__dirname,'index.css')).toString();
-var cssmatch=css.match(/@import\s*url\(.*\)/g);
+var cssmatch=css.match(/@import\s*url\(.*\);/g);
 
 cssmatch.forEach(function(item){
   var p = item.substring(item.indexOf('(') + 1, item.lastIndexOf(')'));
