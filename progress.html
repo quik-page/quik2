@@ -6,14 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QUIK2 开发进度</title>
   <style>
-    .wait,.progressing{
+    .wait,.progressing,.done{
       display: inline-block;
       position: relative;
       width: 1em;
       height: 1em;
     }
     .wait::before,
-    .progressing::before{
+    .progressing::before,
+    .done::before{
       content:'';
       width: 8px;
       height: 8px;
@@ -24,7 +25,9 @@
       top: calc(50% - 4px);
       left: calc(50% - 4px);
     }
-
+    .done::before{
+      background-color: #0f0;
+    }
     .progressing::after{
       content:'';
       border-radius: 50%;
@@ -59,9 +62,6 @@
       height:3px;
       display: block;
     }
-    .container{
-      
-    }
     body{
       margin: 0;
       padding: 0;
@@ -71,7 +71,12 @@
       justify-content: center;
       align-items: center;
     }
-
+    ul>li{
+      list-style: none;
+    }
+    ol ul{
+      padding-left: 10px;
+    }
   </style>
 </head>
 <body>
@@ -79,8 +84,19 @@
     <h2>QUIK2 开发进度</h2>
     <div class="progress"><span></span></div>
     <ol>
-      <li><span class="progressing"></span> 项目底层设计</li>
-      <li><span class="wait"></span> 项目基础功能开发</li>
+      <li><span class="done"></span> 项目底层设计</li>
+      <li><span class="progressing"></span> 项目基础功能开发
+        <ul>
+          <li><span class="done"></span> ....(2项)</li>
+          <li>3.<span class="done"></span> 搜索框</li>
+          <li>4.<span class="progressing"></span> 链接</li>
+          <li>5.<span class="progressing"></span> 一言</li>
+          <li>6.<span class="wait"></span> 窗口</li>
+          <li>7.<span class="wait"></span> 二级菜单</li>
+          <li>8.<span class="wait"></span> 卡片</li>
+          <li><span class="wait"></span>....(>10项)</li>
+        </ul>  
+      </li>
       <li><span class="wait"></span> 项目基础功能测试</li>
       <li><span class="wait"></span> 项目必要扩展开发</li>
       <li><span class="wait"></span> 项目功能性扩展开发</li>

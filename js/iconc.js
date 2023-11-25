@@ -32,7 +32,7 @@
       return this.element;
     },
     setIcon:function(content){
-      this.content=options.content;
+      this.content=content;
       this.element.innerHTML=this.content;
     },
     setWidth:function(w){

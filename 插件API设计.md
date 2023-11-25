@@ -42,7 +42,7 @@
 ## 搜索引擎
 - `quik.omnibox.getSearchType()` 获取搜索引擎URL
 - `quik.omnibox.setSearchType(key)` 设置搜索引擎
-- `quik.omnibox.setSearchTypeList(list)` 设置搜索引擎列表
+- `quik.omnibox.setSearchList(list)` 设置搜索引擎列表
 - `quik.omnibox.getSearchTypeList()` 获取搜索引擎列表
 - `quik.omnibox.getSearchTypeIndex()` 获取搜索引擎KEY
 
@@ -384,3 +384,120 @@
 - **`quik.notice.prototype.setProgress(progress:number)`** 修改通知进度(useprogress=true)
 
 # 卡片 `new quik.card(details)`
+
+**`details` 属性：**
+
+| 属性 | 描述 | 内容 | 必要性 | 备注 |
+|--|--|--|:--:|--|
+| `content` | 卡片内容 | `HTMLString` | **required** |  |
+| `offset` | 卡片位置 | `{top?:,left?:,right?:,bottom?:}` | **required** |  |
+| `class` | 卡片HTMLElement class名称 | `String` | - | 便于css控制样式 |
+
+## `quik.dialog.prototype.show()`
+
+显示卡片
+
+## `quik.dialog.prototype.hide()`
+
+隐藏卡片
+
+## `quik.dialog.prototype.destory()`
+
+销毁卡片，销毁后卡片消失，不允许操作
+
+## `quik.dialog.prototype.getCardDom()`
+
+获取卡片Dom元素
+
+## `quik.dialog.prototype.getCardOffset()`
+
+获取卡片位置
+
+## `quik.dialog.prototype.setCardOffset({top?:,left?:,right?:,bottom?:},transition?:Boolean)`
+
+改变卡片位置
+
+`transition`: 为true时添加过渡效果
+
+# 图标栏 `new quik.icon(details)`
+
+**`details` 属性：**
+
+| 属性 | 描述 | 内容 | 必要性 | 备注 |
+|--|--|--|:--:|--|
+| `content` | 图标内容 | `HTMLString` | **required** |  |
+| `offset` | 图标位置 | `'tl'|'tr'|'bl'|'br'` | **required** |  |
+| `width` | 图标宽度 | `'tl'|'tr'|'bl'|'br'` | - |  |
+| `class` | 图标HTMLElement class名称 | `String` | - | 便于css控制样式 |
+
+## `quik.icon.getIcon()`
+
+获取icon HTMLElement
+
+## `quik.icon.setIcon(content:HTMLString)`
+
+设置icon内容
+
+## `quik.icon.getWidth()`
+
+获取icon宽度
+
+## `quik.icon.setWidth(width:String)`
+
+设置icon宽度
+
+## `quik.icon.show()`
+
+显示icon
+
+## `quik.icon.hids()`
+
+隐藏icon
+
+# Toast `quik.toast.show(message:String,time?:number)`
+
+显示一段提示信息
+
+- `message`:提示信息
+- `time`:显示时间 （ms）
+
+
+# 主菜单 `quik.mainmenu`
+
+## 添加项 
+
+`quik.mainmenu.append(ContextMenuItem)=>MainMenuId`
+
+## 删除项
+
+`quik.mainmenu.remove(MainMenuId)`
+
+# 插件 `quik.addons`
+
+## 发起安装请求 
+
+安装第三方插件：`quik.addons.askinstall(url:String)`
+安装官方插件：`quik.addons.askinstall(id:number)`
+
+## 发起卸载插件请求
+
+`quik.addons.askuninstall(rid:String)`
+
+# 主事件 `quik.addEventListener(event:String,cb:Function)`
+
+- `load`:所有组件和启动项加载完毕
+
+# 添加启动项 （高级）
+
+启动项是起始页显示（加载完成）前的执行内容，你可以通过 `quik.registerStarter(rid:String)` 使插件成为启动项，在插件内部需要这样写：
+
+```javascript
+quik.addons.main(function(options){
+  quik.registerStarter(options.rid);
+  // ...
+  if(options.next){
+    options.next();
+  }
+});
+
+```

@@ -23,15 +23,15 @@
       nlist[item.dataset.k]=item.querySelector('.url input').value;
     });
     list=nlist;
-    if(!list[omnibox.searchUtil.getSearchTypeIndex()]){
-      omnibox.searchUtil.setSearchType('bing');
+    if(!list[omnibox.getSearchTypeIndex()]){
+      omnibox.setSearchType('bing');
     }
-    omnibox.searchUtil.setSearchList(list);
+    omnibox.setSearchList(list);
     dia.close();
     toast.show('设置成功')
   }
 
-  var list=omnibox.searchUtil.getSearchTypeList();
+  var list=omnibox.getSearchTypeList();
   var str='';
   for(var k in list){
     str+=`<div class="item" data-k="${k}">

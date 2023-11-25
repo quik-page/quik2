@@ -48,3 +48,15 @@ var ijs = function (code, cb, rootPath) {
 qjs(path.join(__dirname,'index.js'), function (code) {
   fs.writeFileSync(path.join(__dirname,'index.bundle.js'),code);
 });
+
+var css=fs.readFileSync(path.join(__dirname,'index.css')).toString();
+var cssmatch=css.match(/@import\s*url\(.*\)/g);
+
+cssmatch.forEach(function(item){
+  var p = item.substring(item.indexOf('(') + 1, item.lastIndexOf(')'));
+  if(p.indexOf('./')==0){
+    css=css.replace(item,fs.readFileSync(path.join(__dirname,p)).toString())
+  }
+})
+fs.writeFileSync(path.join(__dirname,'index.bundle.css'),css);
+

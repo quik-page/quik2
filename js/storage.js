@@ -4,6 +4,7 @@
   }
 
   var isidbready=false;
+  var idbsupport=localforage._getSupportedDrivers([localforage.INDEXEDDB])[0]==localforage.INDEXEDDB;
   var readyfn=[];
   localforage.ready(function(){
     setTimeout(function(){
@@ -52,7 +53,7 @@
     }
   }
 
-  return function(ck){
+  var f=function(ck){
     if(typeof ck==='string'){
       if(!JSON.parse(localStorage.getItem("quik2"))[ck]){
         setAll({});
@@ -61,7 +62,9 @@
         if(!useidb){
           return getAll()[ck][k];
         }else{
-
+          if(!idbsupport){
+            throw new Error('indexedDB is not support in this browser');
+          }
           filerecv.get(getAll()[ck][k],function(file){
             callback(file);
           });
@@ -73,6 +76,9 @@
           a[ck][k]=v;
           setAll(a[ck]);
         }else{
+          if(!idbsupport){
+            throw new Error('indexedDB is not support in this browser');
+          }
           if(get(k)){
            filerecv.delete(get(k)); 
           }
@@ -91,6 +97,9 @@
         delete a[ck][k]
         setAll(a);
         }else{
+          if(!idbsupport){
+            throw new Error('indexedDB is not support in this browser');
+          }
           filerecv.delete(a[ck][k],function(){
             var a=getAll();
             delete a[ck][k];
@@ -116,4 +125,8 @@
       throw new Error('ck is not a string');
     }
   }
+  f.checkIDB=function(){
+    return idbsupport;
+  }
+  return f;
 })();
