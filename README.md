@@ -6,4 +6,6 @@ __但请你保证网络通畅，因为该测试版本未针对Github进行有效
 
 ## 功能开发剩余进度
 
-见 <https://siquan001.github.io/quik2/progress.html>
+所有内容根据 [插件API设计](./%E6%8F%92%E4%BB%B6API%E8%AE%BE%E8%AE%A1.md) 进行重构
+
+剩余进度见 <https://siquan001.github.io/quik2/progress.html>
