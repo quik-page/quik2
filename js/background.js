@@ -555,7 +555,10 @@
   function getUserUploadUrl(cb){
     var a=initsto.get('userbg');
     // 没有上传，直接返回false
-    if(!a) cb(false);
+    if(!a) {
+      cb(false);
+      return;
+    }
 
     if(a.type=='video'){
       // 视频
