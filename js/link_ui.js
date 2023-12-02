@@ -170,12 +170,15 @@
   }
   function observeCate(){
     var ob=new MutationObserver(function(){
-      var cates=util.query(linkF,'.cate-bar-items .cate-item',true);
-      var w=0;
-      cates.forEach(function(c){
-        w+=c.getBoundingClientRect().width;
-      })
-      util.query(linkF,'.cate-bar-items').style.width=w+'px';
+      setTimeout(function(){
+        var cates=util.query(linkF,'.cate-bar-items .cate-item',true);
+        var w=0;
+        cates.forEach(function(c){
+          w+=c.getBoundingClientRect().width;
+        })
+        util.query(linkF,'.cate-bar-items').style.width=w+'px';
+      },1)
+      
     });
     ob.observe(util.query(linkF,'.cate-bar-items'),{childList:true});
   }
