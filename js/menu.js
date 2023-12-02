@@ -95,7 +95,5 @@
     })
   })
 
-  return {
-    contextMenu:contextMenu
-  }
+  return contextMenu;
 })();

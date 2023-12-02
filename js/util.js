@@ -81,6 +81,19 @@
     },
     getGoogleIcon:function(unicode){
       return '<span class="material-symbols-outlined">&#x'+unicode+';</span>'
+    },
+    /**
+     * 检查details中是否含有必选项
+     * @param {Object} details 
+     * @param {String[]} requires 
+     */
+    checkDetailsCorrect:function(details,requires){
+      for(var i=0;i<requires.length;i++){
+        if(details.hasOwnProperty(requires[i])==false){
+          return false;
+        }
+      }
+      return true;
     }
   }
 })();

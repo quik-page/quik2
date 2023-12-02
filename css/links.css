@@ -5,32 +5,80 @@
   width: 100%;
   overflow: auto;
 }
-.links li{
+.links .cate-bar{
+  width: 100%;
+  height: 30px;
+  overflow: hidden;
+}
+.links .cate-bar>*{
+  float: left;
+}
+.links .cate-bar .cate-bar-scrolls{
+  width: calc(100% - 120px);
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+.links .cate-bar .cate-bar-scrolls::-webkit-scrollbar{
+  display: none;
+}
+.links .cate-bar .cate-bar-controls>*{
+  width: 40px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  float: left;
+  cursor: pointer;
+  user-select: none;
+}
+.links .cate-bar .cate-bar-controls .disabled{
+  color: #999;
+  background-color: transparent!important;
+}
+.links .cate-bar .cate-bar-controls span.material-symbols-outlined{
+  line-height: inherit;
+}
+.links .cate-bar .cate-item:hover,
+.links .cate-bar .cate-bar-controls>*:hover{
+  background-color: #f4f4f4;
+}
+.links .cate-bar .cate-item.active{
+  border-bottom: #555 solid 1px;
+}
+.links .cate-bar .cate-item{
+  float: left;
+  line-height: 30px;
+  height: 30px;
+  padding: 0 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+}
+.links ul.link-list li{
   float: left;
   width: 75px;
   height: 100px;
   position: relative;
 }
-.links li a{
+.links ul.link-list li a{
   text-decoration: none;
   color: inherit;
   display: block;
 }
-.links li a img{
+.links ul.link-list li a img{
   width: 35px;
   height: 35px;
   padding:10px 10px;
   margin: 5px 10px;
   border-radius: 10px;
 }
-.links li a p{
+.links ul.link-list li a p{
   font-size: 12px;
   text-align: center;
 }
-.links li:hover a img{
+.links ul.link-list li:hover a img{
   background-color: rgba(220,220,220,.5);
 }
-.links li .editlinkbtn{
+.links ul.link-list li .editlinkbtn{
   position: absolute;
   top:10px;
   right:10px;
@@ -39,10 +87,10 @@
   display: none;
   cursor: pointer;
 }
-.links li:hover .editlinkbtn{
+.links ul.link-list li:hover .editlinkbtn{
   display:block;
 }
-.links li.link-add a{
+.links ul.link-list li.link-add a{
   width: 43px;
   height: 43px;
   margin: 16px;
@@ -52,27 +100,27 @@
   text-align: center;
   color:#555;
 }
-.links li.link-add a:hover{
+.links ul.link-list li.link-add a:hover{
   background-color: #e1e1e1;
 }
 
 @media(max-width:650px){
-  .links li .editlinkbtn{
+  .links ul.link-list li .editlinkbtn{
     display: block;
     font-size: 12px;
     transform: scale(.6);
   }
-  .links li{
+  .links ul.link-list li{
     width: 55px;
     height: 75px;
   }
-  .links li a img{
+  .links ul.link-list li a img{
     width: 25px;
     height: 25px;
     padding: 5px;
     margin: 5px 10px;
   }
-  .links li.link-add a{
+  .links ul.link-list li.link-add a{
     margin: 6px;
   }
 }
@@ -82,16 +130,16 @@
   }
 }
 
-body.t-dark .links li a{
+body.t-dark .links ul.link-list li a{
   color: #eee;
 }
-body.t-dark .links li.link-add a{
+body.t-dark .links ul.link-list li.link-add a{
   color: #555;
 }
-body.dark .links li.link-add a{
+body.dark .links ul.link-list li.link-add a{
   background-color: #555;
   color:#eee;
 }
-body.dark .links li.link-add a:hover{
+body.dark .links ul.link-list li.link-add a:hover{
   background-color: #333;
 }

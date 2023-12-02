@@ -125,7 +125,10 @@
         var a2=getsa();
         searchfetch=util.jsonp('https://www.baidu.com/sugrec?pre=1&p=3&ie=utf-8&json=1&prod=pc&from=pc_web&wd='+text,function(res){
           searchfetch=null;
-          if(!res.g) r(a2);
+          if(!res.g){
+            r(a2);
+            return;
+          } 
           res.g.forEach(function(item){
             a2.push({
               icon:util.getGoogleIcon('E8B6'),

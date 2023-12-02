@@ -5,6 +5,7 @@
 
   var isidbready=false;
   var idbsupport=localforage._getSupportedDrivers([localforage.INDEXEDDB])[0]==localforage.INDEXEDDB;
+  // var idbsupport=false;
   var readyfn=[];
   localforage.ready(function(){
     setTimeout(function(){
@@ -125,6 +126,11 @@
       throw new Error('ck is not a string');
     }
   }
+
+  /**
+   * 检查浏览器是否支持indexedDB
+   * @returns {Boolean} indexedDB support
+   */
   f.checkIDB=function(){
     return idbsupport;
   }

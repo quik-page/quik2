@@ -7,7 +7,6 @@
   var iconc=_REQUIRE_('./js/iconc.js');
   var setting=_REQUIRE_('./js/setting.js');
   var omnibox=_REQUIRE_('./js/omnibox.js');
-  console.log(omnibox);
   var link=_REQUIRE_('./js/link.js');
   var linkUI=_REQUIRE_('./js/link_ui.js');
   var says=_REQUIRE_('./js/says.js');
@@ -20,7 +19,7 @@
     omnibox:omnibox,
     util:util,
     link:link,
-    linkUI:linkUI,
+    // linkUI:linkUI,
     dialog:dialog,
     says:says,
     menu:menu,

@@ -5,7 +5,7 @@
     offset:"tr"
   });
 
-  var main_menu=new menu.contextMenu({
+  var main_menu=new menu({
     list:[{
       icon:util.getGoogleIcon('e88e'),
       title:"关于QUIK",

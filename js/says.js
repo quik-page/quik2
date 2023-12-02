@@ -16,7 +16,7 @@
 
   var sayI=util.query(sayF,'div.say-inner');
   var sayC=util.query(sayF,'div.say-control');
-  var sayMenu=new menu.contextMenu({
+  var sayMenu=new menu({
     list:[],
   });
 
