@@ -282,8 +282,9 @@
 | `index` | 设置项位置 | `Number`| - | 方便排序用，正数从前，负数从后|
 | `message` | 设置项描述 | `String` | - ||
 | `type` | 设置项类型 | 参见设置项类型 | **required** |
-| `init` | 返回设置初始化内容 | `Function` | type=`range\|select` **required** | 为`range`和`select`准备，`range`返回\[min,max\]，`select`返回\[选项...\] |
+| `init` | 返回设置初始化内容 | `Function` | type=`range\|select` **required** | 为`range`和`select`准备，`range`返回\[min,max\]，`select`返回\{选项...\} |
 | `check` | 检查用户输入内容 | `Function(content)` | - ||
+| `get` | 获取内容 | `Function()=>Promise`| **required** ||
 | `callback` | 设置修改回调 | `Function(content)`| **required** ||
 
 返回SettingItem实例
@@ -393,27 +394,27 @@
 | `offset` | 卡片位置 | `{top?:,left?:,right?:,bottom?:}` | **required** |  |
 | `class` | 卡片HTMLElement class名称 | `String` | - | 便于css控制样式 |
 
-## `quik.dialog.prototype.show()`
+## `quik.card.prototype.show()`
 
 显示卡片
 
-## `quik.dialog.prototype.hide()`
+## `quik.card.prototype.hide()`
 
 隐藏卡片
 
-## `quik.dialog.prototype.destory()`
+## `quik.card.prototype.destory()`
 
 销毁卡片，销毁后卡片消失，不允许操作
 
-## `quik.dialog.prototype.getCardDom()`
+## `quik.card.prototype.getCardDom()`
 
 获取卡片Dom元素
 
-## `quik.dialog.prototype.getCardOffset()`
+## `quik.card.prototype.getCardOffset()`
 
 获取卡片位置
 
-## `quik.dialog.prototype.setCardOffset({top?:,left?:,right?:,bottom?:},transition?:Boolean)`
+## `quik.card.prototype.setCardOffset({top?:,left?:,right?:,bottom?:},transition?:Boolean)`
 
 改变卡片位置
 
