@@ -1,0 +1,79 @@
+(function(){
+function SettingGroup(details){
+  this.title=details.title;
+  this.index=details.index;
+  if(this.index<0) this.index=0
+  this.items=[];
+  this.id='seg_'+util.getRandomHashCache();
+  this._events={
+    change:[]
+  }
+}
+
+SettingGroup.prototype={
+  addNewItem:function(item){
+    this.items.push(item);
+    var _=this;
+    item.on('change',function(dt,_this){
+      _._dochange({
+        type:"change",
+        details:dt,
+        id:_this.id
+      })
+    });
+    _._dochange({
+      type:"add"
+    })
+  },
+  setTitle:function(title){
+    this.title=title;
+    this._dochange({
+      type:"it",
+      details:{
+        attr:"title",
+        content:title
+      }
+    })
+  },
+  setIndex:function(index){
+    this.index=index;
+    this._dochange({
+      type:"it",
+      details:{
+        attr:"index",
+        content:index
+      }
+    })
+  },
+  on:function(event,callback){
+    if(this._events[event]){
+      this._events[event].push(callback);
+    }
+  },
+  show:function(){
+    this.show=true;
+    this._dochange({
+      type:"it",
+      details:{
+      attr:"show",
+      content:true
+    }})
+  },
+  hide:function(){
+    this.show=false;
+    this._dochange({
+      type:"it",
+      details:{
+      attr:"show",
+      content:false
+    }})
+  },
+  _dochange:function(dt){
+    var _=this;
+    this._events.change.forEach(function(callback){
+      callback(dt,_);
+    });
+  }
+}
+return SettingGroup;
+})();

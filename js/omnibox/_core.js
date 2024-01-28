@@ -65,7 +65,7 @@
     k.SA.push(options);
   }
 
-  var searchUtil=_REQUIRE_("./search_util.js");
+  var searchUtil=_REQUIRE_("../search/util.js");
 
   function checkUrl(text){
     if(initsto.get('justsearch')){
@@ -170,7 +170,8 @@
     }
   });
 
-  setting.registerSetting({
+  
+  /*setting.registerSetting({
     index:1,
     unit:'搜索框',
     title:"搜索框仅搜索",
@@ -183,7 +184,23 @@
       initsto.set('justsearch',value);
       return true;
     }
+  })*/
+
+
+  var si=new SettingItem({
+    title:"搜索框仅搜索",
+    index:1,
+    type:'boolean',
+    message:"打开后，搜索框将失去打开链接的功能",
+    get:function(){
+      return !!initsto.get('justsearch');
+    },
+    callback:function(value){
+      initsto.set('justsearch',value);
+      return true;
+    }
   })
+  sg.addNewItem(si);
   
   return {
     getSA:getSA,

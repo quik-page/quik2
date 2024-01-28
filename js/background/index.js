@@ -1,6 +1,6 @@
 (function(){
-  var erciyuanbg=_REQUIRE_('./api/erciyuanbg.js');
-  var fenjibg=_REQUIRE_('./api/fenjibg.js');
+  var erciyuanbg=_REQUIRE_('../api/erciyuanbg.js');
+  var fenjibg=_REQUIRE_('../api/fenjibg.js');
 
   var bgf=util.element('div',{
     class:"bgf"
@@ -471,14 +471,30 @@
   activeTab('0');
 
   // 在设置添加背景设置选项
-  setting.registerSetting({
+  // setting.registerSetting({
+  //   title:"设置背景",
+  //   unit:"背景",
+  //   message:"",
+  //   callback:function(){
+  //     bg_set_d.open();
+  //   }
+  // });
+  var sg=new SettingGroup({
+    title:"背景",
+    index:1
+  });
+
+  var si=new SettingItem({
     title:"设置背景",
-    unit:"背景",
+    index:1,
+    type:'null',
     message:"",
-    callback:function(){
+    callback:function(value){
       bg_set_d.open();
     }
-  });
+  })
+  sg.addNewItem(si);
+  mainSetting.addNewGroup(sg);
 
   // 图片、视频上传器
   var iovuploader=new dialog({

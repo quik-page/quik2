@@ -6,8 +6,13 @@
     beforeenter:[],
     afterenter:[]
   };
-  var core=_REQUIRE_('./omnibox_core.js')
-  var ui=_REQUIRE_('./omnibox_ui.js')
+  var sg=new SettingGroup({
+    title:"搜索框",
+    index:1
+  });
+  mainSetting.addNewGroup(sg);
+  var core=_REQUIRE_('./_core.js')
+  var ui=_REQUIRE_('./_ui.js')
 
   return{
     value:ui.setValue,
@@ -24,6 +29,7 @@
     setSearchList:core.searchUtil.setSearchList,
     search:{
       addEventListener:core.searchUtil.addEventListener
-    }
+    },
+    sg
   }
 })()

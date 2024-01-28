@@ -232,12 +232,28 @@
     input.focus();
   }
 
-  setting.registerSetting({
-    index:0,
-    unit:"搜索框",
+  // setting.registerSetting({
+  //   index:0,
+  //   unit:"搜索框",
+  //   title:"自动聚焦",
+  //   message:"打开页面自动聚焦搜索框",
+  //   type:"boolean",
+  //   get:function(){
+  //     return !!core.initsto.get('autofocus');
+  //   },
+  //   callback:function(value){
+  //     core.initsto.set('autofocus',value);
+  //     return true;
+  //   }
+  // })
+
+  
+
+  var si=new SettingItem({
     title:"自动聚焦",
+    index:1,
+    type:'boolean',
     message:"打开页面自动聚焦搜索框",
-    type:"boolean",
     get:function(){
       return !!core.initsto.get('autofocus');
     },
@@ -246,6 +262,7 @@
       return true;
     }
   })
+  sg.addNewItem(si);
 
   return {
     setValue:function(value){

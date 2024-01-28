@@ -1,7 +1,7 @@
 (function(){
   var initsto=storage('says');
-  var jinrishici=_REQUIRE_('./api/jinrishici.js');
-  var hitokoto=_REQUIRE_('./api/hitokoto.js');
+  var jinrishici=_REQUIRE_('../api/jinrishici.js');
+  var hitokoto=_REQUIRE_('../api/hitokoto.js');
 
 //   var sayTypes=['user','jinrishici','hitokoto'];
 

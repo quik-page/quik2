@@ -1,0 +1,67 @@
+(function(){
+function SettingItem(details){
+  this.title=details.title;
+  this.index=details.index;
+  this.type=details.type;
+  this.init=details.init;
+  this.check=details.check;
+  this.callback=details.callback;
+  this.message=details.message;
+  this.get=details.get;
+  this.show=true;
+  this.id='sei_'+util.getRandomHashCache();
+  this._events={
+    change:[]
+  }
+}
+
+SettingItem.prototype={
+  setTitle:function(title){
+    this.title=title;
+    this._dochange({
+      attr:"title",
+      content:title
+    })
+  },
+  setIndex:function(index){
+    this.index=index;
+    this._dochange({
+      attr:"index",
+      content:index
+    })
+  },
+  setMessage:function(message){
+    this.message=message;
+    this._dochange({
+      attr:"message",
+      content:message
+    })
+  },
+  show:function(){
+    this.show=true;
+    this._dochange({
+      attr:"show",
+      content:true
+    })
+  },
+  hide:function(){
+    this.show=false;
+    this._dochange({
+      attr:"show",
+      content:false
+    })
+  },
+  on:function(event,callback){
+    if(this._events[event]){
+      this._events[event].push(callback);
+    }
+  },
+  _dochange:function(dt){
+    var _=this;
+    this._events.change.forEach(function(callback){
+      callback(dt,_);
+    });
+  }
+}
+return SettingItem;
+})();

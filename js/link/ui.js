@@ -1,4 +1,5 @@
 (function(){
+  console.log(link);
   var linkF=util.element('div',{
     class:"links"
   });

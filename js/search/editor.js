@@ -77,13 +77,25 @@
     }
   }
   // 添加设置
-  setting.registerSetting({
-    index:2,
-    unit:"搜索框",
+  // setting.registerSetting({
+  //   index:2,
+  //   unit:"搜索框",
+  //   title:"自定义搜索引擎",
+  //   message:"",
+  //   callback:function(){
+  //     dia.open();
+  //   }
+  // })
+
+
+  var si=new SettingItem({
     title:"自定义搜索引擎",
+    index:2,
+    type:'null',
     message:"",
-    callback:function(){
+    callback:function(value){
       dia.open();
     }
   })
+  omnibox.sg.addNewItem(si);
 })();
