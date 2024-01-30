@@ -112,6 +112,7 @@
     <ul class="link-list"></ul>`
     link.ready(function(){
       link.getCates(function(r){
+        console.log(r);
         r.data.forEach(function(g){
           bcate(g);
         });
@@ -143,7 +144,6 @@
         })
       }
       function c(a){
-        console.log(a);
         if(a<0)return 0;
         var w=util.query(linkF,'.cate-bar-scrolls').scrollWidth-util.query(linkF,'.cate-bar-scrolls').getBoundingClientRect().width;
         if(a>w)return w;
@@ -175,7 +175,9 @@
         var cates=util.query(linkF,'.cate-bar-items .cate-item',true);
         var w=0;
         cates.forEach(function(c){
-          w+=c.getBoundingClientRect().width;
+          // edit at 2024年1月29日 15点37分
+          // @note 因为加了margin
+          w+=c.getBoundingClientRect().width+4;
         })
         util.query(linkF,'.cate-bar-items').style.width=w+'px';
       },1)

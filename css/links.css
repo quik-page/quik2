@@ -42,7 +42,7 @@
   background-color: #f4f4f4;
 }
 .links .cate-bar .cate-item.active{
-  border-bottom: #555 solid 1px;
+  background-color: #eeeeee;
 }
 .links .cate-bar .cate-item{
   float: left;
@@ -52,6 +52,8 @@
   box-sizing: border-box;
   cursor: pointer;
   user-select: none;
+  border-radius: 4px;
+  margin: 0 2px;
 }
 .links ul.link-list li{
   float: left;

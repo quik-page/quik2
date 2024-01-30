@@ -493,8 +493,8 @@
       bg_set_d.open();
     }
   })
-  sg.addNewItem(si);
   mainSetting.addNewGroup(sg);
+  sg.addNewItem(si);
 
   // 图片、视频上传器
   var iovuploader=new dialog({

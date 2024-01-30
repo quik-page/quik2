@@ -2460,6 +2460,7 @@ return SettingItem;
     <ul class="link-list"></ul>`
     link.ready(function(){
       link.getCates(function(r){
+        console.log(r);
         r.data.forEach(function(g){
           bcate(g);
         });
@@ -2491,7 +2492,6 @@ return SettingItem;
         })
       }
       function c(a){
-        console.log(a);
         if(a<0)return 0;
         var w=util.query(linkF,'.cate-bar-scrolls').scrollWidth-util.query(linkF,'.cate-bar-scrolls').getBoundingClientRect().width;
         if(a>w)return w;
@@ -2523,7 +2523,9 @@ return SettingItem;
         var cates=util.query(linkF,'.cate-bar-items .cate-item',true);
         var w=0;
         cates.forEach(function(c){
-          w+=c.getBoundingClientRect().width;
+          // edit at 2024年1月29日 15点37分
+          // @note 因为加了margin
+          w+=c.getBoundingClientRect().width+4;
         })
         util.query(linkF,'.cate-bar-items').style.width=w+'px';
       },1)
@@ -3643,8 +3645,8 @@ return SettingItem;
       bg_set_d.open();
     }
   })
-  sg.addNewItem(si);
   mainSetting.addNewGroup(sg);
+  sg.addNewItem(si);
 
   // 图片、视频上传器
   var iovuploader=new dialog({
