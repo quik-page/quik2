@@ -55,6 +55,10 @@
   background-color: #eee;
   color: #333;
   border-radius: 2px;
+  /* @note 适配非button @edit 2024/1/30 15:18*/
+  display: inline-block;
+  text-align: center;
+  font-size: 12px;
 }
 .dialog .d-c img,
 .dialog .d-c video

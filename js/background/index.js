@@ -509,13 +509,16 @@
         <p class="tip">URL和文件只需填写一个即可，优先选择本地文件</p>
       </div>
       <div class="footer">
-        <button class="cancel btn">取消</button>
+        <div class="cancel btn">取消</div>
         <button class="ok btn">确定</button>
       </div>
     </form>
   `,
     class:"iovuploader",
   })
+  // @note 将cancel按钮修改为div，防止表单submit到cancel
+  // @edit at 2024/1/30 15:20
+
   // Dom
   var iovuploaderf=iovuploader.getDialogDom();
   // 取消
@@ -642,12 +645,15 @@
         <p>深色模式：<input type="color" class="darkbgcolor"/></p>
       </div>
       <div class="footer">
-        <button class="cancel btn">取消</button>
+        <div class="cancel btn">取消</div>
         <button class="ok btn">确定</button>
       </div>
     </form>
     `
   });
+  // @note 将cancel按钮修改为div，防止表单submit到cancel
+  // @edit at 2024/1/30 15:20
+
   // Dom
   var colorchangerf=colorchanger.getDialogDom();
   // 取消

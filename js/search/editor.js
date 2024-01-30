@@ -65,7 +65,13 @@
         toast.show('该项只读');
         return;
       }
-      this.parentElement.parentElement.querySelector('.icon img').src=util.getFavicon(this.value);
+      // @note 隐藏用户输入了不正确的URL的报错
+      // @edit at 2024/1/30 15:28
+      try{
+        this.parentElement.parentElement.querySelector('.icon img').src=util.getFavicon(this.value);
+      }catch(e){
+        // 用户输入了不正确的URL
+      }
     }
     util.query(item,'.remove').onclick=function(){
       if(this.parentElement.dataset.k=='bing'){
@@ -76,16 +82,6 @@
       this.parentElement.remove();
     }
   }
-  // 添加设置
-  // setting.registerSetting({
-  //   index:2,
-  //   unit:"搜索框",
-  //   title:"自定义搜索引擎",
-  //   message:"",
-  //   callback:function(){
-  //     dia.open();
-  //   }
-  // })
 
 
   var si=new SettingItem({
