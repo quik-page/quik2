@@ -117,10 +117,14 @@
         a[ck]=ob;
         localStorage.setItem("quik2",JSON.stringify(a));
       }
+      function list(){
+        return Object.keys(getAll()[ck]);
+      }
       return {
         get:get,
         set:set,
-        remove:remove
+        remove:remove,
+        list:list
       }
     }else{
       throw new Error('ck is not a string');

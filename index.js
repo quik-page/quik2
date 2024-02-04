@@ -10,14 +10,18 @@
   var SettingGroup=setting.SettingGroup;
   var SettingItem=setting.SettingItem;
   var mainSetting=setting.mainSetting;
+  var tyGroup=setting.tyGroup;
   var omnibox=_REQUIRE_('./js/omnibox/index.js');
   var link=_REQUIRE_('./js/link/index.js');
   var says=_REQUIRE_('./js/says/index.js');
   var background=_REQUIRE_('./js/background/index.js');
   var mainmenu=_REQUIRE_('./js/menu/mainmenu.js');
   var searchEditor=_REQUIRE_('./js/search/editor.js');
+  var theme=_REQUIRE_('./js/theme/index.js');
+  var addon=_REQUIRE_('./js/addon/index.js');
 
   window.quik={
+    addon,
     storage,
     omnibox,
     util,
@@ -33,6 +37,7 @@
     SettingGroup,
     SettingItem,
     mainSetting,
+    tyGroup
   }
   document.querySelector("main").style.display='';
 })();

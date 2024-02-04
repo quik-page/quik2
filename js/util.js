@@ -59,6 +59,23 @@
         delete window[a];
       }
     },
+    xhr:function(url,cb){
+      var xhr=new XMLHttpRequest();
+      xhr.onreadystatechange=function(){
+        if(xhr.readyState==4){
+          if(xhr.status==200){
+            cb(xhr.responseText);
+          }
+        }
+      }
+      xhr.open('GET',url,true);
+      xhr.send();
+      return{
+        abort:function(){
+          xhr.abort();
+        }
+      }
+    },
     getRandomHashCache:function(){
       return Math.random().toString(36).slice(2)+Date.now().toString(36);
     },

@@ -34,13 +34,15 @@ main .bottomer
 }
 main .topper .left,
 main .bottomer .left,
-main .topper .item,
-main .bottomer .item
+main .topper .left .item,
+main .bottomer .left .item
 {
   float: left;
 }
 main .topper .right,
-main .bottomer .right{
+main .bottomer .right,
+main .topper .right .item,
+main .bottomer .right .item{
   float: right;
 }
 main .center{
