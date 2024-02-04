@@ -527,11 +527,19 @@ return posix;
       matches.forEach(function(item,index){
         var url=eval(item.substring(item.indexOf('(')+1,item.lastIndexOf(')')));
         if(cache[url]){
-          code=code.replace(item,cache[url]);
+          if(url.lastIndexOf('.js')==url.length-3){
+            code=code.replace(item,cache[url]);
+          }else{
+            code=code.replace(item,zhuanyi(cache[url]));
+          }
         }else{
           bcbs.push(new Promise(function(r,j){
             qjs(url,function(codes){
-              code=code.replace(item,codes);
+              if(url.lastIndexOf('.js')==url.length-3){
+                code=code.replace(item,codes);
+              }else{
+                code=code.replace(item,zhuanyi(codes));
+              }
               r();
             },path.dirname(rootPath))
           }));
@@ -548,6 +556,10 @@ return posix;
     }else{
       cb(code);
     }
+  }
+
+  function zhuanyi(code){
+    return "\""+code.replaceAll('"','\\"').replaceAll('\r\n','\\n').replaceAll('\n','\\n').replaceAll("\t","\\t")+"\"";
   }
 
   window.addEventListener('DOMContentLoaded',function(){

@@ -1,7 +1,7 @@
 (function(){
   var addon_icon=new iconc.icon({
     offset:"tr",
-    content:util.getGoogleIcon("e87b")
+    content:util.getGoogleIcon("e87b",{type:"fill"})
   });
   addon_icon.getIcon().onclick=function(){
     // TODO:open dialog
@@ -76,6 +76,7 @@
     return new Session();
   }
 
+  
   return {
     installAddon
   }
