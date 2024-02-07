@@ -4,6 +4,7 @@
   });
   util.query(document, 'body').appendChild(bgf);
   var initsto = storage('background');
+  var tabindexCount=0;
 
   // 避免缓存（用于图片API）
   function urlnocache(url) {
@@ -55,14 +56,13 @@
   var drawers = [defDrawer];
   dodrawer(defDrawer);
 
-  var tabindexCount=0;
   function pushBgTab(item) {
     var tab=item.tab; // tab标题
 
     // 一个tab标签
     var tabitem=util.element('div',{
       class:'tabitem',
-      'data-tab':tabindexCount //TabID，方便控制
+      'data-tab':tabindexCount.toString() //TabID，方便控制
     });
     tab_con.appendChild(tabitem);
     tabitem.innerHTML=tab;
@@ -74,7 +74,7 @@
     // 内容
     var scrollitem=util.element('div',{
       class:'scrollitem',
-      'data-tab':tabindexCount //对应TabID，方便控制
+      'data-tab':tabindexCount.toString() //对应TabID，方便控制
     });
     scroll_con.appendChild(scrollitem);
     scrollitem.innerHTML=item.content;
@@ -173,7 +173,7 @@
   sg.addNewItem(si);
 
   //开始activeTab0
-  // activeTab('0');
+    activeTab('0');
 
   return{
     pushBgDrawer,

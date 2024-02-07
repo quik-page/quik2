@@ -1,5 +1,4 @@
 (function(){
-  console.log(link);
   var linkF=util.element('div',{
     class:"links"
   });
@@ -112,7 +111,6 @@
     <ul class="link-list"></ul>`
     link.ready(function(){
       link.getCates(function(r){
-        console.log(r);
         r.data.forEach(function(g){
           bcate(g);
         });

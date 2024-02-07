@@ -8,9 +8,15 @@
         content:_REQUIRE_('./htmls/imgvideobgtab.html')
       })
       // pushTab 纯色
-
+      e.pushBgTab({
+        tab:"纯色",
+        content:_REQUIRE_('./htmls/colorbgtab.html')
+      })
       // pushTab 自定义
-
+      e.pushBgTab({
+        tab:"自定义",
+        content:_REQUIRE_('./htmls/custombgtab.html')
+      })
     },
     destory: function () {
       // TODO

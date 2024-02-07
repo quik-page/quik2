@@ -172,7 +172,8 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   right: 5px;
 }
 .d-c.bg_d .scroll_con .bgitem.full .left .hasBg{
-  display: none;
+  width: 100%;
+  height: 100%;
 }
 .d-c.bg_d .scroll_con .bgitem.full .left .noBg{
   width: 100%;
@@ -182,6 +183,7 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   align-items: center;
   background-color: #09f;
   color: #fff;
+  display: none;
 }
 .d-c.bg_d .scroll_con .bgitem.full .left .noBg span{
   font-size: 36px;
