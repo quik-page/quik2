@@ -59,6 +59,26 @@
         delete window[a];
       }
     },
+    xhr:function(url,cb){
+      var xhr=new XMLHttpRequest();
+      xhr.onreadystatechange=function(){
+        if(xhr.readyState==4){
+          if(xhr.status==200){
+            cb(xhr.responseText);
+          }
+        }
+      }
+      xhr.open('GET',url,true);
+      xhr.send();
+      return{
+        abort:function(){
+          xhr.abort();
+        }
+      }
+    },
+    checkSession:function (session){
+      return session.isSession&&session.session_token==="Hvm_session_token_eoi1j2j";
+    },
     getRandomHashCache:function(){
       return Math.random().toString(36).slice(2)+Date.now().toString(36);
     },
@@ -79,8 +99,8 @@
       }
       toast.show('复制成功');
     },
-    getGoogleIcon:function(unicode){
-      return '<span class="material-symbols-outlined">&#x'+unicode+';</span>'
+    getGoogleIcon:function(unicode,d){
+      return '<span class="material-symbols-outlined'+(d&&d.type?' '+d.type:'')+'">&#x'+unicode+';</span>'
     },
     /**
      * 检查details中是否含有必选项

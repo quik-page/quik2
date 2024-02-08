@@ -679,7 +679,7 @@ Setting.prototype={
       },
       'null':function(){
         elr.innerHTML=`<div class="setting-item-input null-click">${util.getGoogleIcon('e5e1')}</div>`;
-        elr.onclick=function(){
+        itemEle.onclick=function(){
           item.callback();
         }
       }
@@ -711,11 +711,18 @@ Setting.prototype={
         }else{
           v=this.value;
         }
-        if(item.check(v)){
-          item.callback(v)
+        //@note 判断check方法是否存在，check是可选参数
+        //@edit at 2023/1/30 15:12
+        if(typeof item.check=='function'){
+          if(item.check(v)){
+            item.callback(v)
+          }else{
+            getacb();
+          }
         }else{
-          getacb();
+          item.callback(v);
         }
+        
     });
   },
   _dochangeGroup:function(group,dt){
@@ -1480,25 +1487,12 @@ return SettingItem;
   chulitype('');
 
   if(core.initsto.get('autofocus')){
-    input.focus();
+    // @note 这样才能生效，也许是因为浏览器还没渲染好吧
+    // @edit at 2024年1月30日 15点10分
+    setTimeout(function(){
+      input.focus();
+    })
   }
-
-  // setting.registerSetting({
-  //   index:0,
-  //   unit:"搜索框",
-  //   title:"自动聚焦",
-  //   message:"打开页面自动聚焦搜索框",
-  //   type:"boolean",
-  //   get:function(){
-  //     return !!core.initsto.get('autofocus');
-  //   },
-  //   callback:function(value){
-  //     core.initsto.set('autofocus',value);
-  //     return true;
-  //   }
-  // })
-
-  
 
   var si=new SettingItem({
     title:"自动聚焦",
@@ -2621,11 +2615,13 @@ return SettingItem;
             <p>位置：<input class="link-add-index" type="number" min="0" placeholder="链接位置"/></p>
           </div>
           <div class="footer">
-            <button class="cancel btn">取消</button>
+            <div class="cancel btn">取消</div>
             <button class="ok btn"></button>
           </div>
         </form>`,
       });
+      // @note 将cancel按钮修改为div，防止表单submit到cancel
+      // @edit at 2024/1/30 15:20
       var d=linkaddDialog.getDialogDom();
       util.query(d,'.cancel.btn').onclick=function(e){
         e.preventDefault();
@@ -2694,11 +2690,13 @@ return SettingItem;
             <p>标题：<input class="cate-name" type="text" required placeholder="分组标题(必填)"/></p>
           </div>
           <div class="footer">
-            <button class="cancel btn">取消</button>
+            <div class="cancel btn">取消</div>
             <button class="ok btn">确定</button>
           </div>
         </form>`,
       });
+      // @note 将cancel按钮修改为div，防止表单submit到cancel
+      // @edit at 2024/1/30 15:20
     }
       var d=cateeditDialog.getDialogDom();
       util.query(d,'.cancel.btn').onclick=function(e){
@@ -3064,11 +3062,12 @@ return SettingItem;
   <p><input class="says-input" type="text"/></p>
 </div>
 <div class="footer">
-  <button class="cancel btn">取消</button>
+  <div class="cancel btn">取消</div>
   <button class="ok btn">确定</button>
 </div>`
       })
-
+      // @note 将cancel按钮修改为div，防止表单submit到cancel
+      // @edit at 2024/1/30 15:20
       var d=sayseditordialog.getDialogDom();
       util.query(d,'.cancel.btn').onclick=function(){
         sayseditordialog.close();
@@ -3661,13 +3660,16 @@ return SettingItem;
         <p class="tip">URL和文件只需填写一个即可，优先选择本地文件</p>
       </div>
       <div class="footer">
-        <button class="cancel btn">取消</button>
+        <div class="cancel btn">取消</div>
         <button class="ok btn">确定</button>
       </div>
     </form>
   `,
     class:"iovuploader",
   })
+  // @note 将cancel按钮修改为div，防止表单submit到cancel
+  // @edit at 2024/1/30 15:20
+
   // Dom
   var iovuploaderf=iovuploader.getDialogDom();
   // 取消
@@ -3794,12 +3796,15 @@ return SettingItem;
         <p>深色模式：<input type="color" class="darkbgcolor"/></p>
       </div>
       <div class="footer">
-        <button class="cancel btn">取消</button>
+        <div class="cancel btn">取消</div>
         <button class="ok btn">确定</button>
       </div>
     </form>
     `
   });
+  // @note 将cancel按钮修改为div，防止表单submit到cancel
+  // @edit at 2024/1/30 15:20
+
   // Dom
   var colorchangerf=colorchanger.getDialogDom();
   // 取消
@@ -3954,7 +3959,13 @@ return SettingItem;
         toast.show('该项只读');
         return;
       }
-      this.parentElement.parentElement.querySelector('.icon img').src=util.getFavicon(this.value);
+      // @note 隐藏用户输入了不正确的URL的报错
+      // @edit at 2024/1/30 15:28
+      try{
+        this.parentElement.parentElement.querySelector('.icon img').src=util.getFavicon(this.value);
+      }catch(e){
+        // 用户输入了不正确的URL
+      }
     }
     util.query(item,'.remove').onclick=function(){
       if(this.parentElement.dataset.k=='bing'){
@@ -3965,16 +3976,6 @@ return SettingItem;
       this.parentElement.remove();
     }
   }
-  // 添加设置
-  // setting.registerSetting({
-  //   index:2,
-  //   unit:"搜索框",
-  //   title:"自定义搜索引擎",
-  //   message:"",
-  //   callback:function(){
-  //     dia.open();
-  //   }
-  // })
 
 
   var si=new SettingItem({

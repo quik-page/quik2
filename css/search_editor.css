@@ -76,3 +76,15 @@
 .d-c.search_editor .searchlist .addnewitem:hover{
   background-color: #eee;
 }
+body.dark .d-c.search_editor .searchlist .addnewitem:hover{
+  background-color: #222;
+}
+body.dark .d-c.search_editor .searchlist .item .url input{
+  color: #aaa;
+}
+body.dark .d-c.search_editor .searchlist .item .url input:focus{
+  color: #fff;
+}
+body.dark .d-c.search_editor .searchlist .item .remove:hover{
+  background-color: #222;
+}

@@ -35,13 +35,15 @@ main .bottomer
 }
 main .topper .left,
 main .bottomer .left,
-main .topper .item,
-main .bottomer .item
+main .topper .left .item,
+main .bottomer .left .item
 {
   float: left;
 }
 main .topper .right,
-main .bottomer .right{
+main .bottomer .right,
+main .topper .right .item,
+main .bottomer .right .item{
   float: right;
 }
 main .center{
@@ -93,4 +95,12 @@ body.dark ::-webkit-scrollbar-thumb{
 }
 body.dark ::-webkit-scrollbar-thumb:hover{
   background-color: #666;
+}
+
+.material-symbols-outlined.fill {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
 }

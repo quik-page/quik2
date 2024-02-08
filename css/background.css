@@ -72,29 +72,30 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   display: none;
   padding-bottom: 20px;
 }
-.d-c.bg_d .scroll_con .unititem{
+.d-c.bg_d .scroll_con .unit-item{
   padding: 5px 10px;
 }
-.d-c.bg_d .scroll_con .unititem .unit-title{
+.d-c.bg_d .scroll_con .unit-item .unit-title{
   font-size: 14px;
   color: #00f;
   font-weight: bold;
   line-height: 20px;
   padding: 10px 0;
 }
-.d-c.bg_d .scroll_con .unititem .unit-content{
+.d-c.bg_d .scroll_con .unit-item .unit-content{
   width: 100%;
   overflow: hidden;
 }
-.d-c.bg_d .scroll_con .unititem .bgitem{
+.d-c.bg_d .scroll_con .unit-item .bgitem{
   float: left;
 }
 .d-c.bg_d .scroll_con .bgitem.full{
   width: calc(100% - 10px);
   height: 100px;
   margin: 5px;
+  position: relative;
 }
-.d-c.bg_d .scroll_con .bgitem .fk{
+.d-c.bg_d .scroll_con .bgitem .left{
   border-radius: 10px;
   overflow: hidden;
   float: left;
@@ -102,7 +103,7 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   position: relative;
 }
 
-.d-c.bg_d .scroll_con .bgitem .fk::after{
+.d-c.bg_d .scroll_con .bgitem .left::after{
   content:'';
   position: absolute;
   width:100%;
@@ -114,7 +115,7 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   transition: opacity .3s;
   color: #fff;
 }
-.d-c.bg_d .scroll_con .bgitem.selected .fk::after{
+.d-c.bg_d .scroll_con .bgitem.selected .left::after{
   content:'\e876';
   font-family: 'Material Symbols Outlined';
   opacity: .3;
@@ -123,22 +124,22 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   align-items: center;
   font-size: 40px;
 }
-.d-c.bg_d .scroll_con .bgitem .fk:hover::after{
+.d-c.bg_d .scroll_con .bgitem .left:hover::after{
   opacity: .3;
 }
-.d-c.bg_d .scroll_con .bgitem .fk img{
+.d-c.bg_d .scroll_con .bgitem .left img{
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center center;
 }
-.d-c.bg_d .scroll_con .bgitem .fk .leftcolorbox,
-.d-c.bg_d .scroll_con .bgitem .fk .rightcolorbox{
+.d-c.bg_d .scroll_con .bgitem .left .leftcolorbox,
+.d-c.bg_d .scroll_con .bgitem .left .rightcolorbox{
   float: left;
   width: 50%;
   height: 100%;
 }
-.d-c.bg_d .scroll_con .bgitem.full .fk{
+.d-c.bg_d .scroll_con .bgitem.full .left{
   width: 33%;
   height: 100px;
   margin-right: 10px;
@@ -148,7 +149,7 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   height: 100px;
   margin: 5px;
 }
-.d-c.bg_d .scroll_con .bgitem.half .fk{
+.d-c.bg_d .scroll_con .bgitem.half .left{
   width: 50%;
   height: 100px;
   margin-right: 10px;
@@ -158,25 +159,47 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   height: 100px;
   margin: 5px;
 }
-.d-c.bg_d .scroll_con .bgitem.def .fk{
+.d-c.bg_d .scroll_con .bgitem.def .left{
   width: 100%;
   height: 100px;
 }
-.d-c.bg_d .scroll_con .bgitem.full .bg-message{
+.d-c.bg_d .scroll_con .bgitem.full .right{
   width: calc(66% - 10px);
 }
-.d-c.bg_d .scroll_con .bgitem.half .bg-message{
+.d-c.bg_d .scroll_con .bgitem.full .editbtn{
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+.d-c.bg_d .scroll_con .bgitem.full .left .hasBg{
+  width: 100%;
+  height: 100%;
+}
+.d-c.bg_d .scroll_con .bgitem.full .left .noBg{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #09f;
+  color: #fff;
+  display: none;
+}
+.d-c.bg_d .scroll_con .bgitem.full .left .noBg span{
+  font-size: 36px;
+}
+.d-c.bg_d .scroll_con .bgitem.half .right{
   width: calc(50% - 10px);
 }
-.d-c.bg_d .scroll_con .bgitem .bg-message{
+.d-c.bg_d .scroll_con .bgitem .right{
   float: left;
 }
-.d-c.bg_d .scroll_con .bgitem .bg-message .bg-message-title{
+.d-c.bg_d .scroll_con .bgitem .right .bg-title{
   font-size: 16px;
   font-weight: 600;
   padding: 10px 0;
 }
-.d-c.bg_d .scroll_con .bgitem .bg-message .bg-message-text{
+.d-c.bg_d .scroll_con .bgitem .right .bg-message{
   font-size: 12px;
   color: #666;
 }
@@ -214,16 +237,16 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   .d-c.bg_d .bgfl .c>div{
     width: calc(50% - 10px);
   }
-  .d-c.bg_d .scroll_con .bgitem.full .bg-message .bg-message-title{
+  .d-c.bg_d .scroll_con .bgitem.full .right .bg-title{
     padding:0;
   }
   .d-c.bg_d .scroll_con .bgitem.half{
     width: calc(100% - 10px);
   }
-  .d-c.bg_d .scroll_con .bgitem.half .fk{
+  .d-c.bg_d .scroll_con .bgitem.half .left{
     width: 33%;
   }
-  .d-c.bg_d .scroll_con .bgitem.half .bg-message{
+  .d-c.bg_d .scroll_con .bgitem.half .right{
     width: calc(66% - 10px);
   }
 }

@@ -1,5 +1,4 @@
 (function(){
-  console.log(link);
   var linkF=util.element('div',{
     class:"links"
   });
@@ -112,7 +111,6 @@
     <ul class="link-list"></ul>`
     link.ready(function(){
       link.getCates(function(r){
-        console.log(r);
         r.data.forEach(function(g){
           bcate(g);
         });
@@ -273,11 +271,13 @@
             <p>位置：<input class="link-add-index" type="number" min="0" placeholder="链接位置"/></p>
           </div>
           <div class="footer">
-            <button class="cancel btn">取消</button>
+            <div class="cancel btn">取消</div>
             <button class="ok btn"></button>
           </div>
         </form>`,
       });
+      // @note 将cancel按钮修改为div，防止表单submit到cancel
+      // @edit at 2024/1/30 15:20
       var d=linkaddDialog.getDialogDom();
       util.query(d,'.cancel.btn').onclick=function(e){
         e.preventDefault();
@@ -346,11 +346,13 @@
             <p>标题：<input class="cate-name" type="text" required placeholder="分组标题(必填)"/></p>
           </div>
           <div class="footer">
-            <button class="cancel btn">取消</button>
+            <div class="cancel btn">取消</div>
             <button class="ok btn">确定</button>
           </div>
         </form>`,
       });
+      // @note 将cancel按钮修改为div，防止表单submit到cancel
+      // @edit at 2024/1/30 15:20
     }
       var d=cateeditDialog.getDialogDom();
       util.query(d,'.cancel.btn').onclick=function(e){

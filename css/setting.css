@@ -10,48 +10,54 @@
     height: 100%;
   }
 }
-
-.d-c.setting_dia>ul{
+/* 
+@note 适配新setting
+@edit at 2024/1/30 15:13
+*/
+.setting-root{
   width: calc(100% - 40px);
   height: calc(100% - 60px);
   overflow-y: auto;
 }
-.d-c.setting_dia ul{
+.setting-root,.setting-tree{
   margin:5px 15px;
   padding: 5px;
 }
-.d-c.setting_dia ul li.unit{
+.setting-tree{
   padding: 10px 0;
 }
-.d-c.setting_dia ul li.unit>.title{
+.setting-group-title{
   font-size: 14px;
   font-weight: bold;
   color: #00f;
 }
-.d-c.setting_dia ul li.setting_item{
+.setting-item{
   width: 100%;
   overflow: hidden;
   height: 40px;
   margin: 5px 0;
 }
-.d-c.setting_dia ul li.setting_item .left-message{
+.setting-item .setting-item-left{
   float: left;
   height: 40px;
 }
-.d-c.setting_dia ul li.setting_item .left-message .name{
+.setting-item-title{
   line-height: 24px;
   font-size: 16px;
   margin-top: 4px;
 }
-.d-c.setting_dia ul li.setting_item .left-message .message{
+.setting-item-message{
   line-height: 12px;
   font-size: 12px;
   color: #888;
 }
-.d-c.setting_dia ul li.setting_item .right_con{
+.setting-item .setting-item-right{
   float: right;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 40px;
+}
+.setting-item .null-click .material-symbols-outlined{
+  font-size: 16px;
 }

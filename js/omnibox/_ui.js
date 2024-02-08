@@ -229,25 +229,12 @@
   chulitype('');
 
   if(core.initsto.get('autofocus')){
-    input.focus();
+    // @note 这样才能生效，也许是因为浏览器还没渲染好吧
+    // @edit at 2024年1月30日 15点10分
+    setTimeout(function(){
+      input.focus();
+    })
   }
-
-  // setting.registerSetting({
-  //   index:0,
-  //   unit:"搜索框",
-  //   title:"自动聚焦",
-  //   message:"打开页面自动聚焦搜索框",
-  //   type:"boolean",
-  //   get:function(){
-  //     return !!core.initsto.get('autofocus');
-  //   },
-  //   callback:function(value){
-  //     core.initsto.set('autofocus',value);
-  //     return true;
-  //   }
-  // })
-
-  
 
   var si=new SettingItem({
     title:"自动聚焦",

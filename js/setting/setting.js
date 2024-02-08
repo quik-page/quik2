@@ -178,7 +178,7 @@ Setting.prototype={
       },
       'null':function(){
         elr.innerHTML=`<div class="setting-item-input null-click">${util.getGoogleIcon('e5e1')}</div>`;
-        elr.onclick=function(){
+        itemEle.onclick=function(){
           item.callback();
         }
       }
@@ -210,11 +210,18 @@ Setting.prototype={
         }else{
           v=this.value;
         }
-        if(item.check(v)){
-          item.callback(v)
+        //@note 判断check方法是否存在，check是可选参数
+        //@edit at 2023/1/30 15:12
+        if(typeof item.check=='function'){
+          if(item.check(v)){
+            item.callback(v)
+          }else{
+            getacb();
+          }
         }else{
-          getacb();
+          item.callback(v);
         }
+        
     });
   },
   _dochangeGroup:function(group,dt){

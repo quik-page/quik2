@@ -145,3 +145,10 @@ body.dark .links ul.link-list li.link-add a{
 body.dark .links ul.link-list li.link-add a:hover{
   background-color: #333;
 }
+body.dark .links .cate-bar .cate-item:hover,
+body.dark .links .cate-bar .cate-bar-controls>*:hover{
+  background-color: #2a2a2a;
+}
+body.dark .links .cate-bar .cate-item.active{
+  background-color: #111;
+}
