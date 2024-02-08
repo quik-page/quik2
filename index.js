@@ -16,6 +16,7 @@
   var background=_REQUIRE_('./js/background/index.js');
   var mainmenu=_REQUIRE_('./js/menu/mainmenu.js');
   var searchEditor=_REQUIRE_('./js/search/editor.js');
+  var notice=_REQUIRE_('./js/notice/index.js');
 
   window.quik={
     storage,
@@ -33,6 +34,7 @@
     SettingGroup,
     SettingItem,
     mainSetting,
+    notice
   }
   document.querySelector("main").style.display='';
 })();
