@@ -1,0 +1,125 @@
+.notice-sc{
+  width: 300px;
+  height: calc(100% - 40px);
+  position: absolute;
+  right:0;
+  bottom:40px;
+}
+.notice-con{
+  position: absolute;
+  right:0;
+  bottom:0;
+}
+.notice-item{
+  width: 260px;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: #aaa 0 1px 5px;
+  display: none;
+}
+.notice-item .notice-actionbar{
+  width: 100%;
+  height: 24px;
+}
+.notice-item .notice-title{
+  line-height: 24px;
+  width: calc(100% - 24px);
+  float: left;
+}
+.notice-item .notice-close-btn{
+  float: right;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  user-select: none;
+}
+.notice-item .notice-close-btn:hover{
+  background-color: #f3f3f3;
+}
+.notice-item .notice-close-btn span{
+  font-size: 16px;
+  text-align: center;
+  display: block;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+}
+.notice-item .notice-btns{
+  overflow: hidden;
+}
+.notice-item .notice-btns .btn{
+  min-width: 60px;
+  line-height: 30px;
+  border:0;
+  outline: 0;
+  cursor: pointer;
+  box-shadow: #aaa 0 1px 2px;
+  background-color: #eee;
+  color: #333;
+  border-radius: 2px;
+  text-align: center;
+  font-size: 12px;
+  float: right;
+  margin: 5px;
+  user-select: none;
+}
+.notice-item .notice-btns .btn:hover{
+  background-color: #ddd;
+}
+.notice-item .notice-btns .btn:active{
+  background-color: #f5f5f5;
+}
+.notice-item .notice-btns .btn.ok{
+  background-color: #09f;
+  color:#fff;
+}
+.notice-item .notice-btns .btn.ok:hover{
+  background-color: #07f;
+}
+.notice-item .notice-btns .btn.ok:active{
+  background-color: #0af;
+}
+.notice-item .notice-btns .btn.delete{
+  background-color: #f00;
+  color:#fff;
+}
+.notice-item .notice-btns .btn.delete:hover{
+  background-color: #d00;
+}
+.notice-item .notice-btns .btn.delete:active{
+  background-color: #f30;
+}
+@keyframes noticein {
+  0%{
+    transform: translateX(300px);
+  }100%{
+    transform: none;
+  }
+}
+@keyframes noticeout {
+  0%{
+    transform: none;
+  }100%{
+    transform: translateX(300px);
+  }
+}
+.notice-progress{
+  width: 100%;
+  height: 3px;
+  padding: 5px 0;
+}
+.notice-progress .p{
+  width: 100%;
+  height: 3px;
+  background-color: #eee;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.notice-progress .p div{
+  height: 3px;
+  background-color: #09f;
+  transition: width .3s;
+  width: 0%;
+}

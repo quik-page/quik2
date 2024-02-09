@@ -8,20 +8,19 @@
     notice_con.appendChild(this.el);
     this.title=details.title;
     this.content=details.content;
-    this.btns=details.btns||[{
-      text:"确定",
-      click:function(n){
-        n.hide();
-      }
-    }];
+    this.btns=details.btns||[];
     this.useprogress=details.useprogress;
     this.progress=0;
     drawNotice(this);
   }
   notice.prototype={
     show:function(time){
+      clearTimeout(this._timeouthide);
       this.el.classList.add('show');
       var _=this;
+      this.el.style.display='block';
+      this.el.style.animation='noticein .3s';
+
       if(time){
         setTimeout(function(){
           _.hide();
@@ -30,6 +29,11 @@
     },
     hide:function(){
       this.el.classList.remove('show');
+      this.el.style.animation='noticeout .3s';
+      var _=this;
+      this._timeouthide=setTimeout(function(){
+        _.el.style.display='none';
+      },300)
     },
     focus:function(){
       // TODO
@@ -51,12 +55,15 @@
         return;
       }
       this.progress=progress;
-      drawNoticeProgress();
+      drawNoticeProgress(this);
     }
   }
 
   function drawNotice(n){
     n.el.innerHTML=notice_mb.replace('{{close-btn}}',util.getGoogleIcon('e5cd'));
+    util.query(n.el,'.notice-close-btn').onclick=function(){
+      n.hide();
+    }
     drawNoticeTitle(n);
     drawNoticeContent(n);
     drawNoticeBtn(n);
@@ -96,5 +103,16 @@
     var progressel=util.query(n.el,'.notice-progress .p div');
     progressel.style.width=n.progress*100+"%";
   }
+
+  // test
+  var n=new notice({
+    title:"test",
+    content:"test content",
+    useprogress:true
+  })
+  n.show();
+  window.n=n;
+
+  return notice;
 
 })();
