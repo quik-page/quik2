@@ -1,10 +1,25 @@
 (function(){
+  var eventfns={
+    initdone:[]
+  }
+  var _isinitdone=false;
+  var addon_dialog=new dialog({
+    content:(_REQUIRE_('./addon_list.mb.html')).replace('{{close-btn}}',util.getGoogleIcon('e5cd')),
+    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
+    class:"addon-dialog"
+  });
+
+  var addon_dialog_d=addon_dialog.getDialogDom();
+  util.query(addon_dialog_d,'.closeBtn').addEventListener('click',()=>{
+    addon_dialog.close();
+  });
+
   var addon_icon=new iconc.icon({
     offset:"tr",
     content:util.getGoogleIcon("e87b",{type:"fill"})
   });
   addon_icon.getIcon().onclick=function(){
-    // TODO:open dialog
+    addon_dialog.open();
   }
 
   var initsto=storage('addon');
@@ -12,57 +27,129 @@
     initsto.set('list',{});
   }
   var initscripts=storage('addon_script');
-  function installAddon(manifest_url){
+  function installAddon(manifest_url,cb){
+    if(!manifest_url||typeof manifest_url!='string'){
+      return;
+    }
+    var l=initsto.get('list');
+    for(var k in l){
+      if(l[k].url==manifest_url){
+        cb({
+          code:1,
+          msg:"该插件已经安装"
+        });
+        return;
+      }
+    }
     util.xhr(manifest_url,function(res){
       try{
         var manifest=JSON.parse(res);
       }catch(e){
-        console.error('安装失败，无效的manifest');
+        cb({
+          code:-3,
+          msg:'安装失败，无效的manifest'
+        });
         return;
       }
       if(!manifest.url){
-        console.error('安装失败，manifest中没有url字段');
+        cb({
+          code:-2,
+          msg:'安装失败，manifest中没有url字段'
+        });
         return;
       }
       var addon_session=getSession();
-      insertAddon(manifest,addon_session);
-    })
-  }
-
-  function insertAddon(m,s){
-    var a=initsto.get('list');
-    a[s.id]=m;
-    initsto.set('list',a);
-    util.xhr(m.url,function(res){
-      initscripts.set(s.id,res,true,function(){
-        runAddon(s.id);
+      insertAddon(manifest_url,manifest,addon_session,function(code){
+        if(code==0){
+          cb({
+            code:0,
+            msg:'安装成功'
+          });
+        }else if(code==-1){
+          cb({
+            code:code,
+            msg:'安装失败，脚本请求失败'
+          })
+        }
+      });
+    },function(){
+      cb({
+        code:-4,
+        msg:'安装失败，manifest请求失败'
       });
     })
   }
 
-  function runAddon(id){
-    initscripts.get(id,true,function(res){
-      var sc=document.createElement('script');
-      sc.innerHTML=`!function(){
-        quik.addonPush=function(fn){
-          function Session(id){
-            this.id=id;
-            this.session_token="Hvm_session_token_eoi1j2j";
-            this.isSession=true;
-          }
-          fn({
-            session:new Session("${id}"),
-          })
-        };
-        ${res};
-      }()`;
-      document.body.appendChild(sc);
+  function uninstallAddon(session_id,cb){
+    if(!initsto.get('list')[session_id]){
+      cb({
+        code:-1,
+        msg:'卸载失败，未找到该插件'
+      })
+    }else{
+      var l=initsto.get('list');
+      delete l[session_id];
+      initsto.set('list',l);
+      initscripts.remove(session_id,true,function(){
+        cb({
+          code:0,
+          msg:"卸载成功"
+        });
+      })
+    }
+  }
+
+  function insertAddon(u,m,s,cb){
+    util.xhr(m.url,function(res){
+      var a=initsto.get('list');
+      a[s.id]={
+        url:u,
+        manifest:m
+      };
+      initsto.set('list',a);
+      initscripts.set(s.id,res,true,function(){
+        cb(0);
+        runAddon(s.id);
+      });
+    },function(){
+      cb(-1)
     })
   }
 
+  function runAddon(id){
+    return new Promise(function(r,j){
+      initscripts.get(id,true,function(res){
+        var sc=document.createElement('script');
+        sc.innerHTML=`!function(){
+          quik.addonPush=function(fn){
+            function Session(id){
+              this.id=id;
+              this.session_token="Hvm_session_token_eoi1j2j";
+              this.isSession=true;
+            }
+            fn({
+              session:new Session("${id}"),
+            })
+          };
+          ${res};
+        }()`;
+        document.body.appendChild(sc);
+        setTimeout(function(){
+          r();
+        })
+      })
+    })
+    
+  }
+
   function initAddon(){
+    var n=[];
     initscripts.list().forEach(function(id){
-      runAddon(id);//运行插件
+      n.push(runAddon(id));//运行插件
+    })
+    Promise.all(n).finally(function(){
+      _isinitdone=true;
+      doevent('initdone',[]);
     })
   }
   initAddon();
@@ -76,8 +163,33 @@
     return new Session();
   }
 
+  function getAddonList(){
+    return initsto.get('list');
+  }
+
+
+  function addEventListener(event,cb){
+    if(eventfns[event]){
+      eventfns[event].push(cb);
+    }else{
+      eventfns[event]=[cb];
+    }
+  }
+
+  function doevent(event,data){
+    eventfns[event].forEach(function(fn){
+      fn.apply(null,data);
+    });
+  }
+  function isinitdone(){
+    return _isinitdone
+  }
   
   return {
-    installAddon
+    installAddon,
+    uninstallAddon,
+    getAddonList,
+    addEventListener,
+    isinitdone
   }
 })();

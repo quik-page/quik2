@@ -1,6 +1,8 @@
 (function(){
   var notice_con=document.querySelector(".notice-con");
+  var notip=document.querySelector(".no-notice-tip");
   var notice_mb=_REQUIRE_('./notice.mb.html');
+  var focus_con=document.querySelector(".focus-notice");
   function notice(details){
     this.el=util.element('div',{
       class:"notice-item"
@@ -15,8 +17,13 @@
   }
   notice.prototype={
     show:function(time){
+      notip.classList.remove('show');
+      mbicon.getIcon().classList.add('notice-hasnew-icon');
       clearTimeout(this._timeouthide);
       this.el.classList.add('show');
+      this.el.addEventListener('click',function(e){
+        e.stopPropagation();
+      })
       var _=this;
       this.el.style.display='block';
       this.el.style.animation='noticein .3s';
@@ -29,6 +36,10 @@
     },
     hide:function(){
       this.el.classList.remove('show');
+      if(!document.querySelector(".notice-con .notice-item.show")){
+        notip.classList.add('show');
+        mbicon.getIcon().classList.remove('notice-hasnew-icon');
+      }
       this.el.style.animation='noticeout .3s';
       var _=this;
       this._timeouthide=setTimeout(function(){
@@ -36,7 +47,8 @@
       },300)
     },
     focus:function(){
-      // TODO
+      this.show();
+      upfocus(this);
     },
     setTitle:function(title){
       this.title=title;
@@ -57,6 +69,47 @@
       this.progress=progress;
       drawNoticeProgress(this);
     }
+  }
+
+  var focus_arr=[];
+  function upfocus(_){
+    focus_arr.push(_);
+    if(focus_arr.length==1){
+      g();
+    }
+  }
+
+  var ___;
+  function g(){
+    var _=focus_arr[0];
+    var _f=_.el.cloneNode(true);
+    focus_con.appendChild(_f);
+    util.query(_f,'.notice-close-btn').onclick=function(){
+      clearTimeout(___);
+      _f.remove();
+      _.hide();
+      focus_arr.shift();
+      if(focus_arr.length>0){
+        g();
+      }
+    }
+    drawNoticeBtn({
+      el:_f,
+      btns:_.btns,
+      hide:function(){
+        _.hide();
+        clearTimeout(___);
+        _f.remove();
+      },
+      show:function(){}
+    });
+    ___=setTimeout(function(){
+      _f.remove();
+      focus_arr.shift();
+      if(focus_arr.length>0){
+        g();
+      }
+    },3000);
   }
 
   function drawNotice(n){
@@ -82,6 +135,7 @@
 
   function drawNoticeBtn(n){
     var btncon=util.query(n.el,'.notice-btns');
+    btncon.innerHTML='';
     for(var i=0;i<n.btns.length;i++){
       var btn=n.btns[i];
       var btnel=util.element('div',{
@@ -103,16 +157,29 @@
     var progressel=util.query(n.el,'.notice-progress .p div');
     progressel.style.width=n.progress*100+"%";
   }
-
-  // test
-  var n=new notice({
-    title:"test",
-    content:"test content",
-    useprogress:true
+  // mobile适配
+  var mbicon=new iconc.icon({
+    content:util.getGoogleIcon('e7f4'),
+    offset:"tl"
+  });
+  
+  window.addEventListener('resize',r);
+  mbicon.getIcon().addEventListener('click',function(){
+    document.querySelector(".notice-sc").classList.add('show');
   })
-  n.show();
-  window.n=n;
+  document.querySelector(".notice-sc").addEventListener('click',function(){
+    this.classList.remove('show');
+  })
+  function r(){
+    if(window.innerWidth>600){
+      mbicon.hide();
+    }else{
+      mbicon.show();
+    }
+  }
+  r();
 
+  
   return notice;
 
 })();

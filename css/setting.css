@@ -61,3 +61,45 @@
 .setting-item .null-click .material-symbols-outlined{
   font-size: 16px;
 }
+
+.setting-item .setting-item-right .check-box{
+  width: 40px;
+  height: 10px;
+  margin: 15px 5px;
+  border-radius: 20px;
+  background-color: #ddd;
+  box-shadow: #ccc 0 0 3px;
+  transition: all .3s;
+  position: relative;
+}
+.setting-item .setting-item-right .check-box .check-box-inner{
+  width: 20px;
+  position: absolute;
+  left: 0;
+  top: -5px;
+  height: 20px;
+  border-radius: 20px;
+  background-color: #aaa;
+  box-shadow: #aaa 0 0 3px;
+  transition: all .3s;
+}
+.setting-item .setting-item-right .check-box.checked .check-box-inner{
+  background-color: #09f;
+  left: 20px;
+  box-shadow: #09f 0 0 3px;
+}
+.setting-item .setting-item-right .check-box input{
+  display: none;
+}
+.setting-item.just-callback-item{
+  transition: background .2s;
+}
+.setting-item.just-callback-item:hover{
+  background-color: #f4f4f4;
+}
+body.dark .setting-item.just-callback-item:hover{
+  background-color: #222;
+}
+body.dark .setting-group-title{
+  color: #0af;
+}

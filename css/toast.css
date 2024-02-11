@@ -1,17 +1,40 @@
 .toast{
   position: absolute;
-  bottom:100px;
+  top:50px;
   left:50%;
   transform: translateX(-50%);
-  padding: 5px;
-  font-size: 15px;
+  padding: 10px;
+  line-height: 20px;
+  min-width: 200px;
+  text-align: center;
+  font-size: 16px;
   color: #333;
-  background-color: #eee;
+  background-color: #fff;
   z-index:999;
   box-shadow: #aaa 0 1px 5px;
-  border-radius: 5px;
+  border-radius: 40px;
   display: none;
+  transition: top .3s;
+  animation: toastin .3s;
 }
 .toast.show{
+  
   display: block;
+}
+@keyframes toastin {
+  0%{
+    top:-100px;
+  }
+  100%{
+    top: 50px;
+  }
+}
+
+@keyframes toastout {
+  0%{
+    top:50px;
+  }
+  100%{
+    top: -100px;
+  }
 }

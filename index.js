@@ -20,6 +20,7 @@
   var notice=_REQUIRE_('./js/notice/index.js');
   var theme=_REQUIRE_('./js/theme/index.js');
   var addon=_REQUIRE_('./js/addon/index.js');
+  let {alert,confirm,prompt}=_REQUIRE_('./js/dialog/dialog_utils.js');
 
   window.quik={
     addon,
@@ -39,7 +40,10 @@
     SettingItem,
     mainSetting,
     notice,
-    tyGroup
+    tyGroup,
+    alert,
+    confirm,
+    prompt,
   }
   document.querySelector("main").style.display='';
 })();

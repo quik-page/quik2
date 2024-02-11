@@ -129,9 +129,20 @@ Setting.prototype={
         }
       },
       boolean:function(){
-        elr.innerHTML=`<div><div></div><input type="checkbox" class="setting-item-input"></div>`;
+        elr.innerHTML=`<div class="check-box"><div class="check-box-inner"></div><input type="checkbox" class="setting-item-input"></div>`;
         cb=function(v){
           util.query(elr,'.setting-item-input').checked=v;
+          if(v){
+            util.query(elr,'.check-box').classList.add('checked');
+          }
+          util.query(elr,'.check-box').addEventListener('click',function(){
+            util.query(elr,'.setting-item-input').click();
+            if(util.query(elr,'.setting-item-input').checked){
+              this.classList.add('checked');
+            }else{
+              this.classList.remove('checked');
+            }
+          })
         }
       },
       range:function(){
@@ -178,6 +189,7 @@ Setting.prototype={
       },
       'null':function(){
         elr.innerHTML=`<div class="setting-item-input null-click">${util.getGoogleIcon('e5e1')}</div>`;
+        itemEle.classList.add('just-callback-item');
         itemEle.onclick=function(){
           item.callback();
         }

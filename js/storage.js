@@ -3,54 +3,19 @@
     localStorage.quik2='{}';
   }
 
-  var isidbready=false;
   var idbsupport=localforage._getSupportedDrivers([localforage.INDEXEDDB])[0]==localforage.INDEXEDDB;
-  // var idbsupport=false;
-  var readyfn=[];
-  localforage.ready(function(){
-    setTimeout(function(){
-      isidbready=true;
-      readyfn.forEach(function(fn){
-        fn();
-      })
-    },200)
-
-  })
-
   var filerecv={
     get:function(hash,cb){
-      if(!isidbready){
-        readyfn.push(function(){
-          localforage.getItem(hash).then(cb);
-        })
-      }else{
-        localforage.getItem(hash).then(cb);
-      }
+      localforage.getItem(hash).then(cb);
     },
     set:function(file,cb){
-      if(!isidbready){
-        readyfn.push(function(){
-          var hash='^'+util.getRandomHashCache();
-          localforage.setItem(hash,file).then(function(){
-            cb(hash);
-          });
-        })
-      }else{
-        var hash='^'+util.getRandomHashCache();
+      var hash='^'+util.getRandomHashCache();
       localforage.setItem(hash,file).then(function(){
         cb(hash);
       });
-      }
-      
     },
     delete:function(hash,cb){
-      if(!isidbready){
-        readyfn.push(function(){
-          localforage.removeItem(hash).then(cb);
-        })
-      }else{
-        localforage.removeItem(hash).then(cb);
-      }
+      localforage.removeItem(hash).then(cb);
     }
   }
 
@@ -93,10 +58,10 @@
 
       }
       function remove(k,useidb,callback){
-        if(!useidb){
         var a=getAll();
-        delete a[ck][k]
-        setAll(a);
+        if(!useidb){
+          delete a[ck][k]
+          setAll(a[ck]);
         }else{
           if(!idbsupport){
             throw new Error('indexedDB is not support in this browser');

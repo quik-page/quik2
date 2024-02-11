@@ -59,7 +59,7 @@
         delete window[a];
       }
     },
-    xhr:function(url,cb){
+    xhr:function(url,cb,err){
       var xhr=new XMLHttpRequest();
       xhr.onreadystatechange=function(){
         if(xhr.readyState==4){
@@ -67,6 +67,14 @@
             cb(xhr.responseText);
           }
         }
+      }
+      xhr.onerror=function(){
+        err&&err({
+          status:xhr.status,
+          statusText:xhr.statusText,
+          readyState:xhr.readyState,
+          responseText:xhr.responseText
+        });
       }
       xhr.open('GET',url,true);
       xhr.send();

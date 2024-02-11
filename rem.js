@@ -503,7 +503,7 @@ var posix = {
 return posix;
 })();
 
-  var reg=/_REQUIRE_\s*\(.*\)/g;
+  var reg=/_REQUIRE_\s*\(.*?\)/g;
   var cache={};
   var qjs=function(src,cb,rootPath){
     if(src[0]==='.'&&rootPath){

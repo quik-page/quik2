@@ -82,6 +82,9 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   line-height: 20px;
   padding: 10px 0;
 }
+body.dark .d-c.bg_d .scroll_con .unit-item .unit-title{
+  color: #0af;
+}
 .d-c.bg_d .scroll_con .unit-item .unit-content{
   width: 100%;
   overflow: hidden;
@@ -183,7 +186,6 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   align-items: center;
   background-color: #09f;
   color: #fff;
-  display: none;
 }
 .d-c.bg_d .scroll_con .bgitem.full .left .noBg span{
   font-size: 36px;

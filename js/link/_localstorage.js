@@ -1,6 +1,7 @@
 (function () {
   console.warn('浏览器不支持indexedDB，将在限制模式下使用');
 
+  initsto.set('storage-mode','localstorage');
   // 初始化默认分组
   if (!initsto.get('links')) {
     initsto.set('links', [])

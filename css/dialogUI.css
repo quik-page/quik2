@@ -131,3 +131,7 @@ body.dark .dialog .d-c .actionbar .closeBtn:hover{
   text-decoration: none;
   display: block;
 }
+.def_dialog{
+  min-width: 250px;
+  max-width: 700px;
+}

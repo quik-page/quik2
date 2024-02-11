@@ -1,4 +1,6 @@
 (function () {
+  initsto.set('storage-mode','db');
+
   // 初始化进度，2为初始化完毕
   var initState = 0;
   function init() {
