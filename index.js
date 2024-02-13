@@ -44,6 +44,7 @@
     alert,
     confirm,
     prompt,
+    theme
   }
   document.querySelector("main").style.display='';
 })();

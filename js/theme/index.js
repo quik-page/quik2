@@ -1,5 +1,7 @@
 (function(){
+  var eventfn={}
   var initsto=storage('theme');
+  var n=null;
   if(!initsto.get('theme')){
     initsto.set('theme','a');
   }
@@ -29,13 +31,21 @@
     if(_g!=3){_g=false;}
     if(v=='b'){
       document.body.classList.add('dark');
+      doevent('change',['dark']);
+      n='dark';
     }else if(v=='a'){
       document.body.classList.remove('dark');
+      doevent('change',['light']);
+      n='light'
     }else if(v=='c'){
       if(new Date().getHours()>=18||new Date().getHours()<6){
         document.body.classList.add('dark');
+        doevent('change',['dark']);
+        n='dark';
       }else{
         document.body.classList.remove('dark');
+        doevent('change',['light']);
+        n='light'
       }
     }else if(v=='d'){
       if(window.matchMedia){
@@ -56,18 +66,51 @@
     d.addEventListener('change', e => {
       if(e.matches){
         document.body.classList.add('dark');
+        doevent('change',['dark']);
+        n='dark';
       }else{
         document.body.classList.remove('dark');
+        doevent('change',['light']);
+        n='light'
       }
     });
   }
 
   checkTheme(initsto.get('theme'));
 
+  function getTheme(){
+    return n;
+  }
+
+  function addEventListener(e,f){
+    if(!eventfn[e]){eventfn[e]=[]}
+    eventfn[e].push(f);
+  }
+
+  function removeEventListener(e,f){
+    if(!eventfn[e]){return}
+    for(var i=0;i<eventfn[e].length;i++){
+      if(eventfn[e][i]===f){
+        eventfn[e].splice(i,1);
+        return;
+      }
+    }
+  }
+  function doevent(e,d){
+    if(eventfn[e]){
+      for(var i=0;i<eventfn[e].length;i++){
+        eventfn[e][i].apply(null,d);
+      }
+    }
+  }
+
   return {
     setTheme:function(v){
       initsto.set('theme',v);
       checkTheme(v);
-    }
+    },
+    addEventListener,
+    removeEventListener,
+    getTheme,
   }
 })()

@@ -1,6 +1,12 @@
 (function(){
-  var tab1,setbg;
+  var tab1,setbg,tab2,tab3;
   var initsto=storage('bg-def-user');
+  if(!initsto.get('color')){
+    initsto.set('color',{
+      dark:"#333333",
+      light:'#ffffff'
+    })
+  }
   var acgbg=_REQUIRE_('../api/acgbg.js');
   var fjbg=_REQUIRE_('../api/fenjibg.js');
   var neizhiImg=[
@@ -52,6 +58,18 @@
     refreshFn.call(this);
   };
 
+  //时间的颜色API
+  function getNowColor(){
+    var date=new Date();
+    return {
+      light:`rgb(${256-date.getHours()},${256-date.getMinutes()},${256-date.getSeconds()})`,
+      dark:`rgb(${date.getHours()},${date.getMinutes()},${date.getSeconds()})`
+    }
+    
+  }
+
+  var timeb=null;
+
   var draws={
     img:function(bgf,data){
       if(!util.query(bgf,'.img-sp')){
@@ -71,7 +89,19 @@
       document.body.classList.add('t-dark');
     },
     color:function(bgf,data){
-      
+      if(!util.query(bgf,'.color-sp')){
+        bgf.innerHTML='<div class="color-sp full"></div>'
+      }
+      if(!util.query(document.head,'style.colorSpControl')){
+        var style=document.createElement('style');
+        style.className='colorSpControl';
+        document.head.appendChild(style);
+      }
+      util.query(document.head,'style.colorSpControl').innerHTML=`.color-sp{
+        background-color:${data.light};
+      }body.dark .color-sp{
+        background-color:${data.dark};
+      }`
     },
     api:function(bgf,data){
       if(data.api=='acg'){
@@ -121,6 +151,10 @@
         draws.img(bgf,{
           url:"https://bing.shangzhenyang.com/api/1080p"
         });
+      }else if(data.api=='time'){
+        timeb=setInterval(function(){
+          draws.color(bgf,getNowColor());
+        },200)
       }
     },
     userbg:function(bgf,data){
@@ -158,7 +192,19 @@
       }
     },
     zdy:function(bgf,data){
-
+      if(!util.query(bgf,'.zdy-sp')){
+        bgf.innerHTML='<div class="zdy-sp full"></div>'
+      }
+      if(!util.query(document.head,'style.zdySpControl')){
+        var style=document.createElement('style');
+        style.className='zdySpControl';
+        document.head.appendChild(style);
+      }
+      util.query(document.head,'style.zdySpControl').innerHTML=`.zdy-sp{
+        background:${data.light};
+      }body.dark .zdy-sp{
+        background:${data.dark};
+      }`
     }
   }
 
@@ -207,7 +253,6 @@
       // File优先
 
       // 将内容写入idb
-      console.log(file);
       initsto.set('upload',file,true,function(){
         iovuploader.close();
         getUserUploadUrl(function(r){
@@ -293,26 +338,76 @@
     }
   }
 
-  //获取视频快照（第一帧）
-  function getVideoCaptrue(url,cb){
-    var video=util.element('video',{
-      src:url,
-      crossOrigin:'anonymous',//跨域处理
-      autoplay:"autoplay"// 需要加autoplay才能正常工作
+  //获取视频快照
+  function getVideoCaptrue(url, callback) {
+    var video = document.createElement('video');
+    video.src = url;
+    video.crossOrigin = 'anonymous';
+  
+    video.onloadedmetadata = function() {
+      var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext('2d');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+  
+      video.currentTime = video.duration /4;
+  
+      video.oncanplay = function() {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        callback(canvas.toDataURL('image/png'));
+        this.remove();
+      };
+    };
+  }
+  
+
+  // 自定义颜色修改对话框
+  var colorchanger=new dialog({
+    content:`
+    <form>
+      <h1>自定义背景颜色</h1>
+      <div class="content">
+        <p>浅色模式：<input type="color" class="lightbgcolor"/></p>
+        <p>深色模式：<input type="color" class="darkbgcolor"/></p>
+      </div>
+      <div class="footer">
+        <div class="cancel btn">取消</div>
+        <button class="ok btn">确定</button>
+      </div>
+    </form>
+    `
+  });
+  // @note 将cancel按钮修改为div，防止表单submit到cancel
+  // @edit at 2024/1/30 15:20
+
+  // Dom
+  var colorchangerf=colorchanger.getDialogDom();
+  // 取消
+  util.query(colorchangerf,'.cancel').onclick=function(e){
+    e.preventDefault();
+    colorchanger.close();
+  }
+  // 提交
+  util.query(colorchangerf,'form').onsubmit=function(e){
+    e.preventDefault();
+    var lightc=util.query(colorchangerf,'.lightbgcolor').value;
+    var darkc=util.query(colorchangerf,'.darkbgcolor').value;
+    initsto.set('color',{
+      light:lightc,
+      dark:darkc
     });
-    document.body.append(video);
-    video.oncanplay=function(){
-      video.currentTime=video.duration/4;
-      var canvas=document.createElement('canvas');
-      canvas.width=video.videoWidth;
-      canvas.height=video.videoHeight;
-      var ctx=canvas.getContext('2d');
-      ctx.drawImage(video,0,0,video.videoWidth,video.videoHeight);
-      var u=canvas.toDataURL('image/png');
-      cb(u);
-      video.remove();
-    }
-    
+    util.query(tab2,'.zdy .color-left').style.backgroundColor=lightc;
+    util.query(tab2,'.zdy .color-right').style.backgroundColor=darkc;
+    colorchanger.close();
+
+    setbg({
+      type:"default",
+      data:{
+        type:"color",
+        light:lightc,
+        dark:darkc
+      }
+    })
   }
   
   return {
@@ -398,15 +493,72 @@
 
 
       // pushTab 纯色
-      e.pushBgTab({
+      tab2=e.pushBgTab({
         tab:"纯色",
         content:_REQUIRE_('./htmls/colorbgtab.html')
-      })
+      });
+      var c=initsto.get('color');
+      util.query(tab2,'.zdy .color-left').style.backgroundColor=c.light;
+      util.query(tab2,'.zdy .color-right').style.backgroundColor=c.dark;
+      util.query(tab2,'.zdy .left').onclick=function(){
+        util.query(tab2,'.bgitem',true).forEach(function(b){
+          b.classList.remove('selected');
+        })
+        this.parentElement.classList.add('selected');
+        var c=initsto.get('color');
+        e.setbg({
+          type:e.type,
+          data:{
+            type:"color",
+            light:c.light,
+            dark:c.dark
+          }
+        })
+      }
+      util.query(tab2,'.zdy .btn').onclick=function(){
+        var c=initsto.get('color');
+        util.query(colorchangerf,'.lightbgcolor').value=c.light;
+        util.query(colorchangerf,'.darkbgcolor').value=c.dark;
+        colorchanger.open();
+      }
+      var cd=getNowColor();
+      util.query(tab2,'.api .color-left').style.backgroundColor=cd.light;
+      util.query(tab2,'.api .color-right').style.backgroundColor=cd.dark;
+      util.query(tab2,'.api .left').onclick=function(){
+        var l=this;
+        util.query(tab1,'.bgitem',true).forEach(function(b){
+          b.classList.remove('selected');
+        })
+        l.parentElement.classList.add('selected');
+        e.setbg({
+          type:e.type,
+          data:{
+            type:"api",
+            api:l.parentElement.getAttribute('data-api')
+          }
+        })
+      }
+
       // pushTab 自定义
-      e.pushBgTab({
+      tab3=e.pushBgTab({
         tab:"自定义",
         content:_REQUIRE_('./htmls/custombgtab.html')
-      })
+      });
+      util.query(tab3,'.gjzdytlight').value=initsto.get('custombglight')??'';
+      util.query(tab3,'.gjzdytdark').value=initsto.get('custombgdark')??'';
+      util.query(tab3,'.gjzdysetbtn').onclick=function(){
+        initsto.set('custombglight',util.query(tab3,'.gjzdytlight').value);
+        initsto.set('custombgdark',util.query(tab3,'.gjzdytdark').value);
+        e.setbg({
+          type:e.type,
+          data:{
+            type:'zdy',
+            dark:util.query(tab3,'.gjzdytdark').value,
+            light:util.query(tab3,'.gjzdytlight').value
+          }
+        })
+        quik.toast.show('设置成功')
+      }
     },
     destory: function (n) {
       // TODO
@@ -416,12 +568,15 @@
       document.body.classList.remove('t-dark');
       refreshApiIcon.hide();
       refreshFn=function(){}
+      clearInterval(timeb);
     },
     draw:function(n){
       var bgf=n.bgf;
       var data=n.data;
+      document.body.classList.remove('t-dark');
       refreshApiIcon.hide();
       refreshFn=function(){}
+      clearInterval(timeb);
       draws[data.type](bgf,data);
     }
   }
