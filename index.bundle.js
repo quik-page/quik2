@@ -60,6 +60,34 @@
         delete window[a];
       }
     },
+    xhr:function(url,cb,err){
+      var xhr=new XMLHttpRequest();
+      xhr.onreadystatechange=function(){
+        if(xhr.readyState==4){
+          if(xhr.status==200){
+            cb(xhr.responseText);
+          }
+        }
+      }
+      xhr.onerror=function(){
+        err&&err({
+          status:xhr.status,
+          statusText:xhr.statusText,
+          readyState:xhr.readyState,
+          responseText:xhr.responseText
+        });
+      }
+      xhr.open('GET',url,true);
+      xhr.send();
+      return{
+        abort:function(){
+          xhr.abort();
+        }
+      }
+    },
+    checkSession:function (session){
+      return session.isSession&&session.session_token==="Hvm_session_token_eoi1j2j";
+    },
     getRandomHashCache:function(){
       return Math.random().toString(36).slice(2)+Date.now().toString(36);
     },
@@ -80,8 +108,8 @@
       }
       toast.show('复制成功');
     },
-    getGoogleIcon:function(unicode){
-      return '<span class="material-symbols-outlined">&#x'+unicode+';</span>'
+    getGoogleIcon:function(unicode,d){
+      return '<span class="material-symbols-outlined'+(d&&d.type?' '+d.type:'')+'">&#x'+unicode+';</span>'
     },
     /**
      * 检查details中是否含有必选项
@@ -103,15 +131,20 @@
     class:"toast"
   })
 
-  var g=null;
+  var g=null,g2=null;
   util.query(document,'body').append(to);
   return {
     show:function(value,time){
       to.innerHTML=value;
       to.classList.add('show');
+      to.style.animation="toastin .3s";
       clearTimeout(g);
+      clearTimeout(g2);
       g=setTimeout(function(){
-        to.classList.remove('show');
+        to.style.animation="toastout .3s";
+        g2=setTimeout(function(){
+          to.classList.remove('show');
+        },298);
       },time??2000);
     }
   }
@@ -121,54 +154,19 @@
     localStorage.quik2='{}';
   }
 
-  var isidbready=false;
   var idbsupport=localforage._getSupportedDrivers([localforage.INDEXEDDB])[0]==localforage.INDEXEDDB;
-  // var idbsupport=false;
-  var readyfn=[];
-  localforage.ready(function(){
-    setTimeout(function(){
-      isidbready=true;
-      readyfn.forEach(function(fn){
-        fn();
-      })
-    },200)
-
-  })
-
   var filerecv={
     get:function(hash,cb){
-      if(!isidbready){
-        readyfn.push(function(){
-          localforage.getItem(hash).then(cb);
-        })
-      }else{
-        localforage.getItem(hash).then(cb);
-      }
+      localforage.getItem(hash).then(cb);
     },
     set:function(file,cb){
-      if(!isidbready){
-        readyfn.push(function(){
-          var hash='^'+util.getRandomHashCache();
-          localforage.setItem(hash,file).then(function(){
-            cb(hash);
-          });
-        })
-      }else{
-        var hash='^'+util.getRandomHashCache();
+      var hash='^'+util.getRandomHashCache();
       localforage.setItem(hash,file).then(function(){
         cb(hash);
       });
-      }
-      
     },
     delete:function(hash,cb){
-      if(!isidbready){
-        readyfn.push(function(){
-          localforage.removeItem(hash).then(cb);
-        })
-      }else{
-        localforage.removeItem(hash).then(cb);
-      }
+      localforage.removeItem(hash).then(cb);
     }
   }
 
@@ -211,10 +209,10 @@
 
       }
       function remove(k,useidb,callback){
-        if(!useidb){
         var a=getAll();
-        delete a[ck][k]
-        setAll(a);
+        if(!useidb){
+          delete a[ck][k]
+          setAll(a[ck]);
         }else{
           if(!idbsupport){
             throw new Error('indexedDB is not support in this browser');
@@ -235,10 +233,14 @@
         a[ck]=ob;
         localStorage.setItem("quik2",JSON.stringify(a));
       }
+      function list(){
+        return Object.keys(getAll()[ck]);
+      }
       return {
         get:get,
         set:set,
-        remove:remove
+        remove:remove,
+        list:list
       }
     }else{
       throw new Error('ck is not a string');
@@ -630,9 +632,20 @@ Setting.prototype={
         }
       },
       boolean:function(){
-        elr.innerHTML=`<div><div></div><input type="checkbox" class="setting-item-input"></div>`;
+        elr.innerHTML=`<div class="check-box"><div class="check-box-inner"></div><input type="checkbox" class="setting-item-input"></div>`;
         cb=function(v){
           util.query(elr,'.setting-item-input').checked=v;
+          if(v){
+            util.query(elr,'.check-box').classList.add('checked');
+          }
+          util.query(elr,'.check-box').addEventListener('click',function(){
+            util.query(elr,'.setting-item-input').click();
+            if(util.query(elr,'.setting-item-input').checked){
+              this.classList.add('checked');
+            }else{
+              this.classList.remove('checked');
+            }
+          })
         }
       },
       range:function(){
@@ -679,6 +692,7 @@ Setting.prototype={
       },
       'null':function(){
         elr.innerHTML=`<div class="setting-item-input null-click">${util.getGoogleIcon('e5e1')}</div>`;
+        itemEle.classList.add('just-callback-item');
         itemEle.onclick=function(){
           item.callback();
         }
@@ -929,7 +943,7 @@ return SettingItem;
 })();
   (function(){
   var setting_icon = new iconc.icon({
-    content: util.getGoogleIcon('e8b8'),
+    content: util.getGoogleIcon('e8b8',{type:"fill"}),
     offset: "bl"
   });
 
@@ -937,18 +951,27 @@ return SettingItem;
     mainSetting.open();
   }
 })();;
+  // @note 添加通用SettingGroup，方便添加设置
+  // @edit at 2024/1/31 10:22
+  var tyGroup=new SettingGroup({
+    title:"通用",
+    index:0
+  });
+  mainSetting.addNewGroup(tyGroup);
 
   return {
     Setting,
     SettingGroup,
     SettingItem,
-    mainSetting
+    mainSetting,
+    tyGroup
   }
 })();
   var Setting=setting.Setting;
   var SettingGroup=setting.SettingGroup;
   var SettingItem=setting.SettingItem;
   var mainSetting=setting.mainSetting;
+  var tyGroup=setting.tyGroup;
   var omnibox=(function(){
   var eventFn={
     focus:[],
@@ -1592,6 +1615,8 @@ return SettingItem;
   if (storage.checkIDB()) {
     // 支持数据库
     link=(function () {
+  initsto.set('storage-mode','db');
+
   // 初始化进度，2为初始化完毕
   var initState = 0;
   function init() {
@@ -1891,23 +1916,27 @@ return SettingItem;
               type: 'catedelete',
             });
           });
-        } else if (confirm('确定要删除分组吗？无法恢复！')) {
-          delete c[cate];
-          initsto.set('cate', c, true, function () {
-            callback({
-              code: 0,
-              msg: "删除成功"
-            });
-            doevents('change', {
-              cate: cate,
-              type: 'catedelete',
-            });
-          });
-        } else {
-          callback({
-            code: -2,
-            msg: "用户取消删除"
-          });
+        } else{
+          confirm('确定要删除分组吗？无法恢复！',function(r){
+            if(r){
+              delete c[cate];
+              initsto.set('cate', c, true, function () {
+                callback({
+                  code: 0,
+                  msg: "删除成功"
+                });
+                doevents('change', {
+                  cate: cate,
+                  type: 'catedelete',
+                });
+              });
+            }else{
+              callback({
+                code: -2,
+                msg: "用户取消删除"
+              });
+            }
+          })
         }
 
       });
@@ -1989,6 +2018,7 @@ return SettingItem;
     link=(function () {
   console.warn('浏览器不支持indexedDB，将在限制模式下使用');
 
+  initsto.set('storage-mode','localstorage');
   // 初始化默认分组
   if (!initsto.get('links')) {
     initsto.set('links', [])
@@ -2256,26 +2286,26 @@ return SettingItem;
           code: 0,
           msg: "删除成功"
         });
-      } else if (confirm('确定要删除分组吗？无法恢复！')) {
-        delete c[cate];
-        initsto.set('cate', c);
-        callback({
-          code: 0,
-          msg: "删除成功"
-        });
-        doevents('change', {
-          cate: cate,
-          type: 'catedelete',
-        });
-      } else {
-        callback({
-          code: -2,
-          msg: "用户取消删除"
-        });
-        doevents('change', {
-          cate: cate,
-          type: 'catedelete',
-        });
+      } else{
+        confirm('确定要删除分组吗？无法恢复！',function(r){
+          if(r){
+            delete c[cate];
+            initsto.set('cate', c);
+            callback({
+              code: 0,
+              msg: "删除成功"
+            });
+            doevents('change', {
+              cate: cate,
+              type: 'catedelete',
+            });
+          }else{
+            callback({
+              code: -2,
+              msg: "用户取消删除"
+            });
+          }
+        })
       }
     },
     getLinks: function (cate, callback = function () { }) {
@@ -2341,7 +2371,6 @@ return SettingItem;
 })();;
   }
   (function(){
-  console.log(link);
   var linkF=util.element('div',{
     class:"links"
   });
@@ -2454,7 +2483,6 @@ return SettingItem;
     <ul class="link-list"></ul>`
     link.ready(function(){
       link.getCates(function(r){
-        console.log(r);
         r.data.forEach(function(g){
           bcate(g);
         });
@@ -2477,7 +2505,6 @@ return SettingItem;
         })
       }
       util.query(linkF,'.cate-right-btn').onclick=function(){
-        console.log('r');
         util.query(linkF,'.cate-bar-scrolls').scrollTo({
           left:
             c(util.query(linkF,'.cate-bar-scrolls').scrollLeft+
@@ -2493,24 +2520,28 @@ return SettingItem;
       util.query(linkF,'.cate-bar-scrolls').onscroll=function(){
         checkScrollBtn.call(this);
       }
-      function checkScrollBtn(){
-        if(this.scrollLeft==0){
-          util.query(linkF,'.cate-left-btn').classList.add('disabled');
-        }else{
-          util.query(linkF,'.cate-left-btn').classList.remove('disabled');
-        }
-        if(this.scrollLeft>=this.scrollWidth-this.getBoundingClientRect().width){
-          util.query(linkF,'.cate-right-btn').classList.add('disabled');
-        }else{
-          util.query(linkF,'.cate-right-btn').classList.remove('disabled');
-        }
-      }
       checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
       actCate();
     })
   observeCate();
 
   }
+  function checkScrollBtn(){
+    if(this.scrollLeft==0){
+      util.query(linkF,'.cate-left-btn').classList.add('disabled');
+    }else{
+      util.query(linkF,'.cate-left-btn').classList.remove('disabled');
+    }
+    if(this.scrollLeft>=this.scrollWidth-this.getBoundingClientRect().width){
+      util.query(linkF,'.cate-right-btn').classList.add('disabled');
+    }else{
+      util.query(linkF,'.cate-right-btn').classList.remove('disabled');
+    }
+  }
+  window.addEventListener('resize',function(){
+    console.log('r');
+    checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
+  })
   function observeCate(){
     var ob=new MutationObserver(function(){
       setTimeout(function(){
@@ -2522,6 +2553,7 @@ return SettingItem;
           w+=c.getBoundingClientRect().width+4;
         })
         util.query(linkF,'.cate-bar-items').style.width=w+'px';
+        checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
       },1)
       
     });
@@ -2780,16 +2812,27 @@ return SettingItem;
   var hitokoto={};
   var hitokotoType=[];
   var hitokotoMinLength=0,hitokotoMaxLength=30;
+  var d=0;
   hitokoto.load=function(callback){
-    var url=new URL('https://v1.hitokoto.cn/');
+    fetch(gurl()).then(function(r){
+      return r.json()
+    }).then(callback).catch(function(){
+      d=1;
+      fetch(gurl()).then(function(r){
+        return r.json()
+      }).then(callback)
+    });
+  }
+
+  function gurl(){
+    var cu=['https://v1.hitokoto.cn/','https://international.v1.hitokoto.cn/']
+    var url=new URL(cu[d]);
     hitokotoType.forEach(function(k){
       url.searchParams.append('c',k);
     })
     url.searchParams.append('min_length',hitokotoMinLength);
     url.searchParams.append('max_length',hitokotoMaxLength);
-    fetch(url.href).then(function(r){
-      return r.json()
-    }).then(callback);
+    return url.href;
   }
   hitokoto.setTypes=function(arr){
     hitokotoType=arr;
@@ -3099,8 +3142,64 @@ return SettingItem;
     setSayType,
   }
 })();;
-  var background=(function(){
-  var erciyuanbg=(function(){
+  var background=(function () {
+  var bgf = util.element('div', {
+    class: "bgf"
+  });
+  util.query(document, 'body').appendChild(bgf);
+  var initsto = storage('background');
+  var tabindexCount=0;
+
+  // 避免缓存（用于图片API）
+  function urlnocache(url) {
+    return url + (url.indexOf('?') > -1 ? '&' : '?') + 't=' + new Date().getTime();
+  }
+
+  // 背景设置对话框
+  var bg_set_d = new dialog({
+    content: `<div class="actionbar">
+      <h1>背景设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
+    </div>
+    <div class="tab_con"></div>
+    <div class="scroll_con"></div>
+    `,
+    class: "bg_d",
+    mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN
+  });
+
+  // 背景设置对话框Dom
+  var d = bg_set_d.getDialogDom();
+
+  // 关闭按钮
+  util.query(d, '.closeBtn').onclick = function () {
+    bg_set_d.close();
+  }
+
+  // 背景设置对话框Tab
+  var tab_con = util.query(d, 'div.tab_con');
+
+  // 背景设置对话框内容
+  var scroll_con = util.query(d, 'div.scroll_con');
+
+  // 初始化用户存储
+  function initStorage() {
+    if (!initsto.get('bg')) {
+      initsto.set('bg', {
+        type: "default",
+        data: {
+          type: "color",
+          light: "#fff",
+          dark: "#333"
+        }
+      });
+    }
+  }
+  initStorage();
+
+  var defDrawer=(function(){
+  var tab1,setbg;
+  var initsto=storage('bg-def-user');
+  var acgbg=(function(){
   var apis=[{
     url:"https://api.gumengya.com/Api/DmImg?format=image",
     message:{
@@ -3126,7 +3225,7 @@ return SettingItem;
     }
   }
 })();;
-  var fenjibg=(function(){
+  var fjbg=(function(){
   var apis=[{
     url:"https://api.gumengya.com/Api/FjImg?format=image",
     message:{
@@ -3152,500 +3251,164 @@ return SettingItem;
     }
   }
 })();;
-
-  var bgf=util.element('div',{
-    class:"bgf"
-  });
-
-  var bgcover=util.element('div',{
-    class:"bgcover"
-  });
-
-  var bgi=util.element('div',{
-    class:"bgi"
-  });
-
-  util.query(document,'body').appendChild(bgf);
-  bgf.appendChild(bgcover);
-  bgf.appendChild(bgi);
-
-  var initsto=storage('background');
-
-  // 初始化用户存储
-  function initStorage(){
-    if(!initsto.get('bg')){
-      initsto.set('bg','color-#fff-#333');
+  var neizhiImg=[
+    {
+      thumbnail:"https://image.gumengya.com/thumbnails/06470348c93db185e44f8acd87c5b683.png",
+      img:"https://image.gumengya.cn/i/2023/10/13/65294cf55ef7d.png",
+    },
+    {
+      thumbnail:"https://image.gumengya.com/thumbnails/5e6200d4552394e722967ef96addd06a.png",
+      img:"https://image.gumengya.cn/i/2023/10/13/65294c34841b4.jpg",
+    },
+    {
+      thumbnail:"https://image.gumengya.com/thumbnails/7ee6991ee0f43be59c28d183597e0cca.png",
+      img:"https://image.gumengya.cn/i/2023/10/13/65294c30563b7.jpg",
+    },
+    {
+      thumbnail:"https://image.gumengya.com/thumbnails/ff674343879116e22e3cf713358f2cb5.png",
+      img:"https://image.gumengya.com/thumbnails/ff674343879116e22e3cf713358f2cb5.png",
+    },
+    {
+      thumbnail:"https://image.gumengya.com/thumbnails/c9c187157ca050044a6589f230e8ddbf.png",
+      img:"https://image.gumengya.cn/i/2023/10/13/65294c2d8aae1.png",
     }
-    if(!initsto.get('usercolor')){
-      initsto.set('usercolor','#fff-#333');
+  ];
+
+  function loadimg(url,cb){
+    var img=new Image();
+    img.src=url;
+    img.onload=function(){
+      cb(true);
     }
-    if(!initsto.get('usergjzdy')){
-      initsto.set('usergjzdy',{
-        light:'',
-        dark:""
-      })
+    img.onerror=function(){
+      cb(false);
     }
   }
-  initStorage();
 
-  var intervals=[];
-
-  var INIT_SHOWTYPE={
-    // 宽度占满对话框，含标题信息
-    full:0,
-    // 宽度占一半，含标题信息
-    half:1,
-    // 默认宽度，不含标题信息
-    def:2,
+  function hasUploadedImg(){
+    return !!initsto.get('upload');
   }
-  // 背景对话框内容
-  var initalBgs=[{
-    tab:"图片/视频",
-    content:{
-      "自定义":[
-        {
-          showtype:INIT_SHOWTYPE.full,
-          img:function(){
-            return new Promise((r,j)=>{
-              getUserUploadUrl(function(res){
-                if(res) r(res);
-              })
-            })
-          },
-          out:"userzdyi",//抛出一个classname以方便外部控制
-          select:'user-upload',// 这是选择后背景的抽象字符串
-          title:"上传你喜欢的图片或视频作为背景",
-          text:"点击左边图片设置背景，点击<a class=\"updateImgOrVideo\" href=\"javascript:;\">此处</a>上传图片或视频，你可以通过输入图片或视频URL的方式设置，也可以从你的设备本地上传"
-        }
-      ],
-      "内置":[
-        {
-          showtype:INIT_SHOWTYPE.def,
-          img:"https://image.gumengya.com/thumbnails/06470348c93db185e44f8acd87c5b683.png",
-          select:"img-https://image.gumengya.cn/i/2023/10/13/65294cf55ef7d.png",
-        },
-        {
-          showtype:INIT_SHOWTYPE.def,
-          img:"https://image.gumengya.com/thumbnails/5e6200d4552394e722967ef96addd06a.png",
-          select:"img-https://image.gumengya.cn/i/2023/10/13/65294c34841b4.jpg",
-        },
-        {
-          showtype:INIT_SHOWTYPE.def,
-          img:"https://image.gumengya.com/thumbnails/7ee6991ee0f43be59c28d183597e0cca.png",
-          select:"img-https://image.gumengya.cn/i/2023/10/13/65294c30563b7.jpg",
-        },
-        {
-          showtype:INIT_SHOWTYPE.def,
-          img:"https://image.gumengya.com/thumbnails/ff674343879116e22e3cf713358f2cb5.png",
-          select:"img-https://image.gumengya.com/thumbnails/ff674343879116e22e3cf713358f2cb5.png",
-        },
-        {
-          showtype:INIT_SHOWTYPE.def,
-          img:"https://image.gumengya.com/thumbnails/c9c187157ca050044a6589f230e8ddbf.png",
-          select:"img-https://image.gumengya.cn/i/2023/10/13/65294c2d8aae1.png",
-        }
-      ],
-      "API":[
-        {
-          showtype:INIT_SHOWTYPE.half,
-          img:function(){
-            return "https://bing.shangzhenyang.com/api/1080p";
-          },
-          select:"api-bing",
-          title:"必应壁纸",
-          text:"获取必应首页的壁纸作为背景"
-        },
-        {
-          showtype:INIT_SHOWTYPE.half,
-          img:function(){
-            return erciyuanbg.getImg(1).url;
-          },
-          select:"api-2cy",
-          title:"随机二次元壁纸",
-          text:"获取随机二次元壁纸作为背景，背景提供：loliapi.com"
-        },
-        {
-          showtype:INIT_SHOWTYPE.half,
-          img:function(){
-            return fenjibg.getImg(1).url;
-          },
-          select:"api-fj",
-          title:"随机风景壁纸",
-          text:"获取随机风景壁纸作为背景，背景提供：imgapi.cn"
-        },
-      ]
-    }
-  },{
-    tab:"纯色",
-    content:{
-      "自定义":[
-        {
-          showtype:INIT_SHOWTYPE.full,
-          color:function(){
-            return new Promise((r,j)=>{
-              // 获取用户自定义颜色
-              r(initsto.get('usercolor').split('-'))
-            })
-          },
-          out:"userzdyc",
-          select:"user-color",
-          title:"将你喜欢的颜色作为背景",
-          text:"点击左边的方块设置背景，点击<a class=\"updateColor\" href=\"javascript:;\">此处</a>编辑颜色",
-        }
-      ],
-      "内置":[
-        {
-          showtype:INIT_SHOWTYPE.def,
-          color:"#fff-#333",
-          select:"color-#fff-#333"
-        },{
-          showtype:INIT_SHOWTYPE.def,
-          color:"#f1f1fe-#3e3e31",
-          select:"color-#f1f1fe-#3e3e31"
-        }
-      ],
-      "API":[
-        {
-          showtype:INIT_SHOWTYPE.half,
-          color:function(){
-            return [getNowColor(0),getNowColor(1)];
-          },
-          select:"api-time",
-          title:"时间的颜色",
-          text:"获取当前时间的颜色作为背景，详情<a class=\"timeColorInfo\" href=\"javascript:;\">此处</a>"
-        }
-      ]
-    }
-  },{
-    tab:"高级自定义",
-    content:`
-    <p>浅色模式：</p><br>
-    <textarea class="gjzdytlight textarea"></textarea>
-    <p>深色模式：</p><br>
-    <textarea class="gjzdytdark textarea"></textarea>
-    <button class="gjzdysetbtn">设置</button>
-    <p class="tip">参见 CSS | background属性</p>
-    `
-  }]
 
-  //时间的颜色API
-  function getNowColor(a){
-    var date=new Date();
-    if(typeof a=='number'){
-      if(a==0){
-       return `rgb(${256-date.getHours()},${256-date.getMinutes()},${256-date.getSeconds()})`;
-      }else{
-       return `rgb(${date.getHours()},${date.getMinutes()},${date.getSeconds()})`;
+  var refreshApiIcon=new iconc.icon({
+    content:util.getGoogleIcon('e86a'),
+    offset:"br"
+  });
+  refreshApiIcon.hide();
+  var refreshFn=function(){}
+
+  refreshApiIcon.getIcon().onclick=function(){
+    refreshFn.call(this);
+  };
+
+  var draws={
+    img:function(bgf,data){
+      if(!util.query(bgf,'.img-sp')){
+        bgf.innerHTML='<div class="img-sp full"><div class="cover"></div><img src=""/></div>'
       }
-    }else{
-     if(document.body.classList.contains('dark')){
-       return `rgb(${date.getHours()},${date.getMinutes()},${date.getSeconds()})`;
-     }else{
-       return `rgb(${256-date.getHours()},${256-date.getMinutes()},${256-date.getSeconds()})`;
-     }
-    }
-  }
-
-  // 方便控制不同主题下的背景样式
-  var styleElement=util.element('style');
-  document.head.append(styleElement);
-
-  // 处理并应用抽象背景字符串
-  function chulibg(bgv){
-    // 清理定时器
-    intervals.forEach(function(item){
-      clearInterval(item);
-    });
-    intervals=[];
-
-    //清理背景和样式
-    bgi.innerHTML='';
-    styleElement.innerHTML='';
-    document.body.classList.remove('t-dark');
-
-    //处理抽象背景字符串
-    bgv=bgv.split('-');
-
-    // 背景类型
-    var lx=bgv[0];
-
-    bgv.shift();
-    
-    // 背景内容
-    var value=bgv.join('-');
-    if(lx=='def'){
-      return;
-    }else if(lx=='img'){
-      bgi.innerHTML=`<img src="${value}"/>`;
+      util.query(bgf,'.img-sp img').src=data.url;
       document.body.classList.add('t-dark');
-      // 图片或视频为背景时，采用初步dark主题会更好看
-    }else if(lx=='video'){
-      bgi.innerHTML=`<video src="${value}" autoplay loop muted></video>`;
+    },
+    video:function(bgf,data){
+      if(!util.query(bgf,'.video-sp')){
+        bgf.innerHTML='<div class="video-sp full"><div class="cover"></div><video src="" muted loop></video></div>'
+      }
+      util.query(bgf,'.video-sp video').src=data.url;
+      util.query(bgf,'.video-sp video').oncanplay=function(){
+        this.play();
+      }
       document.body.classList.add('t-dark');
-    }else if(lx=='color'){
-      // color分亮暗主题
-      styleElement.innerHTML=`.bgi{background:${value.split('-')[0]};}body.dark .bgi{background:${value.split('-')[1]};}`
-    }else if(lx=='api'){
-      if(value=='2cy'){
-        // 二次元
-        bgi.innerHTML=`<img src="${urlnocache(erciyuanbg.getImg().url)}"/>`
-        util.query(bgi,'img').onerror=function(){
-          this.src=urlnocache(erciyuanbg.getImg().url);
-        }
-        document.body.classList.add('t-dark');
-      }else if(value=='fj'){
-        // 风景
-        bgi.innerHTML=`<img src="${urlnocache(fenjibg.getImg().url)}"/>`
-        util.query(bgi,'img').onerror=function(){
-          this.src=urlnocache(fenjibg.getImg().url);
-        }
-        document.body.classList.add('t-dark');
-      }else if(value=='bing'){
-        // bing
-        bgi.innerHTML=`<img src="${urlnocache("https://bing.shangzhenyang.com/api/1080p")}"/>`
-        util.query(bgi,'img').onerror=function(){
-          this.src=urlnocache("https://bing.shangzhenyang.com/api/1080p");
-        }
-        document.body.classList.add('t-dark');
-      }else if(value=='time'){
-        // 时间的颜色
-        intervals.push(setInterval(function(){
-          bgi.style.backgroundColor=getNowColor();
-        },1000))
-      }
-    }else if(lx=='user'){
-      //用户自定义
-      if(bgv=='upload'){
-        // 图片或视频
-        var a=initsto.get('userbg');
-        if(!a) return;
-
-        document.body.classList.add('t-dark');
-        if(a.type=='video'){
-          var b=a.upasdb;
-          if(b){
-            initsto.get('useruploaderbg',true,function(blob){
-              bgi.innerHTML=`<video src="${URL.createObjectURL(blob)}" autoplay loop muted></video>`;
-            })
-          }else{
-            bgi.innerHTML=`<video src="${a.url}" autoplay loop muted></video>`;
-          }
-        }else if(a.type=='image'){
-          var b=a.upasdb;
-          if(b){
-            initsto.get('useruploaderbg',true,function(blob){
-              bgi.innerHTML=`<img src="${URL.createObjectURL(blob)}"/>`;
-            })
-          }else{
-            bgi.innerHTML=`<img src="${a.url}"/>`;
-          }
-        }
-      }else if(bgv=='color'){
-        //颜色
-        var value=initsto.get('usercolor');
-        styleElement.innerHTML=`.bgi{background:${value.split('-')[0]};}body.dark .bgi{background:${value.split('-')[1]};}`
-      }else if(bgv=='gjzdy'){
-        //高级自定义
-        var value=initsto.get('usergjzdy');
-        styleElement.innerHTML=`.bgi{background:${value.light};}body.dark .bgi{background:${value.dark};}`
-      }
-    }
-  }
-
-  // 避免缓存（用于图片API）
-  function urlnocache(url){
-    return url+(url.indexOf('?')>-1?'&':'?')+'t='+new Date().getTime();
-  }
-
-  // 背景设置对话框
-  var bg_set_d=new dialog({
-    content:`<div class="actionbar">
-    <h1>背景设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
-  </div>
-  <div class="tab_con"></div>
-  <div class="scroll_con"></div>
-  `,
-    class:"bg_d",
-    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN
-  });
-
-  // 背景设置对话框Dom
-  var d=bg_set_d.getDialogDom();
-
-  // 关闭按钮
-  util.query(d,'.closeBtn').onclick=function(){
-    bg_set_d.close();
-  }
-
-  // 背景设置对话框Tab
-  var tab_con=util.query(d,'div.tab_con');
-
-  // 背景设置对话框内容
-  var scroll_con=util.query(d,'div.scroll_con');
-
-  // 实例化
-  initalBgs.forEach(function(item,i){
-    var tab=item.tab; // tab标题
-
-    // 一个tab标签
-    var tabitem=util.element('div',{
-      class:'tabitem',
-      'data-tab':i //TabID，方便控制
-    });
-    tab_con.appendChild(tabitem);
-    tabitem.innerHTML=tab;
-    // 点击时跳转至该Tab
-    tabitem.onclick=function(){
-      activeTab(this.getAttribute('data-tab'));
-    }
-
-    // 内容
-    var scrollitem=util.element('div',{
-      class:'scrollitem',
-      'data-tab':i //对应TabID，方便控制
-    });
-    scroll_con.appendChild(scrollitem);
-    
-    // 如果item.content是字符串的化，直接写入
-    if(typeof item.content=='string'){
-      scrollitem.innerHTML=item.content;
-      return;
-    }
-
-    // 否则对item.content对象进行解析
-    for(var k in item.content){
-      var unititem=util.element('div',{
-        class:"unititem"
-      });
-      unititem.innerHTML=`<div class="unit-title">${k}</div><div class="unit-content"></div>`;
-      item.content[k].forEach(function(it,i){
-        // 一个背景选项
-        var bgitem=util.element('div',{
-          class:"bgitem "+['full','half','def'][it.showtype]+" "+it.out??'',
-          'data-select':it.select,
+    },
+    color:function(bgf,data){
+      
+    },
+    api:function(bgf,data){
+      if(data.api=='acg'){
+        var url=urlnocache(acgbg.getImg().url);
+        draws.img(bgf,{
+          url:url
         });
-        if(it.showtype==INIT_SHOWTYPE.def){
-          //默认则不用处理信息
-          bgitem.innerHTML=_shilifk(it,bgitem);
-        }else if(it.showtype==INIT_SHOWTYPE.full||it.showtype==INIT_SHOWTYPE.half){
-          //其它处理信息
-          bgitem.innerHTML=_shilifk(it,bgitem)+_shilimessage(it);
+        refreshApiIcon.show();
+        refreshFn=function(){
+          var url=urlnocache(acgbg.getImg().url);
+          this.classList.add('round-anim');
+          var _=this;
+          loadimg(url,function(ok){
+            if(ok){
+              _.classList.remove('round-anim');
+              draws.img(bgf,{
+                url:url
+              });
+            }else{
+              refreshFn.call(_);
+            }
+          })
+          
         }
-        util.query(unititem,'.unit-content').append(bgitem);
-        util.query(bgitem,'.fk').onclick=function(){
-          // 点击改变背景
-          changeBg(this.parentElement.getAttribute('data-select'));
+      }else if(data.api=='fj'){
+        var url=urlnocache(fjbg.getImg().url);
+        draws.img(bgf,{
+          url:url
+        });
+        refreshApiIcon.show();
+        refreshFn=function(){
+          var url=urlnocache(fjbg.getImg().url);
+          this.classList.add('round-anim');
+          var _=this;
+          loadimg(url,function(ok){
+            if(ok){
+              _.classList.remove('round-anim');
+              draws.img(bgf,{
+                url:url
+              });
+            }else{
+              refreshFn.call(_);
+            }
+          })
         }
-      })
-      scrollitem.append(unititem);
-    }
+      }else if(data.api=='bing'){
+        draws.img(bgf,{
+          url:"https://bing.shangzhenyang.com/api/1080p"
+        });
+      }
+    },
+    userbg:function(bgf,data){
+      // 图片或视频
+      var a=initsto.get('userbg');
+      if(!a) return;
 
-  });
-
-  function _shilifk(it,bgitem){
-    var str='';
-    if(it.img){
-      if(typeof it.img=='string'){
-        str=`<div class="fk"><img src="${it.img}"></div>`
-      }else{
-        var src=it.img();
-        if(src instanceof Promise){
-          str=`<div class="fk"></div>`;
-          src.then(function(url){
-            util.query(bgitem,'.fk').innerHTML=`<img src="${url}"/>`;
+      document.body.classList.add('t-dark');
+      if(a.type=='video'){
+        var b=a.useidb;
+        if(b){
+          initsto.get('upload',true,function(blob){
+            draws.video(bgf,{
+              url:URL.createObjectURL(blob)
+            })
           })
         }else{
-          str=`<div class="fk"><img src="${src}"></div>`
+          draws.video(bgf,{
+            url:a.url
+          })
         }
-      }
-    }else if(it.color){
-      if(typeof it.color=='string'){
-        var colors=it.color.split('-');
-        str= _shilifk_color_str(colors);
-      }else{
-        var colors=it.color();
-        if(colors instanceof Promise){
-          str=`<div class="fk"></div>`;
-          colors.then(function(colors){
-            util.query(bgitem,'.fk').innerHTML= _shilifk_color_str(colors,true);
+      }else if(a.type=='image'){
+        var b=a.useidb;
+        if(b){
+          initsto.get('upload',true,function(blob){
+            draws.img(bgf,{
+              url:URL.createObjectURL(blob)
+            })
           })
         }else{
-          str=_shilifk_color_str(colors);
+          draws.img(bgf,{
+            url:a.url
+          })
         }
       }
+    },
+    zdy:function(bgf,data){
+
     }
-    return str;
   }
-  function _shilifk_color_str(colors,a){
-    return `${a?'':'<div class="fk">'}
-    <div class="leftcolorbox" style="background:${colors[0]}"></div>
-    <div class="rightcolorbox" style="background:${colors[1]}"></div>
-    ${a?'':'</div>'}`
-  }
-
-  util.query(scroll_con,'.updateImgOrVideo').onclick=function(){
-    iovuploader.open();
-  }
-  function _shilimessage(it){
-    return `<div class="bg-message">
-      <div class="bg-message-title">${it.title}</div>
-      <div class="bg-message-text">${it.text}</div>
-    </div>`
-  }
-
-  // 改变背景
-  function changeBg(select){
-    // 存储改变
-    initsto.set('bg',select);
-    // 处理背景
-    chulibg(select);
-    // 给对应bgitem设置active
-    var setbgi= util.query(scroll_con,'.bgitem.selected');
-    setbgi&&setbgi.classList.remove('selected');
-    var ybgi=util.query(scroll_con,'.bgitem[data-select="'+select+'"');
-    ybgi&&ybgi.classList.add('selected');
-  }
-
-  // activeTab
-  function activeTab(i){
-    util.query(d,'.tabitem',true).forEach(function(t){
-      t.classList.remove('active');
-    });
-    util.query(d,'.scrollitem',true).forEach(function(t){
-      t.style.display='';
-    });
-    util.query(d,'.tabitem[data-tab="'+i+'"]').classList.add('active');
-    util.query(d,'.scrollitem[data-tab="'+i+'"]').style.display='block';
-  }
-
-  //开始activeTab0
-  activeTab('0');
-
-  // 在设置添加背景设置选项
-  // setting.registerSetting({
-  //   title:"设置背景",
-  //   unit:"背景",
-  //   message:"",
-  //   callback:function(){
-  //     bg_set_d.open();
-  //   }
-  // });
-  var sg=new SettingGroup({
-    title:"背景",
-    index:1
-  });
-
-  var si=new SettingItem({
-    title:"设置背景",
-    index:1,
-    type:'null',
-    message:"",
-    callback:function(value){
-      bg_set_d.open();
-    }
-  })
-  mainSetting.addNewGroup(sg);
-  sg.addNewItem(si);
 
   // 图片、视频上传器
   var iovuploader=new dialog({
@@ -3687,23 +3450,30 @@ return SettingItem;
     // File?
     var file=util.query(iovuploaderf,'input[type="file"]').files[0];
     // 先把背景设置对话框中的图片src重置
-    util.query(d,'.userzdyi .fk img').src='';
+    util.query(d,'.zdy .left img').src='';
     if(file){
       // File优先
 
       // 将内容写入idb
-      initsto.set('useruploaderbg',file,true,function(){
+      console.log(file);
+      initsto.set('upload',file,true,function(){
         iovuploader.close();
         getUserUploadUrl(function(r){
           // 获取并设置背景设置对话框中的图片src
-          util.query(d,'.userzdyi .fk img').src=r;
+          util.query(d,'.zdy .left img').src=r;
+        })
+        setbg({
+          type:"default",
+          data:{
+            type:"userbg"
+          }
         })
       });
 
       // 设置存储
       initsto.set('userbg',{
         type:type,
-        upasdb:true // 表示背景内容写入了idb
+        useidb:true
       })
     }else{
       initsto.set('userbg',{
@@ -3713,12 +3483,18 @@ return SettingItem;
       iovuploader.close();
       getUserUploadUrl(function(r){
         // 获取并设置背景设置对话框中的图片src
-        util.query(d,'.userzdyi .fk img').src=r;
+        util.query(tab1,'.zdy .left img').src=r;
+        setbg({
+          type:"default",
+          data:{
+            type:"userbg"
+          }
+        })
       })
     }
 
-    // 最后，直接改变背景
-    changeBg('user-upload');
+    util.query(tab1,'.noBg').style.display='none';
+    util.query(tab1,'.zdy .editbtn').style.display='block';
   }
 
   // 获取用户上传图片、视频URL
@@ -3732,10 +3508,10 @@ return SettingItem;
 
     if(a.type=='video'){
       // 视频
-      var b=a.upasdb;
+      var b=a.useidb;
       if(b){
         // 来自用户本地上传，从idb提取，获取视频快照返回
-        initsto.get('useruploaderbg',true,function(blob){
+        initsto.get('upload',true,function(blob){
           getVideoCaptrue(URL.createObjectURL(blob),function(c){
             cb(c);
           });
@@ -3752,10 +3528,10 @@ return SettingItem;
         }
       }
     }else if(a.type=='image'){
-      var b=a.upasdb;
+      var b=a.useidb;
       if(b){
         // 来自用户本地上传，从idb提取返回
-        initsto.get('useruploaderbg',true,function(blob){
+        initsto.get('upload',true,function(blob){
           cb(URL.createObjectURL(blob));
         })
       }else{
@@ -3774,6 +3550,7 @@ return SettingItem;
     });
     document.body.append(video);
     video.oncanplay=function(){
+      video.currentTime=video.duration/4;
       var canvas=document.createElement('canvas');
       canvas.width=video.videoWidth;
       canvas.height=video.videoHeight;
@@ -3785,82 +3562,247 @@ return SettingItem;
     }
     
   }
+  
+  return {
+    type: "default",
+    init: function (e) {
+      setbg=e.setbg;
+      // pushTab 图片/视频
+      tab1=e.pushBgTab({
+        tab:"图片/视频",
+        content:"<div class=\"unit-item zdy\">\n  <div class=\"unit-title\">自定义</div>\n  <div class=\"unit-content\">\n    <div class=\"bgitem full\">\n      <div class=\"left\">\n        <div class=\"hasBg\">\n          <img src=\"\" alt=\"\">\n        </div>\n        <div class=\"noBg\">\n          <span class=\"material-symbols-outlined\">&#xf09b;</span>\n        </div>\n      </div>\n      <div class=\"right\">\n        <div class=\"bg-title\">用户自定义背景</div>\n        <div class=\"bg-message\">上传任意你喜欢的图片/视频作背景</div>\n      </div>\n      <div class=\"editbtn\">\n        <div class=\"btn ok\">重新上传</div>\n      </div>\n    </div>\n  </div>\n</div>\n<div class=\"unit-item neizhi\">\n  <div class=\"unit-title\">内置</div>\n  <div class=\"unit-content\"></div>\n</div>\n<div class=\"unit-item api\">\n  <div class=\"unit-title\">API</div>\n  <div class=\"unit-content\">\n    <div class=\"bgitem half\">\n      <div class=\"left\" data-api=\"bing\">\n        <img src=\"https://bing.shangzhenyang.com/api/1080p\" alt=\"\">\n      </div>\n      <div class=\"right\">\n        <div class=\"bg-title\">必应壁纸</div>\n        <div class=\"bg-message\">获取必应首页的壁纸作为背景</div>\n      </div>\n    </div>\n    <div class=\"bgitem half\">\n      <div class=\"left\" data-api=\"acg\">\n        <img src=\"https://www.loliapi.com/acg/\" alt=\"\">\n      </div>\n      <div class=\"right\">\n        <div class=\"bg-title\">随机二次元壁纸</div>\n        <div class=\"bg-message\">获取随机二次元壁纸作为背景，背景提供：loliapi.com</div>\n      </div>\n    </div>\n    <div class=\"bgitem half\">\n      <div class=\"left\" data-api=\"fj\">\n        <img src=\"https://imgapi.cn/api.php?fl=fengjing\" alt=\"\">\n      </div>\n      <div class=\"right\">\n        <div class=\"bg-title\">随机风景壁纸</div>\n        <div class=\"bg-message\">获取随机风景壁纸作为背景，背景提供：imgapi.cn</div>\n      </div>\n    </div>\n  </div>\n</div>"
+      });
 
-  // 自定义颜色修改对话框
-  var colorchanger=new dialog({
-    content:`
-    <form>
-      <h1>自定义背景颜色</h1>
-      <div class="content">
-        <p>浅色模式：<input type="color" class="lightbgcolor"/></p>
-        <p>深色模式：<input type="color" class="darkbgcolor"/></p>
-      </div>
-      <div class="footer">
-        <div class="cancel btn">取消</div>
-        <button class="ok btn">确定</button>
-      </div>
-    </form>
-    `
-  });
-  // @note 将cancel按钮修改为div，防止表单submit到cancel
-  // @edit at 2024/1/30 15:20
+      if(!hasUploadedImg()){
+        util.query(tab1,'.hasBg').style.display='none';
+        util.query(tab1,'.zdy .editbtn').style.display='none';
+      }else{
+        util.query(tab1,'.noBg').style.display='none';
+        getUserUploadUrl(function(url){
+          util.query(tab1,'.zdy .left img').src=url;
+        })
+      }
+      util.query(tab1,'.zdy .left').addEventListener('click',function(){
+        if(hasUploadedImg()){
+          e.setbg({
+            type:e.type,
+            data:{
+              type:"userbg"
+            }
+          })
+          util.query(tab1,'.bgitem',true).forEach(function(b){
+            b.classList.remove('selected');
+          })
+          this.parentElement.classList.add('selected');
+        }else{
+          iovuploader.open();
+        }
+      })
+      util.query(tab1,'.zdy .editbtn').addEventListener('click',function(){
+        iovuploader.open();
+      });
 
-  // Dom
-  var colorchangerf=colorchanger.getDialogDom();
-  // 取消
-  util.query(colorchangerf,'.cancel').onclick=function(e){
-    e.preventDefault();
-    colorchanger.close();
+      // 内置图片
+      var u=util.query(tab1,'.neizhi .unit-content');
+      var _=this;
+      neizhiImg.forEach(function(im){
+        var bgitem=util.element('div',{
+          class:"bgitem def",
+          'data-img':im.img,
+        });
+        bgitem.innerHTML='<div class="left"><img src="'+im.thumbnail+'"/></div>'
+        u.appendChild(bgitem);
+        util.query(bgitem,'.left').onclick=function(){
+          util.query(tab1,'.bgitem',true).forEach(function(b){
+            b.classList.remove('selected');
+          })
+          bgitem.classList.add('selected');
+          e.setbg({
+            type:e.type,
+            data:{
+              type:"img",
+              url:bgitem.getAttribute('data-img')
+            }
+          })
+        }
+      });
+
+      // API
+      util.query(tab1,'.api.unit-item .left',true).forEach(function(l){
+        l.addEventListener('click',function(){
+          util.query(tab1,'.bgitem',true).forEach(function(b){
+            b.classList.remove('selected');
+          })
+          l.parentElement.classList.add('selected');
+          e.setbg({
+            type:e.type,
+            data:{
+              type:"api",
+              api:l.getAttribute('data-api')
+            }
+          })
+        });
+      });
+
+
+      // pushTab 纯色
+      e.pushBgTab({
+        tab:"纯色",
+        content:""
+      })
+      // pushTab 自定义
+      e.pushBgTab({
+        tab:"自定义",
+        content:""
+      })
+    },
+    destory: function (n) {
+      // TODO
+    },
+    cancel: function (n) {
+      n.bgf.innerHTML='';
+      document.body.classList.remove('t-dark');
+      refreshApiIcon.hide();
+      refreshFn=function(){}
+    },
+    draw:function(n){
+      var bgf=n.bgf;
+      var data=n.data;
+      refreshApiIcon.hide();
+      refreshFn=function(){}
+      draws[data.type](bgf,data);
+    }
   }
-  // 提交
-  util.query(colorchangerf,'form').onsubmit=function(e){
-    e.preventDefault();
-    var lightc=util.query(colorchangerf,'.lightbgcolor').value;
-    var darkc=util.query(colorchangerf,'.darkbgcolor').value;
-    initsto.set('usercolor',lightc+'-'+darkc);
-    util.query(d,'.userzdyc .fk').innerHTML=_shilifk_color_str([lightc,darkc],true);
+})();;
+  var drawers = [defDrawer];
+  dodrawer(defDrawer);
 
-    //直接改变背景
-    changeBg('user-color');
-    colorchanger.close();
-  }
+  function pushBgTab(item) {
+    var tab=item.tab; // tab标题
 
-  util.query(d,'a.updateColor').onclick=function(){
-    // 点击修改链接时，把对话框中的颜色设置为用户自定义的颜色，方便对比修改
-    var colors=initsto.get('usercolor');
-    var lightc=colors.split('-')[0];
-    var darkc=colors.split('-')[1];
-    util.query(colorchangerf,'.lightbgcolor').value=lightc;
-    util.query(colorchangerf,'.darkbgcolor').value=darkc;
-    colorchanger.open();
-  }
-
-  util.query(d,'.gjzdysetbtn').onclick=function(){
-    // 设置高级自定义背景
-    var lr=util.query(d,'.gjzdytlight').value;
-    var dr=util.query(d,'.gjzdytdark').value;
-    initsto.set('usergjzdy',{
-      light:lr, //light模式
-      dark:dr   //dark模式
+    // 一个tab标签
+    var tabitem=util.element('div',{
+      class:'tabitem',
+      'data-tab':tabindexCount.toString() //TabID，方便控制
     });
-    changeBg('user-gjzdy');
+    tab_con.appendChild(tabitem);
+    tabitem.innerHTML=tab;
+    // 点击时跳转至该Tab
+    tabitem.onclick=function(){
+      activeTab(this.getAttribute('data-tab'));
+    }
+
+    // 内容
+    var scrollitem=util.element('div',{
+      class:'scrollitem',
+      'data-tab':tabindexCount.toString() //对应TabID，方便控制
+    });
+    scroll_con.appendChild(scrollitem);
+    scrollitem.innerHTML=item.content;
+    tabindexCount++;
+    return scrollitem;
   }
 
-  // 填充背景设置对话框中的高级自定义背景代码，方便对比修改
-  var _gjzdy=initsto.get('usergjzdy');
-  util.query(d,'.gjzdytlight').value=_gjzdy.light;
-  util.query(d,'.gjzdytdark').value=_gjzdy.dark;
+  // activeTab
+  function activeTab(i){
+    util.query(d,'.tabitem',true).forEach(function(t){
+      t.classList.remove('active');
+    });
+    util.query(d,'.scrollitem',true).forEach(function(t){
+      t.style.display='';
+    });
+    util.query(d,'.tabitem[data-tab="'+i+'"]').classList.add('active');
+    util.query(d,'.scrollitem[data-tab="'+i+'"]').style.display='block';
+  }
 
 
-  // 实例化背景
-  chulibg(initsto.get('bg'));
-  // 选中对应背景
-  var setbgi=util.query(scroll_con,'.bgitem[data-select="'+initsto.get('bg')+'"');
-  setbgi&&setbgi.classList.add('selected');
+  function pushBgDrawer(drawer) {
+    var session = drawer.session;
+    try {
+      if (!util.checkSession(session)) {
+        throw 'session error';
+      }
+    } catch (e) {
+      throw new Error('背景Drawer注册失败，Session校验错误。')
+    }
+    var bgdrawerid = 'bgdrawer-' + util.getRandomHashCache();
+    drawer.id = bgdrawerid;
+    drawers.push(drawer);
+    dodrawer(drawer);
+    onbgdrawersign(drawer);
+    return bgdrawerid;
+  }
+
+  function dodrawer(drawer) {
+    drawer.init({
+      bgf: bgf,
+      pushBgTab:pushBgTab,
+      setbg:setbg,
+      type:drawer.type
+    });
+  }
+
+  var waitdraw=null;
+  function onbgdrawersign(drawer) {
+    if(waitdraw){
+      if(drawer.type==waitdraw.type){
+        drawers[i].draw({
+          bgf:bgf,data:waitdraw.data
+        })
+      }
+    }
+  }
+
+  var nowdraw=null;
+  function drawbg(data){
+    for(var i=0;i<drawers.length;i++){
+      if(data.type==drawers[i].type){
+        if(nowdraw&&nowdraw.type!=drawers[i].type){
+          nowdraw.cancel({bgf:bgf});
+          nowdraw=drawers[i];
+        }
+        drawers[i].draw({
+          bgf:bgf,data:data.data
+        })
+        return;
+      }
+    }
+    waitdraw=data;
+  }
+
+  function setbg(data){
+    initsto.set('bg',data);
+    drawbg(data);
+  }
+
+  drawbg(initsto.get('bg'));
+
+  var sg=new SettingGroup({
+    title:"背景",
+    index:3
+  });
+
+  var si=new SettingItem({
+    title:"背景设置",
+    message:"点击设置背景",
+    index:0,
+    type:'null',
+    callback:function(){
+      bg_set_d.open();
+    }
+  })
+
+  mainSetting.addNewGroup(sg);
+  sg.addNewItem(si);
+
+  //开始activeTab0
+    activeTab('0');
 
   return{
-    changeBg
+    pushBgDrawer,
+    setbg
   }
+
 })();;
   var mainmenu=(function(){
   var mainmenu_icon=new iconc.icon({
@@ -3989,8 +3931,542 @@ return SettingItem;
   })
   omnibox.sg.addNewItem(si);
 })();;
+  var notice=(function(){
+  var notice_con=document.querySelector(".notice-con");
+  var notip=document.querySelector(".no-notice-tip");
+  var notice_mb="<div class=\"notice-actionbar\">\n  <div class=\"notice-title\"></div>\n  <div class=\"notice-close-btn\">{{close-btn}}</div>\n</div>\n<div class=\"notice-content\"></div>\n<div class=\"notice-progress\">\n  <div class=\"p\"><div></div></div>\n</div>\n<div class=\"notice-btns\"></div>";
+  var focus_con=document.querySelector(".focus-notice");
+  function notice(details){
+    this.el=util.element('div',{
+      class:"notice-item"
+    });
+    notice_con.appendChild(this.el);
+    this.title=details.title;
+    this.content=details.content;
+    this.btns=details.btns||[];
+    this.useprogress=details.useprogress;
+    this.progress=0;
+    drawNotice(this);
+  }
+  notice.prototype={
+    show:function(time){
+      notip.classList.remove('show');
+      mbicon.getIcon().classList.add('notice-hasnew-icon');
+      clearTimeout(this._timeouthide);
+      this.el.classList.add('show');
+      this.el.addEventListener('click',function(e){
+        e.stopPropagation();
+      })
+      var _=this;
+      this.el.style.display='block';
+      this.el.style.animation='noticein .3s';
+
+      if(time){
+        setTimeout(function(){
+          _.hide();
+        },time)
+      }
+    },
+    hide:function(){
+      this.el.classList.remove('show');
+      if(!document.querySelector(".notice-con .notice-item.show")){
+        notip.classList.add('show');
+        mbicon.getIcon().classList.remove('notice-hasnew-icon');
+      }
+      this.el.style.animation='noticeout .3s';
+      var _=this;
+      this._timeouthide=setTimeout(function(){
+        _.el.style.display='none';
+      },300)
+    },
+    focus:function(){
+      this.show();
+      upfocus(this);
+    },
+    setTitle:function(title){
+      this.title=title;
+      drawNoticeTitle(this);
+    },
+    setContent:function(content){
+      this.content=content;
+      drawNoticeContent(this);
+    },
+    setBtn:function(btns){
+      this.btns=btns;
+      drawNoticeBtn(this);
+    },
+    setProgress:function(progress){
+      if(!this.useprogress||progress>1||progress<0){
+        return;
+      }
+      this.progress=progress;
+      drawNoticeProgress(this);
+    }
+  }
+
+  var focus_arr=[];
+  function upfocus(_){
+    focus_arr.push(_);
+    if(focus_arr.length==1){
+      g();
+    }
+  }
+
+  var ___;
+  function g(){
+    var _=focus_arr[0];
+    var _f=_.el.cloneNode(true);
+    focus_con.appendChild(_f);
+    util.query(_f,'.notice-close-btn').onclick=function(){
+      clearTimeout(___);
+      _f.remove();
+      _.hide();
+      focus_arr.shift();
+      if(focus_arr.length>0){
+        g();
+      }
+    }
+    drawNoticeBtn({
+      el:_f,
+      btns:_.btns,
+      hide:function(){
+        _.hide();
+        clearTimeout(___);
+        _f.remove();
+      },
+      show:function(){}
+    });
+    ___=setTimeout(function(){
+      _f.remove();
+      focus_arr.shift();
+      if(focus_arr.length>0){
+        g();
+      }
+    },3000);
+  }
+
+  function drawNotice(n){
+    n.el.innerHTML=notice_mb.replace('{{close-btn}}',util.getGoogleIcon('e5cd'));
+    util.query(n.el,'.notice-close-btn').onclick=function(){
+      n.hide();
+    }
+    drawNoticeTitle(n);
+    drawNoticeContent(n);
+    drawNoticeBtn(n);
+    drawNoticeProgress(n);
+  }
+
+  function drawNoticeTitle(n){
+    var titleel=util.query(n.el,'.notice-title');
+    titleel.innerHTML=n.title;
+  }
+
+  function drawNoticeContent(n){
+    var contentel=util.query(n.el,'.notice-content');
+    contentel.innerHTML=n.content;
+  }
+
+  function drawNoticeBtn(n){
+    var btncon=util.query(n.el,'.notice-btns');
+    btncon.innerHTML='';
+    for(var i=0;i<n.btns.length;i++){
+      var btn=n.btns[i];
+      var btnel=util.element('div',{
+        class:"btn"+(btn.style?" "+btn.style:""),
+      });
+      btnel.innerText=btn.text;
+      btnel.onclick=function(){
+        btn.click(n);
+      }
+      btncon.appendChild(btnel);
+    }
+  }
+
+  function drawNoticeProgress(n){
+    if(!n.useprogress){
+      util.query(n.el,'.notice-progress').style.display="none";
+      return;
+    }
+    var progressel=util.query(n.el,'.notice-progress .p div');
+    progressel.style.width=n.progress*100+"%";
+  }
+  // mobile适配
+  var mbicon=new iconc.icon({
+    content:util.getGoogleIcon('e7f4'),
+    offset:"tl"
+  });
+  
+  window.addEventListener('resize',r);
+  mbicon.getIcon().addEventListener('click',function(){
+    document.querySelector(".notice-sc").classList.add('show');
+  })
+  document.querySelector(".notice-sc").addEventListener('click',function(){
+    this.classList.remove('show');
+  })
+  function r(){
+    if(window.innerWidth>600){
+      mbicon.hide();
+    }else{
+      mbicon.show();
+    }
+  }
+  r();
+
+  
+  return notice;
+
+})();;
+  var theme=(function(){
+  var initsto=storage('theme');
+  if(!initsto.get('theme')){
+    initsto.set('theme','a');
+  }
+  var si=new SettingItem({
+    index:0,
+    title:"主题颜色",
+    type:"select",
+    message:'',
+    get:function(){
+      return initsto.get('theme');
+    },
+    callback:function(v){
+      initsto.set('theme',v);
+      checkTheme(v);
+    },
+    init:function(){
+      return {
+        a:'浅色',b:'深色',c:'跟随时间',d:"跟随系统"
+      }
+    }
+  });
+
+  tyGroup.addNewItem(si);
+
+  var _g=3;
+  function checkTheme(v){
+    if(_g!=3){_g=false;}
+    if(v=='b'){
+      document.body.classList.add('dark');
+    }else if(v=='a'){
+      document.body.classList.remove('dark');
+    }else if(v=='c'){
+      if(new Date().getHours()>=18||new Date().getHours()<6){
+        document.body.classList.add('dark');
+      }else{
+        document.body.classList.remove('dark');
+      }
+    }else if(v=='d'){
+      if(window.matchMedia){
+        if(_g==3){
+          _g=true;
+          listenTheme();
+        }else{
+          _g=true;
+        }
+      }else{
+        toast('你的浏览器不支持此功能')
+      }
+    }
+  }
+  function listenTheme(){
+    var d=window.matchMedia('(prefers-color-scheme: dark)');
+    d.matches?document.body.classList.add('dark'):document.body.classList.remove('dark');
+    d.addEventListener('change', e => {
+      if(e.matches){
+        document.body.classList.add('dark');
+      }else{
+        document.body.classList.remove('dark');
+      }
+    });
+  }
+
+  checkTheme(initsto.get('theme'));
+
+  return {
+    setTheme:function(v){
+      initsto.set('theme',v);
+      checkTheme(v);
+    }
+  }
+})();
+  var addon=(function(){
+  var eventfns={
+    initdone:[]
+  }
+  var _isinitdone=false;
+  var addon_dialog=new dialog({
+    content:("<div class=\"actionbar\">\n  <h1>插件管理</h1><div class=\"closeBtn\">{{close-btn}}</div>\n</div>\n<ul class=\"addon-root\">\n  \n</ul>").replace('{{close-btn}}',util.getGoogleIcon('e5cd')),
+    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
+    class:"addon-dialog"
+  });
+
+  var addon_dialog_d=addon_dialog.getDialogDom();
+  util.query(addon_dialog_d,'.closeBtn').addEventListener('click',()=>{
+    addon_dialog.close();
+  });
+
+  var addon_icon=new iconc.icon({
+    offset:"tr",
+    content:util.getGoogleIcon("e87b",{type:"fill"})
+  });
+  addon_icon.getIcon().onclick=function(){
+    addon_dialog.open();
+  }
+
+  var initsto=storage('addon');
+  if(!initsto.get('list')){
+    initsto.set('list',{});
+  }
+  var initscripts=storage('addon_script');
+  function installAddon(manifest_url,cb){
+    if(!manifest_url||typeof manifest_url!='string'){
+      return;
+    }
+    var l=initsto.get('list');
+    for(var k in l){
+      if(l[k].url==manifest_url){
+        cb({
+          code:1,
+          msg:"该插件已经安装"
+        });
+        return;
+      }
+    }
+    util.xhr(manifest_url,function(res){
+      try{
+        var manifest=JSON.parse(res);
+      }catch(e){
+        cb({
+          code:-3,
+          msg:'安装失败，无效的manifest'
+        });
+        return;
+      }
+      if(!manifest.url){
+        cb({
+          code:-2,
+          msg:'安装失败，manifest中没有url字段'
+        });
+        return;
+      }
+      var addon_session=getSession();
+      insertAddon(manifest_url,manifest,addon_session,function(code){
+        if(code==0){
+          cb({
+            code:0,
+            msg:'安装成功'
+          });
+        }else if(code==-1){
+          cb({
+            code:code,
+            msg:'安装失败，脚本请求失败'
+          })
+        }
+      });
+    },function(){
+      cb({
+        code:-4,
+        msg:'安装失败，manifest请求失败'
+      });
+    })
+  }
+
+  function uninstallAddon(session_id,cb){
+    if(!initsto.get('list')[session_id]){
+      cb({
+        code:-1,
+        msg:'卸载失败，未找到该插件'
+      })
+    }else{
+      var l=initsto.get('list');
+      delete l[session_id];
+      initsto.set('list',l);
+      initscripts.remove(session_id,true,function(){
+        cb({
+          code:0,
+          msg:"卸载成功"
+        });
+      })
+    }
+  }
+
+  function insertAddon(u,m,s,cb){
+    util.xhr(m.url,function(res){
+      var a=initsto.get('list');
+      a[s.id]={
+        url:u,
+        manifest:m
+      };
+      initsto.set('list',a);
+      initscripts.set(s.id,res,true,function(){
+        cb(0);
+        runAddon(s.id);
+      });
+    },function(){
+      cb(-1)
+    })
+  }
+
+  function runAddon(id){
+    return new Promise(function(r,j){
+      initscripts.get(id,true,function(res){
+        var sc=document.createElement('script');
+        sc.innerHTML=`!function(){
+          quik.addonPush=function(fn){
+            function Session(id){
+              this.id=id;
+              this.session_token="Hvm_session_token_eoi1j2j";
+              this.isSession=true;
+            }
+            fn({
+              session:new Session("${id}"),
+            })
+          };
+          ${res};
+        }()`;
+        document.body.appendChild(sc);
+        setTimeout(function(){
+          r();
+        })
+      })
+    })
+    
+  }
+
+  function initAddon(){
+    var n=[];
+    initscripts.list().forEach(function(id){
+      n.push(runAddon(id));//运行插件
+    })
+    Promise.all(n).finally(function(){
+      _isinitdone=true;
+      doevent('initdone',[]);
+    })
+  }
+  initAddon();
+
+  function getSession(){
+    function Session(){
+      this.id="ext_"+util.getRandomHashCache();
+      this.session_token="Hvm_session_token_eoi1j2j";
+      this.isSession=true;
+    }
+    return new Session();
+  }
+
+  function getAddonList(){
+    return initsto.get('list');
+  }
+
+
+  function addEventListener(event,cb){
+    if(eventfns[event]){
+      eventfns[event].push(cb);
+    }else{
+      eventfns[event]=[cb];
+    }
+  }
+
+  function doevent(event,data){
+    eventfns[event].forEach(function(fn){
+      fn.apply(null,data);
+    });
+  }
+  function isinitdone(){
+    return _isinitdone
+  }
+  
+  return {
+    installAddon,
+    uninstallAddon,
+    getAddonList,
+    addEventListener,
+    isinitdone
+  }
+})();;
+  let {alert,confirm,prompt}=(function(){
+  function alert(text,cb){
+    var d=new dialog({
+      content:`<div class="def_dialog">
+      <h1>提示</h1>
+      <div class="content"></div>
+      <div class="footer">
+        <button class="ok btn">确定</button>
+      </div>
+    </div>`
+    });
+    setTimeout(function(){d.open()},10)
+    var dd=d.getDialogDom();
+    util.query(dd,'.content').innerText=text;
+    util.query(dd,'.ok').onclick=function(){
+      cb();
+      d.close();
+      setTimeout(function(){d.destory()},299);
+    }
+  }
+  function confirm(text,cb){
+    var d=new dialog({
+      content:`<div class="def_dialog">
+      <h1>提示</h1>
+      <div class="content"></div>
+      <div class="footer">
+        <button class="cancel btn">取消</button>
+        <button class="ok btn">确定</button>
+      </div>
+    </div>`
+    });
+    setTimeout(function(){d.open()},10)
+    var dd=d.getDialogDom();
+    util.query(dd,'.content').innerText=text;
+    util.query(dd,'.ok').onclick=function(){
+      cb(true);
+      d.close();
+      setTimeout(function(){d.destory()},299);
+    }
+    util.query(dd,'.cancel').onclick=function(){
+      cb(false);
+      d.close();
+      setTimeout(function(){d.destory()},299);
+    }
+  }
+  function prompt(text,cb){
+    var d=new dialog({
+      content:`<div class="def_dialog">
+      <h1>提示</h1>
+      <div class="content">
+        <p class="c"></p>
+        <p><input type="text"/></p>
+      </div>
+      <div class="footer">
+        <button class="cancel btn">取消</button>
+        <button class="ok btn">确定</button>
+      </div>
+    </div>`
+    });
+    setTimeout(function(){d.open()},10)
+    var dd=d.getDialogDom();
+    util.query(dd,'.content .c').innerText=text;
+    util.query(dd,'.ok').onclick=function(){
+      cb(util.query(dd,'.content input').value);
+      d.close();
+      setTimeout(function(){d.destory()},299);
+    }
+    util.query(dd,'.cancel').onclick=function(){
+      cb('');
+      d.close();
+      setTimeout(function(){d.destory()},299);
+    }
+  }
+
+  return{
+    alert,
+    confirm,
+    prompt
+  }
+})();;
 
   window.quik={
+    addon,
     storage,
     omnibox,
     util,
@@ -4006,6 +4482,11 @@ return SettingItem;
     SettingGroup,
     SettingItem,
     mainSetting,
+    notice,
+    tyGroup,
+    alert,
+    confirm,
+    prompt,
   }
   document.querySelector("main").style.display='';
 })();

@@ -2,16 +2,27 @@
   var hitokoto={};
   var hitokotoType=[];
   var hitokotoMinLength=0,hitokotoMaxLength=30;
+  var d=0;
   hitokoto.load=function(callback){
-    var url=new URL('https://v1.hitokoto.cn/');
+    fetch(gurl()).then(function(r){
+      return r.json()
+    }).then(callback).catch(function(){
+      d=1;
+      fetch(gurl()).then(function(r){
+        return r.json()
+      }).then(callback)
+    });
+  }
+
+  function gurl(){
+    var cu=['https://v1.hitokoto.cn/','https://international.v1.hitokoto.cn/']
+    var url=new URL(cu[d]);
     hitokotoType.forEach(function(k){
       url.searchParams.append('c',k);
     })
     url.searchParams.append('min_length',hitokotoMinLength);
     url.searchParams.append('max_length',hitokotoMaxLength);
-    fetch(url.href).then(function(r){
-      return r.json()
-    }).then(callback);
+    return url.href;
   }
   hitokoto.setTypes=function(arr){
     hitokotoType=arr;

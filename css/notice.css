@@ -7,6 +7,9 @@
   z-index: 100;
   pointer-events: none;
 }
+.notice-sc::-webkit-scrollbar{
+  display: none;
+}
 .notice-con{
   position: absolute;
   right:0;
@@ -153,12 +156,12 @@
     opacity: 0;
     transition: opacity .3s;
     overflow: scroll;
-  }
-  .notice-sc.show{
     width: 100%;
     height: 100%;
     bottom: 0;
     background-color: rgba(0,0,0,.2);
+  }
+  .notice-sc.show{
     pointer-events: all;
     opacity: 1;
   }

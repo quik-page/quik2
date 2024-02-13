@@ -133,7 +133,6 @@
         })
       }
       util.query(linkF,'.cate-right-btn').onclick=function(){
-        console.log('r');
         util.query(linkF,'.cate-bar-scrolls').scrollTo({
           left:
             c(util.query(linkF,'.cate-bar-scrolls').scrollLeft+
@@ -149,24 +148,28 @@
       util.query(linkF,'.cate-bar-scrolls').onscroll=function(){
         checkScrollBtn.call(this);
       }
-      function checkScrollBtn(){
-        if(this.scrollLeft==0){
-          util.query(linkF,'.cate-left-btn').classList.add('disabled');
-        }else{
-          util.query(linkF,'.cate-left-btn').classList.remove('disabled');
-        }
-        if(this.scrollLeft>=this.scrollWidth-this.getBoundingClientRect().width){
-          util.query(linkF,'.cate-right-btn').classList.add('disabled');
-        }else{
-          util.query(linkF,'.cate-right-btn').classList.remove('disabled');
-        }
-      }
       checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
       actCate();
     })
   observeCate();
 
   }
+  function checkScrollBtn(){
+    if(this.scrollLeft==0){
+      util.query(linkF,'.cate-left-btn').classList.add('disabled');
+    }else{
+      util.query(linkF,'.cate-left-btn').classList.remove('disabled');
+    }
+    if(this.scrollLeft>=this.scrollWidth-this.getBoundingClientRect().width){
+      util.query(linkF,'.cate-right-btn').classList.add('disabled');
+    }else{
+      util.query(linkF,'.cate-right-btn').classList.remove('disabled');
+    }
+  }
+  window.addEventListener('resize',function(){
+    console.log('r');
+    checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
+  })
   function observeCate(){
     var ob=new MutationObserver(function(){
       setTimeout(function(){
@@ -178,6 +181,7 @@
           w+=c.getBoundingClientRect().width+4;
         })
         util.query(linkF,'.cate-bar-items').style.width=w+'px';
+        checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
       },1)
       
     });

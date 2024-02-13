@@ -300,23 +300,27 @@
               type: 'catedelete',
             });
           });
-        } else if (confirm('确定要删除分组吗？无法恢复！')) {
-          delete c[cate];
-          initsto.set('cate', c, true, function () {
-            callback({
-              code: 0,
-              msg: "删除成功"
-            });
-            doevents('change', {
-              cate: cate,
-              type: 'catedelete',
-            });
-          });
-        } else {
-          callback({
-            code: -2,
-            msg: "用户取消删除"
-          });
+        } else{
+          confirm('确定要删除分组吗？无法恢复！',function(r){
+            if(r){
+              delete c[cate];
+              initsto.set('cate', c, true, function () {
+                callback({
+                  code: 0,
+                  msg: "删除成功"
+                });
+                doevents('change', {
+                  cate: cate,
+                  type: 'catedelete',
+                });
+              });
+            }else{
+              callback({
+                code: -2,
+                msg: "用户取消删除"
+              });
+            }
+          })
         }
 
       });

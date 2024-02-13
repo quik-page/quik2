@@ -115,7 +115,9 @@
   function dodrawer(drawer) {
     drawer.init({
       bgf: bgf,
-      pushBgTab:pushBgTab
+      pushBgTab:pushBgTab,
+      setbg:setbg,
+      type:drawer.type
     });
   }
 
@@ -132,12 +134,12 @@
 
   var nowdraw=null;
   function drawbg(data){
-    if(nowdraw){
-      nowdraw.cancel();
-    }
     for(var i=0;i<drawers.length;i++){
       if(data.type==drawers[i].type){
-        nowdraw=drawers[i];
+        if(nowdraw&&nowdraw.type!=drawers[i].type){
+          nowdraw.cancel({bgf:bgf});
+          nowdraw=drawers[i];
+        }
         drawers[i].draw({
           bgf:bgf,data:data.data
         })

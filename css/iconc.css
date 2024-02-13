@@ -27,3 +27,13 @@ body.t-dark .bottomer .item{
   font-size: 20px;
   line-height: 30px;
 }
+.round-anim{
+  animation: icon_round 1s linear;
+}
+@keyframes icon_round {
+  0%{
+    transform: rotate(0deg);
+  }100%{
+    transform: rotate(360deg);
+  }
+}
