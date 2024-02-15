@@ -409,6 +409,34 @@
       }
     })
   }
+
+  function selectbgitem(data){
+    util.query(tab1,'.bgitem',true).forEach(function(it){
+      it.classList.remove('selected');
+    })
+    util.query(tab2,'.bgitem',true).forEach(function(it){
+      it.classList.remove('selected');
+    })
+    if(data.type=='default'){
+      if(data.data.type=='img'){
+        util.query(tab1,'.neizhi .bgitem[data-img="'+data.data.url+'"]').classList.add('selected');
+      }else if(data.data.type=='userbg'){
+        util.query(tab1,'.zdy .bgitem').classList.add('selected');
+      }else if(data.data.type=='api'){
+        if(data.data.api=='time'){
+          util.query(tab2,'.api .bgitem').classList.add('selected');
+        }else{
+          util.query(tab1,'.api .bgitem[data-api="'+data.data.api+'"]').classList.add('selected');
+        }
+      }else if(data.data.type=='color'){
+        util.query(tab2,'.zdy .bgitem').classList.add('selected');
+      }
+    }
+  }
+  setTimeout(function(){
+    selectbgitem(quik.background.getbg());
+    quik.background.addEventListener('change',selectbgitem)
+  })
   
   return {
     type: "default",
@@ -437,10 +465,6 @@
               type:"userbg"
             }
           })
-          util.query(tab1,'.bgitem',true).forEach(function(b){
-            b.classList.remove('selected');
-          })
-          this.parentElement.classList.add('selected');
         }else{
           iovuploader.open();
         }
@@ -460,10 +484,6 @@
         bgitem.innerHTML='<div class="left"><img src="'+im.thumbnail+'"/></div>'
         u.appendChild(bgitem);
         util.query(bgitem,'.left').onclick=function(){
-          util.query(tab1,'.bgitem',true).forEach(function(b){
-            b.classList.remove('selected');
-          })
-          bgitem.classList.add('selected');
           e.setbg({
             type:e.type,
             data:{
@@ -477,15 +497,11 @@
       // API
       util.query(tab1,'.api.unit-item .left',true).forEach(function(l){
         l.addEventListener('click',function(){
-          util.query(tab1,'.bgitem',true).forEach(function(b){
-            b.classList.remove('selected');
-          })
-          l.parentElement.classList.add('selected');
           e.setbg({
             type:e.type,
             data:{
               type:"api",
-              api:l.getAttribute('data-api')
+              api:l.parentElement.getAttribute('data-api')
             }
           })
         });
@@ -501,10 +517,6 @@
       util.query(tab2,'.zdy .color-left').style.backgroundColor=c.light;
       util.query(tab2,'.zdy .color-right').style.backgroundColor=c.dark;
       util.query(tab2,'.zdy .left').onclick=function(){
-        util.query(tab2,'.bgitem',true).forEach(function(b){
-          b.classList.remove('selected');
-        })
-        this.parentElement.classList.add('selected');
         var c=initsto.get('color');
         e.setbg({
           type:e.type,
@@ -525,16 +537,11 @@
       util.query(tab2,'.api .color-left').style.backgroundColor=cd.light;
       util.query(tab2,'.api .color-right').style.backgroundColor=cd.dark;
       util.query(tab2,'.api .left').onclick=function(){
-        var l=this;
-        util.query(tab1,'.bgitem',true).forEach(function(b){
-          b.classList.remove('selected');
-        })
-        l.parentElement.classList.add('selected');
         e.setbg({
           type:e.type,
           data:{
             type:"api",
-            api:l.parentElement.getAttribute('data-api')
+            api:this.parentElement.getAttribute('data-api')
           }
         })
       }
@@ -559,9 +566,6 @@
         })
         quik.toast.show('设置成功')
       }
-    },
-    destory: function (n) {
-      // TODO
     },
     cancel: function (n) {
       n.bgf.innerHTML='';

@@ -1,4 +1,5 @@
 (function(){
+  var getEventHandle=_REQUIRE_('./js/event.js');
   var util=_REQUIRE_('./js/util.js');
   var toast=_REQUIRE_('./js/toast.js');
   var storage=_REQUIRE_('./js/storage.js');

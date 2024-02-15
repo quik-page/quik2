@@ -1,4 +1,8 @@
 (function () {
+  var eventHandle=getEventHandle();
+  var addEventListener=eventHandle.addEventListener;
+  var removeEventListener=eventHandle.removeEventListener;
+  var doevent=eventHandle.doevent;
   var bgf = util.element('div', {
     class: "bgf"
   });
@@ -152,6 +156,7 @@
   function setbg(data){
     initsto.set('bg',data);
     drawbg(data);
+    doevent('change',[data]);
   }
 
   drawbg(initsto.get('bg'));
@@ -177,9 +182,16 @@
   //开始activeTab0
     activeTab('0');
 
+  function getbg(){
+    return initsto.get('bg');
+  }
+
   return{
     pushBgDrawer,
-    setbg
+    getbg,
+    setbg,
+    addEventListener,
+    removeEventListener
   }
 
 })();

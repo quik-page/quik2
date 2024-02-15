@@ -10,7 +10,9 @@ body{
   overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
 }
-
+textarea,input{
+  font-family: Consolas,Arial, Helvetica, sans-serif;
+}
 body.dark{
   background-color: #333;
   color: #fff;
@@ -1034,8 +1036,7 @@ body.dark .d-c.bg_d .scroll_con .unit-item .unit-title{
   object-fit: cover;
   object-position: center center;
 }
-.d-c.bg_d .scroll_con .bgitem .left .leftcolorbox,
-.d-c.bg_d .scroll_con .bgitem .left .rightcolorbox{
+.d-c.bg_d .scroll_con .bgitem .left .color{
   float: left;
   width: 50%;
   height: 100%;

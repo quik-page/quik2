@@ -1,5 +1,8 @@
 (function(){
-  var eventfn={}
+  var eventHandle=getEventHandle();
+  var addEventListener=eventHandle.addEventListener;
+  var removeEventListener=eventHandle.removeEventListener;
+  var doevent=eventHandle.doevent;
   var initsto=storage('theme');
   var n=null;
   if(!initsto.get('theme')){
@@ -81,29 +84,6 @@
   function getTheme(){
     return n;
   }
-
-  function addEventListener(e,f){
-    if(!eventfn[e]){eventfn[e]=[]}
-    eventfn[e].push(f);
-  }
-
-  function removeEventListener(e,f){
-    if(!eventfn[e]){return}
-    for(var i=0;i<eventfn[e].length;i++){
-      if(eventfn[e][i]===f){
-        eventfn[e].splice(i,1);
-        return;
-      }
-    }
-  }
-  function doevent(e,d){
-    if(eventfn[e]){
-      for(var i=0;i<eventfn[e].length;i++){
-        eventfn[e][i].apply(null,d);
-      }
-    }
-  }
-
   return {
     setTheme:function(v){
       initsto.set('theme',v);
