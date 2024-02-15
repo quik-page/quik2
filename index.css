@@ -1,25 +1,16 @@
 @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200);
-
 @import url(./css/base.css);
-
 @import url(./css/omnibox.css);
-
 @import url(./css/dialog.css);
 @import url(./css/dialogUI.css);
-
 @import url(./css/links.css);
-
 @import url(./css/says.css);
-
 @import url(./css/menu.css);
-
 @import url(./css/iconc.css);
 @import url(./css/setting.css);
-
 @import url(./css/background.css);
-
 @import url(./css/toast.css);
 @import url(./css/search_editor.css);
 @import url(./css/notice.css);
-
 @import url(./css/addon.css);
+@import url(./css/card.css)

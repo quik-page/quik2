@@ -19,11 +19,14 @@
     }
   }
 
-  var f=function(ck){
+  var jl={};
+
+  var f=function(ck,details){
     if(typeof ck==='string'){
       if(!JSON.parse(localStorage.getItem("quik2"))[ck]){
         setAll({});
       }
+      jl[ck]=details;
       function get(k,useidb,callback){
         if(!useidb){
           return getAll()[ck][k];
@@ -103,5 +106,13 @@
   f.checkIDB=function(){
     return idbsupport;
   }
-  return f;
+  return {
+    storage:f,
+    getStorageList:function(){
+      return jl;
+    },
+    getAllStorage:function(){
+      return JSON.parse(localStorage.getItem("quik2"));
+    }
+  };
 })();

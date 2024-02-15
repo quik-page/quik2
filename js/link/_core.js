@@ -1,4 +1,6 @@
-var initsto = storage('link');
+var initsto = storage('link',{
+  sync:true
+});
 
   var eventfns={
     change:[]

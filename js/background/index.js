@@ -7,7 +7,9 @@
     class: "bgf"
   });
   util.query(document, 'body').appendChild(bgf);
-  var initsto = storage('background');
+  var initsto = storage('background',{
+    sync:true
+  });
   var tabindexCount=0;
 
   // 避免缓存（用于图片API）

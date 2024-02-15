@@ -3,7 +3,9 @@
     return;
   }
 
-  var initsto=storage('search');
+  var initsto=storage('search',{
+    sync:true
+  });
   var keyword="%keyword%";
   var deftypelist={
     "bing":"https://cn.bing.com/search?q="+keyword,

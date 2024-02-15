@@ -4,7 +4,9 @@
     enter:[],
   }
 
-  var initsto=storage('omnibox');
+  var initsto=storage('omnibox',{
+    sync:true
+  });
   var sawait=[];
 
 

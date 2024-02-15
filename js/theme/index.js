@@ -3,7 +3,9 @@
   var addEventListener=eventHandle.addEventListener;
   var removeEventListener=eventHandle.removeEventListener;
   var doevent=eventHandle.doevent;
-  var initsto=storage('theme');
+  var initsto=storage('theme',{
+    sync:true
+  });
   var n=null;
   if(!initsto.get('theme')){
     initsto.set('theme','a');
