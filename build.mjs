@@ -1,5 +1,9 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import {minify} from 'minify';
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 var reg = /_REQUIRE_\s*\(.*?\)/g;
 var cache = {};
@@ -59,6 +63,20 @@ function zhuanyi(code){
 
 qjs(path.join(__dirname,'index.js'), function (code) {
   fs.writeFileSync(path.join(__dirname,'index.bundle.js'),code);
+  console.log('js');
+  minify(path.join(__dirname,'index.bundle.js'),{
+    js:{
+      "mangle": true,
+      "mangleClassNames": true,
+      "removeUnusedVariables": true,
+      "removeConsole": false,
+      "removeUselessSpread": true
+    }
+  }).then(function(res){
+    fs.writeFileSync(path.join(__dirname,'index.bundle.js'),res);
+    console.log('js-done');
+  })
+
 });
 
 var css=fs.readFileSync(path.join(__dirname,'index.css')).toString();
@@ -71,4 +89,13 @@ cssmatch.forEach(function(item){
   }
 })
 fs.writeFileSync(path.join(__dirname,'index.bundle.css'),css);
-
+console.log('css');
+minify(path.join(__dirname,'index.bundle.css'),{
+  css:{
+    "compatibility": "*"
+  }
+}).then(function(res){
+  fs.writeFileSync(path.join(__dirname,'index.bundle.css'),res);
+console.log('css-done');
+})
+;

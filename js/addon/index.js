@@ -22,7 +22,9 @@
     addon_dialog.open();
   }
 
-  var initsto=storage('addon');
+  var initsto=storage('addon',{
+    sync:true
+  });
   if(!initsto.get('list')){
     initsto.set('list',{});
   }
@@ -119,6 +121,9 @@
   function runAddon(id){
     return new Promise(function(r,j){
       initscripts.get(id,true,function(res){
+        if(!res){
+          j();
+        }
         var sc=document.createElement('script');
         sc.innerHTML=`!function(){
           quik.addonPush=function(fn){
@@ -184,12 +189,49 @@
   function isinitdone(){
     return _isinitdone
   }
+
+  function syncAddon(cb){
+    var l=getAddonList();
+    var il=0,ll=Object.keys(l).length;
+    if(ll==0){cb()}
+    for(var id in l){
+      if(initscripts.get(id)){
+        il++;
+        a();
+        continue;
+      }
+      util.xhr(l[id].url,function(res){
+        initscripts.set(id,res,true,function(){
+          runAddon(id);
+          il++;
+          a();
+        });
+      },function(){
+        il++;
+        // TODO
+      })
+    }
+    function a(){
+      if(il==ll){
+        cb();
+      }
+    }
+  }
+
+  if(localStorage._wsync){
+    toast.show('正在同步插件中，请不要刷新页面')
+    syncAddon(function(){
+      toast.show('同步完成');
+      localStorage.removeItem('_wsync');
+    });
+  }
   
   return {
     installAddon,
     uninstallAddon,
     getAddonList,
     addEventListener,
-    isinitdone
+    isinitdone,
+    syncAddon
   }
 })();

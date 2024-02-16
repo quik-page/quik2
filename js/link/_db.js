@@ -4,6 +4,7 @@
   // 初始化进度，2为初始化完毕
   var initState = 0;
   function init() {
+    console.log(initsto.get('links'),initsto.get('cate'));
     // 初始化默认分组
     if (!initsto.get('links')) {
       initsto.set('links', [], true, function () {
@@ -356,6 +357,7 @@
     },
     getCates: function (callback = function () { }) {
       initsto.get('cate', true, function (c) {
+        console.log(Object.keys(c),initsto.get('cate'));
         callback({
           code: 0,
           msg: "获取成功",

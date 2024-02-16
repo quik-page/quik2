@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "html-minifier": "^4.0.0"
+    "html-minifier": "^4.0.0",
+    "minify": "^11.0.1"
   }
 }

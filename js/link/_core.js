@@ -34,7 +34,7 @@ var initsto = storage('link',{
     ob[index] = link;
     if (typeof detail.index=='number'&& detail.index >= 0) {
       if (detail.index >= ob.length) {
-        console.warn('添加链接时，index超出范围，应在0-' + (ob.length-1) + '之间');
+        console.warn('修改链接时，index超出范围，应在0-' + (ob.length-1) + '之间');
       }else{
         var linkb = ob.splice(index, 1)[0];
         ob.splice(detail.index, 0, linkb);
