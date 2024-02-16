@@ -1,7 +1,5 @@
 (function(){
   var initsto=storage('says');
-  var jinrishici=_REQUIRE_('../api/jinrishici.js');
-  var hitokoto=_REQUIRE_('../api/hitokoto.js');
 
 //   var sayTypes=['user','jinrishici','hitokoto'];
 
@@ -31,10 +29,7 @@
   }
 
   var sayTypes={},nowSay={};
-  function addSayType(details){
-    if(typeof details!='object'||!details||!util.checkDetailsCorrect(details,['name','key','callback'])||typeof details.callback!='function'){
-      throw '参数不正确';
-    }
+  function _addSayType(details){
     sayTypes[details.key]={
       name:details.name,
       callback:details.callback,
@@ -52,9 +47,25 @@
     }
   }
 
+  _addSayType(_REQUIRE_('./saydep/user.js'));
+  _addSayType(_REQUIRE_('./saydep/yiyan.js'));
+  _addSayType(_REQUIRE_('./saydep/shici.js'));
+
+  console.log(sayTypes);
+  function addSayType(details){
+    if(util.checkSession(details.session)){
+      throw "错误的session";
+    }
+    details.key=details.session.id;
+    _addSayType(details)
+  }
+
   function setSayType(key,cb){
+    if(util.checkSession(key)){
+      key=key.id;
+    }
     if(!sayTypes[key]){
-      throw 'key不存在';
+      throw 'type不存在 type:'+key;
     }
 
     initsto.set('saytype',key);
@@ -65,6 +76,9 @@
   }
 
   function refsay(key,cb){
+    if(util.checkSession(key)){
+      key=key.id;
+    }
     if(!sayTypes[key]){
       throw 'key不存在';
     }
@@ -103,183 +117,71 @@
     sayMenu.show();
   }
 
-  addSayType({
-    key:"user",
-    name:"用户自定义",
-    callback:function(){
-      return new Promise(function(resolve,reject){
-        resolve({
-        say:initsto.get('usersay'),
-        title:"点击修改"});
-      });
-    },
-    click:function(){
-      openSaysEditor();
-    },
-    menu:[{
-      icon:util.getGoogleIcon('e3c9'),
-      title:'修改',
-      click:function(){
-        openSaysEditor();
-      }
-    },{
-      icon:util.getGoogleIcon('e14d'),
-      title:'复制',
-      click:function(){
-        var value=nowSay.say;
-        util.copyText(value);
-      }
-    }]
-  });
-
-  addSayType({
-    key:"hitokoto",
-    name:"Hitokoto",
-    callback:function(){
-      return new Promise(function(resolve,reject){
-        hitokoto.load(function(res){
-          resolve({
-            say:res.hitokoto,
-            from:res.from,
-            uuid:res.uuid,
-            from_who:res.from_who,
-            title:"该一言来自"+res.from+"，由"+res.from_who+"上传"
-          })
-        })
-      })
-    },
-    click:function(){
-      refsay('hitokoto');
-    },
-    menu:[{
-      icon:util.getGoogleIcon('e5d5'),
-      title:'刷新',
-      click:function(){
-        refsay('hitokoto');
-      }
-    },{
-      icon:util.getGoogleIcon('e14d'),
-      title:'复制',
-      click:function(){
-        var value=nowSay.say;
-        util.copyText(value);
-      }
-    },{
-      icon:util.getGoogleIcon('e88e'),
-      title:'一言详情',
-      click:function(){
-        openSayDetailsDialog({
-          'API':"Hitokoto",
-          '内容':nowSay.say,
-          '来源':nowSay.from,
-          '上传者':nowSay.from_who,
-          'UUID':nowSay.uuid
-        })
-      }
-    }]
-  })
-
-  addSayType({
-    key:"jinrishici",
-    name:"今日诗词",
-    callback:function(){
-      return new Promise(function(resolve,reject){
-        jinrishici.load(function(res){
-          resolve({
-            say:res.data.content,
-            author:'('+res.data.origin.dynasty+')'+res.data.origin.author,
-            p_title:'《'+res.data.origin.title+'》',
-            tags:res.data.matchTags.join(' '),
-            content:'<br>'+res.data.origin.content.join('<br>'),
-            title:"摘自"+res.data.origin.dynasty+"·"+res.data.origin.author+"的《"+res.data.origin.title+'》',
-          })
-        })
-      })
-    },
-    click:function(){
-      refsay('jinrishici');
-    },
-    menu:[{
-      icon:util.getGoogleIcon('e5d5'),
-      title:'刷新',
-      click:function(){
-        refsay('jinrishici');
-      }
-    },{
-      icon:util.getGoogleIcon('e14d'),
-      title:'复制',
-      click:function(){
-        var value=nowSay.say;
-        util.copyText(value);
-      }
-    },{
-      icon:util.getGoogleIcon('e88e'),
-      title:'一言详情',
-      click:function(){
-        openSayDetailsDialog({
-          'API':"今日诗词",
-          '内容':nowSay.say,
-          '作者':nowSay.author,
-          '标题':nowSay.p_title,
-          '全部内容':nowSay.content
-        })
-      }
-    }]
-  })
-
-
-  if(!initsto.get('usersay')){
-    initsto.set('usersay',def);
-  }
-
   if(!initsto.get('saytype')){
     initsto.set('saytype','user');
   }
 
-  var sayseditordialog=null;
-  function openSaysEditor(){
-    if(!sayseditordialog){
-      sayseditordialog=new dialog({
-        class:"sayseditordialog",
-        content:`<h1>修改一言</h1>
-<div class="content">
-  <p><input class="says-input" type="text"/></p>
-</div>
-<div class="footer">
-  <div class="cancel btn">取消</div>
-  <button class="ok btn">确定</button>
-</div>`
-      })
-      // @note 将cancel按钮修改为div，防止表单submit到cancel
-      // @edit at 2024/1/30 15:20
-      var d=sayseditordialog.getDialogDom();
-      util.query(d,'.cancel.btn').onclick=function(){
-        sayseditordialog.close();
-      }
-      util.query(d,'.ok.btn').onclick=function(){
-        var v=util.query(d,'.says-input').value;
-        initsto.set('usersay',v);
-        initSays(nowsaystype);
-        sayseditordialog.close();
-      }
-    }
-    setTimeout(function(){
-      var d=sayseditordialog.getDialogDom();
-      sayseditordialog.open();
-      util.query(d,'.says-input').value=initsto.get('usersay');
-    })
-  }
+  
   if(initsto.get('enabled')==undefined){
     initsto.set('enabled',true);
   }
+  
+
+  var sg=new SettingGroup({
+    title:"一言",
+    index:3
+  });
+  var typesi=new SettingItem({
+    title:"一言类型",
+    type:'select',
+    index:1,
+    message:"页面底部显示的一言类型",
+    init:function(){
+      var ks={};
+      for(var k in sayTypes){
+        ks[k]=sayTypes[k].name;
+      }
+      return ks;
+    },
+    callback:function(v){
+      setSayType(v);
+    },
+    get:function(){
+      return initsto.get('saytype');
+    }
+  })
+  var showsi=new SettingItem({
+    title:"显示一言",
+    type:'boolean',
+    message:"是否页面底部显示的一言",
+    index:0,
+    callback:function(v){
+      initsto.set('enabled',v);
+      if(v){
+        setSayType(initsto.get('saytype'));
+        sayF.style.display='';
+        typesi.show();
+      }else{
+        sayF.style.display='none';
+        typesi.hide();
+      }
+    },
+    get:function(){
+      return initsto.get('enabled');
+    }
+  })
+  mainSetting.addNewGroup(sg);
+  sg.addNewItem(typesi);
+  sg.addNewItem(showsi);
   if(initsto.get('enabled')){
     setSayType(initsto.get('saytype'));
   }else{
     sayF.style.display='none';
+    typesi.hide();
   }
-
   return {
     getNowSay,
     setSayType,
+    addSayType
   }
 })();

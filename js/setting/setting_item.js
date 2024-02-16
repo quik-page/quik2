@@ -8,7 +8,7 @@ function SettingItem(details){
   this.callback=details.callback;
   this.message=details.message;
   this.get=details.get;
-  this.show=true;
+  this._show=true;
   this.id='sei_'+util.getRandomHashCache();
   this._events={
     change:[]
@@ -38,14 +38,14 @@ SettingItem.prototype={
     })
   },
   show:function(){
-    this.show=true;
+    this._show=true;
     this._dochange({
       attr:"show",
       content:true
     })
   },
   hide:function(){
-    this.show=false;
+    this._show=false;
     this._dochange({
       attr:"show",
       content:false
