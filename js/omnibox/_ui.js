@@ -79,7 +79,8 @@
   }
 
   /* 集中处理input事件 */
-  input.oninput=util.fangdou(function(){
+  input.oninput=util.fangdou(inputInputEv,300)
+  function inputInputEv(){
     // 渲染Type
     chulitype(this.value.trim());
     saul.innerHTML='';
@@ -114,7 +115,7 @@
     eventFn.input.forEach(function(fn){
       fn(input.value);
     })
-  },300)
+  }
   /* * */
 
   /* 集中处理keydown事件 */
@@ -149,6 +150,12 @@
         }
       }else{
         util.query(saul,'li').classList.add('active');
+      }
+    }else if(e.key=='ArrowRight'){
+      var actli=util.query(saul,'li.active');
+      if(actli){
+        input.value=util.query(actli,'.sa_text').innerText;
+        inputInputEv.call(this);
       }
     }
   }

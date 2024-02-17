@@ -551,8 +551,10 @@
         tab:"自定义",
         content:_REQUIRE_('./htmls/custombgtab.html')
       });
-      util.query(tab3,'.gjzdytlight').value=initsto.get('custombglight')??'';
-      util.query(tab3,'.gjzdytdark').value=initsto.get('custombgdark')??'';
+      var _l_=initsto.get('custombglight');
+      var _d_=initsto.get('custombgdark');
+      util.query(tab3,'.gjzdytlight').value=_l_?_l_:'';
+      util.query(tab3,'.gjzdytdark').value=_d_?_d_:'';
       util.query(tab3,'.gjzdysetbtn').onclick=function(){
         initsto.set('custombglight',util.query(tab3,'.gjzdytlight').value);
         initsto.set('custombgdark',util.query(tab3,'.gjzdytdark').value);

@@ -16,6 +16,16 @@ function SettingItem(details){
 }
 
 SettingItem.prototype={
+  reInit:function(){
+    this._dochange({
+      attr:"reinit"
+    })
+  },
+  reGet:function(){
+    this._dochange({
+      attr:"reget"
+    })
+  },
   setTitle:function(title){
     this.title=title;
     this._dochange({

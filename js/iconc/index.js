@@ -10,6 +10,7 @@
    * @class icon
    * @param {Object} options 
    * @param {String} options.content
+   * @param {Boolean} options.important?
    * @param {String} options.class?
    * @param {Number} options.width?
    * @param {'tl'|'tr'|'bl'|'br'} options.offset
@@ -18,7 +19,7 @@
     this.content=options.content;
     this.width=options.width;
     var ic=util.element('div',{
-      class:"item"+(options.class?(' '+options.class):''),
+      class:"item"+(options.class?(' '+options.class):'')+(options.important?' important':''),
     });
     icners[options.offset].append(ic);
     ic.innerHTML=this.content;

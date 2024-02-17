@@ -80,17 +80,55 @@
 .links ul.link-list li:hover a img{
   background-color: rgba(220,220,220,.5);
 }
-.links ul.link-list li .editlinkbtn{
-  position: absolute;
-  top:10px;
-  right:10px;
-  font-size: 14px;
-  user-select: none;
-  display: none;
-  cursor: pointer;
+.links ul.link-list.xs li{
+  width:40px;
+  height:60px;
 }
-.links ul.link-list li:hover .editlinkbtn{
-  display:block;
+.links ul.link-list.xs li a img{
+  width: 24px;
+  height: 24px;
+  padding:4px 4px;
+  margin: 4px 4px;
+  border-radius: 3px;
+}
+.links ul.link-list.s li{
+  width:60px;
+  height:80px;
+}
+.links ul.link-list.s li a img{
+  width: 30px;
+  height: 30px;
+  padding:10px 10px;
+  margin: 5px 5px;
+  border-radius: 6px;
+}
+.links ul.link-list.l li{
+  width:80px;
+  height:120px;
+}
+.links ul.link-list.l li a img{
+  width: 40px;
+  height: 40px;
+  padding:10px 10px;
+  margin: 10px 10px;
+  border-radius: 12px;
+}
+.links ul.link-list.l li a p{
+  font-size: 15px;
+}
+.links ul.link-list.xl li{
+  width:100px;
+  height:125px;
+}
+.links ul.link-list.xl li a img{
+  width: 50px;
+  height: 50px;
+  padding:15px 15px;
+  margin: 10px 10px;
+  border-radius: 15px;
+}
+.links ul.link-list.xl li a p{
+  font-size: 18px;
 }
 .links ul.link-list li.link-add a{
   width: 43px;
@@ -101,6 +139,30 @@
   line-height: 43px;
   text-align: center;
   color:#555;
+}
+.links ul.link-list.xs li.link-add a{
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  line-height: 30px;
+}
+.links ul.link-list.s li.link-add a{
+  width: 36px;
+  height: 36px;
+  margin: 12px;
+  line-height: 36px;
+}
+.links ul.link-list.l li.link-add a{
+  width: 50px;
+  height: 50px;
+  margin: 15px;
+  line-height: 50px;
+}
+.links ul.link-list.xl li.link-add a{
+  width: 68px;
+  height: 68px;
+  margin: 16px;
+  line-height: 68px;
 }
 .links ul.link-list li.link-add a:hover{
   background-color: #e1e1e1;

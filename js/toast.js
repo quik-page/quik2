@@ -17,7 +17,7 @@
         g2=setTimeout(function(){
           to.classList.remove('show');
         },298);
-      },time??2000);
+      },time?time:2000);
     }
   }
 })();

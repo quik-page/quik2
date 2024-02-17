@@ -26,7 +26,7 @@
       util.query(d,'.ok.btn').onclick=function(){
         var v=util.query(d,'.says-input').value;
         initsto.set('usersay',v);
-        initSays(nowsaystype);
+        refsay('user');
         sayseditordialog.close();
       }
     }

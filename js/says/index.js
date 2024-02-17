@@ -51,13 +51,13 @@
   _addSayType(_REQUIRE_('./saydep/yiyan.js'));
   _addSayType(_REQUIRE_('./saydep/shici.js'));
 
-  console.log(sayTypes);
   function addSayType(details){
     if(util.checkSession(details.session)){
       throw "错误的session";
     }
     details.key=details.session.id;
     _addSayType(details)
+    typesi.reInit();
   }
 
   function setSayType(key,cb){
@@ -73,6 +73,7 @@
     sayI.onclick=sayTypes[key].click
 
     refsay(key,cb);
+    typesi.reGet();
   }
 
   function refsay(key,cb){

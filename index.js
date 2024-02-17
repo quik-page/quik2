@@ -25,6 +25,31 @@
   var card=_REQUIRE_('./js/card/index.js');
   var sync=_REQUIRE_('./js/sync/index.js');
 
+  var version_code=4;
+  console.log(version_code);
+  if('serviceWorker' in  navigator){
+    navigator.serviceWorker.ready.then(function(registration){
+      quik.util.xhr('./version',function(r){
+        var nv=parseInt(r);
+        if(nv>version_code){
+          registration.active.postMessage('update');
+        }
+      },function(){
+        console.log('获取版本失败');
+      })        
+    });
+    navigator.serviceWorker.addEventListener('message',function(e){
+      if(e.data=='updated'){
+        quik.confirm('新版本已准备就绪，是否刷新页面',function(v){
+          if(v){
+            location.reload();
+          }
+        })
+      }
+    });
+  }
+  
+
   window.quik={
     sync,
     addon,

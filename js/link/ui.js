@@ -79,9 +79,7 @@
     li.innerText=g;
     util.query(linkF,'.cate-bar-items').append(li);
     li.onclick=function(){
-      try{util.query(linkF,'.cate-bar-items .cate-item.active').classList.remove('active');}catch(e){};
-      this.classList.add('active');
-      actCate(this.innerText)
+      actCate(this)
     }
     li.oncontextmenu=function(e){
       e.preventDefault();
@@ -149,9 +147,10 @@
         checkScrollBtn.call(this);
       }
       checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
-      actCate();
+      dcate(initsto.get('enabledCate'));
+      dsize(initsto.get('linksize'));
     })
-  observeCate();
+    observeCate();
 
   }
   function checkScrollBtn(){
@@ -167,25 +166,29 @@
     }
   }
   window.addEventListener('resize',function(){
-    console.log('r');
     checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
   })
+
+  function cateWidthShiPei(){
+    var cates=util.query(linkF,'.cate-bar-items .cate-item',true);
+    var w=0;
+    cates.forEach(function(c){
+      // edit at 2024年1月29日 15点37分
+      // @note 因为加了margin
+      w+=c.getBoundingClientRect().width+4;
+    })
+    util.query(linkF,'.cate-bar-items').style.width=w+'px';
+    checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
+  }
   function observeCate(){
     var ob=new MutationObserver(function(){
-      setTimeout(function(){
-        var cates=util.query(linkF,'.cate-bar-items .cate-item',true);
-        var w=0;
-        cates.forEach(function(c){
-          // edit at 2024年1月29日 15点37分
-          // @note 因为加了margin
-          w+=c.getBoundingClientRect().width+4;
-        })
-        util.query(linkF,'.cate-bar-items').style.width=w+'px';
-        checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
-      },1)
+      setTimeout(cateWidthShiPei,1)
       
     });
-    ob.observe(util.query(linkF,'.cate-bar-items'),{childList:true});
+    ob.observe(util.query(linkF,'.cate-bar-items'),{
+      childList:true,
+      attributes:true
+    });
   }
 
   link.addEventListener('change',function(cl){
@@ -220,8 +223,32 @@
     }
   })
 
-  function actCate(cate){
+  function actCate(cateEl){
     util.query(linkF,'.link-list').innerHTML='';
+    var cate=null;
+    if(typeof cateEl=='string'){
+      try{util.query(linkF,'.cate-bar-items .cate-item.active').classList.remove('active');}catch(e){};
+      var cateEls=util.query(linkF,'.cate-bar-items .cate-item',true);
+      for(var i=0;i<cateEls.length;i++){
+        if(cateEls[i].classList.contains('mr')){
+          continue;
+        }
+        if(cateEls[i].innerText==cateEl){
+          cateEls[i].classList.add('active');
+          break;
+        }
+      }
+      cate=cateEl;
+    }else if(!cateEl){
+      try{util.query(linkF,'.cate-bar-items .cate-item.active').classList.remove('active');}catch(e){};
+      util.query(linkF,'.cate-bar-items .cate-item.mr').classList.add('active');
+    }else{
+      try{util.query(linkF,'.cate-bar-items .cate-item.active').classList.remove('active');}catch(e){};
+      cateEl.classList.add('active');
+      cate=cateEl.innerText;
+    }
+    
+
     link.getLinks(cate,function(ls){
       linklist=ls.data;
       ls.data.forEach(function(l){
@@ -399,4 +426,70 @@
     })
   }
   // initLinks();
+
+  if(!initsto.get('enabledCate')){
+    initsto.set('enabledCate',true);
+  }
+
+  if(!initsto.get('linksize')){
+    initsto.set('linksize','m');
+  }
+
+  var linksg=new SettingGroup({
+    title:"链接",
+  });
+
+  var enabledCateSi=new SettingItem({
+    type:'boolean',
+    title:"链接分组",
+    message:"启用链接分组功能来管理链接",
+    get:function(){
+      return initsto.get('enabledCate');
+    },
+    callback:function(v){
+      initsto.set('enabledCate',v);
+      dcate(v);
+    }
+  });
+  var linkSizeSi=new SettingItem({
+    type:'select',
+    title:"链接大小",
+    message:"修改链接显示的大小",
+    init:function(){
+      return {
+        xs:"很小",
+        s:"小",
+        m:"中",
+        l:"大",
+        xl:"很大"
+      }
+    },
+    get:function(){
+      return initsto.get('linksize');
+    },
+    callback:function(v){
+      initsto.set('linksize',v);
+      dsize(v);
+    }
+  });
+
+  mainSetting.addNewGroup(linksg);
+  linksg.addNewItem(enabledCateSi);
+  linksg.addNewItem(linkSizeSi);
+
+  function dcate(v){
+    actCate();
+    if(v){
+      util.query(linkF,'.cate-bar').style.display='block';
+      cateWidthShiPei();
+    }else{
+      util.query(linkF,'.cate-bar').style.display='none';
+    }
+  }
+
+  function dsize(v){
+    util.query(linkF,'.link-list').className='link-list '+v;
+  }
+
+  
 })();
