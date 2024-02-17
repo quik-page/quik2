@@ -42,21 +42,6 @@
     <div class="cards"></div>
   </main>
   <!-- <script src="https://polyfill.io/v3/polyfill.min.js"></script> -->
-  <script>
-    // register sw
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('./sw.js',{
-        scope:"./"
-      });
-    }else{
-      setTimeout(function(){
-        quik.notice({
-          title:"提示",
-          content:"当前浏览器不支持serviceWorker，无法使用离线缓存功能",
-        })
-      })
-    }
-  </script>
   <script src="https://cdn.bootcdn.net/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   <script src="./index.bundle.js"></script>
 </body>

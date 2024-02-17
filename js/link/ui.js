@@ -481,7 +481,7 @@
     actCate();
     if(v){
       util.query(linkF,'.cate-bar').style.display='block';
-      cateWidthShiPei();
+      setTimeout(function(){cateWidthShiPei();});
     }else{
       util.query(linkF,'.cate-bar').style.display='none';
     }

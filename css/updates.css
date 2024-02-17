@@ -1,0 +1,62 @@
+.version_item{
+  padding: 5px;
+}
+.version_item_title{
+  font-size: 16px;
+  color: #000;
+}
+.version_item_update_time{
+  font-size: 14px;
+  color: #333;
+}
+.version_update{
+  padding: 5px;
+}
+.version_update .update_item{
+  overflow: hidden;
+  padding: 5px 0;
+}
+
+.update_item_tag{
+  width:40px;
+  float: left;
+}
+.update_item_tag div{
+  width: 34px;
+  margin:3px;
+  line-height: 17px;
+  font-size: 12px;
+  color: #fff;
+  border-radius: 3px;
+  text-align:center;
+}
+
+.update_item_tag.new div{
+  background-color: #0f9;
+}
+
+.update_item_tag.del div{
+  background-color: #f00;
+}
+.update_item_tag.change div{
+  background-color: #40f;
+}
+.update_item_tag.fix div{
+  background-color: #f70;
+}
+.update_item_tag.thanks div{
+  background-color: #c0f;
+}
+
+.update_item_content{
+  float: left;
+  font-size:15px;
+  width: calc(100% - 40px);
+}
+
+.update_dialog{
+  width:600px;
+  max-height:calc(100% - 20px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}

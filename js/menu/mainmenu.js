@@ -5,26 +5,47 @@
     offset:"tr"
   });
 
-  var main_menu=new menu({
-    list:[{
-      icon:util.getGoogleIcon('e88e'),
-      title:"关于QUIK",
-      click:function(){
+  var mainmenulist_top=[];
+  var mainmenulist_bottom=[{
+    icon:util.getGoogleIcon('e88e'),
+    title:"关于QUIK",
+    click:function(){
 
-      }
-    }],
+    }
+  }];
+
+  var main_menu=new menu({
+    list:[],
     offset:{
       top:40,
       right:15
     }
   });
 
+  function glist(){
+    main_menu.setList(mainmenulist_top.concat(mainmenulist_bottom));
+  }
+
   mainmenu_icon.getIcon().onclick=function(e){
     e.stopPropagation();
     main_menu.show();
   }
+  var MAIN_MENU_TOP=0;
+  var MAIN_MENU_BOTTOM=1;
+
+  function pushMenu(a,b){
+    if(b==MAIN_MENU_BOTTOM){
+      mainmenulist_bottom.push(a);
+    }else{
+      mainmenulist_top.push(a);
+    }
+    glist();
+  }
+
 
   return{
-    
+    pushMenu,
+    MAIN_MENU_BOTTOM,
+    MAIN_MENU_TOP
   }
 })();

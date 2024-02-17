@@ -188,6 +188,14 @@
     return initsto.get('bg');
   }
 
+  mainmenu.pushMenu({
+    icon:util.getGoogleIcon('e1bc'),
+    title:'背景设置',
+    click:function(){
+      bg_set_d.open();
+    }
+  },mainmenu.MAIN_MENU_TOP)
+
   return{
     pushBgDrawer,
     getbg,
