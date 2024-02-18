@@ -1,26 +1,50 @@
 (function(){
-  var apis=[{
-    url:"https://api.gumengya.com/Api/DmImg?format=image",
-    message:{
-      from:"故梦API",
-      site:"https://gumengya.com/"
+
+  function ce(cb){
+    var u='';
+    if(window.innerWidth<=500){
+      u='https://img.loliapi.cn/i/pe/img'+(parseInt(Math.random()*3095)+1)+'.webp'
+    }else{
+      u='https://img.loliapi.cn/i/pc/img'+(parseInt(Math.random()*696)+1)+'.webp'
     }
-  },{
-    url:"https://www.loliapi.com/acg/",
-    message:{
-      from:"LoliApi",
-      site:"https://www.loliapi.com/"
+    util.loadimg(u,function(ok){
+      if(ok){
+        cb({
+          url:u,
+          candownload:true
+        });
+      }else{
+        u="https://loliapi.com/acg/?_="+Date.now();
+        util.loadimg(u,function(){
+          cb({
+            url:u,
+            candoanload:false
+          })
+        })
+        
+      }
+    })
+  }
+
+  var gi=(function(){
+    if(window.location.host=='siquan001.github.io'){
+      return function(cb){
+        util.xhr('https://stear.cn/api/quik.php?m=bg&key=sys81a1g519lsokh0e8&host=siquan001.github.io',function(r){
+          r=JSON.parse(r);
+          cb({
+            url:r,
+            candoanload:true
+          });
+        },function(){
+          ce(cb);
+        })
+      }
+    }else{
+      return ce;
     }
-  },{
-    url:"https://img.xjh.me/random_img.php?return=302&type=bg",
-    message:{
-      from:"岁月小筑",
-      site:"https://img.xjh.me/"
-    }
-  }]
+  })();
+  
   return {
-    getImg:function(apiindex){
-      return apis[typeof apiindex=='number'&&apiindex<apis.length?apiindex:parseInt(Math.random()*apis.length)]
-    }
+    getImg:gi
   }
 })();

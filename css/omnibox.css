@@ -7,12 +7,12 @@
   width: 600px;
   box-shadow: #aaa 0 1px 5px;
   border-radius: 20px;
-  background-color: #fff;
+  background-color: rgb(255,255,255);
   overflow: hidden;
   height: 40px;
 }
 body.dark .searchbox{
-  background-color: #222;
+  background-color: rgba(34, 34, 34, 0.7);
 }
 .searchpadding{
   width: 100%;
@@ -97,6 +97,9 @@ body.dark .searchbox{
 body.dark .searchbox ul li:hover,
 body.dark .searchbox ul li.active{
   background-color: #666;
+}
+body.t-dark .searchbox{
+  background-color: rgba(255,255,255,.7);
 }
 .searchcover{
   z-index:3;

@@ -135,7 +135,7 @@
   height: 43px;
   margin: 16px;
   border-radius: 50%;
-  background-color: #eee;
+  background-color: rgba(238, 238, 238, 0.7);
   line-height: 43px;
   text-align: center;
   color:#555;

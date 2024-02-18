@@ -52,7 +52,14 @@
     offset:"br"
   });
   refreshApiIcon.hide();
-  var refreshFn=function(){}
+  var downloadIcon=new iconc.icon({
+    content:util.getGoogleIcon('f090'),
+    offset:"br"
+  });
+  downloadIcon.hide();
+  downloadIcon.getIcon().onclick=function(){
+    window.open(document.querySelector(".bgf img").src);
+  }
 
   refreshApiIcon.getIcon().onclick=function(){
     refreshFn.call(this);
@@ -105,45 +112,50 @@
     },
     api:function(bgf,data){
       if(data.api=='acg'){
-        var url=urlnocache(acgbg.getImg().url);
-        draws.img(bgf,{
-          url:url
-        });
         refreshApiIcon.show();
+        refreshApiIcon.getIcon().classList.add('round-anim');
+        acgbg.getImg(function(d){
+          refreshApiIcon.getIcon().classList.remove('round-anim');
+          draws.img(bgf,{
+            url:d.url
+          });
+          if(d.candownload){
+            downloadIcon.show();
+          }
+        })
         refreshFn=function(){
-          var url=urlnocache(acgbg.getImg().url);
-          this.classList.add('round-anim');
-          var _=this;
-          loadimg(url,function(ok){
-            if(ok){
-              _.classList.remove('round-anim');
-              draws.img(bgf,{
-                url:url
-              });
-            }else{
-              refreshFn.call(_);
+          refreshApiIcon.getIcon().classList.add('round-anim');
+          acgbg.getImg(function(d){
+            refreshApiIcon.getIcon().classList.remove('round-anim');
+            draws.img(bgf,{
+              url:d.url
+            });
+            if(d.candownload){
+              downloadIcon.show();
             }
           })
-          
         }
       }else if(data.api=='fj'){
-        var url=urlnocache(fjbg.getImg().url);
-        draws.img(bgf,{
-          url:url
-        });
         refreshApiIcon.show();
+        refreshApiIcon.getIcon().classList.add('round-anim');
+        fjbg.getImg(function(d){
+          refreshApiIcon.getIcon().classList.remove('round-anim');
+          draws.img(bgf,{
+            url:d.url
+          });
+          if(d.candownload){
+            downloadIcon.show();
+          }
+        })
         refreshFn=function(){
-          var url=urlnocache(fjbg.getImg().url);
-          this.classList.add('round-anim');
-          var _=this;
-          loadimg(url,function(ok){
-            if(ok){
-              _.classList.remove('round-anim');
-              draws.img(bgf,{
-                url:url
-              });
-            }else{
-              refreshFn.call(_);
+          refreshApiIcon.getIcon().classList.add('round-anim');
+          fjbg.getImg(function(d){
+            refreshApiIcon.getIcon().classList.remove('round-anim');
+            draws.img(bgf,{
+              url:d.url
+            });
+            if(d.candownload){
+              downloadIcon.show();
             }
           })
         }
@@ -151,6 +163,7 @@
         draws.img(bgf,{
           url:"https://bing.shangzhenyang.com/api/1080p"
         });
+        downloadIcon.show();
       }else if(data.api=='time'){
         timeb=setInterval(function(){
           draws.color(bgf,getNowColor());
@@ -291,6 +304,7 @@
     }
 
     util.query(tab1,'.noBg').style.display='none';
+    util.query(tab1,'.hasBg').style.display='block';
     util.query(tab1,'.zdy .editbtn').style.display='block';
   }
 
@@ -436,7 +450,15 @@
   setTimeout(function(){
     selectbgitem(quik.background.getbg());
     quik.background.addEventListener('change',selectbgitem)
-  })
+  });
+
+  function _reset(){
+    document.body.classList.remove('t-dark');
+    refreshApiIcon.hide();
+    refreshFn=function(){}
+    clearInterval(timeb);
+    downloadIcon.hide();
+  }
   
   return {
     type: "default",
@@ -571,18 +593,12 @@
     },
     cancel: function (n) {
       n.bgf.innerHTML='';
-      document.body.classList.remove('t-dark');
-      refreshApiIcon.hide();
-      refreshFn=function(){}
-      clearInterval(timeb);
+      _reset();
     },
     draw:function(n){
       var bgf=n.bgf;
       var data=n.data;
-      document.body.classList.remove('t-dark');
-      refreshApiIcon.hide();
-      refreshFn=function(){}
-      clearInterval(timeb);
+      _reset();
       draws[data.type](bgf,data);
     }
   }

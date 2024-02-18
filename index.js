@@ -25,7 +25,8 @@
   var card=_REQUIRE_('./js/card/index.js');
   var sync=_REQUIRE_('./js/sync/index.js');
 
-  _REQUIRE_('./js/update.js')
+  _REQUIRE_('./js/ignores/index.js');
+  _REQUIRE_('./js/update.js');
   
 
   window.quik={

@@ -1,5 +1,15 @@
 (function(){
   return {
+    loadimg:function (url,cb){
+      var img=new Image();
+      img.src=url;
+      img.onload=function(){
+        cb(true);
+      }
+      img.onerror=function(){
+        cb(false);
+      }
+    },
     element:function(tagname,options={}){
       var a=document.createElement(tagname);
       for(var i in options){

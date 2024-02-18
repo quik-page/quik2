@@ -1,28 +1,13 @@
 !function(){
-  window.version_code = 5;
+  window.version_code = 6;
   window.version={
     version:'2.0.0-dev',
     version_code:window.version_code,
-    updateTime:'2024-02-17 15:33:00',
+    updateTime:'2024/02/18',
     log:[
       {
-        tag:"new",
-        content:"新增 lorem ipsum,fqwe89fiuwqebfulwqeifuoqwegvfuasehkfusevglawiuevgowaeiruvgiwaehfshdcweruiwbaeifclsadfuhawilefuqouqvgiuwercvaw",
-      },
-      {
         tag:"change",
-        content:"修改 lorem ipsum,fqwe89fiuwqebfulwqeifuoqwegvfuasehkfusevglawiuevgowaeiruvgiwaehfshdcweruiwbaeifclsadfuhawilefuqouqvgiuwercvaw"
-      },
-      {
-        tag:"fix",
-        content:"修复 lorem ipsum,fqwe89fiuwqebfulwqeifuoqwegvfuasehkfusevglawiuevgowaeiruvgiwaehfshdcweruiwbaeifclsadfuhawilefuqouqvgiuwercvawlorem ipsum,fqwe89fiuwqebfulwqeifuoqwegvfuasehkfusevglawiuevgowaeiruvgiwaehfshdcweruiwbaeifclsadfuhawilefuqouqvgiuwercvaw"
-      },
-      {
-        tag:"del",
-        content:"删除 lorem ipsum,fqwe89fiuwqebfulwqeifuoqwegvfuasehkfusevglawiuevgowaeiruvgiwaehfshdcweruiwbaeifclsadfuhawilefuqouqvgiuwercvaw"
-      },{
-        tag:"thanks",
-        content:"感谢 xn"
+        content:"UI",
       }
     ]
   }

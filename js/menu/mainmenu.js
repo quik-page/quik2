@@ -6,13 +6,7 @@
   });
 
   var mainmenulist_top=[];
-  var mainmenulist_bottom=[{
-    icon:util.getGoogleIcon('e88e'),
-    title:"关于QUIK",
-    click:function(){
-
-    }
-  }];
+  var mainmenulist_bottom=[];
 
   var main_menu=new menu({
     list:[],

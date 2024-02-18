@@ -118,7 +118,11 @@
       }
       if (q) sr.appendChild(itemEle);
       util.query(itemEle, '.setting-item-title').innerText = item.title;
-      util.query(itemEle, '.setting-item-message').innerText = item.message;
+      if(item.message){
+        util.query(itemEle, '.setting-item-message').innerText = item.message;
+      }else{
+        itemEle.classList.add('no-message');
+      }
       var elr = util.query(itemEle, '.setting-item-right');
       var cb = function () { }
       var types = {
@@ -270,7 +274,12 @@
       if (dt.attr == 'title') {
         util.query(g, '.setting-group-title').innerText = dt.content;
       } else if (dt.attr == 'message') {
-        util.query(g, '.setting-item-message').innerText = dt.content;
+        if(dt.content){
+          util.query(g, '.setting-item-message').innerText = dt.content;
+          g.classList.remove('no-message');
+        }else{
+          g.classList.add('no-message');
+        }
       } else if (dt.attr == 'index') {
         g.setAttribute('data-index', dt.content);
         var sr = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + '] .setting-tree');

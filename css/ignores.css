@@ -1,0 +1,66 @@
+.about-dialog {
+  max-width: 600px;
+}
+
+.about-dialog .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.about-dialog .close span {
+  font-size: 20px;
+  line-height: 40px;
+}
+
+.about-dialog .ab-logo {
+  width: 300px;
+  margin: 50px auto;
+  margin-bottom: 20px;
+}
+
+.about-dialog .t {
+  font-size: 13px;
+  line-height: 24px;
+  margin: 10px;
+}
+
+.d-c.update_dia {
+  width: 600px;
+  height: 400px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.d-c.update_dia .version_list {
+  width: calc(100% - 40px);
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  padding: 10px 20px;
+}
+
+.d-c.update_dia .version_list .version_item_title {
+  position: relative;
+}
+
+.d-c.update_dia .version_list .version_item_title::before {
+  content: "";
+  width: 4px;
+  height: 12px;
+  background-color: #0072ff;
+  position: absolute;
+  top: 3px;
+  border-radius: 3px;
+  left: -10px;
+}
+@media (max-width:600px){
+  .dialog.mobile-show-full .d-c.update_dia{
+    width: 100%;
+    height: 100%;
+  }
+}
