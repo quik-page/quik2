@@ -32,7 +32,7 @@
         util.xhr('https://stear.cn/api/quik.php?m=bg&key=sys81a1g519lsokh0e8&host=siquan001.github.io',function(r){
           r=JSON.parse(r);
           cb({
-            url:r,
+            url:r.url,
             candoanload:true
           });
         },function(){
