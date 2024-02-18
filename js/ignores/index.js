@@ -25,7 +25,7 @@
     title:"用户协议和隐私政策",
     index:3,
     callback:function(){
-      // TODO
+      licDialog.open();
     }
   });
   var thankSi=new SettingItem({
@@ -33,7 +33,7 @@
     title:"特别鸣谢",
     index:4,
     callback:function(){
-      // TODO
+      thaDialog.open();
     }
   });
   igsg.addNewItem(aboutSi);
@@ -78,7 +78,6 @@
   util.query(updom,'.closeBtn').onclick=function(){
     updateDialog.close();
   }
-  console.log(updatelog);
 
   util.query(updom,'.version_list').innerHTML=(function(){
     var s='';
@@ -102,4 +101,31 @@
     var s='<div class="version_item"><div class="version_item_title">'+v+'</div><div class="version_item_update_time">发布时间：'+fv.time+'</div><div class="version_update">'+str+'</div></div>';
     return s;
   }
+
+  var lichtml=_REQUIRE_('./text/license.html');
+  function getLicense(){
+    return lichtml;
+  }
+
+  var licDialog=new dialog({
+    content:` <div class="close">${util.getGoogleIcon('e5cd')}</div><div class="lic-con">${getLicense()}</div>`,
+    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
+    class:"lic-dialog"
+  });
+
+  util.query(licDialog.getDialogDom(),'.close').onclick=function(){
+    licDialog.close();
+  }
+
+  var thankhtml=_REQUIRE_('./text/thanks.html');
+  var thaDialog=new dialog({
+    content:`<div class="close">${util.getGoogleIcon('e5cd')}</div><div class="thank-con">${thankhtml}</div>`,
+    class:"thank-dialog",
+    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN
+  });
+
+  util.query(thaDialog.getDialogDom(),'.close').onclick=function(){
+    thaDialog.close();
+  }
+
 })();

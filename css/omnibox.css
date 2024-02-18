@@ -11,6 +11,9 @@
   overflow: hidden;
   height: 40px;
 }
+body.t-dark .searchbox{
+  background-color: rgba(255,255,255,.7);
+}
 body.dark .searchbox{
   background-color: rgba(34, 34, 34, 0.7);
 }
@@ -98,9 +101,7 @@ body.dark .searchbox ul li:hover,
 body.dark .searchbox ul li.active{
   background-color: #666;
 }
-body.t-dark .searchbox{
-  background-color: rgba(255,255,255,.7);
-}
+
 .searchcover{
   z-index:3;
   background-color: #333;

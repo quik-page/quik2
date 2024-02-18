@@ -9,6 +9,12 @@
   font-size: 14px;
   color: #333;
 }
+body.dark .version_item_title{
+  color:#fff;
+}
+body.dark .version_item_update_time{
+  color:#ddd;
+}
 .version_update{
   padding: 5px;
 }

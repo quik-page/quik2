@@ -198,14 +198,14 @@ body.t-dark .links ul.link-list li a{
   color: #eee;
 }
 body.t-dark .links ul.link-list li.link-add a{
-  color: #555;
+  color: rgba(85, 85, 85, 0.8);
 }
 body.dark .links ul.link-list li.link-add a{
-  background-color: #555;
+  background-color: rgba(85, 85, 85, 0.8);
   color:#eee;
 }
 body.dark .links ul.link-list li.link-add a:hover{
-  background-color: #333;
+  background-color: rgba(51, 51, 51, 0.8);
 }
 body.dark .links .cate-bar .cate-item:hover,
 body.dark .links .cate-bar .cate-bar-controls>*:hover,

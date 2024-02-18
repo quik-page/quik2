@@ -14,37 +14,40 @@
           candownload:true
         });
       }else{
-        u="https://loliapi.com/acg/?_="+Date.now();
-        util.loadimg(u,function(){
-          cb({
-            url:u,
-            candoanload:false
+        if(window.location.host=='siquan001.github.io'){
+          return function(cb){
+            util.xhr('https://stear.cn/api/quik.php?m=bg&key=sys81a1g519lsokh0e8&host=siquan001.github.io',function(r){
+              r=JSON.parse(r);
+              cb({
+                url:r.url,
+                candoanload:true
+              });
+            },function(){
+              u="https://loliapi.com/acg/?_="+Date.now();
+              util.loadimg(u,function(){
+                cb({
+                  url:u,
+                  candoanload:false
+                })
+              })
+            })
+          }
+        }else{
+          u="https://loliapi.com/acg/?_="+Date.now();
+          util.loadimg(u,function(){
+            cb({
+              url:u,
+              candoanload:false
+            })
           })
-        })
+        }
+        
         
       }
     })
   }
-
-  var gi=(function(){
-    if(window.location.host=='siquan001.github.io'){
-      return function(cb){
-        util.xhr('https://stear.cn/api/quik.php?m=bg&key=sys81a1g519lsokh0e8&host=siquan001.github.io',function(r){
-          r=JSON.parse(r);
-          cb({
-            url:r.url,
-            candoanload:true
-          });
-        },function(){
-          ce(cb);
-        })
-      }
-    }else{
-      return ce;
-    }
-  })();
   
   return {
-    getImg:gi
+    getImg:ce
   }
 })();
