@@ -8,6 +8,6 @@
     // 不支持数据库，使用localStorage
     link=_REQUIRE_('./_localstorage.js');
   }
-  _REQUIRE_('./ui.js')
-  return link;
+  var ui=_REQUIRE_('./ui.js');
+  return util.joinObj(link,ui);
 })();

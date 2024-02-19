@@ -1,5 +1,19 @@
 (function(){
   return {
+    joinObj:function(){
+      var obs=arguments;
+      var n=obs[0];
+      function jt(a,b){
+        for(var k in b){
+          a[k]=b[k];
+        }
+        return a;
+      }
+      for(var i=1;i<obs.length;i++){
+        n=jt(n,obs[i]);
+      }
+      return n;
+    },
     loadimg:function (url,cb){
       var img=new Image();
       img.src=url;

@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import {minify} from 'minify';
+import cleanCSS from "clean-css";
+import uglifyJs from "uglify-js";
+import htmlMinifier from "html-minifier"; 
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,10 +14,23 @@ var qjs = function (src, cb, rootPath) {
     src = path.join(rootPath, src);
   }
   var code=fs.readFileSync(src).toString();
-  ijs(code, function (code) {
+  if(src.lastIndexOf('.js')==src.length-3){
+    ijs(code, function (code) {
+      cache[src] = code;
+      cb(code, src);
+    }, src)
+  }else if(src.lastIndexOf('.html')==src.length-5){
+    code=htmlMinifier.minify(code,{
+      collapseWhitespace:true,
+      removeComments:true
+    });
     cache[src] = code;
     cb(code, src);
-  }, src)
+  }else{
+    cache[src] = code;
+    cb(code, src);
+  }
+  
 
 }
 var ijs = function (code, cb, rootPath) {
@@ -62,21 +77,7 @@ function zhuanyi(code){
 
 
 qjs(path.join(__dirname,'index.js'), function (code) {
-  fs.writeFileSync(path.join(__dirname,'index.bundle.js'),code);
-  console.log('js');
-  minify(path.join(__dirname,'index.bundle.js'),{
-    js:{
-      "mangle": true,
-      "mangleClassNames": true,
-      "removeUnusedVariables": true,
-      "removeConsole": false,
-      "removeUselessSpread": true
-    }
-  }).then(function(res){
-    fs.writeFileSync(path.join(__dirname,'index.bundle.js'),res);
-    console.log('js-done');
-  })
-
+  fs.writeFileSync(path.join(__dirname,'index.bundle.js'),uglifyJs.minify(code).code);
 });
 
 var css=fs.readFileSync(path.join(__dirname,'index.css')).toString();
@@ -88,14 +89,4 @@ cssmatch.forEach(function(item){
     css=css.replace(item,fs.readFileSync(path.join(__dirname,p)).toString())
   }
 })
-fs.writeFileSync(path.join(__dirname,'index.bundle.css'),css);
-console.log('css');
-minify(path.join(__dirname,'index.bundle.css'),{
-  css:{
-    "compatibility": "*"
-  }
-}).then(function(res){
-  fs.writeFileSync(path.join(__dirname,'index.bundle.css'),res);
-console.log('css-done');
-})
-;
+fs.writeFileSync(path.join(__dirname,'index.bundle.css'),new cleanCSS().minify(css).styles);

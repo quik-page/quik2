@@ -32,19 +32,8 @@
     }
   ];
 
-  function loadimg(url,cb){
-    var img=new Image();
-    img.src=url;
-    img.onload=function(){
-      cb(true);
-    }
-    img.onerror=function(){
-      cb(false);
-    }
-  }
-
   function hasUploadedImg(){
-    return !!initsto.get('upload');
+    return !!initsto.get('userbg');
   }
 
   var refreshApiIcon=new iconc.icon({
@@ -104,11 +93,7 @@
         style.className='colorSpControl';
         document.head.appendChild(style);
       }
-      util.query(document.head,'style.colorSpControl').innerHTML=`.color-sp{
-        background-color:${data.light};
-      }body.dark .color-sp{
-        background-color:${data.dark};
-      }`
+      util.query(document.head,'style.colorSpControl').innerHTML=`.color-sp{background-color:${data.light};}body.dark .color-sp{background-color:${data.dark};}`
     },
     api:function(bgf,data){
       if(data.api=='acg'){
@@ -213,32 +198,13 @@
         style.className='zdySpControl';
         document.head.appendChild(style);
       }
-      util.query(document.head,'style.zdySpControl').innerHTML=`.zdy-sp{
-        background:${data.light};
-      }body.dark .zdy-sp{
-        background:${data.dark};
-      }`
+      util.query(document.head,'style.zdySpControl').innerHTML=`.zdy-sp{background:${data.light};}body.dark .zdy-sp{background:${data.dark};}`
     }
   }
 
   // 图片、视频上传器
   var iovuploader=new dialog({
-    content:`
-    <form>
-      <h1>上传背景</h1>
-      <div class="content">
-        <p>背景类型：<input type="radio" class="uploadi" name="uploadiov" checked/> 图片 
-        <input type="radio" class="uploadv" name="uploadiov"/> 视频 </p>
-        <p>背景URL：<input type="url" placeholder="URL"/></p>
-        <p>从本地选择文件：<input type="file"/></p>
-        <p class="tip">URL和文件只需填写一个即可，优先选择本地文件</p>
-      </div>
-      <div class="footer">
-        <div class="cancel btn">取消</div>
-        <button class="ok btn">确定</button>
-      </div>
-    </form>
-  `,
+    content:_REQUIRE_('./htmls/iovuploader.html'),
     class:"iovuploader",
   })
   // @note 将cancel按钮修改为div，防止表单submit到cancel
@@ -377,19 +343,7 @@
 
   // 自定义颜色修改对话框
   var colorchanger=new dialog({
-    content:`
-    <form>
-      <h1>自定义背景颜色</h1>
-      <div class="content">
-        <p>浅色模式：<input type="color" class="lightbgcolor"/></p>
-        <p>深色模式：<input type="color" class="darkbgcolor"/></p>
-      </div>
-      <div class="footer">
-        <div class="cancel btn">取消</div>
-        <button class="ok btn">确定</button>
-      </div>
-    </form>
-    `
+    content:_REQUIRE_('./htmls/colorchanger.html')
   });
   // @note 将cancel按钮修改为div，防止表单submit到cancel
   // @edit at 2024/1/30 15:20
@@ -493,6 +447,15 @@
       })
       util.query(tab1,'.zdy .editbtn').addEventListener('click',function(){
         iovuploader.open();
+        var j=initsto.get('userbg');
+        if(j){
+          util.query(iovuploaderf,'input[type="url"]').value=j.url;
+          if(j.type=='image'){
+            util.query(iovuploaderf,'.uploadi').checked=true;
+          }else{
+            util.query(iovuploaderf,'.uploadv').checked=true;
+          }
+        }
       });
 
       // 内置图片

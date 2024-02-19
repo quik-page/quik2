@@ -47,7 +47,9 @@
 
   // 回车事件
   var enter=function(text){
+    doevent('beforeenter',[text])
     getType(text).enter(text);
+    doevent('afterenter',[text])
   }
 
   // 获取类型
@@ -211,6 +213,10 @@
     addNewType:addNewType,
     addNewSA:addNewSA,
     searchUtil:searchUtil,
-    initsto:initsto
+    initsto:initsto,
+    setJustSearch:function(value){
+      initsto.set('justsearch',value);
+      si.reGet();
+    }
   }
 })();

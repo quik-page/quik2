@@ -8,14 +8,7 @@
     if(!sayseditordialog){
       sayseditordialog=new dialog({
         class:"sayseditordialog",
-        content:`<h1>修改一言</h1>
-<div class="content">
-  <p><input class="says-input" type="text"/></p>
-</div>
-<div class="footer">
-  <div class="cancel btn">取消</div>
-  <button class="ok btn">确定</button>
-</div>`
+        content:`<h1>修改一言</h1><div class="content"><p><input class="says-input" type="text"/></p></div><div class="footer"><div class="cancel btn">取消</div><button class="ok btn">确定</button></div>`
       })
       // @note 将cancel按钮修改为div，防止表单submit到cancel
       // @edit at 2024/1/30 15:20

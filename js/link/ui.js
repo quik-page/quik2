@@ -92,21 +92,7 @@
     }
   }
   function init(){
-    linkF.innerHTML=`<div class="cate-bar">
-      <div class="cate-bar-controls">
-        <div class="cate-left-btn">${util.getGoogleIcon('e314')}</div>
-      </div>
-      <div class="cate-bar-scrolls">
-        <div class="cate-bar-items">
-          <div class="cate-item mr active">默认</div>
-        </div>
-      </div>
-      <div class="cate-bar-controls">
-      <div class="cate-right-btn">${util.getGoogleIcon('e315')}</div>
-        <div class="cate-add-btn">${util.getGoogleIcon('e145')}</div>
-      </div>
-    </div>
-    <ul class="link-list"></ul>`
+    linkF.innerHTML=_REQUIRE_('./htmls/linkinit.html').replace('{{cate-left}}',util.getGoogleIcon('e314')).replace('{{cate-right}}',util.getGoogleIcon('e315')).replace('{{cate-add}}',util.getGoogleIcon('e145'))
     link.ready(function(){
       link.getCates(function(r){
         r.data.forEach(function(g){
@@ -294,18 +280,7 @@
     if(!linkaddDialog){
       linkaddDialog=new dialog({
         class:"link-add-dialog",
-        content:`<form>
-          <h1></h1>
-          <div class="content">
-            <p>URL ：<input class="link-add-url" type="url" required placeholder="链接地址(必填)"/></p>
-            <p>标题：<input class="link-add-title" type="text" required placeholder="链接标题(必填)"/></p>
-            <p>位置：<input class="link-add-index" type="number" min="0" placeholder="链接位置"/></p>
-          </div>
-          <div class="footer">
-            <div class="cancel btn">取消</div>
-            <button class="ok btn"></button>
-          </div>
-        </form>`,
+        content:_REQUIRE_('./htmls/linkedit.html'),
       });
       // @note 将cancel按钮修改为div，防止表单submit到cancel
       // @edit at 2024/1/30 15:20
@@ -371,16 +346,7 @@
     if(!cateeditDialog){
       cateeditDialog=new dialog({
         class:"link-add-dialog",
-        content:`<form>
-          <h1></h1>
-          <div class="content">
-            <p>标题：<input class="cate-name" type="text" required placeholder="分组标题(必填)"/></p>
-          </div>
-          <div class="footer">
-            <div class="cancel btn">取消</div>
-            <button class="ok btn">确定</button>
-          </div>
-        </form>`,
+        content:_REQUIRE_('./htmls/cateedit.html'),
       });
       // @note 将cancel按钮修改为div，防止表单submit到cancel
       // @edit at 2024/1/30 15:20
@@ -491,5 +457,19 @@
     util.query(linkF,'.link-list').className='link-list '+v;
   }
 
+  return {
+    setShowCate:function(v){
+      initsto.set('enabledCate',v);
+      dcate(v);
+      enabledCateSi.reGet();
+    },
+    setLinkSize:function(v){
+      if(['xs','s','m','l','xl'].indexOf(v)!=-1){
+        initsto.set('linksize',v);
+        dsize(v);
+        linkSizeSi.reGet();
+      }
+    }
+  }
   
 })();

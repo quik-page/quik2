@@ -38,15 +38,11 @@
   function showVersion(){
     if(!version_dia){
       version_dia=new dialog({
-        content:`<h1>版本更新</h1>
-        <div class="version_item">
-          <div class="version_item_title">版本号：${window.version.version}</div>
-          <div class="version_item_update_time">发布时间：${window.version.updateTime}</div>
-          <div class="version_update">${formatVersion(window.version.log)}</div>
-        </div>
-        <div class="footer">
-          <div class="btn ok">我知道了</div>
-        </div>`,
+        content:`<h1>版本更新</h1><div class="version_item">
+<div class="version_item_title">版本号：${window.version.version}</div>
+<div class="version_item_update_time">发布时间：${window.version.updateTime}</div>
+<div class="version_update">${formatVersion(window.version.log)}</div>
+</div><div class="footer"><div class="btn ok">我知道了</div></div>`,
         class:"update_dialog"
       });
       util.query(version_dia.getDialogDom(),'.btn.ok').onclick=function(){

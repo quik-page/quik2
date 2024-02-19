@@ -12,16 +12,7 @@
     class:"searchpadding"
   })
 
-  searchbox.innerHTML=`
-  <div class="box">
-    <div class="icon"></div>
-    <div class="input">
-      <input type="text" placeholder="搜索或输入网址"/>
-    </div>
-    <div class="submit"></div>
-    </div>
-  <ul class="sas"></ul>
-  `;
+  searchbox.innerHTML=_REQUIRE_('./htmls/searchbox.html');
 
   util.query(document,'main').append(searchbox);
   util.query(document,'main').append(searchcover);
@@ -112,9 +103,7 @@
         })
       }
     })
-    eventFn.input.forEach(function(fn){
-      fn(input.value);
-    })
+    doevent('input',[input.value]);
   }
   /* * */
 
@@ -164,9 +153,7 @@
   input.addEventListener('focus',function(){
     searchcover.classList.add('active');
     searchbox.classList.add('active');
-    eventFn.focus.forEach(function(fn){
-      fn(input);
-    })
+    doevent('focus',[input]);
   });
 
   // ...
@@ -174,9 +161,7 @@
     setTimeout(function(){
       searchcover.classList.remove('active');
       searchbox.classList.remove('active');
-      eventFn.blur.forEach(function(fn){
-        fn(input);
-      })
+      doevent('blur',[input]);
     },5);
   });
 
@@ -262,6 +247,10 @@
     setValue:function(value){
       input.value=value;
       input.focus();
+    },
+    setAutoFocus:function(value){
+      core.initsto.set('autofocus',value);
+      si.reGet();
     }
   }
 })();

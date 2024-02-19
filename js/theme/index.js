@@ -90,6 +90,7 @@
     setTheme:function(v){
       initsto.set('theme',v);
       checkTheme(v);
+      si.reGet();
     },
     addEventListener,
     removeEventListener,

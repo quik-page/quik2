@@ -1,11 +1,5 @@
 (function(){
-  var eventFn={
-    focus:[],
-    blur:[],
-    input:[],
-    beforeenter:[],
-    afterenter:[]
-  };
+  var {addEventListener,removeEventListener,doevent}=getEventHandle();
   var sg=new SettingGroup({
     title:"搜索框",
     index:1
@@ -17,11 +11,8 @@
   return{
     value:ui.setValue,
     addNewSug:core.addNewSA,
-    addEventListener:function(event,callback){
-      if(eventFn[event]){
-        eventFn[event].push(callback);
-      }
-    },
+    addEventListener,
+    removeEventListener,
     getSearchType:core.searchUtil.getSearchType,
     getSearchTypeList:core.searchUtil.getSearchTypeList,
     getSearchTypeIndex:core.searchUtil.getSearchTypeIndex,
@@ -30,6 +21,8 @@
     search:{
       addEventListener:core.searchUtil.addEventListener
     },
-    sg
+    sg,
+    setAutoFocus:ui.setAutoFocus,
+    setJustSearch:ui.setJustSearch
   }
 })()

@@ -2,10 +2,7 @@
   function Setting(details) {
     this.title = details.title;
     this.dialog = new dialog({
-      content: `<div class="actionbar">
-    <h1>设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
-  </div>
-  <ul class="setting-root"></ul>`,
+      content: `<div class="actionbar"><h1>设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div></div><ul class="setting-root"></ul>`,
       class: "setting_dia",
       mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN
     });
@@ -101,11 +98,7 @@
         'data-index': item.index,
         'data-id': item.id
       });
-      itemEle.innerHTML = `<div class="setting-item-left">
-<div class="setting-item-title"></div>
-<div class="setting-item-message"></div>
-</div>
-<div class="setting-item-right"></div>`;
+      itemEle.innerHTML = `<div class="setting-item-left"><div class="setting-item-title"></div><div class="setting-item-message"></div></div><div class="setting-item-right"></div>`;
       var sr = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + '] .setting-tree');
       var srls = sr.children;
       var q = true;

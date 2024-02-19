@@ -19,12 +19,7 @@
 
   // 背景设置对话框
   var bg_set_d = new dialog({
-    content: `<div class="actionbar">
-      <h1>背景设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
-    </div>
-    <div class="tab_con"></div>
-    <div class="scroll_con"></div>
-    `,
+    content: `<div class="actionbar"><h1>背景设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div></div><div class="tab_con"></div><div class="scroll_con"></div>`,
     class: "bg_d",
     mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN
   });

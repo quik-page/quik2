@@ -1,13 +1,8 @@
 (function(){
+  var base=`<div class="def_dialog"><h1>提示</h1><div class="content">$0</div><div class="footer">$1<button class="ok btn">确定</button></div></div>`
   function alert(text,cb){
     var d=new dialog({
-      content:`<div class="def_dialog">
-      <h1>提示</h1>
-      <div class="content"></div>
-      <div class="footer">
-        <button class="ok btn">确定</button>
-      </div>
-    </div>`
+      content:base.replace('$0','').replace('$1','')
     });
     setTimeout(function(){d.open()},10)
     var dd=d.getDialogDom();
@@ -20,14 +15,7 @@
   }
   function confirm(text,cb){
     var d=new dialog({
-      content:`<div class="def_dialog">
-      <h1>提示</h1>
-      <div class="content"></div>
-      <div class="footer">
-        <button class="cancel btn">取消</button>
-        <button class="ok btn">确定</button>
-      </div>
-    </div>`
+      content:base.replace('$0','').replace('$1','<button class="cancel btn">取消</button>')
     });
     setTimeout(function(){d.open()},10)
     var dd=d.getDialogDom();
@@ -45,17 +33,7 @@
   }
   function prompt(text,cb){
     var d=new dialog({
-      content:`<div class="def_dialog">
-      <h1>提示</h1>
-      <div class="content">
-        <p class="c"></p>
-        <p><input type="text"/></p>
-      </div>
-      <div class="footer">
-        <button class="cancel btn">取消</button>
-        <button class="ok btn">确定</button>
-      </div>
-    </div>`
+      content:base.replace('$0','<p class="c"></p><p><input type="text"/></p>').replace('$1','<button class="cancel btn">取消</button>')
     });
     setTimeout(function(){d.open()},10)
     var dd=d.getDialogDom();

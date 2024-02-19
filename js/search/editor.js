@@ -1,13 +1,6 @@
 (function(){
   var dia=new dialog({
-    content:`<div class="actionbar">
-    <h1>自定义搜索引擎</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
-  </div>
-  <div class="searchlist"></div>
-  <div class="footer">
-    <button class="cancel btn">取消</button>
-    <button class="ok btn">确定</button>
-  </div>`,
+    content:_REQUIRE_('./editor.html'),
   mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
     class:"search_editor"
   });
@@ -34,11 +27,11 @@
   var list=omnibox.getSearchTypeList();
   var str='';
   for(var k in list){
-    str+=`<div class="item" data-k="${k}">
-      <div class="icon"><img src="${util.getFavicon(list[k])}" onerror="this.src=quik.util.getFavicon(this.src,true)"/></div>
-      <div class="url"><input value="${list[k]}"/></div>
-      <div class="remove">${util.getGoogleIcon('e5cd')}</div>
-    </div>`;
+    str+='<div class="item" data-k="'+k+'">'+
+'<div class="icon"><img src="'+util.getFavicon(list[k])+'" onerror="this.src=quik.util.getFavicon(this.src,true)"/></div>'+
+'<div class="url"><input value="'+list[k]+'"/></div>'+
+'<div class="remove">'+util.getGoogleIcon('e5cd')+'</div>'+
+'</div>';
   }
   str+=`<div class="addnewitem">${util.getGoogleIcon('e145')} 添加新的搜索引擎</div>`
   util.query(d,'.searchlist').innerHTML=str;
@@ -50,9 +43,9 @@
       class:'item',
       'data-k':"user_"+Date.now().toString().slice(3)
     });
-    item.innerHTML=`<div class="icon"><img src="https://cn.bing.com/favicon.ico" onerror="this.src=quik.util.getFavicon(this.src,true)"/></div>
-    <div class="url"><input value="https://cn.bing.com/search?q=%keyword%"/></div>
-    <div class="remove">${util.getGoogleIcon('e5cd')}</div>`;
+    item.innerHTML='<div class="icon"><img src="https://cn.bing.com/favicon.ico" onerror="this.src=quik.util.getFavicon(this.src,true)"/></div>'+
+    '<div class="url"><input value="https://cn.bing.com/search?q=%keyword%"/></div>'+
+    '<div class="remove">'+util.getGoogleIcon('e5cd')+'</div>';
     util.query(d,'.searchlist').insertBefore(item,util.query(d,'.searchlist .addnewitem'));
     clitem(item);
   }
