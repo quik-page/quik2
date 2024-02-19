@@ -26,7 +26,8 @@ self.addEventListener('install', (event) => {
       'https://www.baidu.com/favicon.ico',
       'https://so.com/favicon.ico',
       'https://sogou.com/favicon.ico',
-      'https://api.iowen.cn/favicon/google.com.png'
+      'https://api.iowen.cn/favicon/google.com.png',
+      'https://fonts.gstatic.com/s/materialsymbolsoutlined/v164/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2'
     ])
   );
 });

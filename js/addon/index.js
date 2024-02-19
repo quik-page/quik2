@@ -4,7 +4,7 @@
   }
   var _isinitdone=false;
   var addon_dialog=new dialog({
-    content:(_REQUIRE_('./addon_list.mb.html')).replace('{{close-btn}}',util.getGoogleIcon('e5cd')),
+    content:(_REQUIRE_('./addon_list.mb.html')).replace('{{close-btn}}',util.getGoogleIcon('e5cd')).replace('{{add-btn}}',util.getGoogleIcon('e145')),
     mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
     class:"addon-dialog"
   });
@@ -12,6 +12,47 @@
   var addon_dialog_d=addon_dialog.getDialogDom();
   util.query(addon_dialog_d,'.closeBtn').addEventListener('click',()=>{
     addon_dialog.close();
+  });
+
+  var addon_menu=new menu({
+    list:[{
+      icon:util.getGoogleIcon('f1cc'),
+      title:"从插件市场添加插件",
+      click:function(){
+
+      }
+    },{
+      icon:util.getGoogleIcon('e157'),
+      title:"从第三方链接添加插件",
+      click:function(){
+
+      }
+    },{
+      icon:util.getGoogleIcon('e66d'),
+      title:"从第三方文件添加插件",
+      click:function(){
+
+      }
+    },{
+      icon:util.getGoogleIcon('e86f'),
+      title:"添加开发者端口",
+      click:function(){
+
+      }
+    }],
+    offset:{
+      top:0,left:0
+    }
+  });
+
+  util.query(addon_dialog_d,'.add-btn').addEventListener('click',function(e){
+    e.stopPropagation();
+    var b=this.getBoundingClientRect();
+    addon_menu.setOffset({
+      top:b.top+b.height,
+      right:window.innerWidth-b.left-b.width
+    });
+    addon_menu.show();
   });
 
   var addon_icon=new iconc.icon({

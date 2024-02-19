@@ -1,0 +1,31 @@
+.d-c.addon-dialog{
+  width: 600px;
+  height: 400px;
+}
+
+.addon-bar{
+  width: 100%;
+  height: 40px;
+}
+.dialog .d-c .addon-bar h1{
+  float: left;
+  line-height: 35px;
+  padding-top: 5px;
+  padding-left: 5px;
+}
+.addon-bar .r{
+  float: right;
+}
+.addon-bar .r>*{
+  float: left;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  user-select: none;
+  
+}
+.addon-bar .r>* span{
+  line-height: 40px;
+  text-align: center;
+  width: 40px;
+}

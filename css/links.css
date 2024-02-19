@@ -200,6 +200,17 @@ body.t-dark .links ul.link-list li a{
 body.t-dark .links ul.link-list li.link-add a{
   color: rgba(85, 85, 85, 0.8);
 }
+body.t-dark .links .cate-bar .cate-item:hover,
+body.t-dark .links .cate-bar .cate-bar-controls>*:hover{
+  background-color: rgba(220,220,220, 0.5);
+}
+body.t-dark .links .cate-bar .cate-item.active{
+  background-color: rgba(220,220,220, 0.7);
+}
+body.t-dark .links .cate-bar .cate-bar-controls>*,
+body.t-dark .links .cate-bar .cate-item{
+  color: #fff;
+}
 body.dark .links ul.link-list li.link-add a{
   background-color: rgba(85, 85, 85, 0.8);
   color:#eee;
@@ -208,17 +219,12 @@ body.dark .links ul.link-list li.link-add a:hover{
   background-color: rgba(51, 51, 51, 0.8);
 }
 body.dark .links .cate-bar .cate-item:hover,
-body.dark .links .cate-bar .cate-bar-controls>*:hover,
-body.t-dark .links .cate-bar .cate-item:hover,
-body.t-dark .links .cate-bar .cate-bar-controls>*:hover{
+body.dark .links .cate-bar .cate-bar-controls>*:hover{
   background-color: rgba(42, 42, 42, 0.6);
 }
-body.dark .links .cate-bar .cate-item.active,
-body.t-dark .links .cate-bar .cate-item.active
+
+body.dark .links .cate-bar .cate-item.active
 {
   background-color: rgba(22, 22, 22, 0.7);
 }
-body.t-dark .links .cate-bar .cate-bar-controls>*,
-body.t-dark .links .cate-bar .cate-item{
-  color: #fff;
-}
+

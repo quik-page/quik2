@@ -61,11 +61,21 @@
     setOffset:function(offset){
       this.options.offset=offset;
       var options=this.options,el=this.element;
+      el.style.top="";
+      el.style.left="";
+      el.style.bottom="";
+      el.style.right="";
       if(options.offset){
-        el.style.top=options.offset.top+"px";
-        el.style.left=options.offset.left+"px";
-        el.style.bottom=options.offset.bottom+"px";
-        el.style.right=options.offset.right+"px";
+        if(typeof options.offset.top=='number'){
+          el.style.top=options.offset.top+"px";
+        }else{
+          el.style.bottom=options.offset.bottom+"px";
+        }
+        if(typeof options.offset.left=='number'){
+          el.style.left=options.offset.left+"px";
+        }else{
+          el.style.right=options.offset.right+"px";
+        }
       }
     },
     setList:function(list){
