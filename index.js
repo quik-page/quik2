@@ -24,6 +24,7 @@
   let {alert,confirm,prompt}=_REQUIRE_('./js/dialog/dialog_utils.js');
   var card=_REQUIRE_('./js/card/index.js');
   var sync=_REQUIRE_('./js/sync/index.js');
+  var lite=_REQUIRE_('./js/lite.js')
 
   _REQUIRE_('./js/ignores/index.js');
   _REQUIRE_('./js/update.js');
@@ -55,5 +56,7 @@
     theme,
     card
   }
-  document.querySelector("main").style.display='';
+  clearTimeout(loadingtimeout);
+  document.querySelector("main").style.display='block';
+  document.querySelector(".loading-f").classList.add('h');
 })();

@@ -90,3 +90,9 @@ cssmatch.forEach(function(item){
   }
 })
 fs.writeFileSync(path.join(__dirname,'index.bundle.css'),new cleanCSS().minify(css).styles);
+
+let _h=fs.readFileSync(path.join(__dirname,'dev.html')).toString().replace(/<!-- dev -->[\s\S]*<!-- dev end -->/g,'').replace('index.css','index.bundle.css').replace('index.js','index.bundle.js').replace('type="text/rem"','');
+fs.writeFileSync(path.join(__dirname,'index.html'),htmlMinifier.minify(_h,{
+  collapseWhitespace: true,
+  removeComments: true
+}))

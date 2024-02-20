@@ -38,7 +38,8 @@
 
   var refreshApiIcon=new iconc.icon({
     content:util.getGoogleIcon('e86a'),
-    offset:"br"
+    offset:"br",
+    important:true
   });
   refreshApiIcon.hide();
   var downloadIcon=new iconc.icon({

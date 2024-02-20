@@ -8,7 +8,13 @@
   <link rel="stylesheet" href="./index.css">
 </head>
 <body>
-  <main style="display:none;">
+  <div class="loading-f" style="display:none">
+    <div class="loading-p">
+      <div class="g"></div>
+    </div>
+    <div class="tip"></div>
+  </div>
+  <main style="display:none">
     <div class="topper">
       <div class="left"></div>
       <div class="right"></div>
@@ -43,6 +49,11 @@
 
     </div>
   </main>
+  <script>
+    var loadingtimeout=setTimeout(function(){
+      document.querySelector(".loading-f").style.display='block';
+    },1000);
+  </script>
   <!-- <script src="https://polyfill.io/v3/polyfill.min.js"></script> -->
   <!-- dev -->
   <script>
@@ -68,10 +79,10 @@
 				}
 			}
   </script>
+  <script src="./rem.js"></script>
   <!-- dev end -->
 
   <script src="https://cdn.bootcdn.net/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
-  <script src="./rem.js"></script>
   <script src="./index.js" type="text/rem"></script>
 </body>
 </html>

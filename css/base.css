@@ -107,3 +107,39 @@ body.dark ::-webkit-scrollbar-thumb:hover{
   'GRAD' 0,
   'opsz' 24
 }
+
+.loading-f{
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:2;
+  background-color:#fff;
+  transition:opacity .1s;
+}
+.loading-f.h{
+  opacity:0;
+  pointer-events:none;
+}
+.loading-f .loading-p{
+  width:100px;
+  height:2px;
+  position: absolute;
+  top:calc(50% - 1px);
+  left:calc(50% - 50px);
+  overflow:hidden;
+}
+.loading-f .loading-p .g{
+  width:100px;
+  height:2px;
+  background-color:#000;
+  animation:t-l 1s linear infinite;
+}
+@keyframes t-l{
+  0%{
+    margin-left:-100px;
+  }100%{
+    margin-left:200px;
+  }
+}

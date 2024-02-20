@@ -72,6 +72,7 @@
   padding:10px 10px;
   margin: 5px 10px;
   border-radius: 10px;
+  background-color: rgba(220,220,220,.2);
 }
 .links ul.link-list li a p{
   font-size: 12px;
@@ -168,26 +169,7 @@
   background-color: #e1e1e1;
 }
 
-@media(max-width:650px){
-  .links ul.link-list li .editlinkbtn{
-    display: block;
-    font-size: 12px;
-    transform: scale(.6);
-  }
-  .links ul.link-list li{
-    width: 55px;
-    height: 75px;
-  }
-  .links ul.link-list li a img{
-    width: 25px;
-    height: 25px;
-    padding: 5px;
-    margin: 5px 10px;
-  }
-  .links ul.link-list li.link-add a{
-    margin: 6px;
-  }
-}
+
 @media (max-height:400px){
   .links{
     height: calc(100% - 172px);

@@ -1,0 +1,63 @@
+body.lite .links{
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+body.lite main .center .logo{
+  padding-top: 60px;
+}
+body.lite .searchbox{
+  top:200px;
+  opacity: 1;
+  pointer-events: all;
+  transition: all .3s;
+}
+body.lite .searchpadding{
+  transition: height .3s;
+}
+body.lite .topper .item,
+body.lite .bottomer .item{
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+body.lite .topper .item.important,
+body.lite .bottomer .item.important{
+  opacity: 1;
+  pointer-events: all;
+}
+
+body.lite.showall .links{
+  opacity: 1;
+  pointer-events: all;
+}
+body.lite.showall .topper .item,
+body.lite.showall .bottomer .item{
+  opacity: 1;
+  pointer-events: all;
+}
+body.lite.showall .searchbox{
+  opacity: 0;
+  pointer-events: none;
+}
+body.lite.showall .searchpadding{
+  height: 30px;
+}
+body.lite.showall .searchtypeselector{
+  height: 0;
+  border: 0;
+}
+@media(max-width:600px){
+  body.lite .searchbox{
+    top:140px;
+  }
+  body.lite .searchbox.active{
+    top:15px;
+  }
+  body.lite.showall .searchpadding{
+    height: 10px;
+  }
+  body.lite main .center .logo{
+    padding-top:30px;
+  }
+}

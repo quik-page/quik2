@@ -393,7 +393,7 @@
   }
   // initLinks();
 
-  if(!initsto.get('enabledCate')){
+  if(typeof initsto.get('enabledCate')=='undefined'){
     initsto.set('enabledCate',true);
   }
 
@@ -469,7 +469,8 @@
         dsize(v);
         linkSizeSi.reGet();
       }
-    }
+    },
+    cateWidthShiPei
   }
   
 })();
