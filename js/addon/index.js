@@ -193,7 +193,10 @@
     initscripts.list().forEach(function(id){
       n.push(runAddon(id));//运行插件
     })
-    Promise.all(n).finally(function(){
+    Promise.all(n).then(function(){
+      _isinitdone=true;
+      doevent('initdone',[]);
+    }).catch(function(){
       _isinitdone=true;
       doevent('initdone',[]);
     })

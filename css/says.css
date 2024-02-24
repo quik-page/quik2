@@ -1,3 +1,6 @@
+/* 
+@edit 添加max-width限制 2024/2/24 17:47
+*/
 .says{
   position: absolute;
   bottom:10px;
@@ -8,6 +11,7 @@
   transform: translateX(-50%);
   border-radius: 15px;
   user-select: none;
+  max-width: calc(100% - 200px);
 }
 .says_info{
   max-height: 600px;
@@ -19,6 +23,9 @@
   line-height: 30px;
   height: 30px;
   color: inherit;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .says .say-control{
   position: absolute;
@@ -54,6 +61,7 @@ body.t-dark .says{
 @media(max-width:650px){
   .says{
     bottom:40px;
+    max-width: 100%;
   }
   .says .say-control{
     display: block;

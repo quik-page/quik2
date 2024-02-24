@@ -467,7 +467,7 @@
           class:"bgitem def",
           'data-img':im.img,
         });
-        bgitem.innerHTML='<div class="left"><img src="'+im.thumbnail+'"/></div>'
+        bgitem.innerHTML='<div class="left"><img src="'+im.thumbnail+'" loading="lazy"/></div>'
         u.appendChild(bgitem);
         util.query(bgitem,'.left').onclick=function(){
           e.setbg({

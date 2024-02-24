@@ -20,11 +20,8 @@ self.addEventListener('install', (event) => {
       '/index.bundle.css',
       '/index.bundle.js',
       'https://cdn.bootcdn.net/ajax/libs/localforage/1.10.0/localforage.min.js',
-      'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
-      'https://www.baidu.com/favicon.ico',
-      'https://so.com/favicon.ico',
-      'https://sogou.com/favicon.ico',
-      'https://api.iowen.cn/favicon/google.com.png'
+      'https://fonts.loli.net/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
+      'https://gstatic.loli.net/s/materialsymbolsoutlined/v164/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2',
     ])
   );
 });

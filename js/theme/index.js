@@ -67,6 +67,7 @@
   }
   function listenTheme(){
     var d=window.matchMedia('(prefers-color-scheme: dark)');
+    console.log(d);
     d.matches?document.body.classList.add('dark'):document.body.classList.remove('dark');
     d.addEventListener('change', e => {
       if(e.matches){

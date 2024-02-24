@@ -105,7 +105,6 @@
         actCate();
       }
       util.query(linkF,'.cate-add-btn').onclick=function(){
-        console.log('addcate');
         openCateEditDialog();
       }
       util.query(linkF,'.cate-left-btn').onclick=function(){
@@ -137,7 +136,6 @@
       dsize(initsto.get('linksize'));
     })
     observeCate();
-
   }
   function checkScrollBtn(){
     if(this.scrollLeft==0){
@@ -157,6 +155,11 @@
 
   function cateWidthShiPei(){
     var cates=util.query(linkF,'.cate-bar-items .cate-item',true);
+    // edit at 2024年2月24日 17点45分
+    // @note 清除上次width的影响 （除非width>100000px）
+    util.query(linkF,'.cate-bar-items').style.width='100000px';
+    // 强行渲染
+    cates[0].offsetHeight;
     var w=0;
     cates.forEach(function(c){
       // edit at 2024年1月29日 15点37分
@@ -172,8 +175,7 @@
       
     });
     ob.observe(util.query(linkF,'.cate-bar-items'),{
-      childList:true,
-      attributes:true
+      childList:true
     });
   }
 
