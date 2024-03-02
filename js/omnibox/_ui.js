@@ -31,7 +31,14 @@
     var i=core.getType(text);
     if(i.icon[0]==':'){
       icon.setAttribute('data-teshu',i.icon);
-      icon.innerHTML=chuliteshuicon(i.icon);
+      var _ts=chuliteshuicon(i.icon);
+      if(_ts instanceof Promise){
+        _ts.then(function(r){
+          icon.innerHTML=r;
+        })
+      }else{
+        icon.innerHTML=_ts;
+      }
     }else{
       icon.innerHTML=i.icon;
       icon.removeAttribute('data-teshu');
@@ -54,7 +61,15 @@
    */
   function chuliteshuicon(icon){
     if(icon==':searchtype'){
-      return `<img src=${util.getFavicon(core.searchUtil.getSearchType())} onerror='this.src=quik.util.getFavicon(this.src,true)'>`;
+      return new Promise(function(r,j){
+        util.getFavicon(core.searchUtil.getSearchType(),function(fav){
+          if(fav){
+            r('<img src="'+fav+'"/>');
+          }else{
+            r('<img src="'+util.createIcon('s')+'"/>');
+          }
+        })
+      });
     }else{
       return '';
     }
@@ -182,7 +197,17 @@
     var list=core.searchUtil.getSearchTypeList();
     for(var k in list){
       var li=util.element('li');
-      li.innerHTML=`<img src=${util.getFavicon(list[k])} onerror='this.src=quik.util.getFavicon(this.src,true)'>`;
+      li.innerHTML='<img/>';
+      (function(li,k){
+        util.getFavicon(list[k],function(fav){
+          if(fav){
+            li.querySelector('img').src=fav;
+          }else{
+            li.querySelector('img').src=util.createIcon('s');
+          }
+        })
+      })(li,k)
+      
       li.setAttribute('data-type',k);
       ul.append(li);
       if(k==nowset){

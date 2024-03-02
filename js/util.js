@@ -34,12 +34,32 @@
     query:function(element,qstr,isall){
       return element['querySelector'+(isall?'All':'')](qstr);
     },
-    getFavicon:function(url,useAPI){
-      if(useAPI||checkFq(url)){
-        return 'https://api.iowen.cn/favicon/'+new URL(url).host+'.png'
-      }else{
-        return new URL(url).origin+'/favicon.ico';
+    getFavicon:function(url,cb){
+      var _d=0,_ic='';
+      if(checkFq(url)){
+        _d=1;
       }
+      var _=this;
+      function xh(){
+        if(_d==0){
+          _ic=new URL(url).origin+'/favicon.ico';
+        }else if(_d==1){
+          _ic='https://api.iowen.cn/favicon/'+new URL(url).host+'.png';
+        }else if(_d==2){
+          cb(false);
+          return;
+        }
+        _.loadimg(_ic,function(st){
+          if(st){
+            cb(_ic);
+            return;
+          }else{
+            _d++;
+          }
+          xh();
+        });
+      }
+      xh();
 
       function checkFq(url){
         var host=new URL(url).host;
@@ -51,6 +71,19 @@
         }
         return false;
       }
+    },
+    createIcon:function(t){
+      var canvas=document.createElement('canvas');
+      canvas.width=64;
+      canvas.height=64;
+      var ctx=canvas.getContext('2d');
+      ctx.fillStyle=this.getRandomColor();
+      ctx.font='bold 32px Arial';
+      ctx.fillText(t,20,40);
+      return canvas.toDataURL();
+    },
+    getRandomColor:function(){
+      return '#'+Math.random().toString(16).substring(2,8).toUpperCase();
     },
     fangdou:function(fn,time){
       var timer=null;

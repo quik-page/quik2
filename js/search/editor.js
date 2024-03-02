@@ -28,13 +28,14 @@
   var str='';
   for(var k in list){
     str+='<div class="item" data-k="'+k+'">'+
-'<div class="icon"><img src="'+util.getFavicon(list[k])+'" onerror="this.src=quik.util.getFavicon(this.src,true)"/></div>'+
+'<div class="icon"><img/></div>'+
 '<div class="url"><input value="'+list[k]+'"/></div>'+
 '<div class="remove">'+util.getGoogleIcon('e5cd')+'</div>'+
 '</div>';
   }
   str+=`<div class="addnewitem">${util.getGoogleIcon('e145')} 添加新的搜索引擎</div>`
   util.query(d,'.searchlist').innerHTML=str;
+
   util.query(d,'.searchlist .item',true).forEach(function(item){
     clitem(item);
   });
@@ -43,7 +44,7 @@
       class:'item',
       'data-k':"user_"+Date.now().toString().slice(3)
     });
-    item.innerHTML='<div class="icon"><img src="https://cn.bing.com/favicon.ico" onerror="this.src=quik.util.getFavicon(this.src,true)"/></div>'+
+    item.innerHTML='<div class="icon"><img src="https://cn.bing.com/favicon.ico"/></div>'+
     '<div class="url"><input value="https://cn.bing.com/search?q=%keyword%"/></div>'+
     '<div class="remove">'+util.getGoogleIcon('e5cd')+'</div>';
     util.query(d,'.searchlist').insertBefore(item,util.query(d,'.searchlist .addnewitem'));
@@ -52,6 +53,13 @@
 
 
   function clitem(item){
+    util.getFavicon(list[item.getAttribute('data-k')],function(fav){
+      if(fav){
+        util.query(item,'.icon img').src=fav;
+      }else{
+        util.query(item,'.icon img').src=util.createIcon('s');
+      }
+    })
     util.query(item,'.url input').oninput=function(){
       if(this.parentElement.parentElement.dataset.k=='bing'){
         this.value=list['bing'];
@@ -61,7 +69,14 @@
       // @note 隐藏用户输入了不正确的URL的报错
       // @edit at 2024/1/30 15:28
       try{
-        this.parentElement.parentElement.querySelector('.icon img').src=util.getFavicon(this.value);
+        var img=this.parentElement.parentElement.querySelector('.icon img')
+        util.getFavicon(this.value,function(fav){
+          if(fav){
+            img.src=fav;
+          }else{
+            img.src=util.createIcon('s');
+          }
+        })
       }catch(e){
         // 用户输入了不正确的URL
       }

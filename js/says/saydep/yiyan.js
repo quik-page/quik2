@@ -40,7 +40,7 @@
             uuid:res.id,
             cat:res.cat,
             from_who:res.author,
-            title:"该一言来自"+res.from+"，由"+res.from_who+"上传"
+            title:"该一言来自"+res.source+"，由"+res.author+"上传"
           })
         })
       })

@@ -241,12 +241,16 @@
       linklist=ls.data;
       ls.data.forEach(function(l){
         var li=util.element('li');
-        li.innerHTML=`<a href="${l.url}" target="_blank" rel="noopener noreferer">
-   <img src="${util.getFavicon(l.url,true)}" onerror='this.src=quik.util.getFavicon(this.parentElement.href)'/>
-   <p></p>
- </a>`
+        li.innerHTML=`<a href="${l.url}" target="_blank" rel="noopener noreferer"><img/><p></p></a>`
         util.query(linkF,'.link-list').append(li);
         util.query(li,'p').innerText=l.title;
+        util.getFavicon(l.url,function(favicon){
+          if(favicon){
+            util.query(li,'img').src=favicon;
+          }else{
+            util.query(li,'img').src=util.createIcon(l.title[0]);
+          }
+        });
         li.oncontextmenu=function(e){
           e.preventDefault()
            menuedLi=this;
@@ -295,39 +299,28 @@
     setTimeout(function(){
       linkaddDialog.open();
       var d=linkaddDialog.getDialogDom();
+      var ll=linklist.length;
       if(index==-1){
-        util.query(d,'h1').innerHTML='添加链接';
-        util.query(d,'.ok.btn').innerHTML='添加';
-        util.query(d,'input.link-add-url').value='';
-        util.query(d,'input.link-add-title').value='';
-        util.query(d,'input.link-add-index').setAttribute('max',linklist.length);
-        util.query(d,'input.link-add-index').value=util.query(d,'input.link-add-index').max;
-        util.query(d,'form').onsubmit=function(e){
+        _n('添加链接','添加','','',ll,ll,function(e){
           e.preventDefault();
           var url=util.query(d,'.link-add-url').value;
           var title=util.query(d,'.link-add-title').value;
-          var index=util.query(d,'.link-add-index').value;
-          index=typeof index=='undefined'?(util.query(d,'.link-add-index').max-0):index;
+          var index3=util.query(d,'.link-add-index').value;
+          index3=index3==''?ll:(index3-0);
           link.addLink({
-            url,title,index,cate
+            url,title,index: index3,cate
           },function(){
             toast.show('添加成功')
           })
           linkaddDialog.close();
-        }
+        });
       }else{
-        util.query(d,'h1').innerHTML='修改链接';
-        util.query(d,'.ok.btn').innerHTML='修改';
-        util.query(d,'input.link-add-url').value=linklist[index].url;
-        util.query(d,'input.link-add-title').value=linklist[index].title;
-        util.query(d,'input.link-add-index').value=index;
-        util.query(d,'input.link-add-index').setAttribute('max',linklist.length-1);
-        util.query(d,'form').onsubmit=function(e){
+        _n('修改链接','修改',linklist[index].url,linklist[index].title,ll-1,index,function(e){
           e.preventDefault();
           var url=util.query(d,'.link-add-url').value;
           var title=util.query(d,'.link-add-title').value;
-          var index2=util.query(d,'.link-add-index').value-0;
-          index2=typeof index=='undefined'?index:index2;
+          var index2=util.query(d,'.link-add-index').value;
+          index2=index2==''?index:(index2-0);
           link.changeLink(cate,index,{
             url:url,
             title:title,
@@ -336,9 +329,18 @@
             toast.show('修改成功')
           })
           linkaddDialog.close();
-        }
+        });
       }
       
+      function _n(a,b,c,e,f,g,h){
+        util.query(d,'h1').innerHTML=a;
+        util.query(d,'.ok.btn').innerHTML=b;
+        util.query(d,'input.link-add-url').value=c;
+        util.query(d,'input.link-add-title').value=e;
+        util.query(d,'input.link-add-index').setAttribute('max',f);
+        util.query(d,'input.link-add-index').value=g;
+        util.query(d,'form').onsubmit=h;
+      }
     })
   }
 

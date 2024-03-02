@@ -69,10 +69,7 @@
 
   var draws={
     img:function(bgf,data){
-      if(!util.query(bgf,'.img-sp')){
-        bgf.innerHTML='<div class="img-sp full"><div class="cover"></div><img src=""/></div>'
-      }
-      util.query(bgf,'.img-sp img').src=data.url;
+      bgf.innerHTML='<div class="img-sp full"><div class="cover"></div><img src="'+data.url+'"/></div>';
       document.body.classList.add('t-dark');
     },
     video:function(bgf,data){
