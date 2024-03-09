@@ -1,5 +1,56 @@
 (function(){
-  var initsto=storage('says');
+  var initsto=storage('says',{
+    sync:true,
+    title:"一言",
+    desc:"QUIK起始页一言相关配置",
+    get:async function(){
+      var a=initsto.getAll();
+      var ra=quik.addon.getAddonBySessionId(a.saytype);
+      if(ra){
+        a.requireAddon=ra.url;
+      }
+      return a;
+    },
+    rewrite:function(ast,k,a){
+      return new Promise(function(resolve, reject){
+        if(a.requireAddon){
+          var raddon=quik.addon.getAddonByUrl(a.requireAddon);
+          if(raddon){
+            a.saytype=raddon.session.id;
+            ast[k]=a;
+            resolve();
+          }else{
+            confirm('该一言数据需要安装插件以同步，是否安装？',function(v){
+              if(v){
+                quik.addon.installAddon(a.requireAddon).then(function(_addon){
+                  a.saytype=_addon.session.id;
+                  ast[k]=a;
+                  resolve();
+                }).catch(function(code){
+                  if(code==0){
+                    alert('插件取消安装，同步取消',function(){
+                      resolve();
+                    })
+                  }else{
+                    alert('插件安装失败，同步取消',function(){
+                      resolve();
+                    })
+                  }
+                });
+              }else{
+                alert('已取消背景同步',function(){
+                  resolve();
+                })
+              }
+            })
+          }
+        }else{
+          ast[k]=a;
+          resolve();
+        }
+      })
+    }
+  });
 
 //   var sayTypes=['user','jinrishici','hitokoto'];
 

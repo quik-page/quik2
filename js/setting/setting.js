@@ -72,6 +72,7 @@
       });
     },
     _drawGroup: function (group) {
+      var _=this;
       var groupEle = util.element('li', {
         class: 'setting-group',
         'data-index': group.index,
@@ -90,7 +91,9 @@
       }
       if (q) sr.appendChild(groupEle);
       util.query(groupEle, '.setting-group-title').innerText = group.title;
-
+      group.items.forEach(function(item){
+        _._drawItem(group,item);
+      })
     },
     _drawItem: function (group, item) {
       var itemEle = util.element('li', {

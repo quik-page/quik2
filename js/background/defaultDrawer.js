@@ -1,8 +1,7 @@
 (function(){
   var tab1,setbg,tab2,tab3;
-  var initsto=storage('bg-def-user');
-  if(!initsto.get('color')){
-    initsto.set('color',{
+  if(!initsto.get('usercolor')){
+    initsto.set('usercolor',{
       dark:"#333333",
       light:'#ffffff'
     })
@@ -496,11 +495,11 @@
         tab:"纯色",
         content:_REQUIRE_('./htmls/colorbgtab.html')
       });
-      var c=initsto.get('color');
+      var c=initsto.get('usercolor');
       util.query(tab2,'.zdy .color-left').style.backgroundColor=c.light;
       util.query(tab2,'.zdy .color-right').style.backgroundColor=c.dark;
       util.query(tab2,'.zdy .left').onclick=function(){
-        var c=initsto.get('color');
+        var c=initsto.get('usercolor');
         e.setbg({
           type:e.type,
           data:{
@@ -511,7 +510,7 @@
         })
       }
       util.query(tab2,'.zdy .btn').onclick=function(){
-        var c=initsto.get('color');
+        var c=initsto.get('usercolor');
         util.query(colorchangerf,'.lightbgcolor').value=c.light;
         util.query(colorchangerf,'.darkbgcolor').value=c.dark;
         colorchanger.open();

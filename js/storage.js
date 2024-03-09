@@ -92,7 +92,8 @@
         get:get,
         set:set,
         remove:remove,
-        list:list
+        list:list,
+        getAll:getAll,
       }
     }else{
       throw new Error('ck is not a string');
@@ -113,6 +114,7 @@
     },
     getAllStorage:function(){
       return JSON.parse(localStorage.getItem("quik2"));
-    }
+    },
+    dbTool:filerecv
   };
 })();

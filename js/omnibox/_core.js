@@ -5,7 +5,9 @@
   }
 
   var initsto=storage('omnibox',{
-    sync:true
+    sync:true,
+    title:"搜索框",
+    desc:"搜索框相关设置"
   });
   var sawait=[];
 

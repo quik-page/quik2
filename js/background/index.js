@@ -8,7 +8,77 @@
   });
   util.query(document, 'body').appendChild(bgf);
   var initsto = storage('background',{
-    sync:true
+    sync:true,
+    get:function(){
+      return new Promise(function(resolve, reject) {
+        var a=initsto.getAll();
+        delete a.upload;
+        if(a.bg.type!='default'){
+          a.requireAddon=quik.addon.getAddonBySessionId(a.bg.type).url;
+        }else{
+          if(a.bg.data.type=='userbg'&&a.userbg.useidb){
+            a.bg={
+              type: "default",
+              data: {
+                type: "color",
+                light: "#fff",
+                dark: "#333"
+              }
+            }
+          }
+        }
+        if(a.userbg.useidb){
+          delete a.userbg;
+          alert('不支持同步用户上传的背景',function(){
+            resolve(a);
+          })
+        }else{
+          resolve(a);
+        }
+      });
+    },
+    rewrite:function(ast,k,a){
+      return new Promise(function(resolve, reject){
+        if(a.requireAddon){
+          var raddon=quik.addon.getAddonByUrl(a.requireAddon);
+          if(raddon){
+            a.bg.type=raddon.session.id;
+            ast[k]=a;
+            resolve();
+          }else{
+            confirm('该背景数据需要安装插件以同步，是否安装？',function(v){
+              if(v){
+                quik.addon.installAddon(a.requireAddon).then(function(_addon){
+                  a.bg.type=_addon.session.id;
+                  ast[k]=a;
+                  resolve();
+                }).catch(function(code){
+                  if(code==0){
+                    alert('插件取消安装，同步取消',function(){
+                      resolve();
+                    })
+                  }else{
+                    alert('插件安装失败，同步取消',function(){
+                      resolve();
+                    })
+                  }
+                });
+              }else{
+                alert('已取消背景同步',function(){
+                  resolve();
+                })
+              }
+            })
+          }
+        }else{
+          ast[k]=a;
+          resolve();
+        }
+      })
+      
+    },
+    title:"背景",
+    desc:"QUIK起始页背景相关配置"
   });
   var tabindexCount=0;
 

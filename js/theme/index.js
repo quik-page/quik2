@@ -1,4 +1,7 @@
 (function(){
+
+  // 等待重构
+
   var eventHandle=getEventHandle();
   var addEventListener=eventHandle.addEventListener;
   var removeEventListener=eventHandle.removeEventListener;

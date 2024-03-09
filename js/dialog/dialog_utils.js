@@ -1,6 +1,8 @@
 (function(){
   var base=`<div class="def_dialog"><h1>提示</h1><div class="content">$0</div><div class="footer">$1<button class="ok btn">确定</button></div></div>`
+  var emptyFn=function(){};
   function alert(text,cb){
+    if(!cb)cb=emptyFn;
     var d=new dialog({
       content:base.replace('$0','').replace('$1','')
     });
@@ -14,6 +16,7 @@
     }
   }
   function confirm(text,cb){
+    if(!cb)cb=emptyFn;
     var d=new dialog({
       content:base.replace('$0','').replace('$1','<button class="cancel btn">取消</button>')
     });
@@ -32,6 +35,7 @@
     }
   }
   function prompt(text,cb){
+    if(!cb)cb=emptyFn;
     var d=new dialog({
       content:base.replace('$0','<p class="c"></p><p><input type="text"/></p>').replace('$1','<button class="cancel btn">取消</button>')
     });

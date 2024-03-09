@@ -4,7 +4,17 @@
   }
 
   var initsto=storage('search',{
-    sync:true
+    sync:true,
+    title:"搜索引擎",
+    desc:"搜索引擎配置",
+    compare:function(ast,k,a){
+      var o=getSearchTypeList();
+      for(var k in a.typelist){
+        o[k]=a.typelist[k];
+      }
+      a.typelist=o;
+      ast[k]=a;
+    }
   });
   var keyword="%keyword%";
   var deftypelist={

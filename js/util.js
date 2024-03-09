@@ -44,7 +44,7 @@
         if(_d==0){
           _ic=new URL(url).origin+'/favicon.ico';
         }else if(_d==1){
-          _ic='https://api.iowen.cn/favicon/'+new URL(url).host+'.png';
+          _ic='https://api.xinac.net/icon/?url='+new URL(url).origin;
         }else if(_d==2){
           cb(false);
           return;

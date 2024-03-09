@@ -1,9 +1,9 @@
 !function(){
-  window.version_code = 9;
+  window.version_code = 10;
   window.version={
     version:'2.0.0-dev',
     version_code:window.version_code,
-    updateTime:'2024/02/24',
+    updateTime:'2024/3/9',
     log:[
       {
         tag:"fix",

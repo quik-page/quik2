@@ -3,7 +3,7 @@
   var util=_REQUIRE_('./js/util.js');
   var toast=_REQUIRE_('./js/toast.js');
   var iconc=_REQUIRE_('./js/iconc/index.js');
-  var {storage,getStorageList,getAllStorage}=_REQUIRE_('./js/storage.js');
+  var {storage,getStorageList,getAllStorage,dbTool}=_REQUIRE_('./js/storage.js');
   var dialog=_REQUIRE_('./js/dialog/index.js');
   var menu=_REQUIRE_('./js/menu/index.js');
   var mainmenu=_REQUIRE_('./js/menu/mainmenu.js');
