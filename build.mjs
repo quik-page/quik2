@@ -77,7 +77,7 @@ function zhuanyi(code){
 
 
 qjs(path.join(__dirname,'index.js'), function (code) {
-  fs.writeFileSync(path.join(__dirname,'output/index.bundle.js'),uglifyJs.minify(code).code);
+  fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),uglifyJs.minify(code).code);
 });
 
 var css=fs.readFileSync(path.join(__dirname,'index.css')).toString();
@@ -89,12 +89,12 @@ cssmatch.forEach(function(item){
     css=css.replace(item,fs.readFileSync(path.join(__dirname,p)).toString())
   }
 })
-fs.writeFileSync(path.join(__dirname,'output/index.bundle.css'),new cleanCSS().minify(css).styles);
+fs.writeFileSync(path.join(__dirname,'docs/index.bundle.css'),new cleanCSS().minify(css).styles);
 
 let _h=fs.readFileSync(path.join(__dirname,'index.html')).toString().replace(/<!-- dev -->[\s\S]*<!-- dev end -->/g,'').replace('index.css','index.bundle.css').replace('index.js','index.bundle.js').replace('type="text/rem"','');
-fs.writeFileSync(path.join(__dirname,'output/index.html'),htmlMinifier.minify(_h,{
+fs.writeFileSync(path.join(__dirname,'docs/index.html'),htmlMinifier.minify(_h,{
   collapseWhitespace: true,
   removeComments: true
 }));
 
-fs.writeFileSync(path.join(__dirname,'output/sw.js'),fs.readFileSync(path.join(__dirname,'sw.js')));
+fs.writeFileSync(path.join(__dirname,'docs/sw.js'),fs.readFileSync(path.join(__dirname,'sw.js')));
