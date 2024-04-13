@@ -52,6 +52,12 @@
         _.loadimg(_ic,function(st){
           if(st){
             cb(_ic);
+            if(window.swReg){
+              window.swReg.active.postMessage({
+                type:"add",
+                url:ic
+              });
+            }
             return;
           }else{
             _d++;

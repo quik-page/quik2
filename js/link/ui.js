@@ -325,10 +325,14 @@
             url:url,
             title:title,
             index:index2
-          },function(){
-            toast.show('修改成功')
+          },function(back){
+            if(back.code!=0){
+              toast.show(back.msg);
+            }else{
+              toast.show('修改成功')
+              linkaddDialog.close();
+            }
           })
-          linkaddDialog.close();
         });
       }
       

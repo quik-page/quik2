@@ -1,9 +1,9 @@
 !function(){
-  window.version_code = 11;
+  window.version_code = 12;
   window.version={
     version:'2.0.0-dev',
     version_code:window.version_code,
-    updateTime:'2024/3/9',
+    updateTime:'2024/4/13',
     log:[
       {
         tag:"fix",
@@ -13,6 +13,7 @@
   }
   if ('serviceWorker' in navigator&&!window._dev) {
     navigator.serviceWorker.ready.then(function (registration) {
+      window.swReg=registration;
       quik.util.xhr('./version', function (r) {
         var nv = parseInt(r);
         if (nv > version_code) {

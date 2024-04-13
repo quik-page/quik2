@@ -1,4 +1,19 @@
 (function(){
+  function showOpenFilePicker(){
+    return new Promise(function(resolve,reject){
+      var inp=document.createElement('input');
+      inp.type='file';
+      document.body.append(inp);
+      inp.style.display='none';
+      inp.click();
+      inp.onchange=function(){
+        resolve(inp.files);
+        inp.remove();
+      }
+    })
+  }
+
+
   var getEventHandle=_REQUIRE_('./js/event.js');
   var util=_REQUIRE_('./js/util.js');
   var toast=_REQUIRE_('./js/toast.js');

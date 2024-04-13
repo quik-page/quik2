@@ -50,6 +50,13 @@
       this.show();
       upfocus(this);
     },
+    destory:function(){
+      this.hide();
+      var _=this;
+      setTimeout(function(){
+        _.el.remove();
+      },300)
+    },
     setTitle:function(title){
       this.title=title;
       drawNoticeTitle(this);
