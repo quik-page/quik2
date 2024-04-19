@@ -55,7 +55,7 @@
             if(window.swReg){
               window.swReg.active.postMessage({
                 type:"add",
-                url:ic
+                url:_ic
               });
             }
             return;

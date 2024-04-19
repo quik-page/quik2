@@ -38,7 +38,7 @@
                   }
                 });
               }else{
-                alert('已取消背景同步',function(){
+                alert('已取消一言同步',function(){
                   resolve();
                 })
               }

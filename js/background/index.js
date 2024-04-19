@@ -1,4 +1,23 @@
 (function () {
+  var backgroundsg=new SettingGroup({
+    title:"背景",
+    index:3
+  });
+
+  var backgroundsi=new SettingItem({
+    title:"背景设置",
+    message:"点击设置背景",
+    index:0,
+    type:'null',
+    callback:function(){
+      bg_set_d.open();
+    }
+  })
+
+  mainSetting.addNewGroup(backgroundsg);
+  backgroundsg.addNewItem(backgroundsi);
+
+
   var eventHandle=getEventHandle();
   var addEventListener=eventHandle.addEventListener;
   var removeEventListener=eventHandle.removeEventListener;
@@ -227,25 +246,6 @@
   }
 
   drawbg(initsto.get('bg'));
-
-  var sg=new SettingGroup({
-    title:"背景",
-    index:3
-  });
-
-  var si=new SettingItem({
-    title:"背景设置",
-    message:"点击设置背景",
-    index:0,
-    type:'null',
-    callback:function(){
-      bg_set_d.open();
-    }
-  })
-
-  mainSetting.addNewGroup(sg);
-  sg.addNewItem(si);
-
   //开始activeTab0
     activeTab('0');
 

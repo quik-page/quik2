@@ -163,8 +163,8 @@
             _init(l);
           }
           function _init(inited) {
-            util.query(elr, '.setting-item-input').max = inited.max;
-            util.query(elr, '.setting-item-input').min = inited.min;
+            util.query(elr, '.setting-item-input').max = inited[1];
+            util.query(elr, '.setting-item-input').min = inited[0];
           }
         },
         select: function () {
@@ -300,8 +300,8 @@
       var elr = util.query(itemEle, '.setting-item-right')
       if (item.type == 'range') {
         _init = function (inited) {
-          util.query(elr, '.setting-item-input').max = inited.max;
-          util.query(elr, '.setting-item-input').min = inited.min;
+          util.query(elr, '.setting-item-input').max = inited[1];
+          util.query(elr, '.setting-item-input').min = inited[0];
         }
       } else if (item.type == 'select') {
         _init = function (inited) {

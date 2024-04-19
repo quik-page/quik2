@@ -251,7 +251,3 @@ body.dark .d-c.bg_d .scroll_con .unit-item .unit-title{
     width: calc(66% - 10px);
   }
 }
-body.t-dark .bgf .full .cover{
-  background-color: #333;
-  opacity: .3;
-}

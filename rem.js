@@ -527,7 +527,7 @@ return posix;
       matches.forEach(function(item,index){
         var url=eval(item.substring(item.indexOf('(')+1,item.lastIndexOf(')')));
         if(cache[url]){
-          if(url.lastIndexOf('.js')==url.length-3){
+          if(url.lastIndexOf('.js')==url.length-3||url.lastIndexOf('.json')==url.length-5){
             code=code.replace(item,cache[url]);
           }else{
             code=code.replace(item,zhuanyi(cache[url]));
@@ -535,7 +535,7 @@ return posix;
         }else{
           bcbs.push(new Promise(function(r,j){
             qjs(url,function(codes){
-              if(url.lastIndexOf('.js')==url.length-3){
+              if(url.lastIndexOf('.js')==url.length-3||url.lastIndexOf('.json')==url.length-5){
                 code=code.replace(item,codes);
               }else{
                 code=code.replace(item,zhuanyi(codes));

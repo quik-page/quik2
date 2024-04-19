@@ -40,7 +40,7 @@ var ijs = function (code, cb, rootPath) {
     matches.forEach(function (item, index) {
       var url=eval(item.substring(item.indexOf('(')+1,item.lastIndexOf(')')));
       if(cache[url]){
-        if(url.lastIndexOf('.js')==url.length-3){
+        if(url.lastIndexOf('.js')==url.length-3||url.lastIndexOf('.json')==url.length-5){
           code=code.replace(item,cache[url]);
         }else{
           code=code.replace(item,zhuanyi(cache[url]));
@@ -48,7 +48,7 @@ var ijs = function (code, cb, rootPath) {
       }else{
         bcbs.push(new Promise(function(r,j){
           qjs(url,function(codes){
-            if(url.lastIndexOf('.js')==url.length-3){
+            if(url.lastIndexOf('.js')==url.length-3||url.lastIndexOf('.json')==url.length-5){
               code=code.replace(item,codes);
             }else{
               code=code.replace(item,zhuanyi(codes));
@@ -77,6 +77,7 @@ function zhuanyi(code){
 
 
 qjs(path.join(__dirname,'index.js'), function (code) {
+  // fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),code);
   fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),uglifyJs.minify(code).code);
 });
 
