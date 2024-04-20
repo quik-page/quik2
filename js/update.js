@@ -1,13 +1,13 @@
 !function(){
-  window.version_code = 14;
+  window.version_code = 15;
   window.version={
     version:'2.0.0-dev',
     version_code:window.version_code,
-    updateTime:'2024/4/13',
+    updateTime:'2024/4/20',
     log:[
       {
-        tag:"fix",
-        content:"修复BUG",
+        tag:"new",
+        content:"数据同步",
       }
     ]
   }

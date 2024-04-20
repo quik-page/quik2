@@ -87,6 +87,7 @@
           }else if(config[k]==compare){
             if(typeof jl[k].compare=='function'){
               await jl[k].compare(ast,k,json[k].data);
+    console.log(ast); 
             }else{
               throw new Error(k+' 不支持compare')
             }
@@ -103,6 +104,7 @@
       
     }
     
+    console.log(ast);
     localStorage.quik2=JSON.stringify(ast);
     alert('数据导入成功，请重新加载页面',function(){
       location.reload();

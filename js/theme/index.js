@@ -7,7 +7,8 @@
   var removeEventListener=eventHandle.removeEventListener;
   var doevent=eventHandle.doevent;
   var initsto=storage('theme',{
-    sync:true
+    sync:true,
+    title:"主题设置",
   });
   var n=null;
   if(!initsto.get('theme')){

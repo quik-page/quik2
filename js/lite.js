@@ -1,6 +1,7 @@
 (function(){
   var initsto=storage('lite',{
-    sync:true
+    sync:true,
+    title:"极简模式"
   });
   var si=new SettingItem({
     index:2,

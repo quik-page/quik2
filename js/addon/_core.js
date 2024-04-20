@@ -15,7 +15,9 @@
   }
 
   var initsto=storage('addon',{
-    sync:true
+    sync:true,
+    title:"插件",
+    desc:"QUIK起始页插件数据（暂未开发完）"
   });
   var codesto=storage('addonscript');
 

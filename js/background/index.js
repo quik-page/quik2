@@ -32,6 +32,7 @@
       return new Promise(function(resolve, reject) {
         var a=initsto.getAll();
         delete a.upload;
+        debugger;
         if(a.bg.type!='default'){
           a.requireAddon=quik.addon.getAddonBySessionId(a.bg.type).url;
         }else{
@@ -46,7 +47,7 @@
             }
           }
         }
-        if(a.userbg.useidb){
+        if(a.userbg&&a.userbg.useidb){
           delete a.userbg;
           alert('不支持同步用户上传的背景',function(){
             resolve(a);

@@ -244,6 +244,10 @@
 
   // 初始化处理（默认是搜索模式）
   chulitype('');
+  console.log(core.initsto.get('autofocus'),core.initsto.get('autofocus')==undefined);
+  if(core.initsto.get('autofocus')==undefined){
+    core.initsto.set('autofocus',false);
+  }
 
   if(core.initsto.get('autofocus')){
     // @note 这样才能生效，也许是因为浏览器还没渲染好吧
@@ -252,6 +256,7 @@
       input.focus();
     })
   }
+  
 
   var si=new SettingItem({
     title:"自动聚焦",

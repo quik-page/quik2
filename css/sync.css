@@ -10,16 +10,16 @@
     height: 100%;
   }
 }
-.sync-dialog .exportslist{
+.sync-dialog .exportslist,.sync-dialog .importslist{
   width: 100%;
   height: calc(100% - 94px);
   overflow: auto;
 }
-.sync-dialog .exportslist .item{
+.sync-dialog .exportslist .item,.sync-dialog .importslist .item{
   width: 100%;
   height: 50px;
 }
-.sync-dialog .exportslist .item input{
+.sync-dialog .exportslist .item input,.sync-dialog .importslist .item input{
   float: left;
   width: 14px;
   height: 14px;
@@ -30,12 +30,25 @@
   height: 100%;
   float: left;
 }
-.sync-dialog .exportslist .item .message .title{
+.sync-dialog .importslist .item .message{
+  width: calc(100% - 120px);
+  height: 100%;
+  float: left;
+}
+.sync-dialog .exportslist .item .message .title,
+.sync-dialog .importslist .item .message .title{
   font-size: 16px;
 }
-.sync-dialog .exportslist .item .message .desc{
+.sync-dialog .exportslist .item .message .desc,
+.sync-dialog .importslist .item .message .desc{
   font-size: 12px;
   color: #888;
+}
+.sync-dialog .importslist .item select{
+  float: left;
+  width: 50px;
+  height:20px;
+  margin: 5px;
 }
 .sync-dialog .btns{
   float: right;

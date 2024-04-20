@@ -3,12 +3,19 @@
     SA:[],
     enter:[],
   }
+  
 
   var initsto=storage('omnibox',{
     sync:true,
     title:"搜索框",
     desc:"搜索框相关设置"
   });
+  if(initsto.get('autofocus')==undefined){
+    initsto.set('autofocus',false);
+  }
+  if(initsto.get('justsearch')==undefined){
+    initsto.set('justsearch',false);
+  }
   var sawait=[];
 
 

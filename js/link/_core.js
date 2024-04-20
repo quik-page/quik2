@@ -35,30 +35,42 @@ var initsto = storage('link', {
     })
     
   },
-  compare:function(a){
+  compare:function(ast,km,a){
     return new Promise(function(r){
       a['storage-mode']=initsto.get('storage-mode');
       if(a['storage-mode']=='db'){
         initsto.get('links',true,function(old){
-          initsto.remove('links',true,function(){});
-          a.links=compareLinks(old,a.links);
-          dbTool.set(a.links,function(hash){
-            a.links=hash;
-            initsto.get('cate',true,function(ocate){
-              initsto.remove('cate',true,function(){});
-              a.cate=compareCates(ocate,a.cate);
-              dbTool.set(a.cate,function(hash){
-                a.cate=hash;
-                ast[k]=a;
-                r();
+          initsto.remove('links',true,function(){
+            a.links=compareLinks(old,a.links);
+            dbTool.set(a.links,function(hash){
+              a.links=hash;
+              dbTool.get(ast[km].cate,function(ocate){
+                console.log(ocate);
+                dbTool.delete(ast[km].cate,function(){
+                  var d=ocate;
+                  for(var k in a.cate){
+                    d[k]=compareLinks(d[k],a.cate[k]);
+                  }
+                  a.cate=d;
+                  dbTool.set(a.cate,function(hash){
+                    a.cate=hash;
+                    ast[km]=a;
+                    r();
+                  });
+                });
               });
             });
           });
+          
         })
       }else{
         a.links=compareLinks(initsto.get('links'),a.links);
-        a.cate=compareLinks(initsto.get('cates'),a.cate);
-        ast[k]=a;
+        var d=initsto.get('cate');
+        for(var k in a.cate){
+          d[k]=compareLinks(d[k],a.cate[k]);
+        }
+        a.cate=d;
+        ast[km]=a;
       }
     })
   }
@@ -70,6 +82,12 @@ var initsto = storage('link', {
  * @param {Array} b 
  */
 function compareLinks(a,b){
+  if(!a){
+    return b;
+  }
+  if(!b){
+    return a;
+  }
   for(var i=0;i<a.length;i++){
     if(!b.find(function(v){
       return v.title==a[i].title&&v.url==a[i].url;

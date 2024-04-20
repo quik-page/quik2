@@ -42,19 +42,27 @@
             var reader=new FileReader();
             reader.onload=function(e){
               sl=JSON.parse(e.target.result);
+              var jl=getStorageList();
               importDataDialog.open();
               for(var k in sl){
-                var j=jl[k];
+                var j=sl[k];
                 var li=document.createElement('div');
                 li.classList.add('item');
                 li.innerHTML=`<input type="checkbox"/><div class="message">
                   <div class="title">${j.title||k}</div>
                   <div class="desc">${j.desc||''}</div>
                 </div>`;
+                if(jl[k].compare){
+                  li.innerHTML+=`<select>
+                    <option value="compare">对比</option>
+                    <option value="rewrite">覆盖</option>
+                  </select>`
+                  util.query(li,'select').value="compare";
+                }
                 li.dataset.key=k;
-                util.query(dm2,'.exportslist').appendChild(li);
+                util.query(dm2,'.importslist').appendChild(li);
                 util.query(li,'input').checked=true;
-                // TODO
+                importDataDialog.open();
               }
             }
             reader.readAsText(file);
@@ -114,7 +122,7 @@
       <h1>导入数据</h1>
       <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
     </div>
-    <div class="exportslist">
+    <div class="importslist">
     </div>
     <div class="btns">
       <div class="btn cancel">取消</div>
@@ -125,9 +133,24 @@
   });
   var dm2=importDataDialog.getDialogDom();
   util.query(dm2,'.closeBtn').onclick=util.query(dm2,'.cancel').onclick=function(){
+    sl=null;
     importDataDialog.close();
   }
-  // TODO
+  
+  util.query(dm2,'.ok').onclick=function(){
+    var op={};
+    util.query(dm2,'.importslist .item',true).forEach(function(l){
+      if(util.query(l,'input').checked){
+        if(util.query(l,'select')){
+          op[l.dataset.key]=util.query(l,'select').value;
+        }else{
+          op[l.dataset.key]='rewrite';
+        }
+      }
+    })
+    setJSON(sl,op);
+    exportDataDialog.close();
+  }
 
   return {
     getJSON,
