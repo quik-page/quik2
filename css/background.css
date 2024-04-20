@@ -205,8 +205,10 @@ body.dark .d-c.bg_d .scroll_con .unit-item .unit-title{
   color: #666;
 }
 .d-c.bg_d .textarea{
-  width: calc(100% - 5px);
+  width: calc(100% - 25px);
   height: 80px;
+  padding:10px;
+  border-radius: 10px;
 }
 .d-c.bg_d .gjzdysetbtn{
   min-width: 60px;
@@ -250,4 +252,27 @@ body.dark .d-c.bg_d .scroll_con .unit-item .unit-title{
   .d-c.bg_d .scroll_con .bgitem.half .right{
     width: calc(66% - 10px);
   }
+}
+.u-se{
+  width: 100%;
+  overflow: hidden;
+  height: 40px;
+  margin: 5px 0;
+  padding: 0 5px;
+  border-radius: 4px;
+}
+.u-se:hover{
+  background-color: #f4f4f4;
+}
+body.dark .u-se:hover{
+  background-color: #222;
+}
+.u-se p{
+  line-height:40px;
+}
+.u-se p:nth-child(1){
+  float: left;
+}
+.u-se p:nth-child(2){
+  float: right;
 }

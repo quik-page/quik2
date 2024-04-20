@@ -19,6 +19,28 @@
     index:0
   });
 
+  var ivse_th=new SettingItem({
+    title:"背景蒙版颜色主题",
+    index:0,
+    type:"select",
+    init:function(){
+      return {
+        0:"跟随主题",
+        1:"黑色",
+        2:"白色"
+      }
+    },
+    get:function(){
+      return initsto.get('ivsetting').th||1;
+    },
+    callback:function(v){
+      var o=initsto.get('ivsetting');
+      o.th=parseInt(v);
+      initsto.set('ivsetting',o);
+      r();
+    }
+  })
+
   var ivse_mb=new SettingItem({
     title:"背景蒙版浓度",
     index:1,
@@ -78,6 +100,7 @@
   });
 
   ImgOrVideoSe.addNewGroup(ivsg);
+  ivsg.addNewItem(ivse_th);
   ivsg.addNewItem(ivse_mb);
   ivsg.addNewItem(ivse_isbr);
   ivsg.addNewItem(ivse_br);
@@ -87,6 +110,7 @@
 
   function r(){
     // create Style
+    if(!document.querySelector('.bgf .img-sp')&&!document.querySelector('.bgf .video-sp')) return;
     
     var o=initsto.get('ivsetting');
     var s=document.querySelector("#ivbgse");
@@ -96,7 +120,23 @@
       document.head.append(s);
     }
     var h='';
-    h+='.img-sp .cover,.video-sp .cover{background-color:rgba(0,0,0,'+(o.mb/100)+')}';
+    var b='';
+    if(o.th==1){
+      b='0,0,0';
+      document.body.classList.add('t-dark')
+    }else if(o.th==2){
+      b='255,255,255'
+      document.body.classList.remove('t-dark')
+    }else if(o.th==0){
+      if(document.body.classList.contains('dark')){
+        document.body.classList.add('t-dark')
+        b='0,0,0';
+      }else{
+        document.body.classList.remove('t-dark')
+        b='255,255,255';
+      }
+    }
+    h+='.img-sp .cover,.video-sp .cover{background-color:rgba('+b+','+(o.mb/100)+')}';
     if(o.isbr){
       h+='.img-sp .cover,.video-sp .cover{backdrop-filter:blur('+o.br+'px)}'
     }
@@ -104,5 +144,5 @@
   }
 
   r();
-  return ImgOrVideoSi;
+  return {ImgOrVideoSi,checkBgCoverStyle:r};
 })();

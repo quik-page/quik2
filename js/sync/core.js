@@ -15,13 +15,16 @@
         try{
           if(jl[k]&&jl[k].sync){
             if(jl[k].get){
+              console.log('t');
               a[k].data=await jl[k].get();
             }else{
+              console.log('d');
               a[k].data=await dget(ast[k]);
             }
           }
         }catch(e){
-          throw new Error('在获取 '+k+' 时遇到错误',a);
+          console.trace();
+          throw new Error('在获取 '+k+' 时遇到错误',e);
         }
       }else{
         console.warn(k+' 存储区域不存在');

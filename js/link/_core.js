@@ -7,7 +7,7 @@ var initsto = storage('link', {
     var sm=a['storage-mode'];
     if(sm=='db'){
       a.links=await localforage.getItem(a.links);
-      a.cates=await localforage.getItem(a.cates);
+      a.cate=await localforage.getItem(a.cate);
     }
     delete a['storage-mode'];
     return a;
@@ -19,9 +19,9 @@ var initsto = storage('link', {
         initsto.remove('links',true,function(){
           dbTool.set(a.links,function(hash){
             a.links=hash;
-            initsto.remove('cates',true,function(){
-              dbTool.set(a.cates,function(hash){
-                a.cates=hash;
+            initsto.remove('cate',true,function(){
+              dbTool.set(a.cate,function(hash){
+                a.cate=hash;
                 ast[k]=a;
                 r();
               });
@@ -44,11 +44,11 @@ var initsto = storage('link', {
           a.links=compareLinks(old,a.links);
           dbTool.set(a.links,function(hash){
             a.links=hash;
-            initsto.get('cates',true,function(ocate){
-              initsto.remove('cates',true,function(){});
-              a.cates=compareCates(ocate,a.cates);
-              dbTool.set(a.cates,function(hash){
-                a.cates=hash;
+            initsto.get('cate',true,function(ocate){
+              initsto.remove('cate',true,function(){});
+              a.cate=compareCates(ocate,a.cate);
+              dbTool.set(a.cate,function(hash){
+                a.cate=hash;
                 ast[k]=a;
                 r();
               });
@@ -57,7 +57,7 @@ var initsto = storage('link', {
         })
       }else{
         a.links=compareLinks(initsto.get('links'),a.links);
-        a.cates=compareLinks(initsto.get('cates'),a.cates);
+        a.cate=compareLinks(initsto.get('cates'),a.cate);
         ast[k]=a;
       }
     })

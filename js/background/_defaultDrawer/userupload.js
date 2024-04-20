@@ -145,6 +145,7 @@
   return{
     hasUploadedImg,
     getUserUploadUrl,
-    getVideoCaptrue
+    getVideoCaptrue,
+    iovuploader
   }
 })();

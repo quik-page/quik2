@@ -93,7 +93,9 @@
         set:set,
         remove:remove,
         list:list,
-        getAll:getAll,
+        getAll:function(){
+          return getAll()[ck];
+        },
       }
     }else{
       throw new Error('ck is not a string');

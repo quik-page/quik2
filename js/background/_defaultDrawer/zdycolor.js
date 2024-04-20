@@ -35,5 +35,6 @@
       }
     })
   }
+  return {colorchanger,colorchangerf};
 })();
 

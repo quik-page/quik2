@@ -10,7 +10,8 @@
     initsto.set('ivsetting',{
       mb:50,
       isbr:false,
-      br:6
+      br:6,
+      th:1
     })
   }
   var acgbg=_REQUIRE_('../api/acgbg.js');
@@ -46,7 +47,7 @@
     
   }
 
-  var ImgOrVideoSe=_REQUIRE_('./_defaultDrawer/ivbgse.js');
+  var {ImgOrVideoSi,checkBgCoverStyle}=_REQUIRE_('./_defaultDrawer/ivbgse.js');
 
   // dot-timeb
   // @note 这里需要一个定时器用于api背景 时间的颜色
@@ -55,8 +56,8 @@
   var draws={
     img:function(bgf,data){
       bgf.innerHTML='<div class="img-sp full"><div class="cover"></div><img src="'+data.url+'"/></div>';
-      document.body.classList.add('t-dark');
-      ImgOrVideoSe.show();
+      checkBgCoverStyle();
+      ImgOrVideoSi.show();
     },
     video:function(bgf,data){
       bgf.innerHTML='<div class="video-sp full"><div class="cover"></div><video src="" muted loop></video></div>'
@@ -64,8 +65,8 @@
       util.query(bgf,'.video-sp video').oncanplay=function(){
         this.play();
       }
-      document.body.classList.add('t-dark');
-      ImgOrVideoSe.show();
+      checkBgCoverStyle();
+      ImgOrVideoSi.show();
     },
     color:function(bgf,data){
       bgf.innerHTML='<div class="color-sp full"></div>'
@@ -132,10 +133,11 @@
   var {
     getVideoCaptrue,
     getUserUploadUrl,
-    hasUploadedImg
+    hasUploadedImg,
+    iovuploader
   }=_REQUIRE_('./_defaultDrawer/userupload.js');
 
-  _REQUIRE_('./_defaultDrawer/zdycolor.js');
+  var {colorchanger,colorchangerf}=_REQUIRE_('./_defaultDrawer/zdycolor.js');
 
   function selectbgitem(data){
     util.query(tab1,'.bgitem',true).forEach(function(it){
@@ -171,7 +173,7 @@
     refreshFn=function(){}
     clearInterval(timeb);
     downloadIcon.hide();
-    ImgOrVideoSe.hide();
+    ImgOrVideoSi.hide();
   }
   
   return {
@@ -226,7 +228,7 @@
           class:"bgitem def",
           'data-img':im.img,
         });
-        bgitem.innerHTML='<div class="left"><img src="'+im.thumbnail+'" loading="lazy"/></div>'
+        bgitem.innerHTML='<div class="left"><img data-src="'+im.thumbnail+'" loading="lazy"/></div>'
         u.appendChild(bgitem);
         util.query(bgitem,'.left').onclick=function(){
           e.setbg({
@@ -238,6 +240,11 @@
           })
         }
       });
+
+      var se=util.query(tab1,'.u-se');
+      se.onclick=function(){
+        ImgOrVideoSi.callback();
+      }
 
       // API
       util.query(tab1,'.api.unit-item .left',true).forEach(function(l){

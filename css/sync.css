@@ -1,0 +1,44 @@
+.d-c.sync-dialog{
+  width: 600px;
+  height: 400px;
+  padding: 0;
+  overflow: hidden;
+}
+@media (max-width:600px){
+  .dialog.mobile-show-full .d-c.sync-dialog{
+    width: 100%;
+    height: 100%;
+  }
+}
+.sync-dialog .exportslist{
+  width: 100%;
+  height: calc(100% - 94px);
+  overflow: auto;
+}
+.sync-dialog .exportslist .item{
+  width: 100%;
+  height: 50px;
+}
+.sync-dialog .exportslist .item input{
+  float: left;
+  width: 14px;
+  height: 14px;
+  margin: 18px;
+}
+.sync-dialog .exportslist .item .message{
+  width: calc(100% - 50px);
+  height: 100%;
+  float: left;
+}
+.sync-dialog .exportslist .item .message .title{
+  font-size: 16px;
+}
+.sync-dialog .exportslist .item .message .desc{
+  font-size: 12px;
+  color: #888;
+}
+.sync-dialog .btns{
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+}

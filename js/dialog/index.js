@@ -67,6 +67,10 @@
       if(this.onopen){
         this.onopen();
       }
+      util.query(this.element,'img[data-src]',true).forEach(function(lazyimg){
+        lazyimg.src=lazyimg.getAttribute('data-src');
+        lazyimg.removeAttribute('data-src');
+      })
     },
     close:function(){
       this.element.classList.remove('show');
