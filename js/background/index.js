@@ -129,19 +129,14 @@
   var scroll_con = util.query(d, 'div.scroll_con');
 
   // 初始化用户存储
-  function initStorage() {
-    if (!initsto.get('bg')) {
-      initsto.set('bg', {
-        type: "default",
-        data: {
-          type: "color",
-          light: "#fff",
-          dark: "#333"
-        }
-      });
+  util.initSet(initsto,'bg', {
+    type: "default",
+    data: {
+      type: "color",
+      light: "#fff",
+      dark: "#333"
     }
-  }
-  initStorage();
+  });
 
   var defDrawer=_REQUIRE_('./defaultDrawer.js');
   var drawers = [defDrawer];

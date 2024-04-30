@@ -1,5 +1,18 @@
 (function(){
   return {
+    initSet:function(sto,key,ob){
+      var o=sto.get(key);
+      if(typeof o=='object'&&o){
+        for(var k in ob){
+          if(!o[k]){
+            o[k]=ob[k];
+          }
+        }
+        sto.set(key,o);
+      }else{
+        sto.set(key,ob);
+      }
+    },
     joinObj:function(){
       var obs=arguments;
       var n=obs[0];

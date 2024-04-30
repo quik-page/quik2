@@ -1,5 +1,5 @@
 !function(){
-  window.version_code = 15;
+  window.version_code = '${VERSION_CODE}';
   window.version={
     version:'2.0.0-dev',
     version_code:window.version_code,
