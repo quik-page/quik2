@@ -49,9 +49,18 @@ main .topper .right .item,
 main .bottomer .right .item{
   float: right;
 }
+main .topper .item.show,
+main .bottomer .item.show{
+  display: block;
+}
+main .topper .item.hide,
+main .bottomer .item.hide{
+  display: none;
+}
 main .center{
   width: 100%;
-  height:calc(100% - 80px)
+  height:calc(100% - 80px);
+  position: relative;
 }
 main .logo{
   width: 300px;

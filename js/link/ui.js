@@ -138,16 +138,20 @@
     observeCate();
   }
   function checkScrollBtn(){
+    var a=0;
     if(this.scrollLeft==0){
       util.query(linkF,'.cate-left-btn').classList.add('disabled');
+      a++;
     }else{
       util.query(linkF,'.cate-left-btn').classList.remove('disabled');
     }
     if(this.scrollLeft>=this.scrollWidth-this.getBoundingClientRect().width){
       util.query(linkF,'.cate-right-btn').classList.add('disabled');
+      a++;
     }else{
       util.query(linkF,'.cate-right-btn').classList.remove('disabled');
     }
+    this.style.width='calc(100% - '+(120-a*40)+'px)';
   }
   window.addEventListener('resize',function(){
     checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
@@ -466,10 +470,16 @@
   }
 
   return {
+    isShowCate:function(){
+      return initsto.get('enabledCate');
+    },
     setShowCate:function(v){
       initsto.set('enabledCate',v);
       dcate(v);
       enabledCateSi.reGet();
+    },
+    getLinkSize:function(){
+      return initsto.get('linksize');
     },
     setLinkSize:function(v){
       if(['xs','s','m','l','xl'].indexOf(v)!=-1){

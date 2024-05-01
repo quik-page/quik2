@@ -46,10 +46,12 @@
       return this.width;
     },
     show:function(){
-      this.element.style.display='block';
+      this.element.classList.remove('hide');
+      this.element.classList.add('show');
     },
     hide:function(){
-      this.element.style.display='none';
+      this.element.classList.add('hide');
+      this.element.classList.remove('show');
     }
   }
   return {

@@ -244,7 +244,6 @@
 
   // 初始化处理（默认是搜索模式）
   chulitype('');
-  console.log(core.initsto.get('autofocus'),core.initsto.get('autofocus')==undefined);
   if(core.initsto.get('autofocus')==undefined){
     core.initsto.set('autofocus',false);
   }
@@ -277,6 +276,15 @@
     setValue:function(value){
       input.value=value;
       input.focus();
+    },
+    focus:function(){
+      input.focus();
+    },
+    blur:function(){
+      input.blur();
+    },
+    isblur:function(){
+      return !input.isSameNode(document.activeElement);
     },
     setAutoFocus:function(value){
       core.initsto.set('autofocus',value);

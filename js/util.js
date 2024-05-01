@@ -48,41 +48,15 @@
       return element['querySelector'+(isall?'All':'')](qstr);
     },
     getFavicon:function(url,cb){
-      var _d=0,_ic='';
-      if(checkFq(url)){
-        _d=1;
-      }
-      var _=this;
-      function xh(){
-        if(_d==0){
-          _ic=new URL(url).origin+'/favicon.ico';
-        }else if(_d==1){
-          _ic='https://api.xinac.net/icon/?url='+new URL(url).origin;
-        }else if(_d==2){
-          cb(false);
-          return;
+      var _ic='https://api.xinac.net/icon/?url='+new URL(url).origin;
+      this.loadimg(_ic,function(st){
+        if(st){
+          cb(_ic);
+        }else{
+          cb(false)
         }
-        _.loadimg(_ic,function(st){
-          if(st){
-            cb(_ic);
-          }else{
-            _d++;
-            xh();
-          }
-        });
-      }
-      xh();
-
-      function checkFq(url){
-        var host=new URL(url).host;
-        var list=['google.com','goog.le','chrome.com','youtube.com','youtu.be','facebook.com','fb.com','twitter.com','t.co','reddit.com','instagram.com','pinterest.com','linkedin.com'];
-        for(var i=0;i<list.length;i++){
-          if(host.indexOf(list[i])>-1){
-            return true;
-          }
-        }
-        return false;
-      }
+      });
+      // 删除多余代码，统一体验
     },
     createIcon:function(t){
       var canvas=document.createElement('canvas');

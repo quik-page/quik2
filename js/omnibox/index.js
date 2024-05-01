@@ -10,6 +10,9 @@
 
   return{
     value:ui.setValue,
+    focus:ui.focus,
+    blur:ui.blur,
+    isblur:ui.isblur,
     addNewSug:core.addNewSA,
     addEventListener,
     removeEventListener,

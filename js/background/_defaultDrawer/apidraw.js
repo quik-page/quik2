@@ -36,6 +36,7 @@ function api(bgf,data){
         url:"https://bing.shangzhenyang.com/api/1080p"
       });
       downloadIcon.show();
+      infoIcon.show();
     break;
     case 'time':
       // at ../defaultDrawer.js dot-timeb

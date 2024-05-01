@@ -19,15 +19,23 @@
     offset:"br",
     important:true
   });
-  refreshApiIcon.hide();
   var downloadIcon=new iconc.icon({
     content:util.getGoogleIcon('f090'),
     offset:"br"
   });
-  downloadIcon.hide();
   downloadIcon.getIcon().onclick=function(){
     window.open(document.querySelector(".bgf img").src);
   }
+
+  var infoIcon=new iconc.icon({
+    content:util.getGoogleIcon('e88e'),
+    offset:"br",
+    important:true
+  })
+  infoIcon.getIcon().onclick=function(){
+    window.open('https://bing.com/');
+  }
+  infoIcon.getIcon().title='去往必应首页';
 
   refreshApiIcon.getIcon().onclick=function(){
     refreshFn.call(this);
@@ -170,6 +178,7 @@
     clearInterval(timeb);
     downloadIcon.hide();
     ImgOrVideoSi.hide();
+    infoIcon.hide();
   }
   
   return {

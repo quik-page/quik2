@@ -10,6 +10,7 @@
   background-color: rgb(255,255,255);
   overflow: hidden;
   height: 40px;
+  backdrop-filter: blur(10px);
 }
 body.t-dark .searchbox{
   background-color: rgba(255,255,255,.7);
