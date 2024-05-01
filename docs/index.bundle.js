@@ -96,41 +96,15 @@
       return element['querySelector'+(isall?'All':'')](qstr);
     },
     getFavicon:function(url,cb){
-      var _d=0,_ic='';
-      if(checkFq(url)){
-        _d=1;
-      }
-      var _=this;
-      function xh(){
-        if(_d==0){
-          _ic=new URL(url).origin+'/favicon.ico';
-        }else if(_d==1){
-          _ic='https://api.xinac.net/icon/?url='+new URL(url).origin;
-        }else if(_d==2){
-          cb(false);
-          return;
+      var _ic='https://api.xinac.net/icon/?url='+new URL(url).origin;
+      this.loadimg(_ic,function(st){
+        if(st){
+          cb(_ic);
+        }else{
+          cb(false)
         }
-        _.loadimg(_ic,function(st){
-          if(st){
-            cb(_ic);
-          }else{
-            _d++;
-            xh();
-          }
-        });
-      }
-      xh();
-
-      function checkFq(url){
-        var host=new URL(url).host;
-        var list=['google.com','goog.le','chrome.com','youtube.com','youtu.be','facebook.com','fb.com','twitter.com','t.co','reddit.com','instagram.com','pinterest.com','linkedin.com'];
-        for(var i=0;i<list.length;i++){
-          if(host.indexOf(list[i])>-1){
-            return true;
-          }
-        }
-        return false;
-      }
+      });
+      // 删除多余代码，统一体验
     },
     createIcon:function(t){
       var canvas=document.createElement('canvas');
@@ -313,10 +287,12 @@
       return this.width;
     },
     show:function(){
-      this.element.style.display='block';
+      this.element.classList.remove('hide');
+      this.element.classList.add('show');
     },
     hide:function(){
-      this.element.style.display='none';
+      this.element.classList.add('hide');
+      this.element.classList.remove('show');
     }
   }
   return {
@@ -1804,7 +1780,6 @@ return SettingItem;
 
   // 初始化处理（默认是搜索模式）
   chulitype('');
-  console.log(core.initsto.get('autofocus'),core.initsto.get('autofocus')==undefined);
   if(core.initsto.get('autofocus')==undefined){
     core.initsto.set('autofocus',false);
   }
@@ -1838,6 +1813,15 @@ return SettingItem;
       input.value=value;
       input.focus();
     },
+    focus:function(){
+      input.focus();
+    },
+    blur:function(){
+      input.blur();
+    },
+    isblur:function(){
+      return !input.isSameNode(document.activeElement);
+    },
     setAutoFocus:function(value){
       core.initsto.set('autofocus',value);
       si.reGet();
@@ -1847,6 +1831,9 @@ return SettingItem;
 
   return{
     value:ui.setValue,
+    focus:ui.focus,
+    blur:ui.blur,
+    isblur:ui.isblur,
     addNewSug:core.addNewSA,
     addEventListener,
     removeEventListener,
@@ -2879,7 +2866,7 @@ function limitURL(detail) {
     }
   }
   function init(){
-    linkF.innerHTML="<div class=\"cate-bar\"><div class=\"cate-bar-controls\"><div class=\"cate-left-btn\">{{cate-left}}</div></div><div class=\"cate-bar-scrolls\"><div class=\"cate-bar-items\"><div class=\"cate-item mr active\">默认</div></div></div><div class=\"cate-bar-controls\"><div class=\"cate-right-btn\">{{cate-right}}</div><div class=\"cate-add-btn\">{{cate-add}}</div></div></div><ul class=\"link-list\"></ul>".replace('{{cate-left}}',util.getGoogleIcon('e314')).replace('{{cate-right}}',util.getGoogleIcon('e315')).replace('{{cate-add}}',util.getGoogleIcon('e145'))
+    linkF.innerHTML="<div class=\"cate-bar\"><div class=\"cate-bar-controls\"><div class=\"cate-left-btn\">{{cate-left}}</div></div><div class=\"cate-bar-scrolls\"><div class=\"cate-bar-items\"><div class=\"cate-item mr active\">默认</div></div></div><div class=\"cate-bar-controls r\"><div class=\"cate-right-btn\">{{cate-right}}</div><div class=\"cate-add-btn\">{{cate-add}}</div></div></div><ul class=\"link-list\"></ul>".replace('{{cate-left}}',util.getGoogleIcon('e314')).replace('{{cate-right}}',util.getGoogleIcon('e315')).replace('{{cate-add}}',util.getGoogleIcon('e145'))
     link.ready(function(){
       link.getCates(function(r){
         r.data.forEach(function(g){
@@ -2925,16 +2912,20 @@ function limitURL(detail) {
     observeCate();
   }
   function checkScrollBtn(){
+    var a=0;
     if(this.scrollLeft==0){
       util.query(linkF,'.cate-left-btn').classList.add('disabled');
+      a++;
     }else{
       util.query(linkF,'.cate-left-btn').classList.remove('disabled');
     }
     if(this.scrollLeft>=this.scrollWidth-this.getBoundingClientRect().width){
       util.query(linkF,'.cate-right-btn').classList.add('disabled');
+      a++;
     }else{
       util.query(linkF,'.cate-right-btn').classList.remove('disabled');
     }
+    this.style.width='calc(100% - '+(120-a*40)+'px)';
   }
   window.addEventListener('resize',function(){
     checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
@@ -3253,10 +3244,16 @@ function limitURL(detail) {
   }
 
   return {
+    isShowCate:function(){
+      return initsto.get('enabledCate');
+    },
     setShowCate:function(v){
       initsto.set('enabledCate',v);
       dcate(v);
       enabledCateSi.reGet();
+    },
+    getLinkSize:function(){
+      return initsto.get('linksize');
     },
     setLinkSize:function(v){
       if(['xs','s','m','l','xl'].indexOf(v)!=-1){
@@ -3982,15 +3979,23 @@ function limitURL(detail) {
     offset:"br",
     important:true
   });
-  refreshApiIcon.hide();
   var downloadIcon=new iconc.icon({
     content:util.getGoogleIcon('f090'),
     offset:"br"
   });
-  downloadIcon.hide();
   downloadIcon.getIcon().onclick=function(){
     window.open(document.querySelector(".bgf img").src);
   }
+
+  var infoIcon=new iconc.icon({
+    content:util.getGoogleIcon('e88e'),
+    offset:"br",
+    important:true
+  })
+  infoIcon.getIcon().onclick=function(){
+    window.open('https://bing.com/');
+  }
+  infoIcon.getIcon().title='去往必应首页';
 
   refreshApiIcon.getIcon().onclick=function(){
     refreshFn.call(this);
@@ -4221,6 +4226,7 @@ function limitURL(detail) {
         url:"https://bing.shangzhenyang.com/api/1080p"
       });
       downloadIcon.show();
+      infoIcon.show();
     break;
     case 'time':
       // at ../defaultDrawer.js dot-timeb
@@ -4517,6 +4523,7 @@ function limitURL(detail) {
     clearInterval(timeb);
     downloadIcon.hide();
     ImgOrVideoSi.hide();
+    infoIcon.hide();
   }
   
   return {
@@ -6227,11 +6234,23 @@ function limitURL(detail) {
   })
 
   tyGroup.addNewItem(si);
+  var liteBack=util.element('div',{
+    class:"liteback"
+  });
+
+  liteBack.innerHTML=util.getGoogleIcon('e5ce');
+  document.querySelector('main .center').appendChild(liteBack);
+  liteBack.addEventListener('click',function(){
+    document.body.classList.remove('showall');
+    document.body.classList.add('hiden');
+  })
 
   function d(v){
+    document.body.classList.remove('hiden');
     document.body.classList.remove('showall');
     if(v){
       document.body.classList.add('lite');
+      document.body.classList.add('hiden');
     }else{
       document.body.classList.remove('lite');
       link.cateWidthShiPei();
@@ -6239,18 +6258,42 @@ function limitURL(detail) {
   }
 
   document.querySelector("main .center .logo").addEventListener('click',function(){
-    if(initsto.get('lite')){
-      if(document.body.classList.contains('showall')){
-        document.body.classList.remove('showall');
-      }else{
-        document.body.classList.add('showall');
-        link.cateWidthShiPei();
-      }
-    }
+    document.body.classList.add('showall');
+    document.body.classList.remove('hiden');
+    link.cateWidthShiPei();
   })
 
   d(initsto.get('lite'));
-})();
+  return {
+    set:function(a){
+      a=!!a;
+      initsto.set('lite',a);
+      d(a);
+      si.reGet();
+    },
+    get:function(){
+      return initsto.get('lite');
+    }
+  };
+})();;
+  var hotkey=(function(){
+    document.addEventListener('keydown',function(e){
+        if(e.key=='Enter'){
+            omnibox.isblur()&&omnibox.focus();
+        }else if(e.key=='Esc'){
+            (!omnibox.isblur())&&omnibox.blur();
+        }else if(e.key=='s'&&e.altKey){
+            e.preventDefault();
+            mainSetting.open();
+        }else if(e.key=='x'&&e.altKey){
+            e.preventDefault();
+            lite.set(!lite.get());
+        }else if(e.key=='g'&&e.altKey){
+            e.preventDefault();
+            link.setShowCate(!link.isShowCate());
+        }
+    });
+})();;
 
   (function(){
   var igsg=new SettingGroup({
@@ -6590,7 +6633,7 @@ function limitURL(detail) {
 
 })();;
   !function(){
-  window.version_code = 19;
+  window.version_code = 21;
   window.version={
     version:'2.0.0-dev',
     version_code:window.version_code,
