@@ -13,6 +13,9 @@
   })
 
   searchbox.innerHTML=_REQUIRE_('./htmls/searchbox.html');
+  searchbox.addEventListener('click',function(e){
+    e.stopPropagation();
+  })
 
   util.query(document,'main').append(searchbox);
   util.query(document,'main').append(searchcover);
@@ -173,11 +176,12 @@
 
   // ...
   input.addEventListener('blur',function(){
-    setTimeout(function(){
-      searchcover.classList.remove('active');
-      searchbox.classList.remove('active');
-      doevent('blur',[input]);
-    },5);
+    this.classList.remove('active');
+    doevent('blur',[input]);
+  });
+  document.addEventListener('click',function(){
+    searchcover.classList.remove('active');
+    searchbox.classList.remove('active');
   });
 
   // ...
@@ -284,7 +288,7 @@
       input.blur();
     },
     isblur:function(){
-      return !input.isSameNode(document.activeElement);
+      return !input.classList.contains('active');
     },
     setAutoFocus:function(value){
       core.initsto.set('autofocus',value);

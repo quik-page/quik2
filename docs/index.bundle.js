@@ -96,7 +96,11 @@
       return element['querySelector'+(isall?'All':'')](qstr);
     },
     getFavicon:function(url,cb){
-      var _ic='https://api.xinac.net/icon/?url='+new URL(url).origin;
+      var u=new URL(url);
+      var _ic='https://api.xinac.net/icon/?url='+u.origin;
+      if(u.hostname.indexOf('bing.com')!=-1){
+        _ic='https://bing.com/favicon.ico';
+      }
       this.loadimg(_ic,function(st){
         if(st){
           cb(_ic);
@@ -1549,6 +1553,9 @@ return SettingItem;
   })
 
   searchbox.innerHTML="<div class=\"box\"><div class=\"icon\"></div><div class=\"input\"><input type=\"text\" placeholder=\"搜索或输入网址\"></div><div class=\"submit\"></div></div><ul class=\"sas\"></ul>";
+  searchbox.addEventListener('click',function(e){
+    e.stopPropagation();
+  })
 
   util.query(document,'main').append(searchbox);
   util.query(document,'main').append(searchcover);
@@ -1709,11 +1716,12 @@ return SettingItem;
 
   // ...
   input.addEventListener('blur',function(){
-    setTimeout(function(){
-      searchcover.classList.remove('active');
-      searchbox.classList.remove('active');
-      doevent('blur',[input]);
-    },5);
+    this.classList.remove('active');
+    doevent('blur',[input]);
+  });
+  document.addEventListener('click',function(){
+    searchcover.classList.remove('active');
+    searchbox.classList.remove('active');
   });
 
   // ...
@@ -1820,7 +1828,7 @@ return SettingItem;
       input.blur();
     },
     isblur:function(){
-      return !input.isSameNode(document.activeElement);
+      return !input.classList.contains('active');
     },
     setAutoFocus:function(value){
       core.initsto.set('autofocus',value);
@@ -6633,7 +6641,7 @@ function limitURL(detail) {
 
 })();;
   !function(){
-  window.version_code = 21;
+  window.version_code = 22;
   window.version={
     version:'2.0.0-dev',
     version_code:window.version_code,
