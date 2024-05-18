@@ -1,9 +1,0 @@
-{
-  "url":"/test/test_addon/index.js",
-  "name":"测试插件",
-  "desc":"测试",
-  "author":"siquan001",
-  "version":"1.0.0",
-  "version_code":1,
-  "icon":"https://siquan001.github.io/favicon.ico"
-}

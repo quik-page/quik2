@@ -7,12 +7,130 @@
   width: 100%;
   height: 40px;
 }
-.dialog .d-c .addon-bar h1{
+.addon-bar .l{
   float: left;
-  line-height: 35px;
-  padding-top: 5px;
-  padding-left: 5px;
 }
+.addon-bar .l .item{
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+  border-radius: 5px;
+  margin-top: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+  user-select: none;
+  color:#000;
+}
+.addon-bar .l .item:hover{
+  background-color: #eee;
+}
+.addon-bar .l .item.active{
+  background: #09f;
+  color: #fff;
+}
+.d-c.addon-dialog .content .p{
+  display: none;
+}
+.d-c.addon-dialog .p ul li{
+  height: 60px;
+  width: 100%;
+  border-bottom: #eee solid 1px;
+  overflow: hidden;
+  transition: all .2s;
+}
+.d-c.addon-dialog .p ul li:hover{
+  background-color: #f4f4f4;
+}
+.d-c.addon-dialog .p ul li.active{
+  height: 150px;
+  background-color: #fff;
+}
+.d-c.addon-dialog .p ul li .n{
+  overflow: hidden;
+  height: 60px;
+}
+.d-c.addon-dialog .p ul li .d{
+  overflow: hidden;
+  height: 600px;
+}
+.d-c.addon-dialog .p ul li .d .website{
+  color: #888;
+  font-size: 14px;
+  text-indent: 2em;
+}
+.d-c.addon-dialog .p ul li .d .desc{
+  color: #888;
+  font-size: 14px;
+  text-indent: 2em;
+  height: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+} 
+.d-c.addon-dialog .controls{
+  float: right;
+}
+.d-c.addon-dialog .controls .btn{
+  color: #fff;
+  display: none;
+  float: left;
+  margin: 0 5px;
+}
+
+.d-c.addon-dialog .controls .ch_update{
+  background-color: #0cf;
+}
+.d-c.addon-dialog .controls .update{
+  background-color: #09f;
+}
+.d-c.addon-dialog .controls .disable{
+  background-color: #333;
+}
+.d-c.addon-dialog .controls .enable{
+  background-color: #0f0;
+}
+.d-c.addon-dialog .controls .uninstall{
+  background-color: #f00;
+}
+.d-c.addon-dialog .controls .ch_update:hover{
+  background-color: #0ef;
+}
+.d-c.addon-dialog .controls .update:hover{
+  background-color: #0af;
+}
+.d-c.addon-dialog .controls .disable:hover{
+  background-color: #555;
+}
+.d-c.addon-dialog .controls .enable:hover{
+  background-color: #0e0;
+}
+.d-c.addon-dialog .controls .uninstall:hover{
+  background-color: #c00;
+}
+.d-c.addon-dialog .p ul li img{
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  float: left;
+}
+.d-c.addon-dialog .p ul li .ds{
+  float: left;
+  width: calc(100% - 80px);
+  height: 40px;
+  padding: 10px;
+}
+.d-c.addon-dialog .p ul li .ds .name{
+  line-height: 20px;
+}
+.d-c.addon-dialog .p ul li .ds .message{
+  line-height: 20px;
+  color: #888;
+  font-size: 12px;
+}
+.d-c.addon-dialog .p ul li .ds .message span{
+  padding-right: 10px;
+}
+
 .addon-bar .r{
   float: right;
 }
@@ -28,4 +146,53 @@
   line-height: 40px;
   text-align: center;
   width: 40px;
+}
+.addon_install_ui .ma{
+  width:300px;
+}
+.addon_install_ui .ma .sth{
+  width: 100%;
+  height: 120px;
+}
+.addon_install_ui .ma .sth img{
+  width: 50px;
+  height: 50px;
+  margin:5px auto;
+  display:block;
+}
+.addon_install_ui .ma .sth p{
+  text-align: center;
+  font-size: 14px;
+  line-height: 20px;
+  padding-top: 5px;
+}
+.addon_install_ui .ma .sth p.version{
+  color: #888;
+}
+.addon_install_ui .ma .progress{
+  width: 100%;
+  height:5px;
+}
+.addon_install_ui .ma .progress .r{
+  width: 0;
+  height: 5px;
+  background: #09f;
+  transition: all .3s;
+}
+.addon_install_ui .ma .progress.error .r{
+  background: #f00;
+}
+.addon_install_ui .ma .msg{
+  width: 100%;
+  height: 120px;
+}
+.addon_install_ui .ma .btns{
+  float: right;
+}
+
+@media(max-width: 600px){
+  .d-c.addon-dialog .content{
+    padding: 0;
+    width:100%;
+  }
 }

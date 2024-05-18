@@ -1,10 +1,6 @@
 (function(){
     document.addEventListener('keydown',function(e){
-        if(e.key=='Enter'){
-            omnibox.isblur()&&omnibox.focus();
-        }else if(e.key=='Esc'){
-            (!omnibox.isblur())&&omnibox.blur();
-        }else if(e.key=='s'&&e.altKey){
+        if(e.key=='s'&&e.altKey){
             e.preventDefault();
             mainSetting.open();
         }else if(e.key=='x'&&e.altKey){

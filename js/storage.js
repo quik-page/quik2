@@ -96,6 +96,16 @@
         getAll:function(){
           return getAll()[ck];
         },
+        clear:function(){
+          var a=getAll()[ck];
+          for(var k in a){
+            var b=k[a];
+            if(typeof b=='string'&&b.startsWith('^')){
+              filerecv.delete(b);
+            }
+          }
+          setAll({});
+        }
       }
     }else{
       throw new Error('ck is not a string');
