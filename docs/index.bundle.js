@@ -401,6 +401,16 @@
         getAll:function(){
           return getAll()[ck];
         },
+        clear:function(){
+          var a=getAll()[ck];
+          for(var k in a){
+            var b=k[a];
+            if(typeof b=='string'&&b.startsWith('^')){
+              filerecv.delete(b);
+            }
+          }
+          setAll({});
+        }
       }
     }else{
       throw new Error('ck is not a string');
@@ -5223,18 +5233,121 @@ function limitURL(detail) {
   var {addEventListener,removeEventListner,doevent}=getEventHandle();
   var core=(function(){
   var marketData;
-  var ERRCODES={
-    GET_CODE_FAILED:-1,
-    GET_MANIFEST_FAILED:-2,
-    NO_DB_SUPPORT:-3,
-    MANIFEST_ERROR:-4,
-    NO_ADDON_FOUND:-5,
-    NO_UPDATE_SUPPORT:-6
+
+  function getCode(jsurl,p){
+    return new Promise(function(resolve,reject){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET',jsurl,true);
+      xhr.onreadystatechange=function(){
+        if(xhr.readyState==4){
+          if(xhr.status==200){
+            resolve(xhr.responseText);
+          }
+        }
+      }
+      xhr.onerror=function(){
+        console.log('getCode error');
+        reject(xhr.status);
+      }
+      xhr.onprogress=function(pr){
+        p&&p(pr);
+      }
+      xhr.send();
+    })
+    
   }
 
-  async function getCode(jsurl){
-    const r = await fetch(jsurl);
-    return await r.text();
+  function deAddon(addon_code){
+    addon_code=addon_code.trim();
+    if(addon_code.indexOf('/*QUIK_ADDON ')==0){
+      var meta=addon_code.substring(13,addon_code.indexOf(' */'));
+      meta=meta.split('|');
+      var metaver=meta[0];
+      if(metaver=='1'){
+        return {
+          name:meta[1],
+          version_code:parseInt(meta[2]),
+          version:meta[3],
+          desc:meta[4],
+          author:meta[5],
+          icon:meta[6],
+          website:meta[7],
+          update:meta[8],
+          signature:meta[9],
+          marketId:meta[10]
+        }
+      }else{
+        return {
+          error:true,
+          msg:'un support meta version'
+        }
+      }
+    }else{
+      return {
+        error:true,
+        msg:'not QUIK addon'
+      }
+    }
+  }
+
+  function hasSame(signature){
+    if(!signature) return false;
+    var a=initsto.list();
+    for(var i=0;i<a.length;i++){
+      if(initsto.get(a).signature==signature){
+        return true;
+      }
+    }
+  }
+
+  async function installAddon(code,meta,detail){
+    if(typeof meta!='object'||meta.error){
+      return {
+        msg:"插件格式错误:"+(meta.msg||'META isn\'t an object'),
+        error:true,
+      }
+    }else if(hasSame(meta.signature)){
+      return {
+        msg:"已安装相同插件",
+        error:true
+      }
+    }else{
+      var adid=util.getRandomHashCache();
+      await new Promise(function(r){
+        codesto.set(adid,code,true,r);
+      });
+      meta.id=adid;
+      for(var k in detail){
+        if(typeof meta[k]=='undefined'){
+          meta[k]=detail[k];
+        }
+      }
+      initsto.set(adid,meta);
+      runAddon(adid);
+      return {
+        id:adid
+      };
+    }
+  }
+
+  async function checkUpdate(id){
+    var addon=initsto.get(id);
+    if(!addon){
+      throw 'not found addon';
+    }
+    if(!addon.type){
+      var update=addon.update;
+      var nc=await fetch(update);
+      nc= await nc.text();
+      nc=parseInt(nc);
+      if(nc>addon.version_code){
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
   }
 
   var initsto=storage('addon',{
@@ -5243,6 +5356,7 @@ function limitURL(detail) {
     desc:"QUIK起始页插件数据（暂未开发完）"
   });
   var codesto=storage('addonscript');
+  
 
   function getAddonByUrl(url){
     var as=initsto.getAll();
@@ -5257,201 +5371,182 @@ function limitURL(detail) {
     return initsto.get(id);
   }
 
-  async function fetchAddon(url,update=false){
-    if(!update){
-      var ck=getAddonByUrl(url);
-      if(ck){
-        return {
-          msg:"OK",
-          code:0,
-          data:{
-            id:ck.id
-          }
-        }
-      }
+  var ainstatus=['初始化','获取插件信息','下载插件','等待确认','安装插件','安装成功'];
+  var ainerrors=['初始化失败','未找到插件信息','下载插件失败','插件解析错误','用户取消','安装失败'];
+  function addonInstallProcess(){
+    this.statuCode=0;
+    this.statuMsg=ainstatus[0];
+    this.progress=0;
+    this.errorCode=-1;
+    this.errorMsg='';
+    this.result=null;
+    this.ev=getEventHandle();
+    this.addEventListener=this.ev.addEventListener;
+    this.removeEventListener=this.ev.removeEventListener;
+  }
+  addonInstallProcess.prototype={
+    setProgress:function(n){
+      this.progress=n;
+      this.ev.doevent('progress',[n]);
+    },
+    setStatu:function(n){
+      this.statuCode=n;
+      this.statuMsg=ainstatus[n];
+      this.ev.doevent('statu',[{
+        code:n,
+        msg:ainstatus[n]
+      }])
+    },
+    setError:function(n,m){
+      this.errorCode=n;
+      this.errorMsg=ainerrors[n]+' '+m;
+      this.ev.doevent('error',[{
+        code:n,
+        msg:ainerrors[n]+' '+m
+      }])
+    },
+    setDone:function(res){
+      console.log('a');
+      this.result=res;
+      this.ev.doevent('done',[res]);
+    },
+    wait:function(d,fn){
+      this.waiting=true;
+      var _=this;
+      this.ev.doevent('wait',[function(a){
+        _.waiting=false;
+        fn(a);
+        _._waitfn=fn;
+        _._waitd=d;
+      },d]);
+      this._waitfn=fn;
+      this._waitd=d;
     }
-    
-    if(!url.endsWith('/')) url=url+'/';
-    try{
-      var manifest=await fetch(url+'manifest.json');
-    }catch(e){
-      throw new Error(JSON.stringify({
-        msg:"获取插件manifest失败",
-        code:ERRCODES.GET_MANIFEST_FAILED,
-        err:e
-      }))
-    }
-    try{
-      var data=await manifest.json();
-    }catch(e){
-      throw new Error(JSON.stringify({
-        msg:"插件manifest格式错误",
-        code:ERRCODES.MANIFEST_ERROR,
-        err:e
-      }));
-    }
-    var code;
-    if(data.main){
-      try{
-        code=await getCode(data.main);
-      }catch(e){
-        throw new Error(JSON.stringify({
-          msg:"获取插件代码失败",
-          code:ERRCODES.GET_CODE_FAILED,
-          err:e
-        }))
-      }
-    }else{
-      throw new Error(JSON.stringify({
-        msg:"插件manifest格式错误",
-        code:ERRCODES.MANIFEST_ERROR,
-        err:'manifest.main 缺失'
-      }));
-    }
-    data.rootPath=url;
-    return {data,code};
   }
 
-  async function install(data,code,cldatafn){
-    var adid=util.getRandomHashCache();
-    await new Promise(function(r){
-      codesto.set(adid,code,true,r);
-    });
-    data.id=adid;
-    if(cldatafn){
-      cldatafn(data);
+  function _install_end(p){
+    return function(r){
+      if(r.error){
+        p.setError(5,r.msg);
+      }else{
+        p.setStatu(5);
+        p.setProgress(1);
+        p.setDone(r);
+      }
     }
-    initsto.set(adid,data);
-    return adid;
   }
 
   // 从官方插件市场安装
-  async function installByOfficialMarket(id,p){
-    var p_pr=p.progress||function(){};
+  function installByOfficialMarket(id){
+    var p=new addonInstallProcess();
     if(!storage.checkIDB()){
-      throw new Error(JSON.stringify({
-        msg:"浏览器不支持IndexedDB",
-        code:ERRCODES.NO_DB_SUPPORT
-      }))
+      p.setError(0,"浏览器不支持IndexedDB");
     }
-    p_pr({
-      progress:0,
-      message:"加载插件市场数据..."
-    })
     if(!marketData){
-      await loadMarketData();
-    }
-    
-    if(marketData[id]){
-      p_pr({
-        progress:0.1,
-        message:"获取插件数据..."
-      })
-      var url=marketData[id].url;
-      var {data,code}=await fetchAddon(url);
-      p_pr({
-        progress:0.55,
-        message:"安装插件..."
-      })
-      var adid=await install(data,code,function(data){
-        data.marketId=id;
-      });
-      p_pr({
-        progress:1,
-        message:"安装完成"
-      })
-      return {
-        msg:"OK",
-        code:0,
-        data:{
-          id:adid,
-          marketId:id
-        }
-      } 
+      loadMarketData().then(getmarketData);
     }else{
-      throw new Error(JSON.stringify({
-        msg:"插件未找到",
-        code:ERRCODES.NO_ADDON_FOUND
-      }))
+      getmarketData();
     }
+    function getmarketData(){
+      if(marketData[id]){
+        p.setProgress(0.1);
+        p.setStatu(2);
+        var url=marketData[id].url;
+        getCode(url,function(pr){
+          p.setProgress(0.1+pr*0.5);
+        }).then(function(code){
+          p.setProgress(0.6);
+          p.setStatu(3);
+          installAddon(code,deAddon(code),{
+            marketId:id
+          }).then(_install_end(p))
+        }).catch(function(){
+          p.setError(2,url);
+        });
+      }else{
+        p.setError(1,id);
+      }
+    }
+    return p;
   }
 
   // 从链接安装
-  async function installByUrl(url,p){
-    var p_pr=p.progress||function(){};
+  function installByUrl(url){
+    var p=new addonInstallProcess();
     if(!storage.checkIDB()){
-      throw new Error(JSON.stringify({
-        msg:"浏览器不支持IndexedDB",
-        code:ERRCODES.NO_DB_SUPPORT
-      }))
+      p.setError(0,"浏览器不支持IndexedDB");
     }
-    p_pr({
-      progress:0.2,
-      message:"加载插件数据..."
-    });
-    var {data,code}=await fetchAddon(url);
-    p_pr({
-      progress:0.65,
-      message:"安装插件..."
-    });
-    var adid=await install(data,code);
-    p_pr({
-      progress:1,
-      message:"安装完成"
-    });
-    return {
-      msg:"OK",
-      code:0,
-      data:{
-        id:adid
+    p.setProgress(0.1);
+    p.setStatu(2);
+    getCode(url,function(pr){
+      p.setProgress(0.1+pr*0.5);
+    }).catch(function(err){
+      console.log(err);
+      p.setError(2,url);
+    }).then(function(code){
+      p.setProgress(0.6);
+      var meta=deAddon(code);
+      if(meta.error){
+        p.setError(3,meta.msg);
+      }else{
+        p.setStatu(3);
+        p.wait({
+          meta:meta,
+          msg:"确定是否安装此插件？"
+        },function(n){
+          if(n){
+            installAddon(code,meta,{
+              url:url
+            }).then(_install_end(p));
+          }else{
+            p.setError(4,'');
+          }
+        })
+        
       }
-    }
+    });
+    return p;
   }
 
   // 从本地安装
-  async function installByLocal(code,name,p){
-    var p_pr=p.progress||function(){};
+  function installByLocal(code,p){
+    var p=new addonInstallProcess();
     if(!storage.checkIDB()){
-      throw new Error(JSON.stringify({
-        msg:"浏览器不支持IndexedDB",
-        code:ERRCODES.NO_DB_SUPPORT
-      }))
+      p.setError(0,"浏览器不支持IndexedDB");
     }
-    p_pr({
-      progress:0.5,
-      message:"安装插件..."
-    });
-    var adid=install({
-      name,type:'local'
-    },code);
-    p_pr({
-      progress:1,
-      message:"安装完成"
-    });
-    return {
-      msg:"OK",
-      code:0,
-      data:{
-        id:adid
-      }
+    p.setProgress(0.1);
+    p.setStatu(1);
+    var meta=deAddon(code);
+    if(meta.error){
+      p.setError(3,meta.msg);
+    }else{
+      p.setProgress(0.5);
+      p.setStatu(3);
+      p.wait({
+        meta:meta,
+        msg:"确定是否安装此插件？"
+      },function(n){
+        if(n){
+          installAddon(code,meta,{
+            local:true
+          }).then(_install_end(p));
+        }else{
+          p.setError(4,'');
+        }
+      })
     }
+    return p;
   }
 
   // 从开发端口安装
-  async function installByDev(devurl){
+  function installByDev(devurl){
     var adid=util.getRandomHashCache();
     initsto.set(adid,{
       name:"DEVPORT:"+devurl,
       url:devurl,
       type:"dev"
     });
-    return {
-      msg:"OK",
-      code:0,
-      data:{
-        id:adid
-      }
-    }
+    return adid;
   }
 
   // 插件卸载
@@ -5459,129 +5554,97 @@ function limitURL(detail) {
     if(initsto.get(id)){
       initsto.remove(id);
       await new Promise((r)=>codesto.remove(id,true,r));
-      return {
-        msg:"OK",
-        code:0,
-        data:{
-          id:id
-        }
-      }
+      return true;
     }else{
-      throw new Error(JSON.stringify({
-        msg:"插件未安装",
-        code:ERRCODES.NO_ADDON_FOUND
-      }))
+      return false;
     }
-    
-
   }
   
   // 插件运行
   async function runAddon(id){
     var code;
     var data=initsto.get(id);
+    var script=document.createElement('script');
     if(data.type=='dev'){
-      code=await getCode(data.url+'index.js');
+      script.src=data.url+'index.js?id='+id;
+      script.onerror=function(){
+        alert('开发端口出错');
+      }
     }else{
       code=await new Promise((r)=>codesto.get(id,true,r));
+      script.innerHTML=`(function(){
+        function Session(id){
+          this.id="ext_"+id;
+          this.session_token="Hvm_session_token_eoi1j2j";
+          this.isSession=true;
+        };
+        var addonData={
+          session:new Session('${id}')
+        };
+        (function(){
+          ${code}
+        })();
+      })()`;
     }
-    var script=document.createElement('script');
-    script.innerHTML=`(function(){
-      function Session(id){
-        this.id="ext_"+id;
-        this.session_token="Hvm_session_token_eoi1j2j";
-        this.isSession=true;
-      };
-      var addonData={
-        session:new Session('${id}')
-      };
-      (function(){
-        ${code}
-      })();
-    })()`;
     document.body.appendChild(script);
+    
   }
 
   // 插件升级
-  async function checkAddonUpdate(id){
-    var data=initsto.get(id);
-    if(!data){
-      throw new Error(JSON.stringify({
-        msg:"插件未安装",
-        code:ERRCODES.NO_ADDON_FOUND
-      }))
+  async function update(id){
+    var addon=initsto.get(id);
+    console.log(addon);
+    if(!addon){
+      return {
+        error:true,
+        msg:"未找到插件"
+      }
     }
-    if(!data.type){
+    if(addon.url){
       try{
-        var manifest=await fetch(url+'manifest.json');
+        var code=await getCode(addon.url);
       }catch(e){
-        throw new Error(JSON.stringify({
-          msg:"获取插件manifest失败",
-          code:ERRCODES.GET_MANIFEST_FAILED,
-          err:e
-        }))
-      }
-      try{
-        var ndata=await manifest.json();
-      }catch(e){
-        throw new Error(JSON.stringify({
-          msg:"插件manifest格式错误",
-          code:ERRCODES.MANIFEST_ERROR,
-          err:e
-        }));
-      }
-      if(data.version&&ndata.version!=data.version){
-        var code;
-        if(ndata.main){
-          try{
-            code=await getCode(ndata.main);
-          }catch(e){
-            throw new Error(JSON.stringify({
-              msg:"获取插件代码失败",
-              code:ERRCODES.GET_CODE_FAILED,
-              err:e
-            }))
-          }
-        }else{
-          throw new Error(JSON.stringify({
-            msg:"插件manifest格式错误",
-            code:ERRCODES.MANIFEST_ERROR,
-            err:'manifest.main 缺失'
-          }));
-        }
-        ndata.rootPath=url;
-        ndata.id=id;
-        if(data.marketId){
-          ndata.marketId=data.marketId;
-        }
-        initsto.set(id,ndata);
-        await new Promise(r=>codesto.set(id,code,true,r));
         return {
-          msg:"OK",
-          code:0,
-          data:{
-            id:id,
-            oldversion:data.version,
-            newversion:ndata.version
-          }
+          error:true,
+          msg:"代码请求失败",
+          code:e
+        }
+      }
+      var meta=deAddon(code);
+      if(meta.error){
+        return {
+          error:true,
+          msg:'META 解析失败:'+meta.msg
+        }
+      }
+      if(meta.signature!=addon.signature){
+        return {
+          error:true,
+          msg:'签名校验失败'
+        }
+      }
+      if(meta.version_code>=addon.version_code){
+        for(var k in meta){
+          addon[k]=meta[k];
+        }
+        await new Promise(function(r){
+          codesto.set(id,code,true,r);
+        });
+        initsto.set(id,addon);
+        return {
+          ok:1,id,version_code:meta.version_code
         }
       }else{
-        return{
-          msg:"插件已最新",
-          code:1,
-          data:{
-            id:id
-          }
+        return {
+          error:true,
+          msg:'版本校验失败'
         }
       }
     }else{
-      throw new Error(JSON.stringify({
-        msg:"本地和开发端口插件不支持升级",
-        code:ERRCODES.NO_UPDATE_SUPPORT,
-        data:{
-          id:id
-        }
-      }))
+      return {
+        error:true,
+        msg:"无法升级此插件"
+      }
     }
   }
 
@@ -5617,22 +5680,143 @@ function limitURL(detail) {
     return initsto.list()
   }
 
+  getAddonList().forEach(id=>{
+    if(!initsto.get(id).disabled){
+      runAddon(id);
+    }
+  })
+
+  function enable(id){
+    var o=initsto.get(id);
+    o.disabled=false;
+    initsto.set(id,o)
+  }
+  function disable(id){
+    var o=initsto.get(id);
+    o.disabled=true;
+    initsto.set(id,o)
+  }
+  function getEnable(id){
+    return !initsto.get(id).disabled;
+  }
   return {
+    enable,
+    disable,
     installByOfficialMarket,
     installByUrl,
     installByLocal,
     installByDev,
     uninstall,
     runAddon,
-    checkAddonUpdate,
+    checkUpdate,
+    update,
     checkMarket,
     getAddonByUrl,
     getAddonBySessionId,
     getAddonList
   }
 })();;
+  var ui=(function(){
+    function installui(){
+        var n=new dialog({
+            content:"<div class=\"ma\"><div class=\"sth\"><img src=\"assets/def_addon.png\" alt=\"图标\"><p class=\"name\">...</p><p class=\"version\">版本：...</p></div><div class=\"progress\"><div class=\"r\"></div></div><div class=\"msg\"></div><div class=\"btns\"><div class=\"btn l\">取消</div><div class=\"btn r\">确定</div></div></div>",
+            class:"addon_install_ui"
+        });
+        this._d=n;
+        var d=this._d.getDialogDom();
+        util.query(d,'.btns').style.display='none';
+    }
+
+    installui.prototype={
+        bind:function(p){
+            var _=this;
+            var d=this._d.getDialogDom();
+            util.query(d,'.msg').innerText=p.statuMsg+'...';
+            util.query(d,'.progress .r').style.width=p.progress*100+'%';
+            if(p.errorCode!=-1){
+                util.query(d,'.msg').innerText=p.errorMsg;
+                util.query(d,'.progress').className='progress error';
+                util.query(d,'.btns').style.display='block';
+                util.query(d,'.btn.l').onclick=
+                util.query(d,'.btn.r').onclick=function(){
+                    _.hide();
+                    setTimeout(function(){
+                        _.destory();
+                    },200)
+                }
+            }
+            p.addEventListener('status',function(s){
+                util.query(d,'.msg').innerText=s.msg;
+            });
+            p.addEventListener('progress',function(p){
+                util.query(d,'.progress .r').style.width=p*100+'%';
+            });
+            p.addEventListener('error',function(e){
+                util.query(d,'.msg').innerText=e.msg;
+                util.query(d,'.progress').className='progress error';
+                util.query(d,'.btns').style.display='block';
+                util.query(d,'.btn.l').onclick=
+                util.query(d,'.btn.r').onclick=function(){
+                    _.hide();
+                    setTimeout(function(){
+                        _.destory();
+                    },200)
+                }
+            });
+            p.addEventListener('wait',function(e,d2){
+                if(d2.meta){
+                    util.query(d,'.sth img').src=d2.meta.icon;
+                    util.query(d,'.sth .name').innerText=d2.meta.name;
+                    util.query(d,'.sth .version').innerText='版本：'+d2.meta.version;
+                }
+                util.query(d,'.msg').innerText=d2.msg;
+                util.query(d,'.btns').style.display='block';
+                util.query(d,'.btn.l').onclick=function(){
+                    e(false)
+                }
+                util.query(d,'.btn.r').onclick=function(){
+                    e(true)
+                }
+            });
+            p.addEventListener('done',function(){
+                console.log('a');
+                _.hide();
+                setTimeout(function(){
+                    _.destory();
+                },200)
+            });
+        },
+        ask:function(msg,fn){
+            var d=this._d.getDialogDom();
+            util.query(d,'.msg').innerText=msg;
+            util.query(d,'.btns').style.display='block';
+            util.query(d,'.l').onclick=function(){
+                fn(false);
+                util.query(d,'.btns').style.display='none';
+            }
+            util.query(d,'.r').onclick=function(){
+                fn(true);
+                util.query(d,'.btns').style.display='none';
+            }
+        },
+        show:function(){
+            this._d.open();
+        },
+        hide:function(){
+            this._d.close();
+        },
+        destory:function(){
+            this._d.destory();
+        }
+    }
+
+    return installui;
+})();;
   var addon_dialog=new dialog({
-    content:("<div class=\"addon-bar\"><h1>插件管理</h1><div class=\"r\"><div class=\"add-btn\">{{add-btn}}</div><div class=\"closeBtn\">{{close-btn}}</div></div></div><ul class=\"addon-root\"></ul>").replace('{{close-btn}}',util.getGoogleIcon('e5cd')).replace('{{add-btn}}',util.getGoogleIcon('e145')),
+    content:("<div class=\"addon-bar\"><div class=\"l\"><div class=\"item active\" data-p=\"0\">插件管理</div><div class=\"item\" data-p=\"1\">插件市场</div></div><div class=\"r\"><div class=\"add-btn\">{{add-btn}}</div><div class=\"closeBtn\">{{close-btn}}</div></div></div><div class=\"content\"><div class=\"p gl\" style=\"display:block\"><ul></ul></div><div class=\"p ma\"><div class=\"addon-search-box\"><input type=\"text\"> <button>{{search}}</button></div><ul></ul></div></div>")
+      .replace('{{close-btn}}',util.getGoogleIcon('e5cd'))
+      .replace('{{search}}',util.getGoogleIcon('e8b6'))
+      .replace('{{add-btn}}',util.getGoogleIcon('e145')),
     mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
     class:"addon-dialog"
   });
@@ -5657,26 +5841,13 @@ function limitURL(detail) {
           if(!link){
             return false;
           }
-          var installing_notice=new notice({
-            title:"正在安装插件",
-            content:"链接："+link+"\n",
-            useprogress:true,
-            progress:0
-          })
-          installing_notice.show();
-          core.installByUrl(link,{
-            progress:function(e){
-              installing_notice.setContent("链接："+link+"\n"+e.message);
-              installing_notice.setProgress(e.progress);
-            }
-          }).then(function(a){
-            installing_notice.destory();
+          var p=core.installByUrl(link);
+          var u=new ui();
+          u.show();
+          u.bind(p);
+          p.addEventListener('done',function(a){
             alert('安装成功');
             console.log(a);
-          }).catch(function(err){
-            installing_notice.destory();
-            console.dir(err);
-            alert('安装失败，'+err.msg);
           });
           return true;
         })
@@ -5689,28 +5860,16 @@ function limitURL(detail) {
           var f=files[0];
           var n=f.name;
           var r=new FileReader();
-          var installing_notice=new notice({
-            title:"正在安装插件",
-            content:"from：本地文件\n解析中...",
-            useprogress:true,
-            progress:0
-          })
-          installing_notice.show();
+          var u=new ui();
+          u.show();
           r.onload=function(){
-            core.installByLocal(r.result,n,{
-              progress:function(e){
-                installing_notice.setContent("from：本地文件\n"+e.message);
-                installing_notice.setProgress(e.progress);
-              }
-            }).then(function(a){
+            var p=core.installByLocal(r.result);
+            u.bind(p);
+            p.ondone=function(a){
               installing_notice.destory();
               alert('安装成功');
               console.log(a);
-            }).catch(function(err){
-              installing_notice.destory();
-              console.dir(err);
-              alert('安装失败，'+JSON.parse(err.message).msg);
-            });
+            };
           }
           r.readAsText(f);
         })
@@ -5723,14 +5882,8 @@ function limitURL(detail) {
           if(!link){
             return false;
           }
-          core.installByDev(link).then(function(a){
-            alert('安装成功');
-            console.log(a);
-          }).catch(function(err){
-            console.error(err);
-            alert('安装失败，'+JSON.parse(err.message).msg);
-          });
-          return true;
+          core.installByDev(link);
+          alert('安装成功')
         })
       }
     }],
@@ -5756,10 +5909,129 @@ function limitURL(detail) {
   addon_icon.getIcon().onclick=function(){
     addon_dialog.open();
   }
+  var tmenu=util.query(addon_dialog_d,'.addon-bar .l .item',true);
+  var ps=util.query(addon_dialog_d,'.content .p',true);
+  tmenu.forEach(function(a){
+    a.onclick=function(){
+      tmenu.forEach(function(b){
+          b.classList.remove('active');
+      })
+      this.classList.add('active');
+      ps.forEach(function(c){
+        c.style.display='';
+      })
+      ps[this.dataset.p].style.display='block';
+    }
+  })
 
-  core.getAddonList().forEach(function(id){
-    core.runAddon(id);
-  });
+  var addon_l=util.query(addon_dialog_d,'.content .p.gl ul');
+  function xraddonlist(){
+    core.getAddonList().forEach(function(a){
+      var addon=core.getAddonBySessionId(a);
+      var li=util.element('li');
+      li.innerHTML=`<div class="n">
+        <img src="${addon.icon||"assets/def_addon.png"}" alt="" onerror="this.src='assets/def_addon.png'">
+        <div class="ds">
+          <div class="name">${addon.name}</div>
+          <div class="message">
+            <span>版本：${addon.version||'不详'}</span>
+            <span>作者：${addon.author||'不详'}</span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+      <div class="d">
+        <div class="desc">${addon.desc}</div>
+        <div class="website">网站：${addon.website||'不详'}</div>
+        <div class="controls">
+          <div class="btn ch_update">检查更新</div>
+          <div class="btn update">更新</div>
+          <div class="btn enable">启用</div>
+          <div class="btn disable">禁用</div>
+          <div class="btn uninstall" style="display:block">卸载</div>
+        </div>
+      </div>`;
+      li.dataset.id=a;
+      addon_l.appendChild(li);
+      li.onclick=function(e){
+        addon_l.querySelectorAll('li').forEach(function(li){
+          li.classList.remove('active');
+        })
+        this.classList.add('active');
+      }
+
+      var st=util.query(li,'.message span',true)[2];
+      if(!addon.type){
+        util.query(li,'.ch_update').style.display='block';
+      }
+      if(addon.disabled){
+        util.query(li,'.enable').style.display='block';
+      }else{
+        util.query(li,'.disable').style.display='block';
+      }
+
+      util.query(li,'.ch_update').onclick=function(){
+        st.innerHTML='检查更新中...';
+        var _=this;
+        _.style.display='';
+        core.checkUpdate(a).then(function(a){
+          if(!a){
+            _.style.display='block';
+            st.innerHTML='已是最新版本';
+          }else{
+            st.innerHTML='发现新版本';
+            util.query(li,'.update').style.display='block';
+          }
+        });
+      }
+
+      util.query(li,'.update').onclick=function(){
+        st.innerHTML='更新中...';
+        var _=this;
+        _.style.display='';
+        core.update(a).then(function(r){
+          if(r.error){
+            st.innerHTML='更新失败:'+r.msg;
+            _.style.display='block';
+          }else{
+            st.innerHTML='更新完成，刷新生效';
+            util.query(li,'.ch_update').style.display='inline-block';
+          }
+        });
+      }
+      util.query(li,'.enable').onclick=function(){
+        st.innerHTML='已启用，刷新生效'
+        core.enable(a);
+        util.query(li,'.disable').style.display='block';
+        this.style.display='';
+      }
+      util.query(li,'.disable').onclick=function(){
+        st.innerHTML='已禁用，刷新生效'
+        core.disable(a);
+        util.query(li,'.enable').style.display='block';
+        this.style.display='';
+      }
+
+      util.query(li,'.uninstall').onclick=function(){
+        confirm('你真的要卸载吗？此操作不可恢复！',function(as){
+          if(as){
+            st.innerHTML='正在卸载...'
+            core.uninstall(a).then(function(r){
+              if(r.error){
+                alert('卸载出现错误：'+r.msg)
+              }else{
+                alert('卸载成功，刷新生效');
+                li.remove();
+              }
+            })
+          }
+        })
+      }
+    });
+  }
+  xraddonlist();
+
+  
 
   return core;
 
@@ -6286,11 +6558,7 @@ function limitURL(detail) {
 })();;
   var hotkey=(function(){
     document.addEventListener('keydown',function(e){
-        if(e.key=='Enter'){
-            omnibox.isblur()&&omnibox.focus();
-        }else if(e.key=='Esc'){
-            (!omnibox.isblur())&&omnibox.blur();
-        }else if(e.key=='s'&&e.altKey){
+        if(e.key=='s'&&e.altKey){
             e.preventDefault();
             mainSetting.open();
         }else if(e.key=='x'&&e.altKey){
@@ -6641,7 +6909,7 @@ function limitURL(detail) {
 
 })();;
   !function(){
-  window.version_code = 22;
+  window.version_code = 23;
   window.version={
     version:'2.0.0-dev',
     version_code:window.version_code,
