@@ -134,10 +134,10 @@
 .no-notice-tip{
   display: none;
 }
-.notice-hasnew-icon{
+.notice-icon{
   position: relative;
 }
-.notice-hasnew-icon::before{
+.notice-icon::before{
   content: '';
   width: 5px;
   height: 5px;

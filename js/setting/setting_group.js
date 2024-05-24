@@ -1,10 +1,12 @@
 (function(){
+  var idmax=0;
 function SettingGroup(details){
   this.title=details.title;
   this.index=details.index;
   if(this.index<0) this.index=0
   this.items=[];
-  this.id='seg_'+util.getRandomHashCache();
+  this.id='seg_'+idmax;
+  idmax++;
   this._events={
     change:[]
   }

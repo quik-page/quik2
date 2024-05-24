@@ -59,6 +59,9 @@
   util.query(addom,'.close').onclick=function(){
     aboutDialog.close();
   }
+  util.query(addom,'.t.thanks a').onclick=function(){
+    thaDialog.open();
+  }
   setTimeout(function(){
     util.query(addom,'.ver span').innerText=window.version.version;
   });

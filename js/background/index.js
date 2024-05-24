@@ -181,6 +181,7 @@
   }
 
 
+  var idmax=0;
   function pushBgDrawer(drawer) {
     var session = drawer.session;
     try {
@@ -190,7 +191,8 @@
     } catch (e) {
       throw new Error('背景Drawer注册失败，Session校验错误。')
     }
-    var bgdrawerid = 'bgdrawer-' + util.getRandomHashCache();
+    var bgdrawerid = 'bgdrawer-' + idmax;
+    idmax++;
     drawer.id = bgdrawerid;
     drawers.push(drawer);
     dodrawer(drawer);

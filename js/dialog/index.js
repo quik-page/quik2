@@ -1,5 +1,5 @@
 (function(){
-  var allDialog=[];
+  var allDialog=[],d_index=1,idmax=0;
 
   /**
    * @class dialog
@@ -14,7 +14,7 @@
       class:"dialog",
     });
     dialogF.innerHTML=`<div class="d-b"></div><div class="d-c">${options.content}</div>`;
-    util.query(document,'main').append(dialogF);
+    util.query(document,'.dialogs').append(dialogF);
     var dialogC=util.query(dialogF,'.d-c');
     if(options.class){
       dialogC.classList.add(options.class);
@@ -23,7 +23,8 @@
       dialogF.classList.add('mobile-show-full');
     }
     this.element=dialogF;
-    this.id=util.getRandomHashCache();
+    this.id=idmax;
+    idmax++;
     dialogF.setAttribute('data-id',this.id);
     dialogF.querySelector('.d-b').addEventListener('click',function(){
       if(window.innerWidth<=650){
@@ -63,6 +64,8 @@
   dialog.prototype={
     open:function(){
       this.element.classList.add('show');
+      this.element.style.zIndex=d_index;
+      d_index++;
       this.closed=false;
       if(this.onopen){
         this.onopen();

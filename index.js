@@ -13,6 +13,15 @@
     })
   }
 
+  // (function(){
+  //   function bodyResizer(){
+  //     document.body.style.width=window.innerWidth+'px';
+  //     document.body.style.height=window.innerHeight+'px';
+  //   }
+  //   window.addEventListener('resize',bodyResizer);
+  //   bodyResizer();
+  // })()
+  
 
   var getEventHandle=_REQUIRE_('./js/event.js');
   var util=_REQUIRE_('./js/util.js');

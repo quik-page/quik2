@@ -318,9 +318,12 @@
 
   // 插件卸载
   async function uninstall(id){
-    if(initsto.get(id)){
+    var addon=initsto.get(id);
+    if(addon){
       initsto.remove(id);
-      await new Promise((r)=>codesto.remove(id,true,r));
+      if(addon.type!='dev'){
+        await new Promise((r)=>codesto.remove(id,true,r));
+      }
       return true;
     }else{
       return false;

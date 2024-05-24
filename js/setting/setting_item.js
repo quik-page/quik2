@@ -1,4 +1,5 @@
 (function(){
+  var idmax=0;
 function SettingItem(details){
   this.title=details.title;
   this.index=details.index;
@@ -9,7 +10,8 @@ function SettingItem(details){
   this.message=details.message;
   this.get=details.get;
   this._show=true;
-  this.id='sei_'+util.getRandomHashCache();
+  this.id='sei_'+idmax;
+  idmax++;
   this._events={
     change:[]
   }

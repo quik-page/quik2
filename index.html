@@ -48,6 +48,7 @@
     <div class="cards">
 
     </div>
+    <div class="dialogs"></div>
   </main>
   <script>
     var loadingtimeout=setTimeout(function(){
@@ -87,7 +88,7 @@
         quik.notice({
           title:"提示",
           content:"当前浏览器不支持serviceWorker，无法使用离线缓存功能",
-        })
+        }).show();
       })
     }
   </script>

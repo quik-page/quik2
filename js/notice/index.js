@@ -3,6 +3,7 @@
   var notip=document.querySelector(".no-notice-tip");
   var notice_mb=_REQUIRE_('./notice.mb.html');
   var focus_con=document.querySelector(".focus-notice");
+  var hasNew=0;
   function notice(details){
     this.el=util.element('div',{
       class:"notice-item"
@@ -18,7 +19,7 @@
   notice.prototype={
     show:function(time){
       notip.classList.remove('show');
-      mbicon.getIcon().classList.add('notice-hasnew-icon');
+      r(1);
       clearTimeout(this._timeouthide);
       this.el.classList.add('show');
       this.el.addEventListener('click',function(e){
@@ -38,7 +39,7 @@
       this.el.classList.remove('show');
       if(!document.querySelector(".notice-con .notice-item.show")){
         notip.classList.add('show');
-        mbicon.getIcon().classList.remove('notice-hasnew-icon');
+        r(0);
       }
       this.el.style.animation='noticeout .3s';
       var _=this;
@@ -167,21 +168,27 @@
   // mobile适配
   var mbicon=new iconc.icon({
     content:util.getGoogleIcon('e7f4'),
-    offset:"tl"
+    offset:"tl",
+    class:"notice-icon"
   });
   
-  window.addEventListener('resize',r);
+  window.addEventListener('resize',function(){r()});
   mbicon.getIcon().addEventListener('click',function(){
     document.querySelector(".notice-sc").classList.add('show');
   })
   document.querySelector(".notice-sc").addEventListener('click',function(){
     this.classList.remove('show');
   })
-  function r(){
-    if(window.innerWidth>600){
-      mbicon.hide();
+  function r(a){
+    if(typeof a=="undefined"){
+      a=hasNew;
     }else{
+      hasNew=a;
+    }
+    if(window.innerWidth<600&&a){
       mbicon.show();
+    }else{
+      mbicon.hide();
     }
   }
   r();
