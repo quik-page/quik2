@@ -280,6 +280,7 @@
     setValue:function(value){
       input.value=value;
       input.focus();
+      inputInputEv.call(input);
     },
     focus:function(){
       input.focus();

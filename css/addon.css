@@ -122,6 +122,10 @@
 }
 .d-c.addon-dialog .p ul li .ds .name{
   line-height: 20px;
+  overflow: hidden;
+}
+.d-c.addon-dialog .p ul li .ds .name span{
+  float: left;
 }
 .d-c.addon-dialog .p ul li .ds .message{
   line-height: 20px;
@@ -196,4 +200,14 @@
     padding: 0;
     width:100%;
   }
+}
+.disabled_state{
+  border-radius: 5px;
+  background-color: #444;
+  color: #fff;
+  display:block;
+  float: left;
+  font-size: .5rem;
+  padding: 0 1em;
+  transform: scale(.8);
 }

@@ -1,72 +1,55 @@
-(function(){
-  var {getJSON,setJSON}=_REQUIRE_('./core.js');
+(function () {
+  var { getJSON, setJSON } = _REQUIRE_('./core.js');
 
-  var sg=new SettingGroup({
-    title:"数据",
-    index:4
+  var sg = new SettingGroup({
+    title: "数据",
+    index: 4
   });
 
-  var exportDataSi=new SettingItem({
-    title:"导出数据",
-    message:"导出数据到文件",
-    type:"null",
-    callback:function(){
+  var exportDataSi = new SettingItem({
+    title: "导出数据",
+    message: "导出数据到文件",
+    type: "null",
+    callback: function () {
       exportDataDialog.open();
-      var jl=getStorageList();
-      for(var k in jl){
-        if(!jl[k]||!jl[k].sync){
+      var jl = getStorageList();
+      for (var k in jl) {
+        if (!jl[k] || !jl[k].sync) {
           continue;
         }
-        var j=jl[k];
-        var li=document.createElement('div');
+        var j = jl[k];
+        var li = document.createElement('div');
         li.classList.add('item');
-        li.innerHTML=`<input type="checkbox"/><div class="message">
-          <div class="title">${j.title||k}</div>
-          <div class="desc">${j.desc||''}</div>
+        li.innerHTML = `<input type="checkbox"/><div class="message">
+          <div class="title">${j.title || k}</div>
+          <div class="desc">${j.desc || ''}</div>
         </div>`;
-        li.dataset.key=k;
-        util.query(dm,'.exportslist').appendChild(li);
-        util.query(li,'input').checked=true;
+        li.dataset.key = k;
+        util.query(dm, '.exportslist').appendChild(li);
+        util.query(li, 'input').checked = true;
       }
     }
   });
-  var importDataSi=new SettingItem({
-    title:"导入数据",
-    message:"从文件导入数据",
-    type:"null",
-    callback:function(){
-      showOpenFilePicker().then(function(files){
-        var file=files[0];
-        if(file){
-          try{
-            var reader=new FileReader();
-            reader.onload=function(e){
-              sl=JSON.parse(e.target.result);
-              var jl=getStorageList();
+  var importDataSi = new SettingItem({
+    title: "导入数据",
+    message: "从文件导入数据",
+    type: "null",
+    callback: function () {
+      showOpenFilePicker().then(function (files) {
+        var file = files[0];
+        if (file) {
+          try {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              sl = JSON.parse(e.target.result);
+              var jl = getStorageList();
               importDataDialog.open();
-              for(var k in sl){
-                var j=sl[k];
-                var li=document.createElement('div');
-                li.classList.add('item');
-                li.innerHTML=`<input type="checkbox"/><div class="message">
-                  <div class="title">${j.title||k}</div>
-                  <div class="desc">${j.desc||''}</div>
-                </div>`;
-                if(jl[k].compare){
-                  li.innerHTML+=`<select>
-                    <option value="compare">对比</option>
-                    <option value="rewrite">覆盖</option>
-                  </select>`
-                  util.query(li,'select').value="compare";
-                }
-                li.dataset.key=k;
-                util.query(dm2,'.importslist').appendChild(li);
-                util.query(li,'input').checked=true;
-                importDataDialog.open();
+              for (var k in sl) {
+                importaixr(sl[k], k, jl);
               }
             }
             reader.readAsText(file);
-          }catch(e){
+          } catch (e) {
             alert('读取文件有误！');
           }
         }
@@ -77,10 +60,74 @@
   sg.addNewItem(importDataSi);
   mainSetting.addNewGroup(sg);
 
-  var sl=null;
 
-  var exportDataDialog=new dialog({
-    content:`<div class="actionbar">
+  function importaixr(j, k, jl) {
+    var li = document.createElement('div');
+    if (j.addon&&!jl[k]) {
+      var addo = addon.getAddonByUrl(j.addon);
+      if (!addo) {
+        addon.checkMarket(j.addon).then(function (ismarket) {
+          li.classList.add('item');
+          li.innerHTML = `<input type="checkbox" disabled/><div class="message">
+            <div class="title">${j.title || k}</div>
+            <div class="desc">需要安装插件以同步：${ismarket ? ismarket.name : j.addon}</div>
+          </div>
+          <div class="installbtn">安装</div>`;
+          li.dataset.key = k;
+          util.query(dm2, '.importslist').appendChild(li);
+          li.querySelector('.installbtn').addEventListener('click', function () {
+            if (this.classList.contains('ing')) return;
+            if (this.classList.contains('err')) {
+              this.classList.remove('err');
+            }
+            this.innerHTML = '安装中...';
+            this.classList.add('ing');
+            var p;
+            if (ismarket) {
+              p = addon.installByOfficialMarket(ismarket.id);
+            } else {
+              p = addon.installByUrl(j.addon);
+            }
+            p.addEventListener('error', function (e) {
+              li.querySelector('.installbtn').innerHTML = '安装失败';
+              this.classList.add('err');
+            })
+            p.addEventListener('wait',function(r){
+              r(true);
+            })
+            p.addEventListener('done', function (e) {
+              li.remove();
+              setTimeout(function () {
+                importaixr(j, k, getStorageList());
+              },10)
+            })
+          })
+        });
+        return;
+      }
+
+    }
+    li.classList.add('item');
+    li.innerHTML = `<input type="checkbox"/><div class="message">
+      <div class="title">${j.title || k}</div>
+      <div class="desc">${j.desc || ''}</div>
+    </div>`;
+    if (jl[k].compare) {
+      li.innerHTML += `<select>
+        <option value="compare">对比</option>
+        <option value="rewrite">覆盖</option>
+      </select>`
+      util.query(li, 'select').value = "compare";
+    }
+    li.dataset.key = k;
+    util.query(dm2, '.importslist').appendChild(li);
+    util.query(li, 'input').checked = true;
+  }
+
+  var sl = null;
+
+  var exportDataDialog = new dialog({
+    content: `<div class="actionbar">
       <h1>导出数据</h1>
       <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
     </div>
@@ -90,35 +137,35 @@
       <div class="btn cancel">取消</div>
       <div class="btn ok">导出</div>
     </div>`,
-    class:"sync-dialog",
-    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
+    class: "sync-dialog",
+    mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
   });
-  var dm=exportDataDialog.getDialogDom();
-  util.query(dm,'.closeBtn').onclick=util.query(dm,'.cancel').onclick=function(){
+  var dm = exportDataDialog.getDialogDom();
+  util.query(dm, '.closeBtn').onclick = util.query(dm, '.cancel').onclick = function () {
     exportDataDialog.close();
   }
-  util.query(dm,'.ok').onclick=function(){
-    var op=[];
-    util.query(dm,'.exportslist .item',true).forEach(function(l){
-      if(util.query(l,'input').checked){
+  util.query(dm, '.ok').onclick = function () {
+    var op = [];
+    util.query(dm, '.exportslist .item', true).forEach(function (l) {
+      if (util.query(l, 'input').checked) {
         op.push(l.dataset.key);
       }
     })
-    getJSON(op).then(function(res){
-      download(JSON.stringify(res),'quik-2-exportdata.json');
+    getJSON(op).then(function (res) {
+      download(JSON.stringify(res), 'quik-2-exportdata.json');
     })
     exportDataDialog.close();
   }
 
-  function download(data,filename){
-    var a=document.createElement('a');
-    a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));
-    a.download=filename;
+  function download(data, filename) {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+    a.download = filename;
     a.click();
   }
 
-  var importDataDialog=new dialog({
-    content:`<div class="actionbar">
+  var importDataDialog = new dialog({
+    content: `<div class="actionbar">
       <h1>导入数据</h1>
       <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
     </div>
@@ -128,27 +175,27 @@
       <div class="btn cancel">取消</div>
       <div class="btn ok">导入</div>
     </div>`,
-    class:"sync-dialog",
-    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
+    class: "sync-dialog",
+    mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
   });
-  var dm2=importDataDialog.getDialogDom();
-  util.query(dm2,'.closeBtn').onclick=util.query(dm2,'.cancel').onclick=function(){
-    sl=null;
+  var dm2 = importDataDialog.getDialogDom();
+  util.query(dm2, '.closeBtn').onclick = util.query(dm2, '.cancel').onclick = function () {
+    sl = null;
     importDataDialog.close();
   }
-  
-  util.query(dm2,'.ok').onclick=function(){
-    var op={};
-    util.query(dm2,'.importslist .item',true).forEach(function(l){
-      if(util.query(l,'input').checked){
-        if(util.query(l,'select')){
-          op[l.dataset.key]=util.query(l,'select').value;
-        }else{
-          op[l.dataset.key]='rewrite';
+
+  util.query(dm2, '.ok').onclick = function () {
+    var op = {};
+    util.query(dm2, '.importslist .item', true).forEach(function (l) {
+      if (util.query(l, 'input').checked) {
+        if (util.query(l, 'select')) {
+          op[l.dataset.key] = util.query(l, 'select').value;
+        } else {
+          op[l.dataset.key] = 'rewrite';
         }
       }
     })
-    setJSON(sl,op);
+    setJSON(sl, op);
     exportDataDialog.close();
   }
 

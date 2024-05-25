@@ -57,7 +57,15 @@
 
   window.quik={
     sync,
-    addon,
+    addon:{
+      installByOffcialMarket:addon.upinstallByOffcialMarMarket,
+      installByUrl:addon.upinstallByUrl,
+      uninstall:addon.upuninstall,
+      update:addon.upupdate,
+      getAddonByUrl:addon.getAddonByUrl,
+      getAddonBySessionId:addon.getAddonBySessionId,
+      getAddonList:addon.getAddonList,
+    },
     storage,
     omnibox,
     util,

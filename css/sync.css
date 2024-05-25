@@ -50,6 +50,21 @@
   height:20px;
   margin: 5px;
 }
+.sync-dialog .importslist .item .installbtn{
+  float: left;
+  font-size: 12px;
+  background-color: #09f;
+  color: #fff;
+  padding: 5px;
+  line-height: 15px;
+  margin:13px 3px;
+}
+.sync-dialog .importslist .item .installbtn.ing{
+  background-color: #0ff;
+}
+.sync-dialog .importslist .item .installbtn.err{
+  background-color: #f00;
+}
 .sync-dialog .btns{
   float: right;
   margin-top: 10px;

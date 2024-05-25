@@ -7,7 +7,7 @@
     log:[
       {
         tag:"new",
-        content:"数据同步",
+        content:"新增了很多方便的功能",
       }
     ]
   }

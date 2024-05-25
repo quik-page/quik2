@@ -158,6 +158,7 @@
             st.innerHTML = '更新失败:' + r.msg;
             _.style.display = 'block';
           } else {
+            xraddon(id);
             st.innerHTML = '更新完成，刷新生效';
             util.query(li, '.ch_update').style.display = 'inline-block';
           }
@@ -167,12 +168,14 @@
         st.innerHTML = '已启用，刷新生效'
         core.enable(id);
         util.query(li, '.disable').style.display = 'block';
+        util.query(li, '.disabled_state').style.display="none";
         this.style.display = '';
       }
       util.query(li, '.disable').onclick = function () {
         st.innerHTML = '已禁用，刷新生效'
         core.disable(id);
         util.query(li, '.enable').style.display = 'block';
+      util.query(li, '.disabled_state').style.display="";
         this.style.display = '';
       }
 
@@ -185,7 +188,6 @@
                 alert('卸载出现错误：' + r.msg)
               } else {
                 alert('卸载成功，刷新生效');
-                li.remove();
               }
             })
           }
@@ -193,7 +195,7 @@
       }
     }
     util.query(li, '.n>img').src = addon.icon || "assets/def_addon.png";
-    util.query(li, '.n .ds .name').innerText = addon.name;
+    util.query(li, '.n .ds .name span').innerText = addon.name;
     var ms = util.query(li, '.n .ds .message span', true);
     ms[0].innerText = addon.author || '不详';
     ms[1].innerText = addon.version || '';
@@ -206,14 +208,36 @@
     }
     if (addon.disabled) {
       util.query(li, '.enable').style.display = 'block';
+      util.query(li, '.disabled_state').style.display="";
     } else {
       util.query(li, '.disable').style.display = 'block';
+      util.query(li, '.disabled_state').style.display="none";
     }
 
   }
   core.getAddonList().forEach(function (a) {
     xraddon(a);
   })
+  core.addEventListener('installnew',function(e){
+    xraddon(e.id);
+  })
+  core.addEventListener('uninstall',function(e){
+    var li = util.query(addon_l, 'li[data-id="' + e.id + '"]');
+    if(li){li.remove()}
+  })
+
+  core.upinstallByOffcialMarket=function(id){
+
+  }
+  core.upinstallByUrl=function(url){
+    
+  }
+  core.upuninstall=function(id){
+    
+  }
+  core.upupdate=function(id){
+    
+  }
 
   return core;
 

@@ -48,18 +48,25 @@
       return element['querySelector'+(isall?'All':'')](qstr);
     },
     getFavicon:function(url,cb){
-      var u=new URL(url);
-      var _ic='https://api.xinac.net/icon/?url='+u.origin;
-      if(u.hostname.indexOf('bing.com')!=-1){
-        _ic='https://bing.com/favicon.ico';
+      try{
+        var u=new URL(url);
+      }catch(e){
+        cb(false);
+        return;
       }
-      this.loadimg(_ic,function(st){
-        if(st){
-          cb(_ic);
-        }else{
-          cb(false)
+        var _ic='https://api.xinac.net/icon/?url='+u.origin;
+        if(u.hostname.indexOf('bing.com')!=-1){
+          _ic='https://bing.com/favicon.ico';
         }
-      });
+        this.loadimg(_ic,function(st){
+          if(st){
+            cb(_ic);
+          }else{
+            cb(false)
+          }
+        });
+      
+      
       // 删除多余代码，统一体验
     },
     createIcon:function(t){

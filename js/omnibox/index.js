@@ -8,6 +8,9 @@
   var core=_REQUIRE_('./_core.js')
   var ui=_REQUIRE_('./_ui.js')
 
+  _REQUIRE_('./sp/cal.js');
+  _REQUIRE_('./sp/translate.js');
+
   return{
     value:ui.setValue,
     focus:ui.focus,

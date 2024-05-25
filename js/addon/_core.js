@@ -1,5 +1,6 @@
 (function(){
   var marketData;
+  var evn=getEventHandle();
 
   function getCode(jsurl,p){
     return new Promise(function(resolve,reject){
@@ -90,7 +91,7 @@
         }
       }
       initsto.set(adid,meta);
-      runAddon(adid);
+      await runAddon(adid);
       return {
         id:adid
       };
@@ -120,7 +121,49 @@
   var initsto=storage('addon',{
     sync:true,
     title:"插件",
-    desc:"QUIK起始页插件数据（暂未开发完）"
+    desc:"QUIK起始页插件数据（暂未开发完）",
+    rewrite:function(ast,k,a){
+      return new Promise(function(r){
+        var d=new dialog({
+          content:"<div>正在同步插件...[<span>0</span>/"+Object.keys(a).length+"]</div>",
+          class:"dialog-addon-install",
+        });
+        d.open();
+        var df=d.getDialogDom();
+        var i=0;
+        for(var k in a){
+          var p;
+          if(a[k].url&&getAddonByUrl(a[k].url)){
+            _pu();
+            continue;
+          }
+          if(a[k].marketId){
+            p=installByOfficialMarket(a[k].marketId);
+          }else if(!a[k].type){
+            p=installByUrl(a[k].url);
+          }else{
+            _pu();
+          }
+          p.addEventListener('done',function(){
+            _pu();
+          })
+          p.addEventListener('error',function(){
+            _pu();
+            alert('安装一个插件时失败');
+          })
+          p.addEventListener('wait',function(r){r(true)});
+        }
+        function _pu(){
+          i++;
+            util.query(df,'span').innerHTML=i;
+          if(i==Object.keys(a).length){
+            r(initsto.getAll());
+          }
+        }
+        
+
+      });
+    }
   });
   var codesto=storage('addonscript');
   
@@ -128,7 +171,7 @@
   function getAddonByUrl(url){
     var as=initsto.getAll();
     for(var k in as){
-      if(as[k].rootPath==url){
+      if(as[k].url==url){
         return as[k];
       }
     }
@@ -199,6 +242,7 @@
         p.setStatu(5);
         p.setProgress(1);
         p.setDone(r);
+        evn.doevent('installnew',[r])
       }
     }
   }
@@ -324,6 +368,7 @@
       if(addon.type!='dev'){
         await new Promise((r)=>codesto.remove(id,true,r));
       }
+      evn.doevent('uninstall',[{id}])
       return true;
     }else{
       return false;
@@ -419,15 +464,18 @@
   }
 
   // 官方插件验证
-  async function checkMarket(id,url){
+  async function checkMarket(url){
     if(!marketData){
       await loadMarketData();
     }
-    if(marketData[id].url==url){
-      return true
-    }else{
-      return false;
+    for(var k in marketData){
+      if(marketData[k].url==url){
+        var o=JSON.parse(JSON.stringify(marketData[k]));
+        o.id=k;
+        return o;
+      }
     }
+    return false;
   }
 
   // 加载官方插件市场数据库
@@ -483,6 +531,9 @@
     checkMarket,
     getAddonByUrl,
     getAddonBySessionId,
-    getAddonList
+    getAddonList,
+    getEnable,
+    addEventListener:evn.addEventListener,
+    removeEventListener:evn.removeEventListener
   }
 })();

@@ -308,6 +308,9 @@
         _n('添加链接','添加','','',ll,ll,function(e){
           e.preventDefault();
           var url=util.query(d,'.link-add-url').value;
+          if(url.indexOf('://')==-1){
+            url='http://'+url;
+          }
           var title=util.query(d,'.link-add-title').value;
           var index3=util.query(d,'.link-add-index').value;
           index3=index3==''?ll:(index3-0);
@@ -322,6 +325,9 @@
         _n('修改链接','修改',linklist[index].url,linklist[index].title,ll-1,index,function(e){
           e.preventDefault();
           var url=util.query(d,'.link-add-url').value;
+          if(url.indexOf('://')==-1){
+            url='http://'+url;
+          }
           var title=util.query(d,'.link-add-title').value;
           var index2=util.query(d,'.link-add-index').value;
           index2=index2==''?index:(index2-0);
