@@ -13,6 +13,15 @@
     })
   }
 
+  // (function(){
+  //   function bodyResizer(){
+  //     document.body.style.width=window.innerWidth+'px';
+  //     document.body.style.height=window.innerHeight+'px';
+  //   }
+  //   window.addEventListener('resize',bodyResizer);
+  //   bodyResizer();
+  // })()
+  
 
   var getEventHandle=(function(){
   var events=[];
@@ -96,18 +105,25 @@
       return element['querySelector'+(isall?'All':'')](qstr);
     },
     getFavicon:function(url,cb){
-      var u=new URL(url);
-      var _ic='https://api.xinac.net/icon/?url='+u.origin;
-      if(u.hostname.indexOf('bing.com')!=-1){
-        _ic='https://bing.com/favicon.ico';
+      try{
+        var u=new URL(url);
+      }catch(e){
+        cb(false);
+        return;
       }
-      this.loadimg(_ic,function(st){
-        if(st){
-          cb(_ic);
-        }else{
-          cb(false)
+        var _ic='https://api.xinac.net/icon/?url='+u.origin;
+        if(u.hostname.indexOf('bing.com')!=-1){
+          _ic='https://bing.com/favicon.ico';
         }
-      });
+        this.loadimg(_ic,function(st){
+          if(st){
+            cb(_ic);
+          }else{
+            cb(false)
+          }
+        });
+      
+      
       // 删除多余代码，统一体验
     },
     createIcon:function(t){
@@ -436,7 +452,7 @@
   };
 })();;
   var dialog=(function(){
-  var allDialog=[];
+  var allDialog=[],d_index=1,idmax=0;
 
   /**
    * @class dialog
@@ -451,7 +467,7 @@
       class:"dialog",
     });
     dialogF.innerHTML=`<div class="d-b"></div><div class="d-c">${options.content}</div>`;
-    util.query(document,'main').append(dialogF);
+    util.query(document,'.dialogs').append(dialogF);
     var dialogC=util.query(dialogF,'.d-c');
     if(options.class){
       dialogC.classList.add(options.class);
@@ -460,7 +476,8 @@
       dialogF.classList.add('mobile-show-full');
     }
     this.element=dialogF;
-    this.id=util.getRandomHashCache();
+    this.id=idmax;
+    idmax++;
     dialogF.setAttribute('data-id',this.id);
     dialogF.querySelector('.d-b').addEventListener('click',function(){
       if(window.innerWidth<=650){
@@ -500,6 +517,8 @@
   dialog.prototype={
     open:function(){
       this.element.classList.add('show');
+      this.element.style.zIndex=d_index;
+      d_index++;
       this.closed=false;
       if(this.onopen){
         this.onopen();
@@ -1019,12 +1038,14 @@
   return Setting;
 })();;
   var SettingGroup=(function(){
+  var idmax=0;
 function SettingGroup(details){
   this.title=details.title;
   this.index=details.index;
   if(this.index<0) this.index=0
   this.items=[];
-  this.id='seg_'+util.getRandomHashCache();
+  this.id='seg_'+idmax;
+  idmax++;
   this._events={
     change:[]
   }
@@ -1098,6 +1119,7 @@ SettingGroup.prototype={
 return SettingGroup;
 })();;
   var SettingItem=(function(){
+  var idmax=0;
 function SettingItem(details){
   this.title=details.title;
   this.index=details.index;
@@ -1108,7 +1130,8 @@ function SettingItem(details){
   this.message=details.message;
   this.get=details.get;
   this._show=true;
-  this.id='sei_'+util.getRandomHashCache();
+  this.id='sei_'+idmax;
+  idmax++;
   this._events={
     change:[]
   }
@@ -1830,6 +1853,7 @@ return SettingItem;
     setValue:function(value){
       input.value=value;
       input.focus();
+      inputInputEv.call(input);
     },
     focus:function(){
       input.focus();
@@ -1846,6 +1870,89 @@ return SettingItem;
     }
   }
 })();
+
+  core.addNewSA({
+    check:function(text){
+        return text[0]=='='
+    },
+    get:function(text,getsa){
+      var a=getsa();
+      try{
+          text=text.substr(1);
+          if(!text) return;
+          var e=Math.E;
+          var PI=Math.PI;
+          var ln=Math.log;
+          var lg=Math.log10;
+          var sin=Math.sin;
+          var cos=Math.cos;
+          var tan=Math.tan;
+          var asin=Math.asin;
+          var acos=Math.acos;
+          var atan=Math.atan;
+          var sqrt=Math.sqrt;
+          var abs=Math.abs;
+          text=text.replaceAll('^','**')
+          .replaceAll('π','PI')
+          .replaceAll('[','(')
+          .replaceAll(']',')')
+          .replaceAll('{','(')
+          .replaceAll('}',')');
+          var result=eval(text);
+          a.unshift({
+              icon:util.getGoogleIcon('ea5f'),
+              text:result,
+              click:function(){
+                  ui.setValue(result);
+              }
+          });
+      }catch(e){}
+      
+      r(a);
+    }
+  });;
+  var _t_re;
+core.addNewSA({
+    check:function(text){
+        return checkLang(text);
+    },
+    get:function(text,getsa){
+      return new Promise(function(r,j){
+        _t_re=util.xhr('https://api.gumengya.com/Api/Translate?text='+encodeURI(text)+'&from=auto&to=zh',function(res){
+            var a=getsa();    
+            var o=JSON.parse(res);
+            if(o.code==200){
+                var a=getsa();
+                var result=o.data.result;
+                a.unshift({
+                    icon:util.getGoogleIcon('e8e2'),
+                    text:result,
+                    click:function(){
+                        ui.setValue(result);
+                    }
+                })
+            }else{
+                console.log('Translate API Err:',o);
+            }
+            r(a);
+            
+        },function(err){
+            console.log('Translate API Err:',err);
+        })
+      })
+    },
+    interrupt:function(){
+        if(_t_re){
+            _t_re.abort();
+        }
+    }
+  });
+
+function checkLang(text){
+    var l=text.length
+    var y=text.match(/[a-zA-Z\u3040-\u309F\u30A0-\u30FF\u31F0-\u31FFйцукенгшщзхъфывапролджэячсмитьбюёàâäèéêëîïôœùûüÿçÀÂÄÈÉÊËÎÏÔŒÙÛÜŸÇ\u0530-\u1CDF]/g);
+    return y?y.length/l>0.5:!1;
+};
 
   return{
     value:ui.setValue,
@@ -3082,7 +3189,7 @@ function limitURL(detail) {
     if(!linkaddDialog){
       linkaddDialog=new dialog({
         class:"link-add-dialog",
-        content:"<form><h1></h1><div class=\"content\"><p>URL ：<input class=\"link-add-url\" type=\"url\" required placeholder=\"链接地址(必填)\"></p><p>标题：<input class=\"link-add-title\" type=\"text\" required placeholder=\"链接标题(必填)\"></p><p>位置：<input class=\"link-add-index\" type=\"number\" min=\"0\" placeholder=\"链接位置\"></p></div><div class=\"footer\"><div class=\"cancel btn\">取消</div><button class=\"ok btn\"></button></div></form>",
+        content:"<form><h1></h1><div class=\"content\"><p>URL ：<input class=\"link-add-url\" type=\"text\" required placeholder=\"链接地址(必填)\"></p><p>标题：<input class=\"link-add-title\" type=\"text\" required placeholder=\"链接标题(必填)\"></p><p>位置：<input class=\"link-add-index\" type=\"number\" min=\"0\" placeholder=\"链接位置\"></p></div><div class=\"footer\"><div class=\"cancel btn\">取消</div><button class=\"ok btn\"></button></div></form>",
       });
       // @note 将cancel按钮修改为div，防止表单submit到cancel
       // @edit at 2024/1/30 15:20
@@ -3100,6 +3207,9 @@ function limitURL(detail) {
         _n('添加链接','添加','','',ll,ll,function(e){
           e.preventDefault();
           var url=util.query(d,'.link-add-url').value;
+          if(url.indexOf('://')==-1){
+            url='http://'+url;
+          }
           var title=util.query(d,'.link-add-title').value;
           var index3=util.query(d,'.link-add-index').value;
           index3=index3==''?ll:(index3-0);
@@ -3114,6 +3224,9 @@ function limitURL(detail) {
         _n('修改链接','修改',linklist[index].url,linklist[index].title,ll-1,index,function(e){
           e.preventDefault();
           var url=util.query(d,'.link-add-url').value;
+          if(url.indexOf('://')==-1){
+            url='http://'+url;
+          }
           var title=util.query(d,'.link-add-title').value;
           var index2=util.query(d,'.link-add-index').value;
           index2=index2==''?index:(index2-0);
@@ -4743,6 +4856,7 @@ function limitURL(detail) {
   }
 
 
+  var idmax=0;
   function pushBgDrawer(drawer) {
     var session = drawer.session;
     try {
@@ -4752,7 +4866,8 @@ function limitURL(detail) {
     } catch (e) {
       throw new Error('背景Drawer注册失败，Session校验错误。')
     }
-    var bgdrawerid = 'bgdrawer-' + util.getRandomHashCache();
+    var bgdrawerid = 'bgdrawer-' + idmax;
+    idmax++;
     drawer.id = bgdrawerid;
     drawers.push(drawer);
     dodrawer(drawer);
@@ -4938,6 +5053,7 @@ function limitURL(detail) {
   var notip=document.querySelector(".no-notice-tip");
   var notice_mb="<div class=\"notice-actionbar\"><div class=\"notice-title\"></div><div class=\"notice-close-btn\">{{close-btn}}</div></div><div class=\"notice-content\"></div><div class=\"notice-progress\"><div class=\"p\"><div></div></div></div><div class=\"notice-btns\"></div>";
   var focus_con=document.querySelector(".focus-notice");
+  var hasNew=0;
   function notice(details){
     this.el=util.element('div',{
       class:"notice-item"
@@ -4953,7 +5069,7 @@ function limitURL(detail) {
   notice.prototype={
     show:function(time){
       notip.classList.remove('show');
-      mbicon.getIcon().classList.add('notice-hasnew-icon');
+      r(1);
       clearTimeout(this._timeouthide);
       this.el.classList.add('show');
       this.el.addEventListener('click',function(e){
@@ -4973,7 +5089,7 @@ function limitURL(detail) {
       this.el.classList.remove('show');
       if(!document.querySelector(".notice-con .notice-item.show")){
         notip.classList.add('show');
-        mbicon.getIcon().classList.remove('notice-hasnew-icon');
+        r(0);
       }
       this.el.style.animation='noticeout .3s';
       var _=this;
@@ -5102,21 +5218,27 @@ function limitURL(detail) {
   // mobile适配
   var mbicon=new iconc.icon({
     content:util.getGoogleIcon('e7f4'),
-    offset:"tl"
+    offset:"tl",
+    class:"notice-icon"
   });
   
-  window.addEventListener('resize',r);
+  window.addEventListener('resize',function(){r()});
   mbicon.getIcon().addEventListener('click',function(){
     document.querySelector(".notice-sc").classList.add('show');
   })
   document.querySelector(".notice-sc").addEventListener('click',function(){
     this.classList.remove('show');
   })
-  function r(){
-    if(window.innerWidth>600){
-      mbicon.hide();
+  function r(a){
+    if(typeof a=="undefined"){
+      a=hasNew;
     }else{
+      hasNew=a;
+    }
+    if(window.innerWidth<600&&a){
       mbicon.show();
+    }else{
+      mbicon.hide();
     }
   }
   r();
@@ -5229,10 +5351,11 @@ function limitURL(detail) {
     getTheme,
   }
 })();
-  var addon=(function(){
-  var {addEventListener,removeEventListner,doevent}=getEventHandle();
-  var core=(function(){
+  var addon=(function () {
+  var { addEventListener, removeEventListner, doevent } = getEventHandle();
+  var core = (function(){
   var marketData;
+  var evn=getEventHandle();
 
   function getCode(jsurl,p){
     return new Promise(function(resolve,reject){
@@ -5323,7 +5446,7 @@ function limitURL(detail) {
         }
       }
       initsto.set(adid,meta);
-      runAddon(adid);
+      await runAddon(adid);
       return {
         id:adid
       };
@@ -5353,7 +5476,49 @@ function limitURL(detail) {
   var initsto=storage('addon',{
     sync:true,
     title:"插件",
-    desc:"QUIK起始页插件数据（暂未开发完）"
+    desc:"QUIK起始页插件数据（暂未开发完）",
+    rewrite:function(ast,k,a){
+      return new Promise(function(r){
+        var d=new dialog({
+          content:"<div>正在同步插件...[<span>0</span>/"+Object.keys(a).length+"]</div>",
+          class:"dialog-addon-install",
+        });
+        d.open();
+        var df=d.getDialogDom();
+        var i=0;
+        for(var k in a){
+          var p;
+          if(a[k].url&&getAddonByUrl(a[k].url)){
+            _pu();
+            continue;
+          }
+          if(a[k].marketId){
+            p=installByOfficialMarket(a[k].marketId);
+          }else if(!a[k].type){
+            p=installByUrl(a[k].url);
+          }else{
+            _pu();
+          }
+          p.addEventListener('done',function(){
+            _pu();
+          })
+          p.addEventListener('error',function(){
+            _pu();
+            alert('安装一个插件时失败');
+          })
+          p.addEventListener('wait',function(r){r(true)});
+        }
+        function _pu(){
+          i++;
+            util.query(df,'span').innerHTML=i;
+          if(i==Object.keys(a).length){
+            r(initsto.getAll());
+          }
+        }
+        
+
+      });
+    }
   });
   var codesto=storage('addonscript');
   
@@ -5361,7 +5526,7 @@ function limitURL(detail) {
   function getAddonByUrl(url){
     var as=initsto.getAll();
     for(var k in as){
-      if(as[k].rootPath==url){
+      if(as[k].url==url){
         return as[k];
       }
     }
@@ -5432,6 +5597,7 @@ function limitURL(detail) {
         p.setStatu(5);
         p.setProgress(1);
         p.setDone(r);
+        evn.doevent('installnew',[r])
       }
     }
   }
@@ -5551,9 +5717,13 @@ function limitURL(detail) {
 
   // 插件卸载
   async function uninstall(id){
-    if(initsto.get(id)){
+    var addon=initsto.get(id);
+    if(addon){
       initsto.remove(id);
-      await new Promise((r)=>codesto.remove(id,true,r));
+      if(addon.type!='dev'){
+        await new Promise((r)=>codesto.remove(id,true,r));
+      }
+      evn.doevent('uninstall',[{id}])
       return true;
     }else{
       return false;
@@ -5649,15 +5819,18 @@ function limitURL(detail) {
   }
 
   // 官方插件验证
-  async function checkMarket(id,url){
+  async function checkMarket(url){
     if(!marketData){
       await loadMarketData();
     }
-    if(marketData[id].url==url){
-      return true
-    }else{
-      return false;
+    for(var k in marketData){
+      if(marketData[k].url==url){
+        var o=JSON.parse(JSON.stringify(marketData[k]));
+        o.id=k;
+        return o;
+      }
     }
+    return false;
   }
 
   // 加载官方插件市场数据库
@@ -5713,10 +5886,13 @@ function limitURL(detail) {
     checkMarket,
     getAddonByUrl,
     getAddonBySessionId,
-    getAddonList
+    getAddonList,
+    getEnable,
+    addEventListener:evn.addEventListener,
+    removeEventListener:evn.removeEventListener
   }
 })();;
-  var ui=(function(){
+  var ui = (function(){
     function installui(){
         var n=new dialog({
             content:"<div class=\"ma\"><div class=\"sth\"><img src=\"assets/def_addon.png\" alt=\"图标\"><p class=\"name\">...</p><p class=\"version\">版本：...</p></div><div class=\"progress\"><div class=\"r\"></div></div><div class=\"msg\"></div><div class=\"btns\"><div class=\"btn l\">取消</div><div class=\"btn r\">确定</div></div></div>",
@@ -5812,60 +5988,60 @@ function limitURL(detail) {
 
     return installui;
 })();;
-  var addon_dialog=new dialog({
-    content:("<div class=\"addon-bar\"><div class=\"l\"><div class=\"item active\" data-p=\"0\">插件管理</div><div class=\"item\" data-p=\"1\">插件市场</div></div><div class=\"r\"><div class=\"add-btn\">{{add-btn}}</div><div class=\"closeBtn\">{{close-btn}}</div></div></div><div class=\"content\"><div class=\"p gl\" style=\"display:block\"><ul></ul></div><div class=\"p ma\"><div class=\"addon-search-box\"><input type=\"text\"> <button>{{search}}</button></div><ul></ul></div></div>")
-      .replace('{{close-btn}}',util.getGoogleIcon('e5cd'))
-      .replace('{{search}}',util.getGoogleIcon('e8b6'))
-      .replace('{{add-btn}}',util.getGoogleIcon('e145')),
-    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
-    class:"addon-dialog"
+  var addon_dialog = new dialog({
+    content: ("<div class=\"addon-bar\"><div class=\"l\"><div class=\"item active\" data-p=\"0\">插件管理</div><div class=\"item\" data-p=\"1\">插件市场</div></div><div class=\"r\"><div class=\"add-btn\">{{add-btn}}</div><div class=\"closeBtn\">{{close-btn}}</div></div></div><div class=\"content\"><div class=\"p gl\" style=\"display:block\"><ul></ul></div><div class=\"p ma\"><div class=\"addon-search-box\"><input type=\"text\"> <button>{{search}}</button></div><ul></ul></div></div>")
+      .replace('{{close-btn}}', util.getGoogleIcon('e5cd'))
+      .replace('{{search}}', util.getGoogleIcon('e8b6'))
+      .replace('{{add-btn}}', util.getGoogleIcon('e145')),
+    mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
+    class: "addon-dialog"
   });
 
-  var addon_dialog_d=addon_dialog.getDialogDom();
-  util.query(addon_dialog_d,'.closeBtn').addEventListener('click',()=>{
+  var addon_dialog_d = addon_dialog.getDialogDom();
+  util.query(addon_dialog_d, '.closeBtn').addEventListener('click', () => {
     addon_dialog.close();
   });
 
-  var addon_menu=new menu({
-    list:[{
-      icon:util.getGoogleIcon('f1cc'),
-      title:"从插件市场添加插件",
-      click:function(){
+  var addon_menu = new menu({
+    list: [{
+      icon: util.getGoogleIcon('f1cc'),
+      title: "从插件市场添加插件",
+      click: function () {
         // TODO
       }
-    },{
-      icon:util.getGoogleIcon('e157'),
-      title:"从第三方链接添加插件",
-      click:function(){
-        prompt("请输入插件链接",function(link){
-          if(!link){
+    }, {
+      icon: util.getGoogleIcon('e157'),
+      title: "从第三方链接添加插件",
+      click: function () {
+        prompt("请输入插件链接", function (link) {
+          if (!link) {
             return false;
           }
-          var p=core.installByUrl(link);
-          var u=new ui();
+          var p = core.installByUrl(link);
+          var u = new ui();
           u.show();
           u.bind(p);
-          p.addEventListener('done',function(a){
+          p.addEventListener('done', function (a) {
             alert('安装成功');
             console.log(a);
           });
           return true;
         })
       }
-    },{
-      icon:util.getGoogleIcon('e66d'),
-      title:"从第三方文件添加插件",
-      click:function(){
-        showOpenFilePicker().then(function(files){
-          var f=files[0];
-          var n=f.name;
-          var r=new FileReader();
-          var u=new ui();
+    }, {
+      icon: util.getGoogleIcon('e66d'),
+      title: "从第三方文件添加插件",
+      click: function () {
+        showOpenFilePicker().then(function (files) {
+          var f = files[0];
+          var n = f.name;
+          var r = new FileReader();
+          var u = new ui();
           u.show();
-          r.onload=function(){
-            var p=core.installByLocal(r.result);
+          r.onload = function () {
+            var p = core.installByLocal(r.result);
             u.bind(p);
-            p.ondone=function(a){
+            p.ondone = function (a) {
               installing_notice.destory();
               alert('安装成功');
               console.log(a);
@@ -5874,12 +6050,12 @@ function limitURL(detail) {
           r.readAsText(f);
         })
       }
-    },{
-      icon:util.getGoogleIcon('e86f'),
-      title:"添加开发者端口",
-      click:function(){
-        prompt("请输入开发者端口链接",function(link){
-          if(!link){
+    }, {
+      icon: util.getGoogleIcon('e86f'),
+      title: "添加开发者端口",
+      click: function () {
+        prompt("请输入开发者端口链接", function (link) {
+          if (!link) {
             return false;
           }
           core.installByDev(link);
@@ -5887,151 +6063,167 @@ function limitURL(detail) {
         })
       }
     }],
-    offset:{
-      top:0,left:0
+    offset: {
+      top: 0, left: 0
     }
   });
 
-  util.query(addon_dialog_d,'.add-btn').addEventListener('click',function(e){
+  util.query(addon_dialog_d, '.add-btn').addEventListener('click', function (e) {
     e.stopPropagation();
-    var b=this.getBoundingClientRect();
+    var b = this.getBoundingClientRect();
     addon_menu.setOffset({
-      top:b.top+b.height,
-      right:window.innerWidth-b.left-b.width
+      top: b.top + b.height,
+      right: window.innerWidth - b.left - b.width
     });
     addon_menu.show();
   });
 
-  var addon_icon=new iconc.icon({
-    offset:"tr",
-    content:util.getGoogleIcon("e87b",{type:"fill"})
+  var addon_icon = new iconc.icon({
+    offset: "tr",
+    content: util.getGoogleIcon("e87b", { type: "fill" })
   });
-  addon_icon.getIcon().onclick=function(){
+  addon_icon.getIcon().onclick = function () {
     addon_dialog.open();
   }
-  var tmenu=util.query(addon_dialog_d,'.addon-bar .l .item',true);
-  var ps=util.query(addon_dialog_d,'.content .p',true);
-  tmenu.forEach(function(a){
-    a.onclick=function(){
-      tmenu.forEach(function(b){
-          b.classList.remove('active');
+  var tmenu = util.query(addon_dialog_d, '.addon-bar .l .item', true);
+  var ps = util.query(addon_dialog_d, '.content .p', true);
+  tmenu.forEach(function (a) {
+    a.onclick = function () {
+      tmenu.forEach(function (b) {
+        b.classList.remove('active');
       })
       this.classList.add('active');
-      ps.forEach(function(c){
-        c.style.display='';
+      ps.forEach(function (c) {
+        c.style.display = '';
       })
-      ps[this.dataset.p].style.display='block';
+      ps[this.dataset.p].style.display = 'block';
     }
   })
 
-  var addon_l=util.query(addon_dialog_d,'.content .p.gl ul');
-  function xraddonlist(){
-    core.getAddonList().forEach(function(a){
-      var addon=core.getAddonBySessionId(a);
-      var li=util.element('li');
-      li.innerHTML=`<div class="n">
-        <img src="${addon.icon||"assets/def_addon.png"}" alt="" onerror="this.src='assets/def_addon.png'">
-        <div class="ds">
-          <div class="name">${addon.name}</div>
-          <div class="message">
-            <span>版本：${addon.version||'不详'}</span>
-            <span>作者：${addon.author||'不详'}</span>
-            <span></span>
-          </div>
-        </div>
-      </div>
-      <div class="d">
-        <div class="desc">${addon.desc}</div>
-        <div class="website">网站：${addon.website||'不详'}</div>
-        <div class="controls">
-          <div class="btn ch_update">检查更新</div>
-          <div class="btn update">更新</div>
-          <div class="btn enable">启用</div>
-          <div class="btn disable">禁用</div>
-          <div class="btn uninstall" style="display:block">卸载</div>
-        </div>
-      </div>`;
-      li.dataset.id=a;
+  var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
+  function xraddon(id) {
+    var addon = core.getAddonBySessionId(id);
+    if (addon.type == 'dev') {
+      addon.name = '开发者端口：' + addon.url;
+      addon.author = 'dev';
+      addon.desc = '开发者端口：' + addon.url;
+    }
+    var li = util.query(addon_l, 'li[data-id="' + id + '"]');
+    if (!li) {
+      li = util.element('li');
+      li.innerHTML = "<div class=\"n\"><img src=\"assets/def_addon.png\" alt=\"\" onerror=\"this.src='assets/def_addon.png'\"><div class=\"ds\"><div class=\"name\"><span></span><div class=\"disabled_state\">已禁用</div></div><div class=\"message\"><span></span> <span></span> <span></span></div></div></div><div class=\"d\"><div class=\"desc\"></div><div class=\"website\"></div><div class=\"controls\"><div class=\"btn ch_update\">检查更新</div><div class=\"btn update\">更新</div><div class=\"btn enable\">启用</div><div class=\"btn disable\">禁用</div><div class=\"btn uninstall\" style=\"display:block\">卸载</div></div></div>";
+      li.dataset.id = id;
       addon_l.appendChild(li);
-      li.onclick=function(e){
-        addon_l.querySelectorAll('li').forEach(function(li){
+      li.onclick = function (e) {
+        addon_l.querySelectorAll('li').forEach(function (li) {
           li.classList.remove('active');
         })
         this.classList.add('active');
       }
-
-      var st=util.query(li,'.message span',true)[2];
-      if(!addon.type){
-        util.query(li,'.ch_update').style.display='block';
-      }
-      if(addon.disabled){
-        util.query(li,'.enable').style.display='block';
-      }else{
-        util.query(li,'.disable').style.display='block';
-      }
-
-      util.query(li,'.ch_update').onclick=function(){
-        st.innerHTML='检查更新中...';
-        var _=this;
-        _.style.display='';
-        core.checkUpdate(a).then(function(a){
-          if(!a){
-            _.style.display='block';
-            st.innerHTML='已是最新版本';
-          }else{
-            st.innerHTML='发现新版本';
-            util.query(li,'.update').style.display='block';
+      util.query(li, '.ch_update').onclick = function () {
+        st.innerHTML = '检查更新中...';
+        var _ = this;
+        _.style.display = '';
+        core.checkUpdate(id).then(function (a) {
+          if (!a) {
+            _.style.display = 'block';
+            st.innerHTML = '已是最新版本';
+          } else {
+            st.innerHTML = '发现新版本';
+            util.query(li, '.update').style.display = 'block';
           }
         });
       }
 
-      util.query(li,'.update').onclick=function(){
-        st.innerHTML='更新中...';
-        var _=this;
-        _.style.display='';
-        core.update(a).then(function(r){
-          if(r.error){
-            st.innerHTML='更新失败:'+r.msg;
-            _.style.display='block';
-          }else{
-            st.innerHTML='更新完成，刷新生效';
-            util.query(li,'.ch_update').style.display='inline-block';
+      util.query(li, '.update').onclick = function () {
+        st.innerHTML = '更新中...';
+        var _ = this;
+        _.style.display = '';
+        core.update(id).then(function (r) {
+          if (r.error) {
+            st.innerHTML = '更新失败:' + r.msg;
+            _.style.display = 'block';
+          } else {
+            xraddon(id);
+            st.innerHTML = '更新完成，刷新生效';
+            util.query(li, '.ch_update').style.display = 'inline-block';
           }
         });
       }
-      util.query(li,'.enable').onclick=function(){
-        st.innerHTML='已启用，刷新生效'
-        core.enable(a);
-        util.query(li,'.disable').style.display='block';
-        this.style.display='';
+      util.query(li, '.enable').onclick = function () {
+        st.innerHTML = '已启用，刷新生效'
+        core.enable(id);
+        util.query(li, '.disable').style.display = 'block';
+        util.query(li, '.disabled_state').style.display="none";
+        this.style.display = '';
       }
-      util.query(li,'.disable').onclick=function(){
-        st.innerHTML='已禁用，刷新生效'
-        core.disable(a);
-        util.query(li,'.enable').style.display='block';
-        this.style.display='';
+      util.query(li, '.disable').onclick = function () {
+        st.innerHTML = '已禁用，刷新生效'
+        core.disable(id);
+        util.query(li, '.enable').style.display = 'block';
+      util.query(li, '.disabled_state').style.display="";
+        this.style.display = '';
       }
 
-      util.query(li,'.uninstall').onclick=function(){
-        confirm('你真的要卸载吗？此操作不可恢复！',function(as){
-          if(as){
-            st.innerHTML='正在卸载...'
-            core.uninstall(a).then(function(r){
-              if(r.error){
-                alert('卸载出现错误：'+r.msg)
-              }else{
+      util.query(li, '.uninstall').onclick = function () {
+        confirm('你真的要卸载吗？此操作不可恢复！', function (as) {
+          if (as) {
+            st.innerHTML = '正在卸载...'
+            core.uninstall(id).then(function (r) {
+              if (r.error) {
+                alert('卸载出现错误：' + r.msg)
+              } else {
                 alert('卸载成功，刷新生效');
-                li.remove();
               }
             })
           }
         })
       }
-    });
-  }
-  xraddonlist();
+    }
+    util.query(li, '.n>img').src = addon.icon || "assets/def_addon.png";
+    util.query(li, '.n .ds .name span').innerText = addon.name;
+    var ms = util.query(li, '.n .ds .message span', true);
+    ms[0].innerText = addon.author || '不详';
+    ms[1].innerText = addon.version || '';
+    ms[2].innerText = '';
+    util.query(li, '.d .desc').innerText = addon.desc || '';
+    util.query(li, '.d .website').innerText = addon.website || '';
+    var st = util.query(li, '.message span', true)[2];
+    if (!addon.type) {
+      util.query(li, '.ch_update').style.display = 'block';
+    }
+    if (addon.disabled) {
+      util.query(li, '.enable').style.display = 'block';
+      util.query(li, '.disabled_state').style.display="";
+    } else {
+      util.query(li, '.disable').style.display = 'block';
+      util.query(li, '.disabled_state').style.display="none";
+    }
 
-  
+  }
+  core.getAddonList().forEach(function (a) {
+    xraddon(a);
+  })
+  core.addEventListener('installnew',function(e){
+    xraddon(e.id);
+  })
+  core.addEventListener('uninstall',function(e){
+    var li = util.query(addon_l, 'li[data-id="' + e.id + '"]');
+    if(li){li.remove()}
+  })
+
+  core.upinstallByOffcialMarket=function(id){
+
+  }
+  core.upinstallByUrl=function(url){
+    
+  }
+  core.upuninstall=function(id){
+    
+  }
+  core.upupdate=function(id){
+    
+  }
 
   return core;
 
@@ -6221,8 +6413,8 @@ function limitURL(detail) {
   }
   return card;
 })();;
-  var sync=(function(){
-  var {getJSON,setJSON}=(function(){
+  var sync=(function () {
+  var { getJSON, setJSON } = (function(){
   async function getJSON(config){
     var jl=getStorageList();
     var ast=getAllStorage();
@@ -6338,72 +6530,55 @@ function limitURL(detail) {
   return {getJSON,setJSON}
 })();;
 
-  var sg=new SettingGroup({
-    title:"数据",
-    index:4
+  var sg = new SettingGroup({
+    title: "数据",
+    index: 4
   });
 
-  var exportDataSi=new SettingItem({
-    title:"导出数据",
-    message:"导出数据到文件",
-    type:"null",
-    callback:function(){
+  var exportDataSi = new SettingItem({
+    title: "导出数据",
+    message: "导出数据到文件",
+    type: "null",
+    callback: function () {
       exportDataDialog.open();
-      var jl=getStorageList();
-      for(var k in jl){
-        if(!jl[k]||!jl[k].sync){
+      var jl = getStorageList();
+      for (var k in jl) {
+        if (!jl[k] || !jl[k].sync) {
           continue;
         }
-        var j=jl[k];
-        var li=document.createElement('div');
+        var j = jl[k];
+        var li = document.createElement('div');
         li.classList.add('item');
-        li.innerHTML=`<input type="checkbox"/><div class="message">
-          <div class="title">${j.title||k}</div>
-          <div class="desc">${j.desc||''}</div>
+        li.innerHTML = `<input type="checkbox"/><div class="message">
+          <div class="title">${j.title || k}</div>
+          <div class="desc">${j.desc || ''}</div>
         </div>`;
-        li.dataset.key=k;
-        util.query(dm,'.exportslist').appendChild(li);
-        util.query(li,'input').checked=true;
+        li.dataset.key = k;
+        util.query(dm, '.exportslist').appendChild(li);
+        util.query(li, 'input').checked = true;
       }
     }
   });
-  var importDataSi=new SettingItem({
-    title:"导入数据",
-    message:"从文件导入数据",
-    type:"null",
-    callback:function(){
-      showOpenFilePicker().then(function(files){
-        var file=files[0];
-        if(file){
-          try{
-            var reader=new FileReader();
-            reader.onload=function(e){
-              sl=JSON.parse(e.target.result);
-              var jl=getStorageList();
+  var importDataSi = new SettingItem({
+    title: "导入数据",
+    message: "从文件导入数据",
+    type: "null",
+    callback: function () {
+      showOpenFilePicker().then(function (files) {
+        var file = files[0];
+        if (file) {
+          try {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              sl = JSON.parse(e.target.result);
+              var jl = getStorageList();
               importDataDialog.open();
-              for(var k in sl){
-                var j=sl[k];
-                var li=document.createElement('div');
-                li.classList.add('item');
-                li.innerHTML=`<input type="checkbox"/><div class="message">
-                  <div class="title">${j.title||k}</div>
-                  <div class="desc">${j.desc||''}</div>
-                </div>`;
-                if(jl[k].compare){
-                  li.innerHTML+=`<select>
-                    <option value="compare">对比</option>
-                    <option value="rewrite">覆盖</option>
-                  </select>`
-                  util.query(li,'select').value="compare";
-                }
-                li.dataset.key=k;
-                util.query(dm2,'.importslist').appendChild(li);
-                util.query(li,'input').checked=true;
-                importDataDialog.open();
+              for (var k in sl) {
+                importaixr(sl[k], k, jl);
               }
             }
             reader.readAsText(file);
-          }catch(e){
+          } catch (e) {
             alert('读取文件有误！');
           }
         }
@@ -6414,10 +6589,74 @@ function limitURL(detail) {
   sg.addNewItem(importDataSi);
   mainSetting.addNewGroup(sg);
 
-  var sl=null;
 
-  var exportDataDialog=new dialog({
-    content:`<div class="actionbar">
+  function importaixr(j, k, jl) {
+    var li = document.createElement('div');
+    if (j.addon&&!jl[k]) {
+      var addo = addon.getAddonByUrl(j.addon);
+      if (!addo) {
+        addon.checkMarket(j.addon).then(function (ismarket) {
+          li.classList.add('item');
+          li.innerHTML = `<input type="checkbox" disabled/><div class="message">
+            <div class="title">${j.title || k}</div>
+            <div class="desc">需要安装插件以同步：${ismarket ? ismarket.name : j.addon}</div>
+          </div>
+          <div class="installbtn">安装</div>`;
+          li.dataset.key = k;
+          util.query(dm2, '.importslist').appendChild(li);
+          li.querySelector('.installbtn').addEventListener('click', function () {
+            if (this.classList.contains('ing')) return;
+            if (this.classList.contains('err')) {
+              this.classList.remove('err');
+            }
+            this.innerHTML = '安装中...';
+            this.classList.add('ing');
+            var p;
+            if (ismarket) {
+              p = addon.installByOfficialMarket(ismarket.id);
+            } else {
+              p = addon.installByUrl(j.addon);
+            }
+            p.addEventListener('error', function (e) {
+              li.querySelector('.installbtn').innerHTML = '安装失败';
+              this.classList.add('err');
+            })
+            p.addEventListener('wait',function(r){
+              r(true);
+            })
+            p.addEventListener('done', function (e) {
+              li.remove();
+              setTimeout(function () {
+                importaixr(j, k, getStorageList());
+              },10)
+            })
+          })
+        });
+        return;
+      }
+
+    }
+    li.classList.add('item');
+    li.innerHTML = `<input type="checkbox"/><div class="message">
+      <div class="title">${j.title || k}</div>
+      <div class="desc">${j.desc || ''}</div>
+    </div>`;
+    if (jl[k].compare) {
+      li.innerHTML += `<select>
+        <option value="compare">对比</option>
+        <option value="rewrite">覆盖</option>
+      </select>`
+      util.query(li, 'select').value = "compare";
+    }
+    li.dataset.key = k;
+    util.query(dm2, '.importslist').appendChild(li);
+    util.query(li, 'input').checked = true;
+  }
+
+  var sl = null;
+
+  var exportDataDialog = new dialog({
+    content: `<div class="actionbar">
       <h1>导出数据</h1>
       <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
     </div>
@@ -6427,35 +6666,35 @@ function limitURL(detail) {
       <div class="btn cancel">取消</div>
       <div class="btn ok">导出</div>
     </div>`,
-    class:"sync-dialog",
-    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
+    class: "sync-dialog",
+    mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
   });
-  var dm=exportDataDialog.getDialogDom();
-  util.query(dm,'.closeBtn').onclick=util.query(dm,'.cancel').onclick=function(){
+  var dm = exportDataDialog.getDialogDom();
+  util.query(dm, '.closeBtn').onclick = util.query(dm, '.cancel').onclick = function () {
     exportDataDialog.close();
   }
-  util.query(dm,'.ok').onclick=function(){
-    var op=[];
-    util.query(dm,'.exportslist .item',true).forEach(function(l){
-      if(util.query(l,'input').checked){
+  util.query(dm, '.ok').onclick = function () {
+    var op = [];
+    util.query(dm, '.exportslist .item', true).forEach(function (l) {
+      if (util.query(l, 'input').checked) {
         op.push(l.dataset.key);
       }
     })
-    getJSON(op).then(function(res){
-      download(JSON.stringify(res),'quik-2-exportdata.json');
+    getJSON(op).then(function (res) {
+      download(JSON.stringify(res), 'quik-2-exportdata.json');
     })
     exportDataDialog.close();
   }
 
-  function download(data,filename){
-    var a=document.createElement('a');
-    a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));
-    a.download=filename;
+  function download(data, filename) {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+    a.download = filename;
     a.click();
   }
 
-  var importDataDialog=new dialog({
-    content:`<div class="actionbar">
+  var importDataDialog = new dialog({
+    content: `<div class="actionbar">
       <h1>导入数据</h1>
       <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
     </div>
@@ -6465,27 +6704,27 @@ function limitURL(detail) {
       <div class="btn cancel">取消</div>
       <div class="btn ok">导入</div>
     </div>`,
-    class:"sync-dialog",
-    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
+    class: "sync-dialog",
+    mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
   });
-  var dm2=importDataDialog.getDialogDom();
-  util.query(dm2,'.closeBtn').onclick=util.query(dm2,'.cancel').onclick=function(){
-    sl=null;
+  var dm2 = importDataDialog.getDialogDom();
+  util.query(dm2, '.closeBtn').onclick = util.query(dm2, '.cancel').onclick = function () {
+    sl = null;
     importDataDialog.close();
   }
-  
-  util.query(dm2,'.ok').onclick=function(){
-    var op={};
-    util.query(dm2,'.importslist .item',true).forEach(function(l){
-      if(util.query(l,'input').checked){
-        if(util.query(l,'select')){
-          op[l.dataset.key]=util.query(l,'select').value;
-        }else{
-          op[l.dataset.key]='rewrite';
+
+  util.query(dm2, '.ok').onclick = function () {
+    var op = {};
+    util.query(dm2, '.importslist .item', true).forEach(function (l) {
+      if (util.query(l, 'input').checked) {
+        if (util.query(l, 'select')) {
+          op[l.dataset.key] = util.query(l, 'select').value;
+        } else {
+          op[l.dataset.key] = 'rewrite';
         }
       }
     })
-    setJSON(sl,op);
+    setJSON(sl, op);
     exportDataDialog.close();
   }
 
@@ -6631,6 +6870,9 @@ function limitURL(detail) {
   var addom=aboutDialog.getDialogDom();
   util.query(addom,'.close').onclick=function(){
     aboutDialog.close();
+  }
+  util.query(addom,'.t.thanks a').onclick=function(){
+    thaDialog.open();
   }
   setTimeout(function(){
     util.query(addom,'.ver span').innerText=window.version.version;
@@ -6909,7 +7151,7 @@ function limitURL(detail) {
 
 })();;
   !function(){
-  window.version_code = 23;
+  window.version_code = 24;
   window.version={
     version:'2.0.0-dev',
     version_code:window.version_code,
@@ -6917,7 +7159,7 @@ function limitURL(detail) {
     log:[
       {
         tag:"new",
-        content:"数据同步",
+        content:"新增了很多方便的功能",
       }
     ]
   }
@@ -6988,7 +7230,15 @@ function limitURL(detail) {
 
   window.quik={
     sync,
-    addon,
+    addon:{
+      installByOffcialMarket:addon.upinstallByOffcialMarMarket,
+      installByUrl:addon.upinstallByUrl,
+      uninstall:addon.upuninstall,
+      update:addon.upupdate,
+      getAddonByUrl:addon.getAddonByUrl,
+      getAddonBySessionId:addon.getAddonBySessionId,
+      getAddonList:addon.getAddonList,
+    },
     storage,
     omnibox,
     util,
