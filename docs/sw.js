@@ -50,10 +50,10 @@ self.addEventListener('fetch',(event)=>{
 self.addEventListener('message',function(ev){
   if(ev.data=='update'){
     reAddResourcesToCache([
-      '/',
-      '/index.html',
-      '/index.bundle.css',
-      '/index.bundle.js'
+      './',
+      './index.html',
+      './index.bundle.css',
+      './index.bundle.js'
     ]).then(function(){
       ev.source.postMessage('updated')
     })
