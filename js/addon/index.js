@@ -215,9 +215,14 @@
     }
 
   }
-  core.getAddonList().forEach(function (a) {
-    xraddon(a);
-  })
+  if(!window.addon_){
+    core.getAddonList().forEach(function (a) {
+      xraddon(a);
+    })
+  }else{
+    alert('已在安全模式下运行，插件功能已关闭！')
+  }
+  
   core.addEventListener('installnew',function(e){
     xraddon(e.id);
   })

@@ -1,6 +1,22 @@
+(function(){
+    var si=new SettingItem({
+        title:"自动计算",
+        index:2,
+        type:'boolean',
+        message:"搜索框输入=自动计算后面的内容",
+        get:function(){
+            return !!core.initsto.get('cal');
+        },
+        callback:function(value){
+            core.initsto.set('cal',value);
+            return true;
+        }
+    })
+
+    sg.addNewItem(si);
 core.addNewSA({
     check:function(text){
-        return text[0]=='='
+        return (!!core.initsto.get('cal'))&&text[0]=='='
     },
     get:function(text,getsa){
       var a=getsa();
@@ -38,3 +54,4 @@ core.addNewSA({
       r(a);
     }
   });
+})();

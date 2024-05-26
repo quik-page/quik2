@@ -3,7 +3,10 @@
     localStorage.quik2='{}';
   }
 
-  var idbsupport=localforage._getSupportedDrivers([localforage.INDEXEDDB])[0]==localforage.INDEXEDDB;
+  var evn=getEventHandle();
+
+  // var idbsupport=localforage._getSupportedDrivers([localforage.INDEXEDDB])[0]==localforage.INDEXEDDB;
+  var idbsupport=false;
   var filerecv={
     get:function(hash,cb){
       localforage.getItem(hash).then(cb);
@@ -84,12 +87,23 @@
         var a=getAll();
         a[ck]=ob;
         localStorage.setItem("quik2",JSON.stringify(a));
+        evn.doevent('storage',[{
+          key:ck,
+          value:ob
+        }])
       }
       function list(){
         return Object.keys(getAll()[ck]);
       }
+      function websync(option){
+        evn.doevent('websync',[{
+          key:ck,
+          value:option
+        }])
+      }
       return {
         get:get,
+        websync,
         set:set,
         remove:remove,
         list:list,
@@ -119,6 +133,8 @@
   f.checkIDB=function(){
     return idbsupport;
   }
+  f.on=evn.addEventListener;
+  f.off=evn.removeEventListener;
   return {
     storage:f,
     getStorageList:function(){

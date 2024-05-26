@@ -176,6 +176,42 @@
         }
       }
       return true;
+    },
+    checkUrl:function(text){
+      if(text.startsWith('http://')||text.startsWith('https://')){
+        text=text.substring(text.indexOf('://')+3,text.length);
+      }
+      if(text.startsWith(' ')||!text){
+        return false;
+      }else{
+        var domain=text;
+        if(text.indexOf('/')!=-1){
+          domain=text.substring(0,text.indexOf('/'));
+        }
+        if(domain.indexOf(' ')!=-1){
+          return false;
+        }
+        domain=domain.split(':');
+        var host=domain[0].split('.');
+        var port=domain[1];
+        if(domain.indexOf(':')!=-1){
+          if(port.match(/^[0-9]+$/)){
+            port=parseInt(port);
+            if(port<0||port>65535){
+              return false;
+            }
+          }else{
+            return false;
+          }
+        }
+        
+        var d=host[host.length-1];
+        if(host.length<=1||d.length<=1||host.indexOf('')!=-1||['js','ts','txt','jpg','png','gif','ppt','xls','doc','docx','xlsx','zip','rar','7z','exe','dll','md','html','css','vue','mp3','mp4','epub','avi','flv','mpeg','wav','json','ogg'].indexOf(d)!=-1){
+          return false;
+        }else{
+          return true;
+        }
+      }
     }
   }
 })();

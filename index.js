@@ -53,6 +53,7 @@
 
   _REQUIRE_('./js/ignores/index.js');
   _REQUIRE_('./js/update.js');
+  _REQUIRE_('./js/safe.js');
   
 
   window.quik={

@@ -316,10 +316,14 @@
           index3=index3==''?ll:(index3-0);
           link.addLink({
             url,title,index: index3,cate
-          },function(){
-            toast.show('添加成功')
+          },function(r){
+            if(r.code!=0){
+              toast.show(r.msg);
+            }else{
+              toast.show('添加成功')
+              linkaddDialog.close();
+            }
           })
-          linkaddDialog.close();
         });
       }else{
         _n('修改链接','修改',linklist[index].url,linklist[index].title,ll-1,index,function(e){

@@ -11,6 +11,11 @@
   if (!initsto.get('cate')) {
     initsto.set('cate', {});
   }
+  function doevents(ev, ar) {
+    eventfns[ev].forEach(function (fn) {
+      fn.apply(null, [ar]);
+    })
+  }
 
   return {
     addLink: function (detail, callback = function () { }) {
@@ -18,12 +23,14 @@
         throw '参数不正确';
       }
       var lm = limitURL(detail);
+      console.log(lm);
       if (lm) {
         callback({
           code: -3,
           msg: "受限模式下，" + lm + "长度过长",
           lm: lm
         });
+        return;
       }
       if (detail.cate) {
         // 包含分类 
@@ -89,6 +96,7 @@
           msg: "受限模式下，" + lm + "长度过长",
           lm: lm
         });
+        return;
       }
       if (cate) {
         // 包含分类
