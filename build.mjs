@@ -80,8 +80,8 @@ fs.writeFileSync(path.join(__dirname,'docs/version'),v.toString());
 
 qjs(path.join(__dirname,'index.js'), function (code) {
   code=code.replace('\'${VERSION_CODE}\'',v);
-  fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),code);
-  // fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),uglifyJs.minify(code).code);
+  // fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),code);
+  fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),uglifyJs.minify(code).code);
 });
 
 var css=fs.readFileSync(path.join(__dirname,'index.css')).toString();

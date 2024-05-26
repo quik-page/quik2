@@ -15,10 +15,10 @@ const reAddResourcesToCache = async (resources) => {
 self.addEventListener('install', (event) => {
   event.waitUntil(
     addResourcesToCache([
-      '/',
-      '/index.html',
-      '/index.bundle.css',
-      '/index.bundle.js',
+      './',
+      './index.html',
+      './index.bundle.css',
+      './index.bundle.js',
       'https://cdn.bootcdn.net/ajax/libs/localforage/1.10.0/localforage.min.js',
       'https://fonts.loli.net/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
       'https://gstatic.loli.net/s/materialsymbolsoutlined/v164/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2',
@@ -50,10 +50,10 @@ self.addEventListener('fetch',(event)=>{
 self.addEventListener('message',function(ev){
   if(ev.data=='update'){
     reAddResourcesToCache([
-      '/',
-      '/index.html',
-      '/index.bundle.css',
-      '/index.bundle.js'
+      './',
+      './index.html',
+      './index.bundle.css',
+      './index.bundle.js'
     ]).then(function(){
       ev.source.postMessage('updated')
     })
