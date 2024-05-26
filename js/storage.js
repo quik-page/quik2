@@ -5,8 +5,8 @@
 
   var evn=getEventHandle();
 
-  // var idbsupport=localforage._getSupportedDrivers([localforage.INDEXEDDB])[0]==localforage.INDEXEDDB;
-  var idbsupport=false;
+  var idbsupport=localforage._getSupportedDrivers([localforage.INDEXEDDB])[0]==localforage.INDEXEDDB;
+  // var idbsupport=false;
   var filerecv={
     get:function(hash,cb){
       localforage.getItem(hash).then(cb);
