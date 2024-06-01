@@ -4,12 +4,12 @@
     var ev_i=events.length;
     events.push({});
     return {
-      addEventListener:function(ev,fn){
+      on:function(ev,fn){
         if(!events[ev_i][ev]) events[ev_i][ev]=[];
         events[ev_i][ev].push(fn);
         return true;
       },
-      removeEventListener:function(ev,fn){
+      off:function(ev,fn){
         if(!events[ev_i][ev]) return false;
         for(var i=0;i<events[ev_i][ev].length;i++){
           if(events[ev_i][ev][i]===fn){

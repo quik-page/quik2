@@ -88,14 +88,14 @@
             } else {
               p = addon.installByUrl(j.addon);
             }
-            p.addEventListener('error', function (e) {
+            p.on('error', function (e) {
               li.querySelector('.installbtn').innerHTML = '安装失败';
               this.classList.add('err');
             })
-            p.addEventListener('wait',function(r){
+            p.on('wait',function(r){
               r(true);
             })
-            p.addEventListener('done', function (e) {
+            p.on('done', function (e) {
               li.remove();
               setTimeout(function () {
                 importaixr(j, k, getStorageList());

@@ -36,7 +36,7 @@
   var getSearchType=function(){
     return initsto.get('typelist')[initsto.get('type')];
   }
-  var addEventListener=function(ev,fn){
+  var on=function(ev,fn){
     if(events[ev]){
       events[ev].push(fn);
     }else{
@@ -76,7 +76,7 @@
 
   var retob={
     getSearchType:getSearchType,
-    addEventListener:addEventListener,
+    on:on,
     setSearchList:setSearchList,
     getSearchTypeList:getSearchTypeList,
     setSearchType:setSearchType,

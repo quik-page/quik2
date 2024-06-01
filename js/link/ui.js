@@ -183,7 +183,7 @@
     });
   }
 
-  link.addEventListener('change',function(cl){
+  link.on('change',function(cl){
     var actcate=util.query(linkF,'.cate-bar-items .cate-item.active');
     if(cl.cate==actcate.innerText||(cl.cate==null&&actcate.classList.contains('mr'))){
       if(['add','change','delete'].indexOf(cl.type)!=-1){

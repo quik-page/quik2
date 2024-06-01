@@ -1,5 +1,5 @@
 (function(){
-  var {addEventListener,removeEventListener,doevent}=getEventHandle();
+  var {on,off,doevent}=getEventHandle();
   var sg=new SettingGroup({
     title:"搜索框",
     index:1
@@ -17,15 +17,15 @@
     blur:ui.blur,
     isblur:ui.isblur,
     addNewSug:core.addNewSA,
-    addEventListener,
-    removeEventListener,
+    on,
+    off,
     getSearchType:core.searchUtil.getSearchType,
     getSearchTypeList:core.searchUtil.getSearchTypeList,
     getSearchTypeIndex:core.searchUtil.getSearchTypeIndex,
     setSearchType:core.searchUtil.setSearchType,
     setSearchList:core.searchUtil.setSearchList,
     search:{
-      addEventListener:core.searchUtil.addEventListener
+      on:core.searchUtil.on
     },
     sg,
     setAutoFocus:ui.setAutoFocus,

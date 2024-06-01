@@ -484,21 +484,4 @@
 
 `quik.addons.askuninstall(rid:String)`
 
-# 主事件 `quik.addEventListener(event:String,cb:Function)`
 
-- `load`:所有组件和启动项加载完毕
-
-# 添加启动项 （高级）
-
-启动项是起始页显示（加载完成）前的执行内容，你可以通过 `quik.registerStarter(rid:String)` 使插件成为启动项，在插件内部需要这样写：
-
-```javascript
-quik.addons.main(function(options){
-  quik.registerStarter(options.rid);
-  // ...
-  if(options.next){
-    options.next();
-  }
-});
-
-```

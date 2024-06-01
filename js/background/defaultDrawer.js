@@ -168,7 +168,7 @@
   }
   setTimeout(function(){
     selectbgitem(quik.background.getbg());
-    quik.background.addEventListener('change',selectbgitem)
+    quik.background.on('change',selectbgitem)
   });
 
   function _reset(){

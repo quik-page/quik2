@@ -27,13 +27,13 @@
                     },200)
                 }
             }
-            p.addEventListener('status',function(s){
+            p.on('status',function(s){
                 util.query(d,'.msg').innerText=s.msg;
             });
-            p.addEventListener('progress',function(p){
+            p.on('progress',function(p){
                 util.query(d,'.progress .r').style.width=p*100+'%';
             });
-            p.addEventListener('error',function(e){
+            p.on('error',function(e){
                 util.query(d,'.msg').innerText=e.msg;
                 util.query(d,'.progress').className='progress error';
                 util.query(d,'.btns').style.display='block';
@@ -45,7 +45,7 @@
                     },200)
                 }
             });
-            p.addEventListener('wait',function(e,d2){
+            p.on('wait',function(e,d2){
                 if(d2.meta){
                     util.query(d,'.sth img').src=d2.meta.icon;
                     util.query(d,'.sth .name').innerText=d2.meta.name;
@@ -60,7 +60,7 @@
                     e(true)
                 }
             });
-            p.addEventListener('done',function(){
+            p.on('done',function(){
                 console.log('a');
                 _.hide();
                 setTimeout(function(){

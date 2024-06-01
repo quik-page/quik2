@@ -1,5 +1,4 @@
 (function () {
-  var { addEventListener, removeEventListner, doevent } = getEventHandle();
   var core = _REQUIRE_('./_core.js');
   var ui = _REQUIRE_('./install_ui.js');
   var addon_dialog = new dialog({
@@ -35,7 +34,7 @@
           var u = new ui();
           u.show();
           u.bind(p);
-          p.addEventListener('done', function (a) {
+          p.on('done', function (a) {
             alert('安装成功');
             console.log(a);
           });
@@ -223,10 +222,10 @@
     alert('已在安全模式下运行，插件功能已关闭！')
   }
   
-  core.addEventListener('installnew',function(e){
+  core.on('installnew',function(e){
     xraddon(e.id);
   })
-  core.addEventListener('uninstall',function(e){
+  core.on('uninstall',function(e){
     var li = util.query(addon_l, 'li[data-id="' + e.id + '"]');
     if(li){li.remove()}
   })

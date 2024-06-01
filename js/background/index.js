@@ -19,8 +19,8 @@
 
 
   var eventHandle=getEventHandle();
-  var addEventListener=eventHandle.addEventListener;
-  var removeEventListener=eventHandle.removeEventListener;
+  var on=eventHandle.on;
+  var off=eventHandle.off;
   var doevent=eventHandle.doevent;
   var bgf = util.element('div', {
     class: "bgf"
@@ -263,8 +263,8 @@
     pushBgDrawer,
     getbg,
     setbg,
-    addEventListener,
-    removeEventListener
+    on,
+    off
   }
 
 })();

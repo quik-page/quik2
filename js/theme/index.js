@@ -3,8 +3,8 @@
   // 等待重构
 
   var eventHandle=getEventHandle();
-  var addEventListener=eventHandle.addEventListener;
-  var removeEventListener=eventHandle.removeEventListener;
+  var on=eventHandle.on;
+  var off=eventHandle.off;
   var doevent=eventHandle.doevent;
   var initsto=storage('theme',{
     sync:true,
@@ -73,7 +73,7 @@
     var d=window.matchMedia('(prefers-color-scheme: dark)');
     console.log(d);
     d.matches?document.body.classList.add('dark'):document.body.classList.remove('dark');
-    d.addEventListener('change', e => {
+    d.on('change', e => {
       if(e.matches){
         document.body.classList.add('dark');
         doevent('change',['dark']);
@@ -97,8 +97,8 @@
       checkTheme(v);
       si.reGet();
     },
-    addEventListener,
-    removeEventListener,
+    on,
+    off,
     getTheme,
   }
 })()

@@ -9,7 +9,7 @@
     link=_REQUIRE_('./_localstorage.js');
   }
   var ui=_REQUIRE_('./ui.js');
-  link.addEventListener('change',function(e){
+  link.on('change',function(e){
     initsto.websync(e);
   })
   return util.joinObj(link,ui);

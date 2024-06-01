@@ -133,8 +133,8 @@
   f.checkIDB=function(){
     return idbsupport;
   }
-  f.on=evn.addEventListener;
-  f.off=evn.removeEventListener;
+  f.on=evn.on;
+  f.off=evn.off;
   return {
     storage:f,
     getStorageList:function(){

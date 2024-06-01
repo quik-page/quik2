@@ -144,14 +144,14 @@
           }else{
             _pu();
           }
-          p.addEventListener('done',function(){
+          p.on('done',function(){
             _pu();
           })
-          p.addEventListener('error',function(){
+          p.on('error',function(){
             _pu();
             alert('安装一个插件时失败');
           })
-          p.addEventListener('wait',function(r){r(true)});
+          p.on('wait',function(r){r(true)});
         }
         function _pu(){
           i++;
@@ -191,8 +191,8 @@
     this.errorMsg='';
     this.result=null;
     this.ev=getEventHandle();
-    this.addEventListener=this.ev.addEventListener;
-    this.removeEventListener=this.ev.removeEventListener;
+    this.on=this.ev.on;
+    this.off=this.ev.off;
   }
   addonInstallProcess.prototype={
     setProgress:function(n){
@@ -533,7 +533,7 @@
     getAddonBySessionId,
     getAddonList,
     getEnable,
-    addEventListener:evn.addEventListener,
-    removeEventListener:evn.removeEventListener
+    on:evn.on,
+    off:evn.off
   }
 })();

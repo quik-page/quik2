@@ -236,12 +236,12 @@
   })
   
 
-  core.searchUtil.addEventListener('nowtypechange',function(){
+  core.searchUtil.on('nowtypechange',function(){
     if(icon.getAttribute('data-teshu')==':searchtype'){
       chulitype(input.value);
     }
   })
-  core.searchUtil.addEventListener('typelistchange',function(){
+  core.searchUtil.on('typelistchange',function(){
     chuliSearchTypeSelector();
   })
   chuliSearchTypeSelector();

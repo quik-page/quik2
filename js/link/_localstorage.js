@@ -342,14 +342,14 @@
     ready: function (fn) {
       fn();
     },
-    addEventListener: function (event, fn) {
+    on: function (event, fn) {
       if (eventfns[event]) {
         eventfns[event].push(fn);
       } else {
         eventfns[event] = [fn];
       }
     },
-    removeEventListener: function (event, fn) {
+    off: function (event, fn) {
       if (eventfns[event]) {
         eventfns[event].forEach(function (item, index) {
           if (item === fn) {
