@@ -25,8 +25,14 @@
 .addon-bar .l .item:hover{
   background-color: #eee;
 }
+body.dark .addon-bar .l .item{
+  color: #fff;
+}
+body.dark .addon-bar .l .item:hover{
+  background-color: #555;
+}
 .addon-bar .l .item.active{
-  background: #09f;
+  background: #09f!important;
   color: #fff;
 }
 .d-c.addon-dialog .content .p{
@@ -39,8 +45,17 @@
   overflow: hidden;
   transition: all .2s;
 }
+body.dark .d-c.addon-dialog .p ul li{
+  border-bottom: #555 solid 1px;
+}
 .d-c.addon-dialog .p ul li:hover{
   background-color: #f4f4f4;
+}
+body.dark .d-c.addon-dialog .p ul li:hover{
+  background-color: #555;
+}
+body.dark .d-c.addon-dialog .p ul li.active{
+  background-color: #333;
 }
 .d-c.addon-dialog .p ul li.active{
   height: 150px;
