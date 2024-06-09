@@ -135,8 +135,8 @@
     },
     get:function(text,getsa){
       return new Promise(function(r,j){
-        var a2=getsa();
         searchfetch=util.jsonp('https://www.baidu.com/sugrec?pre=1&p=3&ie=utf-8&json=1&prod=pc&from=pc_web&wd='+text,function(res){
+          var a2=getsa();
           searchfetch=null;
           if(!res.g){
             r(a2);

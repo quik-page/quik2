@@ -131,4 +131,8 @@
     thaDialog.close();
   }
 
+  return {
+    lic:lichtml
+  };
+
 })();

@@ -79,8 +79,7 @@
   padding:10px 10px;
   margin: 5px 10px;
   border-radius: 10px;
-  background-color: rgba(255, 255, 255,.6);
-  transition: all .1s;
+  background-color: rgba(243, 243, 243,.6);
   box-shadow: none;
 }
 .links ul.link-list li a p{
@@ -88,7 +87,7 @@
   text-align: center;
 }
 .links ul.link-list li a:hover img{
-  background-color: rgb(235, 235, 235,.6);
+  background-color: rgb(210, 210, 210,.6);
   box-shadow: 0 0 5px rgba(0,0,0,.1);
 }
 .links ul.link-list.xs li{

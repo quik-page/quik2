@@ -68,21 +68,21 @@
           }else{
             confirm('该背景数据需要安装插件以同步，是否安装？',function(v){
               if(v){
-                quik.addon.installAddon(a.requireAddon).then(function(_addon){
-                  a.bg.type=_addon.session.id;
+                var p=addon.installAddon(a.requireAddon);
+                p.on('error', function (e) {
+                  alert('插件安装失败，同步取消',function(){
+                    resolve();
+                  })
+                });
+                p.on('wait',function(r){
+                  r(true);
+                });
+                p.on('done', function (e) {
+                  a.bg.type=e.id;
                   ast[k]=a;
                   resolve();
-                }).catch(function(code){
-                  if(code==0){
-                    alert('插件取消安装，同步取消',function(){
-                      resolve();
-                    })
-                  }else{
-                    alert('插件安装失败，同步取消',function(){
-                      resolve();
-                    })
-                  }
                 });
+                
               }else{
                 alert('已取消背景同步',function(){
                   resolve();
@@ -193,7 +193,7 @@
     }
     var bgdrawerid = 'bgdrawer-' + idmax;
     idmax++;
-    drawer.id = bgdrawerid;
+    drawer.type = bgdrawerid;
     drawers.push(drawer);
     dodrawer(drawer);
     onbgdrawersign(drawer);
@@ -213,7 +213,7 @@
   function onbgdrawersign(drawer) {
     if(waitdraw){
       if(drawer.type==waitdraw.type){
-        drawers[i].draw({
+        drawer.draw({
           bgf:bgf,data:waitdraw.data
         })
       }

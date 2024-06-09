@@ -60,6 +60,7 @@
     this.closed=true;
     return d;
   }
+  dialog.getDialogById=getDialogById;
 
   dialog.prototype={
     open:function(){

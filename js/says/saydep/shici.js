@@ -23,7 +23,7 @@
       return request(callback,"https://v2.jinrishici.com/one.json?client=browser-sdk/1.2&X-User-Token="+encodeURIComponent(key))
     }else{
       return request(function(res){
-        initsto.set(tokenStorageKey,res.token);
+        jinrishicisto.set(tokenStorageKey,res.token);
         callback(res);
       },"https://v2.jinrishici.com/one.json?client=browser-sdk/1.2")
     }

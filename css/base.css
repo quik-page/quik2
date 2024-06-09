@@ -16,10 +16,13 @@ body.dark{
   color: #fff;
   color-scheme: dark;
 }
-body.dark main .logo,
-body.t-dark main .logo
+main .logo svg{
+  stroke: #000;
+}
+body.dark main .logo svg,
+body.t-dark main .logo svg
 {
-  filter: invert(1);
+  stroke: #fff;
 }
 main{
   position: absolute;

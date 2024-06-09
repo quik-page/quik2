@@ -1,0 +1,90 @@
+.d-c.oobedia{
+    width: 600px;
+    height: 400px;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  @media (max-width:600px){
+    .dialog.mobile-show-full .d-c.oobedia{
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+.oobedia .part{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    display: none;
+    transition: all .3s;
+    transform: scale(.8);
+    opacity: 0;
+    position: absolute;
+    top:0;
+    left:0;
+}
+.oobedia .part.show{
+    display: block;
+    transform: scale(1);
+    opacity: 1;
+}
+.oobedia .part.n{
+    display: block;
+    transform: translateX(-100%);
+    opacity: 1;
+}
+.oobedia .part .lic-c{
+    width: 100%;
+    height: calc(100% - 40px);
+    overflow-y: auto;
+}
+.oobedia .part .btns{
+    float: right;
+    padding-top: 10px;
+}
+.lic-c h1{
+    text-align: center;
+    color: #09f;
+    text-shadow: #aaa 0 1px 5px;
+    line-height: 60px;
+    font-size: 26px;
+}
+.lic-c h2{
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 60px;
+}
+.lic-c p{
+    line-height: 1.5em;
+}
+.oobedia .imglogo{
+    width: 300px;
+    margin: 40px auto;
+}
+.oobedia .biaoyu{
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 10px;
+    line-height: 40px;
+    text-shadow: #aaa 0 1px 5px;
+}
+.oobedia .clist{
+    padding-top: 30px;
+}
+.oobedia .clist .item{
+    width: 60%;
+    font-size: 20px;
+    text-align: center;
+    color: #09f;
+    margin: 5px auto;
+    cursor: pointer;
+    user-select: none;
+    line-height: 40px;
+    transition: all .3s;
+}
+.oobedia .clist .item:hover{
+    box-shadow: #aaa 0 1px 5px inset;
+}

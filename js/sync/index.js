@@ -10,52 +10,54 @@
     title: "导出数据",
     message: "导出数据到文件",
     type: "null",
-    callback: function () {
-      exportDataDialog.open();
-      var jl = getStorageList();
-      for (var k in jl) {
-        if (!jl[k] || !jl[k].sync) {
-          continue;
-        }
-        var j = jl[k];
-        var li = document.createElement('div');
-        li.classList.add('item');
-        li.innerHTML = `<input type="checkbox"/><div class="message">
-          <div class="title">${j.title || k}</div>
-          <div class="desc">${j.desc || ''}</div>
-        </div>`;
-        li.dataset.key = k;
-        util.query(dm, '.exportslist').appendChild(li);
-        util.query(li, 'input').checked = true;
-      }
-    }
+    callback: openExport
   });
+  function openExport() {
+    exportDataDialog.open();
+    var jl = getStorageList();
+    for (var k in jl) {
+      if (!jl[k] || !jl[k].sync) {
+        continue;
+      }
+      var j = jl[k];
+      var li = document.createElement('div');
+      li.classList.add('item');
+      li.innerHTML = `<input type="checkbox"/><div class="message">
+        <div class="title">${j.title || k}</div>
+        <div class="desc">${j.desc || ''}</div>
+      </div>`;
+      li.dataset.key = k;
+      util.query(dm, '.exportslist').appendChild(li);
+      util.query(li, 'input').checked = true;
+    }
+  }
   var importDataSi = new SettingItem({
     title: "导入数据",
     message: "从文件导入数据",
     type: "null",
-    callback: function () {
-      showOpenFilePicker().then(function (files) {
-        var file = files[0];
-        if (file) {
-          try {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-              sl = JSON.parse(e.target.result);
-              var jl = getStorageList();
-              importDataDialog.open();
-              for (var k in sl) {
-                importaixr(sl[k], k, jl);
-              }
-            }
-            reader.readAsText(file);
-          } catch (e) {
-            alert('读取文件有误！');
-          }
-        }
-      })
-    }
+    callback: openImport
   });
+  function openImport() {
+    showOpenFilePicker().then(function (files) {
+      var file = files[0];
+      if (file) {
+        try {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            sl = JSON.parse(e.target.result);
+            var jl = getStorageList();
+            importDataDialog.open();
+            for (var k in sl) {
+              importaixr(sl[k], k, jl);
+            }
+          }
+          reader.readAsText(file);
+        } catch (e) {
+          alert('读取文件有误！');
+        }
+      }
+    })
+  }
   sg.addNewItem(exportDataSi);
   sg.addNewItem(importDataSi);
   mainSetting.addNewGroup(sg);
@@ -201,6 +203,8 @@
 
   return {
     getJSON,
-    setJSON
+    setJSON,
+    openImport,
+    openExport
   }
 })()

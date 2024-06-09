@@ -51,12 +51,19 @@
   var lite=_REQUIRE_('./js/lite.js');
   var hotkey=_REQUIRE_('./js/hotkey.js');
 
-  _REQUIRE_('./js/ignores/index.js');
+  var ignores=_REQUIRE_('./js/ignores/index.js');
   _REQUIRE_('./js/update.js');
   _REQUIRE_('./js/safe.js');
+  _REQUIRE_('./js/oobe/index.js');
   
+  function addStyle(css){
+    var style=util.element('style');
+    style.innerHTML=css;
+    document.head.appendChild(style);
+  }
 
   window.quik={
+    lite,
     sync,
     addon:{
       installByOffcialMarket:addon.upinstallByOffcialMarMarket,
@@ -88,7 +95,8 @@
     confirm,
     prompt,
     theme,
-    card
+    card,
+    addStyle
   }
   clearTimeout(loadingtimeout);
   document.querySelector("main").style.display='block';

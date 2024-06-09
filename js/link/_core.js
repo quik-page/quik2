@@ -32,6 +32,7 @@ var initsto = storage('link', {
         })
       }else{
         ast[k]=a;
+        r();
       }
     })
     

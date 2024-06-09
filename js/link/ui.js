@@ -416,7 +416,7 @@
   // initLinks();
 
   if(typeof initsto.get('enabledCate')=='undefined'){
-    initsto.set('enabledCate',true);
+    initsto.set('enabledCate',false);
   }
 
   if(!initsto.get('linksize')){

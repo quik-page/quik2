@@ -11,6 +11,6 @@
   var ui=_REQUIRE_('./ui.js');
   link.on('change',function(e){
     initsto.websync(e);
-  })
+  });
   return util.joinObj(link,ui);
 })();

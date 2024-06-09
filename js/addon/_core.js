@@ -124,6 +124,7 @@
     desc:"QUIK起始页插件数据（暂未开发完）",
     rewrite:function(ast,k,a){
       return new Promise(function(r){
+        if(Object.keys(a).length==0){r();return;}
         var d=new dialog({
           content:"<div>正在同步插件...[<span>0</span>/"+Object.keys(a).length+"]</div>",
           class:"dialog-addon-install",
@@ -357,6 +358,8 @@
       url:devurl,
       type:"dev"
     });
+    evn.doevent('installnew',[{id:adid}])
+    runAddon(adid);
     return adid;
   }
 

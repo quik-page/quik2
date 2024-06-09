@@ -72,11 +72,11 @@
             var d=this._d.getDialogDom();
             util.query(d,'.msg').innerText=msg;
             util.query(d,'.btns').style.display='block';
-            util.query(d,'.l').onclick=function(){
+            util.query(d,'.btn.l').onclick=function(){
                 fn(false);
                 util.query(d,'.btns').style.display='none';
-            }
-            util.query(d,'.r').onclick=function(){
+            };
+            util.query(d,'.btn.r').onclick=function(){
                 fn(true);
                 util.query(d,'.btns').style.display='none';
             }

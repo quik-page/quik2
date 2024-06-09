@@ -17,6 +17,7 @@
     blur:ui.blur,
     isblur:ui.isblur,
     addNewSug:core.addNewSA,
+    addNewType:core.addNewType,
     on,
     off,
     getSearchType:core.searchUtil.getSearchType,
@@ -24,6 +25,7 @@
     getSearchTypeIndex:core.searchUtil.getSearchTypeIndex,
     setSearchType:core.searchUtil.setSearchType,
     setSearchList:core.searchUtil.setSearchList,
+    keywordText:core.searchUtil.keywordText,
     search:{
       on:core.searchUtil.on
     },

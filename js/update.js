@@ -7,7 +7,7 @@
     log:[
       {
         tag:"new",
-        content:"新增了很多方便的功能",
+        content:"新增了开箱体验",
       }
     ]
   }
