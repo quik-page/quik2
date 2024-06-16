@@ -1,5 +1,109 @@
 (function(){
+  if(location.hash=='#extdheodqp2eidhjwe'){
+    console.log('插件模式');
+    window.isExt=true;
+  }else{
+    console.log('网页模式');
+    window.isExt=false;
+  }
+
+  var extRequests=[],idmax=0;
+  window.addEventListener('message',function(e){
+    if(e.data.type=='xhr_cb'){
+      var id=e.data.id;
+      for(var i=0;i<extRequests.length;i++){
+        if(extRequests[i].id==id){
+          if(typeof extRequests[i][e.data.fn]=='function'){
+            extRequests[i][e.data.fn](e.data.data);
+          }
+          if(e.data.finish==true){
+            extRequests.slice(i,1);
+          }
+          break;
+        }
+      }
+    }
+  })
   return {
+    // https://blog.csdn.net/qq_25257229/article/details/117969685
+    deepClone:function deepClone(target) {
+      const map = new WeakMap()
+      
+      function isObject(target) {
+          return (typeof target === 'object' && target ) || typeof target === 'function'
+      }
+  
+      function clone(data) {
+          if (!isObject(data)) {
+              return data
+          }
+          if ([Date, RegExp].includes(data.constructor)) {
+              return new data.constructor(data)
+          }
+          if (typeof data === 'function') {
+              return new Function('return ' + data.toString())()
+          }
+          const exist = map.get(data)
+          if (exist) {
+              return exist
+          }
+          if (data instanceof Map) {
+              const result = new Map()
+              map.set(data, result)
+              data.forEach((val, key) => {
+                  if (isObject(val)) {
+                      result.set(key, clone(val))
+                  } else {
+                      result.set(key, val)
+                  }
+              })
+              return result
+          }
+          if (data instanceof Set) {
+              const result = new Set()
+              map.set(data, result)
+              data.forEach(val => {
+                  if (isObject(val)) {
+                      result.add(clone(val))
+                  } else {
+                      result.add(val)
+                  }
+              })
+              return result
+          }
+          const keys = Reflect.ownKeys(data)
+          const allDesc = Object.getOwnPropertyDescriptors(data)
+          const result = Object.create(Object.getPrototypeOf(data), allDesc)
+          map.set(data, result)
+          keys.forEach(key => {
+              const val = data[key]
+              if (isObject(val)) {
+                  result[key] = clone(val)
+              } else {
+                  result[key] = val
+              }
+          })
+          return result
+      }
+  
+      return clone(target)
+  },
+    requestByExt:function(details){
+      idmax++;
+      details.id=idmax;
+      extRequests.push(details);
+      var d=this.deepClone(details);
+      for(var k in d){
+        if(typeof d[k]=='function'){
+          d[k]={_t:"fn",_n:k}
+        }
+      }
+      parent.postMessage({
+        type:"xhr",
+        data:d,
+        id:idmax
+      },'*')
+    },
     initSet:function(sto,key,ob){
       var o=sto.get(key);
       if(typeof o=='object'&&o){
