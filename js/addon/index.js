@@ -17,12 +17,6 @@
 
   var addon_menu = new menu({
     list: [{
-      icon: util.getGoogleIcon('f1cc'),
-      title: "从插件市场添加插件",
-      click: function () {
-        // TODO
-      }
-    }, {
       icon: util.getGoogleIcon('e157'),
       title: "从第三方链接添加插件",
       click: function () {

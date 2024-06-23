@@ -104,6 +104,11 @@
         id:idmax
       },'*')
     },
+    addStyle:function addStyle(css){
+      var style=util.element('style');
+      style.innerHTML=css;
+      document.head.appendChild(style);
+    },
     initSet:function(sto,key,ob){
       var o=sto.get(key);
       if(typeof o=='object'&&o){

@@ -19,10 +19,35 @@ body.dark{
 main .logo svg{
   stroke: #000;
 }
+body.dark main .logo .timelogo,
+body.t-dark main .logo .timelogo
+{
+  color: #fff;
+  text-shadow: #000 0 1px 5px;
+}
 body.dark main .logo svg,
 body.t-dark main .logo svg
 {
   stroke: #fff;
+}
+main .logo .timelogo{
+  text-align: center;
+  line-height: 90px;
+  font-size: 46px;
+  color: #000;
+  text-shadow: #fff 0 1px 5px;
+}
+main .logo .timelogo span.i{
+  animation: xhshow 1.5s ease-in-out infinite;
+}
+@keyframes xhshow {
+  0%{
+    opacity: 1;
+  }50%{
+    opacity: 0;
+  }100%{
+    opacity: 1;
+  }
 }
 main{
   position: absolute;
@@ -88,6 +113,9 @@ li{
   main .logo{
     width: 200px;
     height: 60px;
+  }
+  main .logo .timelogo{
+    line-height: 60px;
   }
 }
 @media (max-height:400px){

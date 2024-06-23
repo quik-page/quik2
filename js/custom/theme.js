@@ -1,15 +1,6 @@
 (function(){
 
   // 等待重构
-
-  var eventHandle=getEventHandle();
-  var on=eventHandle.on;
-  var off=eventHandle.off;
-  var doevent=eventHandle.doevent;
-  var initsto=storage('theme',{
-    sync:true,
-    title:"主题设置",
-  });
   var n=null;
   if(!initsto.get('theme')){
     initsto.set('theme','a');
@@ -40,20 +31,20 @@
     if(_g!=3){_g=false;}
     if(v=='b'){
       document.body.classList.add('dark');
-      doevent('change',['dark']);
+      doevent('themechange',['dark']);
       n='dark';
     }else if(v=='a'){
       document.body.classList.remove('dark');
-      doevent('change',['light']);
+      doevent('themechange',['light']);
       n='light'
     }else if(v=='c'){
       if(new Date().getHours()>=18||new Date().getHours()<6){
         document.body.classList.add('dark');
-        doevent('change',['dark']);
+        doevent('themechange',['dark']);
         n='dark';
       }else{
         document.body.classList.remove('dark');
-        doevent('change',['light']);
+        doevent('themechange',['light']);
         n='light'
       }
     }else if(v=='d'){
@@ -71,16 +62,15 @@
   }
   function listenTheme(){
     var d=window.matchMedia('(prefers-color-scheme: dark)');
-    console.log(d);
     d.matches?document.body.classList.add('dark'):document.body.classList.remove('dark');
-    d.on('change', e => {
+    d.addEventListener('change', e => {
       if(e.matches){
         document.body.classList.add('dark');
-        doevent('change',['dark']);
+        doevent('themechange',['dark']);
         n='dark';
       }else{
         document.body.classList.remove('dark');
-        doevent('change',['light']);
+        doevent('themechange',['light']);
         n='light'
       }
     });

@@ -44,29 +44,22 @@
   var background=_REQUIRE_('./js/background/index.js');
   var searchEditor=_REQUIRE_('./js/search/editor.js');
   var notice=_REQUIRE_('./js/notice/index.js');
-  var theme=_REQUIRE_('./js/theme/index.js');
+  var custom=_REQUIRE_('./js/custom/index.js');
   var addon=_REQUIRE_('./js/addon/index.js');
   let {alert,confirm,prompt}=_REQUIRE_('./js/dialog/dialog_utils.js');
   var sync=_REQUIRE_('./js/sync/index.js');
-  var lite=_REQUIRE_('./js/lite.js');
   var hotkey=_REQUIRE_('./js/hotkey.js');
 
   var ignores=_REQUIRE_('./js/ignores/index.js');
   _REQUIRE_('./js/update.js');
   _REQUIRE_('./js/safe.js');
   _REQUIRE_('./js/oobe/index.js');
-  
-  function addStyle(css){
-    var style=util.element('style');
-    style.innerHTML=css;
-    document.head.appendChild(style);
-  }
 
   window.quik={
-    lite,
+    custom,
     sync,
     addon:{
-      installByOffcialMarket:addon.upinstallByOffcialMarMarket,
+      installByOffcialMarket:addon.upinstallByOffcialMarket,
       installByUrl:addon.upinstallByUrl,
       uninstall:addon.upuninstall,
       update:addon.upupdate,
@@ -94,9 +87,7 @@
     alert,
     confirm,
     prompt,
-    theme,
-    card,
-    addStyle
+    card
   }
   clearTimeout(loadingtimeout);
   document.querySelector("main").style.display='block';

@@ -1,9 +1,4 @@
 (function(){
-  var initsto=storage('lite',{
-    sync:true,
-    title:"极简模式"
-  });
-
   util.initSet(initsto,'linkblur',true);
   var si=new SettingItem({
     index:2,

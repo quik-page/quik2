@@ -5,7 +5,7 @@
             mainSetting.open();
         }else if(e.key=='x'&&e.altKey){
             e.preventDefault();
-            lite.set(!lite.get());
+            custom.setLite(!custom.isLite());
         }else if(e.key=='g'&&e.altKey){
             e.preventDefault();
             link.setShowCate(!link.isShowCate());
