@@ -29,6 +29,12 @@
   height: 100%;
   object-fit: cover;
   object-position: center center;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.bgf .img-sp,
+.bgf .video-sp{
+  background-color: #333;
 }
 .d-c.bg_d{
   width: 600px;
@@ -275,4 +281,21 @@ body.dark .u-se:hover{
 }
 .u-se p:nth-child(2){
   float: right;
+}
+.cards .card.bing_info{
+  background-color: rgba(0,0,0,.1);
+  color: #fff;
+}
+.cards .card.bing_info a{
+  color: #fff;
+}
+.cards .card.bing_info .copyright{
+  font-size: 18px;
+}
+.cards .card.bing_info .second{
+  font-size: 12px;
+}
+.cards .card.bing_info .title{
+  font-size: 16px;
+  padding: 10px 0;
 }

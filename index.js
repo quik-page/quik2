@@ -40,13 +40,13 @@
   var omnibox=_REQUIRE_('./js/omnibox/index.js');
   var link=_REQUIRE_('./js/link/index.js');
   var says=_REQUIRE_('./js/says/index.js');
+  var card=_REQUIRE_('./js/card/index.js');
   var background=_REQUIRE_('./js/background/index.js');
   var searchEditor=_REQUIRE_('./js/search/editor.js');
   var notice=_REQUIRE_('./js/notice/index.js');
   var theme=_REQUIRE_('./js/theme/index.js');
   var addon=_REQUIRE_('./js/addon/index.js');
   let {alert,confirm,prompt}=_REQUIRE_('./js/dialog/dialog_utils.js');
-  var card=_REQUIRE_('./js/card/index.js');
   var sync=_REQUIRE_('./js/sync/index.js');
   var lite=_REQUIRE_('./js/lite.js');
   var hotkey=_REQUIRE_('./js/hotkey.js');
@@ -101,4 +101,5 @@
   clearTimeout(loadingtimeout);
   document.querySelector("main").style.display='block';
   document.querySelector(".loading-f").classList.add('h');
+  document.querySelector(".loading-f").style.display='none'
 })();

@@ -43,11 +43,13 @@
     }
     this.el=c_el;
     cardcon.appendChild(c_el);
+    this.isShow=false;
   }
 
   card.prototype={
     show:function(transition){
       var _=this;
+      _.isShow=true;
       this.el.style.display='block';
       if(transition&&transition>0){
         this.el.style.transition='all '+transition+'ms';
@@ -60,6 +62,7 @@
     },
     hide:function(transition){
       var _=this;
+      _.isShow=false;
       if(transition&&transition>0){
         this.el.style.transition='all '+transition+'ms';
         setTimeout(function(){

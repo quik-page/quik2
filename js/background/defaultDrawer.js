@@ -31,14 +31,44 @@
     content:util.getGoogleIcon('e88e'),
     offset:"br",
     important:true
-  })
+  });
+  var infoCard=new card({
+    content:`<div class="copyright">...</div>
+      <div class="second">...</div>
+      <div class="title">...</div>
+      <a class="link" target="_blank" href="https://www.bing.com/">去Bing搜索</a>`,
+    offset:{
+      right:5,
+      bottom:50
+    },
+    class:"bing_info"
+  });
   infoIcon.getIcon().onclick=function(){
-    window.open('https://bing.com/');
+    if(infoCard.isShow){
+      infoCard.hide(400);
+    }else{
+      infoCard.show(400);
+      getBingWallPaperInfo(function(r){
+        var infoCardF=infoCard.getCardDom();
+        util.query(infoCardF,'.copyright').innerText=r.copyright;
+        util.query(infoCardF,'.second').innerText=r.second_copyright;
+        util.query(infoCardF,'.title').innerText=r.title;
+        util.query(infoCardF,'.link').href=r.link;
+      })
+    }
+    
   }
-  infoIcon.getIcon().title='去往必应首页';
+  infoIcon.getIcon().title='显示壁纸详情';
 
   refreshApiIcon.getIcon().onclick=function(){
-    refreshFn.call(this);
+    var a=document.querySelector('.bgf .full img');
+    if(a){
+      a.style.opacity='0';
+    }
+    var _=this;
+    setTimeout(function(){
+      refreshFn.call(_);
+    },300)
   };
 
   //时间的颜色API
@@ -51,6 +81,34 @@
     
   }
 
+  var infocache;
+  function getBingWallPaperInfo(fn){
+    if(infocache){
+      fn(infocache);
+    }else{
+      util.xhr('https://bing.shangzhenyang.com/api/json',function(r){
+        r=JSON.parse(r);
+        var a=r.images[0];
+        var b=a.copyright.split('(');
+        b[1]='('+b[1];
+        infocache={
+          copyright:b[0],
+          second_copyright:b[1],
+          link:a.copyrightlink,
+          title:a.title
+        };
+        fn(infocache)
+      },function(){
+        fn({
+          copyright:"加载失败",
+          second_copyright:"(© Bing)",
+          link:"https://www.bing.com/",
+          title:"点击前往必应"
+        })
+      })
+    }
+  }
+
   var {ImgOrVideoSi,checkBgCoverStyle}=_REQUIRE_('./_defaultDrawer/ivbgse.js');
 
   // dot-timeb
@@ -60,6 +118,9 @@
   var draws={
     img:function(bgf,data){
       bgf.innerHTML='<div class="img-sp full"><div class="cover"></div><img src="'+data.url+'"/></div>';
+      bgf.querySelector('img').onload=function(){
+        this.style.opacity='1';
+      }
       checkBgCoverStyle();
       ImgOrVideoSi.show();
     },
@@ -68,6 +129,7 @@
       util.query(bgf,'.video-sp video').src=data.url;
       util.query(bgf,'.video-sp video').oncanplay=function(){
         this.play();
+        this.style.opacity='1';
       }
       checkBgCoverStyle();
       ImgOrVideoSi.show();

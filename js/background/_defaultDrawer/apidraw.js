@@ -13,7 +13,7 @@ function api(bgf,data){
     })
     refreshFn=function(){
       refreshApiIcon.getIcon().classList.add('round-anim');
-      acgbg.getImg(function(d){
+      a.getImg(function(d){
         refreshApiIcon.getIcon().classList.remove('round-anim');
         draws.img(bgf,{
           url:d.url
