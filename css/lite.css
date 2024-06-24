@@ -43,6 +43,10 @@ body.lite main .center .logo{
   opacity: 1;
   pointer-events: all;
 }
+body.lite.showall .fcard-frame{
+  opacity: 0;
+  pointer-events: none;
+}
 body.lite .searchbox{
   top:200px;
   opacity: 1;

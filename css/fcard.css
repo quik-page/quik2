@@ -1,0 +1,62 @@
+.fcard-frame{
+    width: 360px;
+    height: 160px;
+    position: absolute;
+    top:40px;
+    left:0px;
+    z-index: 4;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transition: opacity .3s;
+}
+.fcard{
+    width: 300px;
+    margin: 10px auto;
+    border-radius: 10px;
+    background-color: #fff;
+    min-height: 50px;
+    padding: 5px;
+    position: relative;
+}
+body.dark .fcard{
+    background-color: #333;
+}
+.fcard-frame.sort .fcard .cover{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left:0;
+}
+.fcard-mob-zd{
+    position: absolute;
+    top: 100px;
+    left:0px;
+    display: none;
+}
+@media(max-width:980px){
+    .fcard-frame{
+        width: 320px;
+    }
+}
+@media(max-width:900px){
+    .fcard-frame{
+        max-width: 400px;
+        left: -400px;
+        transition: left .3s;
+        width: 100%;
+        height: 300px;
+        backdrop-filter: blur(10px);
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+    .fcard-frame.show{
+        left: 0;
+    }
+    .fcard-mob-zd{
+        display: block;
+    }
+    .fcard-mob-zd.hide{
+        display: none;
+    }
+}

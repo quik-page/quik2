@@ -95,7 +95,7 @@ main .logo{
   width: 300px;
   margin: 0px auto;
   height: 90px;
-  padding-top: 30px;
+  padding-top: 60px;
 }
 li{
   list-style: none;
@@ -113,6 +113,7 @@ li{
   main .logo{
     width: 200px;
     height: 60px;
+    padding-top: 30px;
   }
   main .logo .timelogo{
     line-height: 60px;

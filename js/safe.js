@@ -79,4 +79,32 @@
     }
 
     doxnse(!!initsto.get('xnse'));
+
+    window.addEventListener('offline',ckline)
+    window.addEventListener('online',ckline)
+
+    var offlineIcon=new iconc.icon({
+        content:util.getGoogleIcon('f239'),
+        offset:"br",
+        important:true
+    })
+    offlineIcon.getIcon().style.color='red';
+
+    var offlineNotice=new notice({
+        title:"断网提醒",
+        content:"您的网络已断开，请尽快重连！"
+    })
+
+    function ckline(){
+        if(!window.navigator.onLine){
+            offlineNotice.show()
+            offlineNotice.focus();
+            offlineIcon.show();
+        }else{
+            offlineNotice.hide();
+            offlineIcon.hide();
+        }
+    }
+
+    ckline();
 })();
