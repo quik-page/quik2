@@ -248,11 +248,11 @@
 
   // 初始化处理（默认是搜索模式）
   chulitype('');
-  if(core.initsto.get('autofocus')==undefined){
-    core.initsto.set('autofocus',false);
+  if(core.initsto.get('ob_autofocus')==undefined){
+    core.initsto.set('ob_autofocus',false);
   }
 
-  if(core.initsto.get('autofocus')){
+  if(core.initsto.get('ob_autofocus')){
     // @note 这样才能生效，也许是因为浏览器还没渲染好吧
     // @edit at 2024年1月30日 15点10分
     setTimeout(function(){
@@ -267,10 +267,10 @@
     type:'boolean',
     message:"打开页面自动聚焦搜索框",
     get:function(){
-      return !!core.initsto.get('autofocus');
+      return !!core.initsto.get('ob_autofocus');
     },
     callback:function(value){
-      core.initsto.set('autofocus',value);
+      core.initsto.set('ob_autofocus',value);
       return true;
     }
   })
@@ -292,7 +292,7 @@
       return !input.classList.contains('active');
     },
     setAutoFocus:function(value){
-      core.initsto.set('autofocus',value);
+      core.initsto.set('ob_autofocus',value);
       si.reGet();
     }
   }

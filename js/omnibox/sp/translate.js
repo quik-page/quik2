@@ -5,10 +5,10 @@
         type:'boolean',
         message:"搜索框输入非中文时自动翻译为中文",
         get:function(){
-            return !!core.initsto.get('tran');
+            return !!core.initsto.get('ob_tran');
         },
         callback:function(value){
-            core.initsto.set('tran',value);
+            core.initsto.set('ob_tran',value);
             return true;
         }
     })
@@ -17,7 +17,7 @@
 var _t_re;
 core.addNewSA({
     check:function(text){
-        return (!!core.initsto.get('tran'))&&(!util.checkUrl(text))&&checkLang(text);
+        return (!!core.initsto.get('ob_tran'))&&(!util.checkUrl(text))&&checkLang(text);
     },
     get:function(text,getsa){
       return new Promise(function(r,j){

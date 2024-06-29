@@ -3,11 +3,11 @@
   window.version={
     version:'2.0.0-dev',
     version_code:window.version_code,
-    updateTime:'2024/4/20',
+    updateTime:'2024/6/29',
     log:[
       {
-        tag:"new",
-        content:"新增了开箱体验",
+        tag:"change",
+        content:"修改了部分设置的内容，一些设置需重新设置",
       }
     ]
   }

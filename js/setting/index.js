@@ -1,5 +1,10 @@
 (function(){
   
+  var initsto=storage('setting',{
+    title:"设置",
+    desc:"QUIK起始页的各项设置",
+    sync:true
+  })
   var Setting=_REQUIRE_('./setting.js');
   var SettingGroup=_REQUIRE_('./setting_group.js');
   var SettingItem=_REQUIRE_('./setting_item.js');
@@ -18,6 +23,7 @@
     SettingGroup,
     SettingItem,
     mainSetting,
-    tyGroup
+    tyGroup,
+    settingSto:initsto
   }
 })()

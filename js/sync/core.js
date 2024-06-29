@@ -107,6 +107,7 @@
     console.log(ast);
     localStorage.quik2=JSON.stringify(ast);
     alert('数据导入成功，请重新加载页面',function(){
+      location.hash='#newnow'
       location.reload();
     })
   }

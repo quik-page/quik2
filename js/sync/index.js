@@ -45,11 +45,7 @@
           var reader = new FileReader();
           reader.onload = function (e) {
             sl = JSON.parse(e.target.result);
-            var jl = getStorageList();
-            importDataDialog.open();
-            for (var k in sl) {
-              importaixr(sl[k], k, jl);
-            }
+            _importData(sl);
           }
           reader.readAsText(file);
         } catch (e) {
@@ -57,6 +53,14 @@
         }
       }
     })
+  }
+
+  function _importData(sl){
+    var jl = getStorageList();
+    importDataDialog.open();
+    for (var k in sl) {
+      importaixr(sl[k], k, jl);
+    }
   }
   sg.addNewItem(exportDataSi);
   sg.addNewItem(importDataSi);
@@ -201,10 +205,13 @@
     exportDataDialog.close();
   }
 
+  var registerWebSync=_REQUIRE_('./web.js');
+
   return {
     getJSON,
     setJSON,
     openImport,
-    openExport
+    openExport,
+    registerWebSync
   }
 })()

@@ -5,10 +5,10 @@
         type:'boolean',
         message:"搜索框输入=自动计算后面的内容",
         get:function(){
-            return !!core.initsto.get('cal');
+            return !!core.initsto.get('ob_cal');
         },
         callback:function(value){
-            core.initsto.set('cal',value);
+            core.initsto.set('ob_cal',value);
             return true;
         }
     })
@@ -16,7 +16,7 @@
     sg.addNewItem(si);
 core.addNewSA({
     check:function(text){
-        return (!!core.initsto.get('cal'))&&text[0]=='='
+        return (!!core.initsto.get('ob_cal'))&&text[0]=='='
     },
     get:function(text,getsa){
       var a=getsa();

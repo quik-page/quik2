@@ -3,17 +3,9 @@
     SA:[],
     enter:[],
   }
-  
 
-  var initsto=storage('omnibox',{
-    sync:true,
-    title:"搜索框",
-    desc:"搜索框相关设置"
-  });
-  if(initsto.get('autofocus')==undefined){
-    initsto.set('autofocus',false);
-  }
-  if(initsto.get('justsearch')==undefined){
+  var initsto=setting.settingSto;
+  if(initsto.get('ob_justsearch')==undefined){
     initsto.set('justsearch',false);
   }
   var sawait=[];
@@ -81,7 +73,7 @@
   var searchUtil=_REQUIRE_("../search/util.js");
 
   function checkUrl(text){
-    if(initsto.get('justsearch')){
+    if(initsto.get('ob_justsearch')){
       return false;
     }
     return util.checkUrl(text);
@@ -206,10 +198,10 @@
     type:'boolean',
     message:"打开后，搜索框将失去打开链接的功能",
     get:function(){
-      return !!initsto.get('justsearch');
+      return !!initsto.get('ob_justsearch');
     },
     callback:function(value){
-      initsto.set('justsearch',value);
+      initsto.set('ob_justsearch',value);
       return true;
     }
   })
@@ -224,7 +216,7 @@
     searchUtil:searchUtil,
     initsto:initsto,
     setJustSearch:function(value){
-      initsto.set('justsearch',value);
+      initsto.set('ob_justsearch',value);
       si.reGet();
     }
   }

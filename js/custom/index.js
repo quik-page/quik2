@@ -1,9 +1,5 @@
 (function(){
-    var initsto=storage('custom',{
-        sync:true,
-        title:"个性化设置",
-        desc:"主题颜色、极简模式、自定义LOGO等"
-    });
+    var initsto=setting.settingSto;
     var eventHandle=getEventHandle();
     var on=eventHandle.on;
     var off=eventHandle.off;

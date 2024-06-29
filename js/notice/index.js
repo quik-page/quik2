@@ -87,32 +87,32 @@
     }
   }
 
-  var ___;
+  var focus_timeout;
   function g(){
-    var _=focus_arr[0];
-    var _f=_.el.cloneNode(true);
-    focus_con.appendChild(_f);
-    util.query(_f,'.notice-close-btn').onclick=function(){
-      clearTimeout(___);
-      _f.remove();
-      _.hide();
+    var readyFocusNotice=focus_arr[0];
+    var cloneNoticeEl=readyFocusNotice.el.cloneNode(true);
+    focus_con.appendChild(cloneNoticeEl);
+    util.query(cloneNoticeEl,'.notice-close-btn').onclick=function(){
+      clearTimeout(focus_timeout);
+      cloneNoticeEl.remove();
+      readyFocusNotice.hide();
       focus_arr.shift();
       if(focus_arr.length>0){
         g();
       }
     }
     drawNoticeBtn({
-      el:_f,
-      btns:_.btns,
+      el:cloneNoticeEl,
+      btns:readyFocusNotice.btns,
       hide:function(){
-        _.hide();
-        clearTimeout(___);
-        _f.remove();
+        readyFocusNotice.hide();
+        clearTimeout(focus_timeout);
+        cloneNoticeEl.remove();
       },
       show:function(){}
     });
-    ___=setTimeout(function(){
-      _f.remove();
+    focus_timeout=setTimeout(function(){
+      cloneNoticeEl.remove();
       focus_arr.shift();
       if(focus_arr.length>0){
         g();

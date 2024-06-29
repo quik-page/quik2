@@ -20,8 +20,8 @@
         isdotime=true;
         setInterval(function(){
             var da=new Date();
-            util.query(logoF,'.timelogo .h').innerText=da.getHours();
-            util.query(logoF,'.timelogo .m').innerText=da.getMinutes();
+            util.query(logoF,'.timelogo .h').innerText=util.b0(da.getHours());
+            util.query(logoF,'.timelogo .m').innerText=util.b0(da.getMinutes());
         },100);
     }
     
