@@ -21,6 +21,7 @@
       },
       doevent:function(ev,args){
         if(!events[ev_i][ev]) return false;
+        if(!Array.isArray(args))args=[args];
         for(var i=0;i<events[ev_i][ev].length;i++){
           events[ev_i][ev][i].apply(null,args);
         }

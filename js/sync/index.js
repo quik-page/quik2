@@ -205,13 +205,15 @@
     exportDataDialog.close();
   }
 
-  var registerWebSync=_REQUIRE_('./web.js');
+  var {registerWebSync,unregister,isSync}=_REQUIRE_('./web.js');
 
   return {
     getJSON,
     setJSON,
     openImport,
     openExport,
-    registerWebSync
+    registerWebSync,
+    unregister,
+    isSync
   }
 })()

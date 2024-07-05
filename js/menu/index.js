@@ -55,7 +55,7 @@
     isShow:function(){
       return this.element.classList.contains('show');
     },
-    destory:function(){
+    destroy:function(){
       this.element.remove();
     },
     setOffset:function(offset){

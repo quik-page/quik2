@@ -23,7 +23,7 @@
                 util.query(d,'.btn.r').onclick=function(){
                     _.hide();
                     setTimeout(function(){
-                        _.destory();
+                        _.destroy();
                     },200)
                 }
             }
@@ -41,7 +41,7 @@
                 util.query(d,'.btn.r').onclick=function(){
                     _.hide();
                     setTimeout(function(){
-                        _.destory();
+                        _.destroy();
                     },200)
                 }
             });
@@ -64,7 +64,7 @@
                 console.log('a');
                 _.hide();
                 setTimeout(function(){
-                    _.destory();
+                    _.destroy();
                 },200)
             });
         },
@@ -87,8 +87,8 @@
         hide:function(){
             this._d.close();
         },
-        destory:function(){
-            this._d.destory();
+        destroy:function(){
+            this._d.destroy();
         }
     }
 

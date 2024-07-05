@@ -150,7 +150,7 @@
 
 关闭窗口
 
-## `quik.dialog.prototype.destory()`
+## `quik.dialog.prototype.destroy()`
 
 销毁窗口，销毁后窗口消失，不允许打开或关闭
 
@@ -357,7 +357,7 @@
 - `quik.contextMenu.prototype.show()` 显示
 - `quik.contextMenu.prototype.hide()` 隐藏
 - `quik.contextMenu.prototype.isShow()=>Boolean` 是否显示
-- `quik.contextMenu.prototype.destory()` 销毁(之后无法操作)
+- `quik.contextMenu.prototype.destroy()` 销毁(之后无法操作)
 - `quik.contextMenu.prototype.setList(ContextMenuItem[])` 设置二级菜单项列表
 - `quik.contextMenu.prototype.setOffset({top?,left?,right?,bottom?})` 设置二级菜单位置
 
@@ -402,7 +402,7 @@
 
 隐藏卡片
 
-## `quik.card.prototype.destory()`
+## `quik.card.prototype.destroy()`
 
 销毁卡片，销毁后卡片消失，不允许操作
 

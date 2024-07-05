@@ -49,7 +49,7 @@
             var p = core.installByLocal(r.result);
             u.bind(p);
             p.ondone = function (a) {
-              installing_notice.destory();
+              installing_notice.destroy();
               alert('安装成功');
               console.log(a);
             };
@@ -256,7 +256,7 @@
           })
           u.hide();
           setTimeout(function(){
-            u.destory()
+            u.destroy()
           },200)
         }
       })

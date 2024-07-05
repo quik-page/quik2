@@ -55,6 +55,23 @@
         }
     }
 
+    function unregister(session){
+        if(!util.checkSession(session)){
+            cb({
+                code:-3,
+                msg:"session不正确"
+            });
+            return;
+        }
+        if(nsyncM==session.id){
+            initsto.remove('yesid');
+        }
+    }
+
+    function isSync(){
+        return !!nsyncM;
+    }
+
     async function startSync(a){
         syncM=a;
         var isLogin=await syncM.isLogin();
@@ -198,7 +215,11 @@
             syncIcon.hide();
         }
     }
-    return registerWebSync;
+    return {
+        registerWebSync,
+        unregister,
+        isSync
+    };
 
 
 })();

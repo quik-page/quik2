@@ -41,7 +41,7 @@
         getFCardDom:function(){
             return this.el
         },
-        destory:function(){
+        destroy:function(){
             this.el.remove();
             this.el=null;
             fcards.splice(fcards.indexOf(this),1);

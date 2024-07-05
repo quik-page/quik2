@@ -35,13 +35,6 @@
     readyfn();
   }
 
-
-  function doevents(ev, ar) {
-    eventfns[ev].forEach(function (fn) {
-      fn.apply(null, [ar]);
-    })
-  }
-
   return {
     addLink: function (detail, callback = function () { }) {
       if (initState != 2) {
@@ -65,7 +58,7 @@
                 code: 0,
                 msg: "添加成功"
               });
-              doevents('change', {
+              doevent('change', {
                 cate: detail.cate,
                 type: 'add',
                 detail: detail
@@ -83,7 +76,7 @@
               code: 0,
               msg: "添加成功"
             });
-            doevents('change', {
+            doevent('change', {
               cate: null,
               type: 'add',
               detail: detail
@@ -124,7 +117,7 @@
               code: 0,
               msg: "修改成功"
             });
-            doevents('change', {
+            doevent('change', {
               cate: cate,
               index: index,
               type: 'change',
@@ -149,7 +142,7 @@
               code: 0,
               msg: "修改成功"
             });
-            doevents('change', {
+            doevent('change', {
               cate: null,
               index: index,
               type: 'change',
@@ -186,7 +179,7 @@
               code: 0,
               msg: "删除成功"
             });
-            doevents('change', {
+            doevent('change', {
               cate: cate,
               index: index,
               type: 'delete',
@@ -209,7 +202,7 @@
               code: 0,
               msg: "删除成功"
             });
-            doevents('change', {
+            doevent('change', {
               cate: null,
               index: index,
               type: 'delete',
@@ -236,7 +229,7 @@
             code: 0,
             msg: "添加成功"
           });
-          doevents('change', {
+          doevent('change', {
             cate: cate,
             type: 'cateadd',
           });
@@ -268,7 +261,7 @@
             code: 0,
             msg: "修改成功"
           });
-          doevents('change', {
+          doevent('change', {
             cate: cate,
             catename: catename,
             type: 'caterename',
@@ -295,7 +288,7 @@
               code: 0,
               msg: "删除成功"
             });
-            doevents('change', {
+            doevent('change', {
               cate: cate,
               type: 'catedelete',
             });
@@ -309,7 +302,7 @@
                   code: 0,
                   msg: "删除成功"
                 });
-                doevents('change', {
+                doevent('change', {
                   cate: cate,
                   type: 'catedelete',
                 });
@@ -380,21 +373,6 @@
         readyfn = fn;
       }
     },
-    on: function (event, fn) {
-      if (eventfns[event]) {
-        eventfns[event].push(fn);
-      } else {
-        eventfns[event] = [fn];
-      }
-    },
-    off: function (event, fn) {
-      if (eventfns[event]) {
-        eventfns[event].forEach(function (item, index) {
-          if (item === fn) {
-            eventfns[event].splice(index, 1);
-          }
-        });
-      }
-    }
+    on,off
   }
 })();

@@ -51,7 +51,7 @@
       this.show();
       upfocus(this);
     },
-    destory:function(){
+    destroy:function(){
       this.hide();
       var _=this;
       setTimeout(function(){

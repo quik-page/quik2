@@ -27,9 +27,7 @@
     idmax++;
     dialogF.setAttribute('data-id',this.id);
     dialogF.querySelector('.d-b').addEventListener('click',function(){
-      if(window.innerWidth<=650){
-        getDialogById(this.parentElement.getAttribute('data-id')).close();
-      }
+      getDialogById(this.parentElement.getAttribute('data-id')).close();
     })
     allDialog.push(this);
   }
@@ -83,7 +81,7 @@
         this.onopen();
       }
     },
-    destory:function(){
+    destroy:function(){
       this.element.remove();
       allDialog.splice(allDialog.indexOf(this),1);
     },

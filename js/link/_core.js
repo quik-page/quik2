@@ -111,9 +111,7 @@ function compareCates(a,b){
   return b;
 }
 
-var eventfns = {
-  change: []
-};
+var {on,off,doevent}=getEventHandle();
 function pushLink(detail, ob) {
   var link = {
     title: detail.title,

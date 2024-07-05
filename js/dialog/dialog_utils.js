@@ -12,7 +12,7 @@
     util.query(dd,'.ok').onclick=function(){
       cb();
       d.close();
-      setTimeout(function(){d.destory()},299);
+      setTimeout(function(){d.destroy()},299);
     }
   }
   function confirm(text,cb){
@@ -26,12 +26,12 @@
     util.query(dd,'.ok').onclick=function(){
       cb(true);
       d.close();
-      setTimeout(function(){d.destory()},299);
+      setTimeout(function(){d.destroy()},299);
     }
     util.query(dd,'.cancel').onclick=function(){
       cb(false);
       d.close();
-      setTimeout(function(){d.destory()},299);
+      setTimeout(function(){d.destroy()},299);
     }
   }
   function prompt(text,cb){
@@ -45,12 +45,12 @@
     util.query(dd,'.ok').onclick=function(){
       cb(util.query(dd,'.content input').value);
       d.close();
-      setTimeout(function(){d.destory()},299);
+      setTimeout(function(){d.destroy()},299);
     }
     util.query(dd,'.cancel').onclick=function(){
       cb('');
       d.close();
-      setTimeout(function(){d.destory()},299);
+      setTimeout(function(){d.destroy()},299);
     }
   }
 

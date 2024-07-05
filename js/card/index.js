@@ -74,7 +74,7 @@
       }
       this.el.style.opacity='0';
     },
-    destory:function(){
+    destroy:function(){
       this.el.remove();
     },
     getCardDom:function(){
