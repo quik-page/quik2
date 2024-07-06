@@ -1,33 +1,19 @@
 (function(){
     var initsto=storage('safe');
     window.addEventListener('hashchange',hashcl);
+    window.addEventListener('visibilitychange',function(){
+        if(document.visibilityState=='hidden'){
+            document.body.style.display='none';
+        }else{
+            document.body.style.display='block';
+        }
+    })
     function hashcl(){
         var hash=location.hash;
-        if(hash=='#clearAll'){
-            confirm('确定要清除所有数据吗？',function(r){
-            if(r){
-                function c(){
-                    prompt('请在下方输入“clearAll”，并再次确定是否要清除所有数据，此操作无法恢复。',function(t){
-                        if(t=='clearAll'){
-                            localStorage.clear();
-                            localforage.clear().then(function(){
-                                location.reload();
-                            });
-                            location.hash='';
-                        }else if(!t){
-                            
-                        }else{
-                            c();
-                        }
-                    })
-                }
-                c(); 
-            } 
-            });
-        }else if(hash=='#safe'){
+        if(hash=='#safe'){
             location.hash='';
             window.addon_=false;
-            alert('已阻止所有插件运行');
+            alert('已阻止所有插件运行，请修改设置或删除插件');
         }
     }
     hashcl();
@@ -57,8 +43,27 @@
         message:"清除QUIK起始页的所有数据",
         index:2,
         type:"null",
-        callback:function(n){
-            location.hash='#clearAll';
+        callback:function(){
+            confirm('确定要清除所有数据吗？',function(r){
+                if(r){
+                    function c(){
+                        prompt('请在下方输入“clearAll”，并再次确定是否要清除所有数据，此操作无法恢复。',function(t){
+                            if(t=='clearAll'){
+                                localStorage.clear();
+                                localforage.clear().then(function(){
+                                    location.reload();
+                                });
+                                location.hash='';
+                            }else if(!t){
+                                
+                            }else{
+                                c();
+                            }
+                        })
+                    }
+                    c(); 
+                } 
+                });
         }
     });
     gaoji.addNewItem(clse);

@@ -352,6 +352,10 @@
 
   // 从开发端口安装
   function installByDev(devurl){
+    if(!window.isExt){
+      alert('请在浏览器扩展中安装开发端口')
+      return;
+    }
     var adid=util.getRandomHashCache();
     initsto.set(adid,{
       name:"DEVPORT:"+devurl,
@@ -384,26 +388,37 @@
     var data=initsto.get(id);
     var script=document.createElement('script');
     if(data.type=='dev'){
-      script.src=data.url+'index.js?id='+id;
-      script.onerror=function(){
-        alert('开发端口出错');
-      }
+      await new Promise((r,j)=>{
+        util.requestByExt({
+          url:data.url+'index.js',
+          method:"get",
+          responseType:"text",
+          then:function(res){
+            code=res.data;
+            r()
+          },
+          catch:function(){
+            alert('开发端口出错');
+            j();
+          }
+        })
+      })
     }else{
       code=await new Promise((r)=>codesto.get(id,true,r));
-      script.innerHTML=`(function(){
-        function Session(id){
-          this.id="ext_"+id;
-          this.session_token="Hvm_session_token_eoi1j2j";
-          this.isSession=true;
-        };
-        var addonData={
-          session:new Session('${id}')
-        };
-        (function(){
-          ${code}
-        })();
-      })()`;
     }
+    script.innerHTML=`(function(){
+      function Session(id){
+        this.id="ext_"+id;
+        this.session_token="Hvm_session_token_eoi1j2j";
+        this.isSession=true;
+      };
+      var addonData={
+        session:new Session('${id}')
+      };
+      (function(){
+        ${code}
+      })();
+    })()`;
     document.body.appendChild(script);
     
   }
@@ -483,18 +498,7 @@
 
   // 加载官方插件市场数据库
   async function loadMarketData(){
-    // fetch(...).then(r=>r.json()).then(data=>{marketData=data});
-    // 模拟数据
-    marketData = {
-      "000":{
-        "name":"插件名称",
-        "version":"1.0.0",
-        "description":"插件描述",
-        "author":"作者",
-        "icon":"插件图标",
-        "url":"插件下载链接",
-      }
-    }
+    fetch('/addon_market/list.json').then(r=>r.json()).then(data=>{marketData=data});
   }
 
   function getAddonList(){

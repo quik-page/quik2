@@ -20,11 +20,12 @@
   pointer-events: all;
   width: 260px;
   margin: 10px;
-  padding: 10px;
+  padding: 15px;
   border-radius: 5px;
   box-shadow: #aaa 0 1px 5px;
   display: none;
   background-color: #fff;
+  position: relative;
 }
 .notice-item .notice-actionbar{
   width: 100%;
@@ -36,11 +37,14 @@
   float: left;
 }
 .notice-item .notice-close-btn{
-  float: right;
   width: 24px;
   height: 24px;
+  border-radius: 50%;
   cursor: pointer;
   user-select: none;
+  position: absolute;
+  top:0;
+  right:0;
 }
 .notice-item .notice-close-btn:hover{
   background-color: #f3f3f3;

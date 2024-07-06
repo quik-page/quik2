@@ -92,7 +92,10 @@
     card
   }
   clearTimeout(loadingtimeout);
-  document.querySelector("main").style.display='block';
   document.querySelector(".loading-f").classList.add('h');
-  document.querySelector(".loading-f").style.display='none'
+  document.querySelector(".loading-f").style.display='none';
+  setTimeout(function(){
+    document.querySelector("main").style.display='block';
+    document.querySelector("main").style.opacity='1';
+  })
 })();

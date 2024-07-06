@@ -4,7 +4,7 @@
     position: absolute;
     top:40px;
     left:0px;
-    z-index: 4;
+    z-index: 2;
     overflow-x: hidden;
     overflow-y: auto;
     transition: opacity .3s;

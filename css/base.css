@@ -57,6 +57,8 @@ main{
   bottom:0;
   z-index:1;
   overflow: hidden;
+  opacity: 0;
+  transition: opacity .2s;
 }
 main .topper,
 main .bottomer
@@ -164,7 +166,7 @@ body.dark ::-webkit-scrollbar-thumb:hover{
   opacity:0;
   pointer-events:none;
 }
-.loading-f .loading-p{
+.loading-p{
   width:100px;
   height:2px;
   position: absolute;
@@ -172,7 +174,7 @@ body.dark ::-webkit-scrollbar-thumb:hover{
   left:calc(50% - 50px);
   overflow:hidden;
 }
-.loading-f .loading-p .g{
+.loading-p .g{
   width:100px;
   height:2px;
   background-color:#000;
