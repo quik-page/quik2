@@ -69,7 +69,7 @@
 
   function importaixr(j, k, jl) {
     var li = document.createElement('div');
-    if (j.addon&&!jl[k]) {
+    if (j.addon) {
       var addo = addon.getAddonByUrl(j.addon);
       if (!addo) {
         addon.checkMarket(j.addon).then(function (ismarket) {
@@ -111,8 +111,8 @@
         });
         return;
       }
-
     }
+    if(!jl[k])return;
     li.classList.add('item');
     li.innerHTML = `<input type="checkbox"/><div class="message">
       <div class="title">${j.title || k}</div>

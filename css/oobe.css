@@ -75,16 +75,23 @@
     padding-top: 30px;
 }
 .oobedia .clist .item{
-    width: 60%;
-    font-size: 20px;
+    width: 200px;
+    background-color: #09f;
+    color: #fff;
+    margin: 10px auto;
     text-align: center;
+    line-height: 30px;
+    border-radius: 5px;
+    box-shadow:  none;
+    transition: all .2s;
+}
+.oobedia .clist .item.b{
+    background-color: #fff;
     color: #09f;
-    margin: 5px auto;
-    cursor: pointer;
-    user-select: none;
-    line-height: 40px;
-    transition: all .3s;
+}
+.oobedia .clist .item.a:hover{
+    background-color: #0af;
 }
 .oobedia .clist .item:hover{
-    box-shadow: #aaa 0 1px 5px inset;
+    box-shadow: 0 0 3px #aaa;
 }

@@ -11,6 +11,9 @@
     function hashcl(){
         var hash=location.hash;
         if(hash=='#safe'){
+            location.hash='#safe_called';
+            location.reload();
+        }else if(hash=='#safe_called'){
             location.hash='';
             window.addon_=false;
             alert('已阻止所有插件运行，请修改设置或删除插件');

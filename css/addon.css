@@ -103,13 +103,17 @@ body.dark .d-c.addon-dialog .p ul li.active{
 .d-c.addon-dialog .controls .ch_update{
   background-color: #0cf;
 }
-.d-c.addon-dialog .controls .update{
+.d-c.addon-dialog .controls .update,
+.d-c.addon-dialog .controls .install
+{
   background-color: #09f;
 }
 .d-c.addon-dialog .controls .disable{
   background-color: #333;
 }
-.d-c.addon-dialog .controls .enable{
+.d-c.addon-dialog .controls .enable,
+.d-c.addon-dialog .controls .installed
+{
   background-color: #0f0;
 }
 .d-c.addon-dialog .controls .uninstall{
@@ -118,7 +122,9 @@ body.dark .d-c.addon-dialog .p ul li.active{
 .d-c.addon-dialog .controls .ch_update:hover{
   background-color: #0ef;
 }
-.d-c.addon-dialog .controls .update:hover{
+.d-c.addon-dialog .controls .update:hover,
+.d-c.addon-dialog .controls .install:hover
+{
   background-color: #0af;
 }
 .d-c.addon-dialog .controls .disable:hover{
@@ -223,7 +229,8 @@ body.dark .d-c.addon-dialog .p ul li.active{
     width:100%;
   }
 }
-.disabled_state{
+.disabled_state,
+.official_state{
   border-radius: 5px;
   background-color: #444;
   color: #fff;
@@ -232,6 +239,9 @@ body.dark .d-c.addon-dialog .p ul li.active{
   font-size: .5rem;
   padding: 0 1em;
   transform: scale(.8);
+}
+.official_state{
+  background-color: #0e0;
 }
 
 .d-c.addon-dialog .addon-search-box{

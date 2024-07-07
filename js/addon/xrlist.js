@@ -97,5 +97,23 @@ var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
       util.query(li, '.disable').style.display = 'block';
       util.query(li, '.disabled_state').style.display="none";
     }
+    if(addon.marketId){
+      util.query(li, '.official_state').style.display = '';
+    }else{
+      util.query(li, '.official_state').style.display = 'none';
+    }
 
   }
+
+  core.getAddonList().forEach(function (a) {
+    xraddon(a);
+  })
+
+  core.on('installnew',function(e){
+    xraddon(e.id);
+  })
+
+  core.on('uninstall',function(e){
+    var li = util.query(addon_l, 'li[data-id="' + e.id + '"]');
+    if(li){li.remove()}
+  })

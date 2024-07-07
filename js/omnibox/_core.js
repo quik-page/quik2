@@ -84,7 +84,7 @@
       return true;
     },
     enter:function(text){
-      open(searchUtil.getSearchType().replace(searchUtil.keywordText,text));
+      open(searchUtil.getSearchType().replace(searchUtil.keywordText,encodeURI(text)));
     },
     icon:":searchtype",
     submit:util.getGoogleIcon('E8B6')

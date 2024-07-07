@@ -4,7 +4,8 @@
   function alert(text,cb){
     if(!cb)cb=emptyFn;
     var d=new dialog({
-      content:base.replace('$0','').replace('$1','')
+      content:base.replace('$0','').replace('$1',''),
+      clickOtherToClose:false
     });
     setTimeout(function(){d.open()},10)
     var dd=d.getDialogDom();
@@ -18,7 +19,8 @@
   function confirm(text,cb){
     if(!cb)cb=emptyFn;
     var d=new dialog({
-      content:base.replace('$0','').replace('$1','<button class="cancel btn">取消</button>')
+      content:base.replace('$0','').replace('$1','<button class="cancel btn">取消</button>'),
+      clickOtherToClose:false
     });
     setTimeout(function(){d.open()},10)
     var dd=d.getDialogDom();
@@ -37,7 +39,8 @@
   function prompt(text,cb){
     if(!cb)cb=emptyFn;
     var d=new dialog({
-      content:base.replace('$0','<p class="c"></p><p><input type="text"/></p>').replace('$1','<button class="cancel btn">取消</button>')
+      content:base.replace('$0','<p class="c"></p><p><input type="text"/></p>').replace('$1','<button class="cancel btn">取消</button>'),
+      clickOtherToClose:false
     });
     setTimeout(function(){d.open()},10)
     var dd=d.getDialogDom();
@@ -52,6 +55,14 @@
       d.close();
       setTimeout(function(){d.destroy()},299);
     }
+    util.query(dd,'.content input').focus();
+    util.query(dd,'.content input').addEventListener('keydown',function(e){
+      if(e.key=='Enter'){
+        cb(this.value);
+        d.close();
+        setTimeout(function(){d.destroy()},299);
+      }
+    })
   }
 
   return{

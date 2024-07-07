@@ -121,13 +121,14 @@
   var initsto=storage('addon',{
     sync:true,
     title:"插件",
-    desc:"QUIK起始页插件数据（暂未开发完）",
-    rewrite:function(ast,k,a){
+    desc:"QUIK起始页插件数据",
+    rewrite:function(ast,k2,a){
       return new Promise(function(r){
         if(Object.keys(a).length==0){r();return;}
         var d=new dialog({
           content:"<div>正在同步插件...[<span>0</span>/"+Object.keys(a).length+"]</div>",
           class:"dialog-addon-install",
+          clickOtherToClose:false
         });
         d.open();
         var df=d.getDialogDom();
@@ -158,11 +159,10 @@
           i++;
             util.query(df,'span').innerHTML=i;
           if(i==Object.keys(a).length){
-            r(initsto.getAll());
+            ast[k2]=initsto.getAll();
+            r();
           }
         }
-        
-
       });
     }
   });
@@ -180,6 +180,15 @@
 
   function getAddonBySessionId(id){
     return initsto.get(id);
+  }
+
+  function getAddonByMarketId(id){
+    var as=initsto.getAll();
+    for(var k in as){
+      if(as[k].marketId==id){
+        return as[k];
+      }
+    }
   }
 
   var ainstatus=['初始化','获取插件信息','下载插件','等待确认','安装插件','安装成功'];
@@ -375,7 +384,7 @@
       if(addon.type!='dev'){
         await new Promise((r)=>codesto.remove(id,true,r));
       }
-      evn.doevent('uninstall',[{id}])
+      evn.doevent('uninstall',[{id,marketId:addon.marketId}])
       return true;
     }else{
       return false;
@@ -498,18 +507,26 @@
 
   // 加载官方插件市场数据库
   async function loadMarketData(){
-    fetch('/addon_market/list.json').then(r=>r.json()).then(data=>{marketData=data});
+    if(marketData){
+      return marketData;
+    }else{
+      marketData=await (await fetch('/addon_market/list.json')).json();
+      return marketData;
+    }
   }
 
   function getAddonList(){
     return initsto.list()
   }
 
-  getAddonList().forEach(id=>{
-    if(!initsto.get(id).disabled){
-      runAddon(id);
-    }
-  })
+  if(!window.addon_){
+    getAddonList().forEach(id=>{
+      if(!initsto.get(id).disabled){
+        runAddon(id);
+      }
+    })
+  }
+  
 
   function enable(id){
     var o=initsto.get(id);
@@ -524,9 +541,11 @@
   function getEnable(id){
     return !initsto.get(id).disabled;
   }
+  
   return {
     enable,
     disable,
+    loadMarketData,
     installByOfficialMarket,
     installByUrl,
     installByLocal,
@@ -538,6 +557,7 @@
     checkMarket,
     getAddonByUrl,
     getAddonBySessionId,
+    getAddonByMarketId,
     getAddonList,
     getEnable,
     on:evn.on,

@@ -6,8 +6,8 @@
     updateTime:'2024/6/29',
     log:[
       {
-        tag:"change",
-        content:"修改了部分设置的内容，一些设置需重新设置",
+        tag:"new",
+        content:"最后一次内核更新",
       }
     ]
   }

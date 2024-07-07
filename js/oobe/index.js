@@ -12,7 +12,8 @@
     var oobeDia=new dialog({
         content:all,
         class:'oobedia',
-        mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN
+        mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
+        clickOtherToClose:false
     })
     var d=oobeDia.getDialogDom();
 

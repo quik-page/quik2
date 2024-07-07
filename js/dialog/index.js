@@ -5,6 +5,7 @@
    * @class dialog
    * @param {Object} options 
    * @param {String} options.content
+   * @param {String} options.clickOtherToClose
    * @param {Number} options.mobileShowtype?
    * @param {String} options.class?
    */
@@ -26,9 +27,17 @@
     this.id=idmax;
     idmax++;
     dialogF.setAttribute('data-id',this.id);
-    dialogF.querySelector('.d-b').addEventListener('click',function(){
-      getDialogById(this.parentElement.getAttribute('data-id')).close();
-    })
+    if(typeof options.clickOtherToClose=='undefined'){
+      this.clickOtherToClose=true;
+    }else{
+      this.clickOtherToClose=options.clickOtherToClose;
+    }
+    if(this.clickOtherToClose){
+      dialogF.querySelector('.d-b').addEventListener('click',function(){
+        getDialogById(this.parentElement.getAttribute('data-id')).close();
+      })
+    }
+    
     allDialog.push(this);
   }
 

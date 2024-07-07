@@ -2,7 +2,8 @@
     function installui(){
         var n=new dialog({
             content:_REQUIRE_('./install_ui.html'),
-            class:"addon_install_ui"
+            class:"addon_install_ui",
+            clickOtherToClose:false
         });
         this._d=n;
         var d=this._d.getDialogDom();
@@ -68,8 +69,11 @@
                 },200)
             });
         },
-        ask:function(msg,fn){
+        ask:function(msg,fn,de={}){
             var d=this._d.getDialogDom();
+            util.query(d,'.sth img').src=de.img||"assets/def_addon.png";
+            util.query(d,'.sth .name').innerText=de.name||"-";
+            util.query(d,'.sth .version').innerText='版本：'+de.version||'-';
             util.query(d,'.msg').innerText=msg;
             util.query(d,'.btns').style.display='block';
             util.query(d,'.btn.l').onclick=function(){
