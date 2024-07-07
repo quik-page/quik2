@@ -19,9 +19,10 @@ self.addEventListener('install', (event) => {
       './index.html',
       './index.bundle.css',
       './index.bundle.js',
-      'https://cdn.bootcdn.net/ajax/libs/localforage/1.10.0/localforage.min.js',
-      'https://fonts.loli.net/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
-      'https://gstatic.loli.net/s/materialsymbolsoutlined/v164/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2',
+      './assets/localforage.js',
+      './assets/def_addon.png',
+      './assets/logo.svg',
+      './assets/google-icon.woff2'
     ])
   );
 });
