@@ -2,6 +2,7 @@
   if(location.hash=='#extdheodqp2eidhjwe'){
     console.log('插件模式');
     window.isExt=true;
+    
   }else{
     console.log('网页模式');
     window.isExt=false;

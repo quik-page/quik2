@@ -99,4 +99,16 @@
     document.querySelector("main").style.display='block';
     document.querySelector("main").style.opacity='1';
   })
+
+  var f=`@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    font-weight: 100 700;
+    src: url($0) format('woff2');
+  }`
+  if(window.isExt){
+    util.addStyle(f.replace('$0','./assets/google-icon.woff2'))
+  }else{
+    util.addStyle(f.replace('$0','https://gstatic.loli.net/s/materialsymbolsoutlined/v164/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2'))
+  }
 })();
