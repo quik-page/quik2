@@ -450,7 +450,8 @@
         msg:"未找到插件"
       }
     }
-    if(addon.url){
+    if(addon.url||addon.marketId){
+      if(addon.marketId)addon.url=await loadMarketData()[addon.marketId].url;
       try{
         var code=await getCode(addon.url);
       }catch(e){
