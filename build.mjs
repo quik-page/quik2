@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import cleanCSS from "clean-css";
-import uglifyJs from "uglify-js";
-import htmlMinifier from "html-minifier"; 
+import uglifyJs from "./util/minijs.js";
+import htmlMinifier from "./util/minihtml.js"; 
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -72,7 +72,7 @@ var ijs = function (code, cb, rootPath) {
 }
 
 function zhuanyi(code){
-  return "\""+code.replaceAll('"','\\"').replaceAll('\r\n','\\n').replaceAll('\n','\\n').replaceAll("\t","\\t")+"\"";
+  return "\""+code.replace(/"/g,'\\"').replace(/\r\n/g,'\\n').replace(/\n/g,'\\n').replace(/\t/g,"\\t")+"\"";
 }
 
 var v=parseInt(fs.readFileSync(path.join(__dirname,'docs/version')))+1;
@@ -81,7 +81,9 @@ fs.writeFileSync(path.join(__dirname,'docs/version'),v.toString());
 qjs(path.join(__dirname,'index.js'), function (code) {
   code=code.replace('\'${VERSION_CODE}\'',v);
   // fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),code);
-  fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),uglifyJs.minify(code).code);
+  uglifyJs.minify(code).then(function(result){
+    fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),result.code);
+  })
 });
 
 var css=fs.readFileSync(path.join(__dirname,'index.css')).toString();

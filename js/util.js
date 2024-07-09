@@ -217,6 +217,10 @@
         return a.href;
       }
       document.body.appendChild(script);
+      script.onerror=function(){
+        cb(false);
+        document.body.removeChild(script);
+      }
       window[a]=function(data){
         cb(data);
         try {
