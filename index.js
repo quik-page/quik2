@@ -92,6 +92,7 @@
     prompt,
     card
   }
+  window.util=util;
   clearTimeout(loadingtimeout);
   document.querySelector(".loading-f").classList.add('h');
   document.querySelector(".loading-f").style.display='none';

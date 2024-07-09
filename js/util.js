@@ -219,8 +219,22 @@
       document.body.appendChild(script);
       window[a]=function(data){
         cb(data);
+        try {
         document.body.removeChild(script);
+          
+        } catch (error) {
+          
+        }
         delete window[a];
+      }
+      return {
+        abort:function(){
+          try {
+            script.remove();
+          } catch (error) {
+            
+          }
+        }
       }
     },
     xhr:function(url,cb,err){

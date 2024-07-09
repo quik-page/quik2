@@ -100,12 +100,16 @@
 
   async function checkUpdate(id){
     var addon=initsto.get(id);
+    console.log(addon);
     if(!addon){
       throw 'not found addon';
     }
     if(!addon.type){
       var update=addon.update;
-      var nc=await fetch(update);
+      if(!update){
+        return false;
+      }
+      var nc=await fetch(joinPath(addon.marketId?((await loadMarketData())[addon.marketId].url):addon.url,update));
       nc= await nc.text();
       nc=parseInt(nc);
       if(nc>addon.version_code){
@@ -116,6 +120,10 @@
     }else{
       return false;
     }
+  }
+
+  function joinPath(a,b){
+    return a.substring(0,a.lastIndexOf('/'))+'/'+b;
   }
 
   var initsto=storage('addon',{

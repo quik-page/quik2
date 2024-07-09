@@ -151,6 +151,8 @@ body.dark .d-c.addon-dialog .p ul li.active{
 .d-c.addon-dialog .p ul li .ds .name{
   line-height: 20px;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .d-c.addon-dialog .p ul li .ds .name span{
   float: left;
