@@ -62,7 +62,7 @@
     if(!signature) return false;
     var a=initsto.list();
     for(var i=0;i<a.length;i++){
-      if(initsto.get(a).signature==signature){
+      if(initsto.get(a[i]).signature==signature){
         return true;
       }
     }
