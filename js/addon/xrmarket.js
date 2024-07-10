@@ -27,9 +27,8 @@ function xrmarketItem(addon,id){
     var li = util.element('li');
     li.innerHTML = _REQUIRE_('./market_item.mb.html').replace(/{deficon}/g,def_addon_icon);
     li.dataset.id = id;
-    addon_l.appendChild(li);
     li.onclick = function (e) {
-        addon_l.querySelectorAll('li').forEach(function (li) {
+        market_l.querySelectorAll('li').forEach(function (li) {
             li.classList.remove('active');
         })
         this.classList.add('active');
