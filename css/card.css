@@ -19,3 +19,6 @@
   opacity: 0;
   display: none;
 }
+body.dark .cards .card{
+  background-color: #333;
+}

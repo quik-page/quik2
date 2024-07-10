@@ -25,7 +25,7 @@ function loadmarket(){
 
 function xrmarketItem(addon,id){
     var li = util.element('li');
-    li.innerHTML = _REQUIRE_('./market_item.mb.html');
+    li.innerHTML = _REQUIRE_('./market_item.mb.html').replace(/{deficon}/g,def_addon_icon);
     li.dataset.id = id;
     addon_l.appendChild(li);
     li.onclick = function (e) {
@@ -34,7 +34,7 @@ function xrmarketItem(addon,id){
         })
         this.classList.add('active');
     }
-    util.query(li, '.n>img').src = addon.icon || "assets/def_addon.png";
+    util.query(li, '.n>img').src = addon.icon || def_addon_icon;
     util.query(li, '.n .ds .name span').innerText = addon.name;
     var ms = util.query(li, '.n .ds .message span', true);
     ms[0].innerText = addon.author || '不详';

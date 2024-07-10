@@ -1,7 +1,7 @@
 (function(){
     function installui(){
         var n=new dialog({
-            content:_REQUIRE_('./install_ui.html'),
+            content:_REQUIRE_('./install_ui.html').replace('{deficon}',def_addon_icon),
             class:"addon_install_ui",
             clickOtherToClose:false
         });

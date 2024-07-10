@@ -99,7 +99,7 @@
       if(actli){
         actli={
           icon:util.query(actli,'div.saicon').innerHTML,
-          text:util.query(actli,'div.sa_text').innerHTML,
+          text:util.query(actli,'div.sa_text').innerText,
         }
       }
 
@@ -107,7 +107,8 @@
       saul.innerHTML='';
       salist.forEach(function(s){
         var li=util.element('li');
-        li.innerHTML=`<div class="saicon">${s.icon}</div><div class="sa_text">${s.text}</div>`;
+        li.innerHTML=`<div class="saicon">${s.icon}</div><div class="sa_text"></div>`;
+        li.querySelector('.sa_text').innerText=s.text;
         saul.append(li);
         li.onclick=s.click;
       });

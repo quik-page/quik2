@@ -1,6 +1,6 @@
 [
     {
-      "thumbnail":"chrome://{id}/assets/mrbgp1_th.png",
-      "img":"chrome://{id}/assets/mrbgp1.webp"
+      "thumbnail":"chrome-extension://{id}/assets/mrbgp1_th.png",
+      "img":"chrome-extension://{id}/assets/mrbgp1.webp"
     }
 ]

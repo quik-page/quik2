@@ -1,4 +1,5 @@
 (function () {
+  var def_addon_icon=window.isExt?("chrome-extension://"+window.extid+"/assets/def_addon.png"):"./assets/def_addon.png"
   var core = _REQUIRE_('./_core.js');
   var ui = _REQUIRE_('./install_ui.js');
   var addon_dialog = new dialog({

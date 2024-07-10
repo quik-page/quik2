@@ -9,7 +9,7 @@ var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
     var li = util.query(addon_l, 'li[data-id="' + id + '"]');
     if (!li) {
       li = util.element('li');
-      li.innerHTML = _REQUIRE_('./addon_item.mb.html');
+      li.innerHTML = _REQUIRE_('./addon_item.mb.html').replace(/{deficon}/g,def_addon_icon);
       li.dataset.id = id;
       addon_l.appendChild(li);
       li.onclick = function (e) {
@@ -78,7 +78,7 @@ var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
         })
       }
     }
-    util.query(li, '.n>img').src = addon.icon || "assets/def_addon.png";
+    util.query(li, '.n>img').src = addon.icon || def_addon_icon;
     util.query(li, '.n .ds .name span').innerText = addon.name;
     var ms = util.query(li, '.n .ds .message span', true);
     ms[0].innerText = addon.author || '不详';

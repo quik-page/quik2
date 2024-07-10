@@ -127,7 +127,8 @@
 
   var draws={
     img:function(bgf,data){
-      bgf.innerHTML='<div class="img-sp full"><div class="cover"></div><img src="'+data.url+'"/></div>';
+      console.log(data);
+      bgf.innerHTML='<div class="img-sp full"><div class="cover"></div><img src="'+(data.url||neizhiImg[data.index].img)+'"/></div>';
       bgf.querySelector('img').onload=function(){
         this.style.opacity='1';
       }
@@ -136,7 +137,7 @@
     },
     video:function(bgf,data){
       bgf.innerHTML='<div class="video-sp full"><div class="cover"></div><video src="" muted loop></video></div>'
-      util.query(bgf,'.video-sp video').src=data.url;
+      util.query(bgf,'.video-sp video').src=data.url||neizhiImg[data.index].img;
       util.query(bgf,'.video-sp video').oncanplay=function(){
         this.play();
         this.style.opacity='1';
@@ -224,7 +225,7 @@
     })
     if(data.type=='default'){
       if(data.data.type=='img'){
-        util.query(tab1,'.neizhi .bgitem[data-img="'+data.data.url+'"]').classList.add('selected');
+        try{util.query(tab1,'.neizhi .bgitem[data-id="'+data.data.index+'"]').classList.add('selected');}catch(e){}
       }else if(data.data.type=='userbg'){
         util.query(tab1,'.zdy .bgitem').classList.add('selected');
       }else if(data.data.type=='api'){
@@ -300,10 +301,10 @@
       // 内置图片
       var u=util.query(tab1,'.neizhi .unit-content');
       var _=this;
-      neizhiImg.forEach(function(im){
+      neizhiImg.forEach(function(im,id){
         var bgitem=util.element('div',{
           class:"bgitem def",
-          'data-img':im.img,
+          'data-id':id,
         });
         bgitem.innerHTML='<div class="left"><img data-src="'+im.thumbnail+'" loading="lazy"/></div>'
         u.appendChild(bgitem);
@@ -312,7 +313,7 @@
             type:e.type,
             data:{
               type:"img",
-              url:bgitem.getAttribute('data-img')
+              index:parseInt(bgitem.getAttribute('data-id'))
             }
           })
         }
