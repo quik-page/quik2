@@ -1,8 +1,8 @@
 (function(){
-  if(location.hash=='#extdheodqp2eidhjwe'){
+  if(location.hash.indexOf('extdheodqp2eidhjwe')!=-1){
     console.log('插件模式');
     window.isExt=true;
-    
+    window.extid=location.hash.split(':')[1];
   }else{
     console.log('网页模式');
     window.isExt=false;

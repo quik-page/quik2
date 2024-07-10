@@ -12,7 +12,17 @@
   })
   var acgbg=_REQUIRE_('../api/acgbg.js');
   var fjbg=_REQUIRE_('../api/fenjibg.js');
-  var neizhiImg=_REQUIRE_('./_defaultDrawer/neizhi.json');
+  var neizhiImg;
+  if(window.isExt){
+    neizhiImg=_REQUIRE_('./_defaultDrawer/neizhi_ext.json')
+    for(var i=0;i<neizhiImg.length;i++){
+      for(var k in neizhiImg[i]){
+        neizhiImg[i][k]=neizhiImg[i][k].replace('{id}',window.extid);
+      }
+    }
+  }else{
+    neizhiImg=_REQUIRE_('./_defaultDrawer/neizhi.json');
+  }
 
   var refreshApiIcon=new iconc.icon({
     content:util.getGoogleIcon('e86a'),

@@ -108,7 +108,7 @@
     src: url($0) format('woff2');
   }`
   if(window.isExt){
-    util.addStyle(f.replace('$0','./assets/google-icon.woff2'))
+    util.addStyle(f.replace('$0','chrome-extension://'+window.extid+'/assets/google-icon.woff2'))
   }else{
     util.addStyle(f.replace('$0','https://gstatic.loli.net/s/materialsymbolsoutlined/v164/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2'))
   }
