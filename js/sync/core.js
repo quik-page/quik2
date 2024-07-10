@@ -74,10 +74,12 @@
 
   async function setJSON(json,config){
     var jl=getStorageList();
-    var ast=getAllStorage();
+    var alls=getAllStorage();
+    var ast={};
     for(var k in json){
       if(config[k]){
         if(jl[k]){
+          ast[k]=alls[k];
           if(config[k]==rewrite){
             if(typeof jl[k].rewrite=='function'){
               await jl[k].rewrite(ast,k,json[k].data);
@@ -87,7 +89,6 @@
           }else if(config[k]==compare){
             if(typeof jl[k].compare=='function'){
               await jl[k].compare(ast,k,json[k].data);
-    console.log(ast); 
             }else{
               throw new Error(k+' 不支持compare')
             }
@@ -105,7 +106,11 @@
     }
     
     console.log(ast);
-    localStorage.quik2=JSON.stringify(ast);
+    var o=JSON.parse(localStorage.quik2);
+    for(var k in ast){
+      o[k]=ast[k];
+    }
+    localStorage.quik2=JSON.stringify(o);
     alert('数据导入成功，请重新加载页面',function(){
       location.hash='#newnow'
       location.reload();

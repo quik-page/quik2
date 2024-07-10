@@ -18,10 +18,10 @@ var initsto = storage('link', {
       a['storage-mode']=initsto.get('storage-mode');
       if(initsto.get('storage-mode')=='db'){
         initsto.remove('links',true,function(){
-          dbTool.set(a.links,function(hash){
+          dbTool.set(a.links,void 0,function(hash){
             a.links=hash;
             initsto.remove('cate',true,function(){
-              dbTool.set(a.cate,function(hash){
+              dbTool.set(a.cate,void 0,function(hash){
                 a.cate=hash;
                 ast[k]=a;
                 r();
@@ -44,7 +44,7 @@ var initsto = storage('link', {
         initsto.get('links',true,function(old){
           initsto.remove('links',true,function(){
             a.links=compareLinks(old,a.links);
-            dbTool.set(a.links,function(hash){
+            dbTool.set(a.links,void 0,function(hash){
               a.links=hash;
               dbTool.get(ast[km].cate,function(ocate){
                 console.log(ocate);
@@ -54,7 +54,7 @@ var initsto = storage('link', {
                     d[k]=compareLinks(d[k],a.cate[k]);
                   }
                   a.cate=d;
-                  dbTool.set(a.cate,function(hash){
+                  dbTool.set(a.cate,void 0,function(hash){
                     a.cate=hash;
                     ast[km]=a;
                     r();

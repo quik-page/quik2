@@ -18,7 +18,7 @@
         reject(xhr.status);
       }
       xhr.onprogress=function(pr){
-        p&&p(pr);
+        p&&p(pr.loaded/pr.total);
       }
       xhr.send();
     })
@@ -41,8 +41,7 @@
           icon:meta[6],
           website:meta[7],
           update:meta[8],
-          signature:meta[9],
-          marketId:meta[10]
+          signature:meta[9]
         }
       }else{
         return {
@@ -282,6 +281,7 @@
         p.setStatu(2);
         var url=marketData[id].url;
         getCode(url,function(pr){
+          console.log(pr);
           p.setProgress(0.1+pr*0.5);
         }).then(function(code){
           p.setProgress(0.6);
@@ -451,7 +451,7 @@
       }
     }
     if(addon.url||addon.marketId){
-      if(addon.marketId)addon.url=await loadMarketData()[addon.marketId].url;
+      if(addon.marketId)addon.url=(await loadMarketData())[addon.marketId].url;
       try{
         var code=await getCode(addon.url);
       }catch(e){
@@ -482,6 +482,7 @@
           codesto.set(id,code,true,r);
         });
         initsto.set(id,addon);
+        evn.doevent('update',{id})
         return {
           ok:1,id,version_code:meta.version_code
         }
@@ -532,6 +533,7 @@
     getAddonList().forEach(id=>{
       if(!initsto.get(id).disabled){
         runAddon(id);
+        console.log(id);
       }
     })
   }

@@ -45,6 +45,12 @@
           toast.show('删除成功')
         })
       }
+    },{
+      icon:util.getGoogleIcon('e14d'),
+      title:"复制链接",
+      click:function(){
+        util.copyText(util.query(menuedLi,'a').href);
+      }
     }]
   });
   var menuedCate=null;

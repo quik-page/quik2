@@ -11,8 +11,8 @@
     get:function(hash,cb){
       localforage.getItem(hash).then(cb);
     },
-    set:function(file,cb){
-      var hash='^'+util.getRandomHashCache();
+    set:function(file,hash,cb){
+      hash=hash||('^'+util.getRandomHashCache());
       localforage.setItem(hash,file).then(function(){
         cb(hash);
       });
@@ -51,10 +51,7 @@
           if(!idbsupport){
             throw new Error('indexedDB is not support in this browser');
           }
-          if(get(k)){
-           filerecv.delete(get(k)); 
-          }
-          filerecv.set(v,function(hash){
+          filerecv.set(v,get(k),function(hash){
             var a=getAll();
             a[ck][k]=hash;
             setAll(a[ck]);

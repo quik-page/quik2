@@ -44,9 +44,14 @@ function xrmarketItem(addon,id){
     util.query(li, '.d .website').innerText = addon.website || '';
     market_l.appendChild(li);
 
-    if(core.getAddonByMarketId(id)){
+    var hastheaddon=core.getAddonByMarketId(id);
+    if(hastheaddon){
         util.query(li,'.btn.install').style.display='';
-        util.query(li,'.btn.installed').style.display='block';
+        if(hastheaddon.version_code<addon.version_code){
+            util.query(li,'.btn.update').style.display='block';
+        }else{
+            util.query(li,'.btn.installed').style.display='block';
+        }
     }
 
     util.query(li,'.btn.install').addEventListener('click',function(){
@@ -66,6 +71,16 @@ function xrmarketItem(addon,id){
             util.query(li,'.btn.install').style.display='block';
             toast.show('插件 “'+addon.name+'” 安装出错（'+err.msg+'）')
         })
+    })
+
+    util.query(li,'.btn.update').addEventListener('click',function(){
+        this.style.display='';
+        ms[2].innerText='正在更新...';
+        core.update(hastheaddon.id).then(function(){
+            ms[2].innerText='更新完成';
+            util.query(li,'.btn.installed').style.display='block';
+            toast.show('插件 “'+addon.name+'” 更新完成')
+        });
     })
     
 }

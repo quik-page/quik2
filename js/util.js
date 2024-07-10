@@ -273,19 +273,26 @@
       return Math.random().toString(36).slice(2)+Date.now().toString(36);
     },
     copyText:function(value){
-      if(navigator.clipboard){
-        navigator.clipboard.writeText(value);
+      if(window.isExt){
+        parent.postMessage({
+          type:"copy",
+          text:value
+        },'*');
       }else{
-        const input = document.createElement('input');
-        input.value = value;
-        input.style.display = 'none';
-        // 将input元素添加到文档中
-        document.body.appendChild(input);
-        // 模拟键盘事件以触发复制操作
-        input.select();
-        document.execCommand('copy');
-        // 从文档中移除input元素
-        document.body.removeChild(input);
+        if(navigator.clipboard){
+          navigator.clipboard.writeText(value);
+        }else{
+          const input = document.createElement('input');
+          input.value = value;
+          input.style.display = 'none';
+          // 将input元素添加到文档中
+          document.body.appendChild(input);
+          // 模拟键盘事件以触发复制操作
+          input.select();
+          document.execCommand('copy');
+          // 从文档中移除input元素
+          document.body.removeChild(input);
+        }
       }
       toast.show('复制成功');
     },

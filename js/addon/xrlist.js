@@ -112,6 +112,9 @@ var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
   core.on('installnew',function(e){
     xraddon(e.id);
   })
+  core.on('update',function(e){
+    xraddon(e.id);
+  })
 
   core.on('uninstall',function(e){
     var li = util.query(addon_l, 'li[data-id="' + e.id + '"]');
