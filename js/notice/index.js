@@ -4,6 +4,7 @@
   var notice_mb=_REQUIRE_('./notice.mb.html');
   var focus_con=document.querySelector(".focus-notice");
   var hasNew=0;
+  var noticeclick=false;
   function notice(details){
     this.el=util.element('div',{
       class:"notice-item"
@@ -23,7 +24,7 @@
       clearTimeout(this._timeouthide);
       this.el.classList.add('show');
       this.el.addEventListener('click',function(e){
-        e.stopPropagation();
+        noticeclick=true;
       })
       var _=this;
       this.el.style.display='block';
@@ -177,6 +178,10 @@
     document.querySelector(".notice-sc").classList.add('show');
   })
   document.querySelector(".notice-sc").addEventListener('click',function(){
+    if(noticeclick){
+      noticeclick=false;
+      return;
+    }
     this.classList.remove('show');
   })
   function r(a){

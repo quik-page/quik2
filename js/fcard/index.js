@@ -2,8 +2,9 @@
     var fcF=util.element('div',{
         class:"fcard-frame"
     });
+    var fcFclicked=false;
     fcF.addEventListener('click',function(e){
-        e.stopPropagation()
+        fcFclicked=true;
     })
     document.querySelector('main').append(fcF);
 
@@ -77,11 +78,15 @@
     mobZDIcon.style.display='none';
     document.querySelector('main').append(mobZDIcon);
     mobZDIcon.onclick=function(e){
-        e.stopPropagation();
+        fcFclicked=true;
         fcF.classList.add('show')
         this.classList.add('hide');
     }
     document.addEventListener('click',function(){
+        if(fcFclicked){
+            fcFclicked=false;
+            return;
+        }
         fcF.classList.remove('show');
         mobZDIcon.classList.remove('hide');
     })
