@@ -90,7 +90,8 @@
     alert,
     confirm,
     prompt,
-    card
+    card,
+    getEventHandle
   }
   window.util=util;
   clearTimeout(loadingtimeout);

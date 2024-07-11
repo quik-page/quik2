@@ -28,6 +28,23 @@
                     },200)
                 }
             }
+            if(p.waiting){
+                var e=p._waitfn;
+                var d2=p._waitd;
+                if(d2.meta){
+                    util.query(d,'.sth img').src=d2.meta.icon;
+                    util.query(d,'.sth .name').innerText=d2.meta.name;
+                    util.query(d,'.sth .version').innerText='版本：'+d2.meta.version;
+                }
+                util.query(d,'.msg').innerText=d2.msg;
+                util.query(d,'.btns').style.display='block';
+                util.query(d,'.btn.l').onclick=function(){
+                    e(false)
+                }
+                util.query(d,'.btn.r').onclick=function(){
+                    e(true)
+                }
+            }
             p.on('status',function(s){
                 util.query(d,'.msg').innerText=s.msg;
             });
