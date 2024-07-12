@@ -72,7 +72,7 @@
           filerecv.delete(a[ck][k],function(){
             var a=getAll();
             delete a[ck][k];
-            setAll(a);
+            setAll(a[ck]);
             callback();
           });
         }

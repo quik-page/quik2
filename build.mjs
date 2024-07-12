@@ -81,7 +81,11 @@ fs.writeFileSync(path.join(__dirname,'docs/version'),v.toString());
 qjs(path.join(__dirname,'index.js'), function (code) {
   code=code.replace('\'${VERSION_CODE}\'',v);
   // fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),code);
-  uglifyJs.minify(code).then(function(result){
+  uglifyJs.minify(code,{
+    compress:{
+      drop_console:true
+    }
+  }).then(function(result){
     fs.writeFileSync(path.join(__dirname,'docs/index.bundle.js'),result.code);
   })
 });

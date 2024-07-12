@@ -81,6 +81,7 @@
     }else{
       var adid=util.getRandomHashCache();
       await new Promise(function(r){
+        console.log(code);
         codesto.set(adid,code,true,r);
       });
       meta.id=adid;
@@ -390,7 +391,9 @@
     if(addon){
       initsto.remove(id);
       if(addon.type!='dev'){
-        await new Promise((r)=>codesto.remove(id,true,r));
+        await new Promise((r)=>{
+          codesto.remove(id,true,r)
+        });
       }
       evn.doevent('uninstall',[{id,marketId:addon.marketId}])
       return true;
