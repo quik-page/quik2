@@ -16,9 +16,9 @@
         idmax++;
         this.id=idmax;
         var fel=util.element('div',{
-            class:"fcard"
+            class:"fcard"+(options.class?" "+options.class:"")
         });
-        fel.innerHTML='<div class="content '+(options.class||"")+'">'+this.content+'<div><div class="cover"></div>';
+        fel.innerHTML='<div class="content">'+this.content+'<div>';
         fcF.insertBefore(fel,fcF.firstChild);
         this.el=fel;
         fcards.push(this);
