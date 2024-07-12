@@ -349,7 +349,6 @@
     },
     getCates: function (callback = function () { }) {
       initsto.get('cate', true, function (c) {
-        console.log(Object.keys(c),initsto.get('cate'));
         callback({
           code: 0,
           msg: "获取成功",

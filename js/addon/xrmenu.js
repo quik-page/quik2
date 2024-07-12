@@ -14,7 +14,6 @@
           u.bind(p);
           p.on('done', function (a) {
             alert('安装成功');
-            console.log(a);
           });
           return true;
         })
@@ -35,7 +34,6 @@
             p.ondone = function (a) {
               installing_notice.destroy();
               alert('安装成功');
-              console.log(a);
             };
           }
           r.readAsText(f);

@@ -127,7 +127,6 @@
 
   var draws={
     img:function(bgf,data){
-      console.log(data);
       bgf.innerHTML='<div class="img-sp full"><div class="cover"></div><img src="'+(data.url||neizhiImg[data.index].img)+'"/></div>';
       bgf.querySelector('img').onload=function(){
         this.style.opacity='1';

@@ -14,7 +14,6 @@
         }
       }
       xhr.onerror=function(){
-        console.log('getCode error');
         reject(xhr.status);
       }
       xhr.onprogress=function(pr){
@@ -81,7 +80,6 @@
     }else{
       var adid=util.getRandomHashCache();
       await new Promise(function(r){
-        console.log(code);
         codesto.set(adid,code,true,r);
       });
       meta.id=adid;
@@ -100,7 +98,6 @@
 
   async function checkUpdate(id){
     var addon=initsto.get(id);
-    console.log(addon);
     if(!addon){
       throw 'not found addon';
     }
@@ -234,7 +231,6 @@
       }])
     },
     setDone:function(res){
-      console.log('a');
       this.result=res;
       this.ev.doevent('done',[res]);
     },
@@ -282,7 +278,6 @@
         p.setStatu(2);
         var url=marketData[id].url;
         getCode(url,function(pr){
-          console.log(pr);
           p.setProgress(0.1+pr*0.5);
         }).then(function(code){
           p.setProgress(0.6);
@@ -311,7 +306,6 @@
     getCode(url,function(pr){
       p.setProgress(0.1+pr*0.5);
     }).catch(function(err){
-      console.log(err);
       p.setError(2,url);
     }).then(function(code){
       p.setProgress(0.6);
@@ -446,7 +440,6 @@
   // 插件升级
   async function update(id){
     var addon=initsto.get(id);
-    console.log(addon);
     if(!addon){
       return {
         error:true,
@@ -536,7 +529,6 @@
     getAddonList().forEach(id=>{
       if(!initsto.get(id).disabled){
         runAddon(id);
-        console.log(id);
       }
     })
   }

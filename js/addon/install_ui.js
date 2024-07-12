@@ -79,7 +79,6 @@
                 }
             });
             p.on('done',function(){
-                console.log('a');
                 _.hide();
                 setTimeout(function(){
                     _.destroy();

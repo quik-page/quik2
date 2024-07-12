@@ -15,15 +15,12 @@
         try{
           if(jl[k]&&jl[k].sync){
             if(jl[k].get){
-              console.log('t');
               a[k].data=await jl[k].get();
             }else{
-              console.log('d');
               a[k].data=await dget(ast[k]);
             }
           }
         }catch(e){
-          console.trace();
           throw new Error('在获取 '+k+' 时遇到错误',e);
         }
       }else{
@@ -105,7 +102,6 @@
       
     }
     
-    console.log(ast);
     var o=JSON.parse(localStorage.quik2);
     for(var k in ast){
       o[k]=ast[k];

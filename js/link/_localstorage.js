@@ -23,7 +23,6 @@
         throw '参数不正确';
       }
       var lm = limitURL(detail);
-      console.log(lm);
       if (lm) {
         callback({
           code: -3,

@@ -47,7 +47,6 @@ var initsto = storage('link', {
             dbTool.set(a.links,void 0,function(hash){
               a.links=hash;
               dbTool.get(ast[km].cate,function(ocate){
-                console.log(ocate);
                 dbTool.delete(ast[km].cate,function(){
                   var d=ocate;
                   for(var k in a.cate){
