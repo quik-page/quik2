@@ -55,7 +55,7 @@
     })
   }
 
-  function _importData(sl){
+  function _importData(sl) {
     var jl = getStorageList();
     importDataDialog.open();
     for (var k in sl) {
@@ -69,18 +69,28 @@
 
   function importaixr(j, k, jl) {
     var li = document.createElement('div');
-    if (j.addon) {
+    if (!jl[k]&&j.addon) {
       var addo = addon.getAddonByUrl(j.addon);
       if (!addo) {
-        addon.checkMarket(j.addon).then(function (ismarket) {
-          li.classList.add('item');
+        li.classList.add('item');
+        var ismarket = false;
+        if (j.addon.indexOf('market:') == 0) {
+          ismarket = true;
+          addon.loadMarketData().then(function (r) {
+            if (r[j.addon.replace('market:', '')])
+              setlihtml(r[j.addon.replace('market:', '')].name);
+            else
+              console.error('解析失败')
+          })
+        } else {
+          setlihtml(j.addon)
+        }
+        function setlihtml(_d) {
           li.innerHTML = `<input type="checkbox" disabled/><div class="message">
             <div class="title">${j.title || k}</div>
-            <div class="desc">需要安装插件以同步：${ismarket ? ismarket.name : j.addon}</div>
+            <div class="desc">需要安装插件以同步：${_d}</div>
           </div>
           <div class="installbtn">安装</div>`;
-          li.dataset.key = k;
-          util.query(dm2, '.importslist').appendChild(li);
           li.querySelector('.installbtn').addEventListener('click', function () {
             if (this.classList.contains('ing')) return;
             if (this.classList.contains('err')) {
@@ -90,7 +100,7 @@
             this.classList.add('ing');
             var p;
             if (ismarket) {
-              p = addon.installByOfficialMarket(ismarket.id);
+              p = addon.installByOfficialMarket(j.addon.replace('market:', ''));
             } else {
               p = addon.installByUrl(j.addon);
             }
@@ -98,21 +108,24 @@
               li.querySelector('.installbtn').innerHTML = '安装失败';
               this.classList.add('err');
             })
-            p.on('wait',function(r){
+            p.on('wait', function (r) {
               r(true);
             })
             p.on('done', function (e) {
               li.remove();
               setTimeout(function () {
                 importaixr(j, k, getStorageList());
-              },10)
+              }, 10)
             })
           })
-        });
+        }
+        li.dataset.key = k;
+        util.query(dm2, '.importslist').appendChild(li);
+        
         return;
       }
     }
-    if(!jl[k])return;
+    if (!jl[k]) return;
     li.classList.add('item');
     li.innerHTML = `<input type="checkbox"/><div class="message">
       <div class="title">${j.title || k}</div>
@@ -205,7 +218,7 @@
     exportDataDialog.close();
   }
 
-  var {registerWebSync,unregister,isSync}=_REQUIRE_('./web.js');
+  var { registerWebSync, unregister, isSync } = _REQUIRE_('./web.js');
 
   return {
     getJSON,
