@@ -192,7 +192,7 @@
 
         for(var i=0;i<data.note.length;i++){
             var id=data.note[i][2].toString(36);
-            quik2mb.notes.data[id]=data.note[i][0];
+            quik2mb.notes.data['n-'+id]=data.note[i][0];
             quik2mb.notes.data.comment.push({
                 id:id,title:getTitle(data.note[i][0]),date:data.note[i][2]
             })
