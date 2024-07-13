@@ -32,6 +32,10 @@
         nextPart();
         sync.openImport();
     }
+    util.query(d,'.part.a2 .item.c').onclick=function(){
+        nextPart();
+        sync.openQUIK1();
+    }
 
     function nextPart(){
         if(i>0){

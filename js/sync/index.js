@@ -233,6 +233,7 @@
     openExport,
     registerWebSync,
     unregister,
-    isSync
+    isSync,
+    openQUIK1:quik1
   }
 })()

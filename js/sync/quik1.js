@@ -223,6 +223,7 @@
 
         return quik2mb;
     }
+    return openQUIK1Helper;
     
     /*
     {
