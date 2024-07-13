@@ -76,8 +76,8 @@
 }
 .oobedia .clist .item{
     width: 200px;
-    background-color: #09f;
-    color: #fff;
+    background-color: #fff;
+    color: #09f;
     margin: 10px auto;
     text-align: center;
     line-height: 30px;
@@ -85,9 +85,9 @@
     box-shadow:  none;
     transition: all .2s;
 }
-.oobedia .clist .item.b{
-    background-color: #fff;
-    color: #09f;
+.oobedia .clist .item.a{
+    background-color: #09f;
+    color: #fff;
 }
 .oobedia .clist .item.a:hover{
     background-color: #0af;

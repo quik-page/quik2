@@ -56,11 +56,8 @@
                                 localforage.clear().then(function(){
                                     location.reload();
                                 });
-                                location.hash='';
-                            }else if(!t){
-                                
                             }else{
-                                c();
+                                t&&c();
                             }
                         })
                     }

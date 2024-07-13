@@ -55,11 +55,12 @@
     })
   }
 
-  function _importData(sl) {
+  function _importData(_sl) {
+    sl=_sl;
     var jl = getStorageList();
     importDataDialog.open();
-    for (var k in sl) {
-      importaixr(sl[k], k, jl);
+    for (var k in _sl) {
+      importaixr(_sl[k], k, jl);
     }
   }
   sg.addNewItem(exportDataSi);
@@ -75,6 +76,7 @@
         li.classList.add('item');
         var ismarket = false;
         if (j.addon.indexOf('market:') == 0) {
+          li.innerHTML='加载中...'
           ismarket = true;
           addon.loadMarketData().then(function (r) {
             if (r[j.addon.replace('market:', '')])
@@ -214,11 +216,15 @@
         }
       }
     })
+    console.log('set');
     setJSON(sl, op);
-    exportDataDialog.close();
+    importDataDialog.close();
   }
 
   var { registerWebSync, unregister, isSync } = _REQUIRE_('./web.js');
+
+
+  var quik1=_REQUIRE_('./quik1.js')
 
   return {
     getJSON,

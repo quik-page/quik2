@@ -70,6 +70,7 @@
   var rewrite='rewrite',compare='compare';
 
   async function setJSON(json,config){
+    console.log(json);
     var jl=getStorageList();
     var alls=getAllStorage();
     var ast={};

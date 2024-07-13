@@ -6,7 +6,10 @@
 
   var initsto=setting.settingSto;
   if(initsto.get('ob_justsearch')==undefined){
-    initsto.set('justsearch',false);
+    initsto.set('ob_justsearch',false);
+  }
+  if(initsto.get('ob_http')==undefined){
+    initsto.set('ob_http',false);
   }
   var sawait=[];
 
@@ -94,7 +97,7 @@
     check:checkUrl,
     enter:function(text){
       if(text.indexOf('://')==-1){
-        text='http://'+text;
+        text=((!!initsto.get('ob_http'))?'https://':'http://')+text;
       }
       open(text);
     },
@@ -165,7 +168,7 @@
           text:text,
           click:function(){
             if(text.indexOf('://')==-1){
-              text='http://'+text;
+              text=((!!initsto.get('ob_http'))?'https://':'http://')+text;
             }
             open(text);
           }
@@ -205,7 +208,22 @@
       return true;
     }
   })
+
+  var si2=new SettingItem({
+    title:"默认HTTPS打开链接",
+    index:1,
+    type:'boolean',
+    message:"打开后，搜索框打开链接在默认情况下使用HTTPS",
+    get:function(){
+      return !!initsto.get('ob_http');
+    },
+    callback:function(value){
+      initsto.set('ob_http',value);
+      return true;
+    }
+  })
   sg.addNewItem(si);
+  sg.addNewItem(si2);
   
   return {
     getSA:getSA,
