@@ -3,7 +3,7 @@
     load:function(fn){
       var i_=0;
       function g(){
-        util.xhr('https://tenapi.cn/v2/yiyan?format=json',function(res){
+        util.xhr('https://api.gumengya.com/Api/YiYan?format=json',function(res){
           fn(JSON.parse(res).data);
         },function(){
           i_++;
@@ -11,20 +11,6 @@
         })
       }
       g();
-    },
-    cats:{
-      a:'动画',
-      b:'漫画',
-      c:'游戏',
-      d:'文学',
-      e:'原创',
-      f:'来自网络',
-      g:'其他',
-      h:'影视',
-      i:'诗词',
-      j:'网易云',
-      k:'哲学',
-      l:'抖机灵'
     }
   }
 
@@ -35,12 +21,8 @@
       return new Promise(function(resolve,reject){
         hitokoto.load(function(res){
           resolve({
-            say:res.hitokoto,
-            from:res.source,
-            uuid:res.id,
-            cat:res.cat,
-            from_who:res.author,
-            title:"该一言来自"+res.source+"，由"+res.author+"上传"
+            say:res.text,
+            title:"来自故梦API"
           })
         })
       })
@@ -67,12 +49,9 @@
       click:function(){
         var c=hitokoto.cats[nowSay.cat];
         openSayDetailsDialog({
-          'API':"Ten·API（tenapi.cn） | Hitokoto (hitokoto.cn)",
+          'API':"故梦API",
           '内容':nowSay.say,
-          '来源':nowSay.from,
-          '上传者':nowSay.from_who,
-          '分类':c?c:'未知',
-          'UUID':nowSay.uuid
+          '来源':'故梦'
         })
       }
     }]
