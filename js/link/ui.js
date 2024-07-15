@@ -436,7 +436,7 @@
   var enabledCateSi=new SettingItem({
     type:'boolean',
     title:"链接分组",
-    message:"启用链接分组功能来管理链接",
+    message:"(Alt+G)启用链接分组功能来管理链接",
     get:function(){
       return initsto.get('enabledCate');
     },

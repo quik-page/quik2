@@ -66,7 +66,7 @@
           if(fav){
             r('<img src="'+fav+'"/>');
           }else{
-            r('<img src="'+util.createIcon('s')+'"/>');
+            r('<img src="'+util.createIcon('S')+'"/>');
           }
         })
       });

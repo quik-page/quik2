@@ -1,0 +1,34 @@
+(function(){
+    return {
+        create:function(steps,cb){
+            if(steps.length==0){cb();return;}
+            var _card=new card({
+                content:"<div class=\"guide-text\"></div><div class=\"btn ok\">确定</div>",
+                class:"guide-card",
+                offset:{top:0,left:0},
+                width:200
+            });
+            var _cd=_card.getCardDom();
+            var j=0;
+            function dostep(){
+                util.query(_cd,'.guide-text').innerHTML=steps[j].text;
+                if(_card.isShow){
+                    _card.setOffset(steps[j].offset,500);
+                }else{
+                    _card.setOffset(steps[j].offset);
+                    _card.show(500);
+                }
+            }
+            dostep();
+            util.query(_cd,'.btn.ok').addEventListener('click',function(){
+                j++;
+                if(j>=steps.length){
+                    _card.hide(500);
+                    cb();
+                }else{
+                    dostep(j);
+                }
+            })
+        }
+    }
+})();

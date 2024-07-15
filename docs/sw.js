@@ -22,7 +22,6 @@ self.addEventListener('install', (event) => {
       './assets/localforage.js',
       './assets/def_addon.png',
       './assets/logo.svg',
-      './assets/google-icon.woff2',
       'https://gstatic.loli.net/s/materialsymbolsoutlined/v164/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2'
     ])
   );

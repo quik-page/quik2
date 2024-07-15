@@ -167,12 +167,20 @@
         var _ic='https://api.xinac.net/icon/?url='+u.origin;
         if(u.hostname.indexOf('bing.com')!=-1){
           _ic='https://bing.com/favicon.ico';
+        }else if(u.hostname.indexOf('google.com')!=-1){
+          _ic='https://tse1-mm.cn.bing.net/th/id/OIP-C.aoNGSVIqKHtM-NWf3QrvdwHaHa?rs=1&pid=ImgDetMain';
         }
         this.loadimg(_ic,function(st){
           if(st){
-            cb(_ic);
+            cb(_ic)
           }else{
-            cb(false)
+            util.loadimg(u.protocol+'//'+u.host+'/favicon.ico',function(st2){
+              if(st2){
+                cb(u.protocol+'//'+u.host+'/favicon.ico');
+              }else{
+                cb(false)
+              }
+            })
           }
         });
       

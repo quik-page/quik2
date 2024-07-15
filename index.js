@@ -41,6 +41,7 @@
   var link=_REQUIRE_('./js/link/index.js');
   var says=_REQUIRE_('./js/says/index.js');
   var card=_REQUIRE_('./js/card/index.js');
+  var guidecreator=_REQUIRE_('./js/guidecreator.js');
   var fcard=_REQUIRE_('./js/fcard/index.js');
   var background=_REQUIRE_('./js/background/index.js');
   var searchEditor=_REQUIRE_('./js/search/editor.js');

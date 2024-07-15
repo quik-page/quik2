@@ -98,26 +98,59 @@
     },
     setOffset:function(offset,transition){
       var _=this;
-      this.offset=offset;
+      var old=this.offset;
       if(transition&&transition>0){
         this.el.style.transition='all '+transition+'ms';
+        var _ck=this.el.getBoundingClientRect();
+        if(typeof offset.top=='number'){
+          if(typeof old.bottom=='number'){
+            this.el.style.bottom=(window.innerHeight-offset.top-_ck.height)+"px";
+          }else{
+            this.el.style.top=offset.top+"px";
+          }
+        }else if(typeof offset.bottom=='number'){
+          if(typeof old.top=='number'){
+            this.el.style.top=(window.innerHeight-offset.bottom-_ck.height)+"px";
+          }else{
+            this.el.style.bottom=offset.bottom+"px";
+          }
+        }
+        if(typeof offset.left=='number'){
+          if(typeof old.right=='number'){
+            this.el.style.right=(window.innerWidth-offset.left-_ck.width)+"px";
+          }else{
+            this.el.style.left=offset.left+"px";
+          }
+        }else if(typeof offset.right=='number'){
+          if(typeof old.left=='number'){
+            this.el.style.left=(window.innerWidth-offset.right-_ck.width)+"px";
+          }else{
+            this.el.style.right=offset.right+"px";
+          }
+        }
         setTimeout(function(){
           _.el.style.transition='none';
+          sz.call(_);
         },transition);
+      }else{
+        sz.call(_);
       }
-      this.el.style.top='auto';
-      this.el.style.left='auto';
-      this.el.style.bottom='auto';
-      this.el.style.right='auto';
-      if(typeof offset.top=='number'){
-        this.el.style.top=offset.top+"px";
-      }else if(typeof offset.bottom=='number'){
-        this.el.style.bottom=offset.bottom+"px";
-      }
-      if(typeof offset.left=='number'){
-        this.el.style.left=offset.left+"px";
-      }else if(typeof offset.right=='number'){
-        this.el.style.right=offset.right+"px";
+      function sz(){
+        this.offset=offset;
+        this.el.style.top='auto';
+        this.el.style.left='auto';
+        this.el.style.bottom='auto';
+        this.el.style.right='auto';
+        if(typeof offset.top=='number'){
+          this.el.style.top=offset.top+"px";
+        }else if(typeof offset.bottom=='number'){
+          this.el.style.bottom=offset.bottom+"px";
+        }
+        if(typeof offset.left=='number'){
+          this.el.style.left=offset.left+"px";
+        }else if(typeof offset.right=='number'){
+          this.el.style.right=offset.right+"px";
+        }
       }
       
     }

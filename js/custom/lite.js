@@ -3,7 +3,7 @@
   var si=new SettingItem({
     index:2,
     title:"极简模式",
-    message:"隐藏所有图标和链接，点击LOGO显示",
+    message:"(Alt+X)隐藏所有图标和链接，点击LOGO显示",
     type:"boolean",
     get:function(){
       return !!initsto.get('lite');
@@ -46,11 +46,26 @@
     if(v){
       document.body.classList.add('lite');
       document.body.classList.add('hiden');
-  si2.show();
+      si2.show();
+      if(!initsto.get('lite_firsted')){
+        var imglogopos=document.querySelector('main .logo .imglogo').getBoundingClientRect();
+        guidecreator.create([{
+          text:"点击LOGO就可以显示链接和所有图标",
+          offset:window.innerWidth>600?{
+            top:imglogopos.top,
+            left:imglogopos.left+imglogopos.width+10
+          }:{
+            top:imglogopos.top+imglogopos.height+10,
+            left:imglogopos.left
+          }
+        }],function(){
+          initsto.set('lite_firsted',true)
+        })
+      }
     }else{
       document.body.classList.remove('lite');
       link.cateWidthShiPei();
-  si2.hide();
+      si2.hide();
     }
   }
 

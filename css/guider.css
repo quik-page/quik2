@@ -1,0 +1,14 @@
+.guide-card .guide-text{
+    font-size: 14px;
+    padding: 6px;
+}
+.guide-card .btn{
+    float: right;
+    font-size: 12px;
+    background-color: #09f;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+}
