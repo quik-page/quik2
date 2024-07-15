@@ -58,6 +58,7 @@
   _REQUIRE_('./js/oobe/index.js');
 
   window.quik={
+    guidecreator,
     fcard,
     custom,
     sync,

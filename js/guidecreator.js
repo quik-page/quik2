@@ -13,17 +13,17 @@
             function dostep(){
                 util.query(_cd,'.guide-text').innerHTML=steps[j].text;
                 if(_card.isShow){
-                    _card.setOffset(steps[j].offset,500);
+                    _card.setOffset(steps[j].offset,300);
                 }else{
                     _card.setOffset(steps[j].offset);
-                    _card.show(500);
+                    _card.show(300);
                 }
             }
             dostep();
             util.query(_cd,'.btn.ok').addEventListener('click',function(){
                 j++;
                 if(j>=steps.length){
-                    _card.hide(500);
+                    _card.hide(300);
                     cb();
                 }else{
                     dostep(j);

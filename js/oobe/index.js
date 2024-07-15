@@ -61,14 +61,14 @@
         if(!initsto.get('guided')){
             guidecreator.create([
                 {
-                    text:"点击左下角的这个图标就可以打开设置，你可以在设置里个性化你的QUIK起始页",
+                    text:"点击左下角的"+util.getGoogleIcon('e8b8',{type:"fill"})+"就可以打开设置，你可以在设置里个性化你的QUIK起始页",
                     offset:{
                         bottom:40,
                         left:0
                     }
                 },
                 {
-                    text:"QUIK起始页提供插件来拓展QUIK起始页的功能，点击这个图标看看插件市场里是否有中意的吧",
+                    text:"QUIK起始页提供插件来拓展QUIK起始页的功能，点击"+util.getGoogleIcon("e87b", { type: "fill" })+"看看插件市场里是否有中意的吧",
                     offset:{
                         top:40,
                         right:40

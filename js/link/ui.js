@@ -475,7 +475,7 @@
     actCate();
     if(v){
       util.query(linkF,'.cate-bar').style.display='block';
-      setTimeout(function(){cateWidthShiPei();});
+      setTimeout(function(){cateWidthShiPei();},10);
     }else{
       util.query(linkF,'.cate-bar').style.display='none';
     }

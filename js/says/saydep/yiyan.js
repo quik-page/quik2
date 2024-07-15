@@ -47,7 +47,6 @@
       icon:util.getGoogleIcon('e88e'),
       title:'一言详情',
       click:function(){
-        var c=hitokoto.cats[nowSay.cat];
         openSayDetailsDialog({
           'API':"故梦API",
           '内容':nowSay.say,
