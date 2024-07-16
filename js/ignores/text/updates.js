@@ -1,4 +1,13 @@
 var updatelog={
+  "2.0.0.1-beta":{
+    updates:[
+      {
+        "tag": "fix",
+        "content": "修复搜索框搜索的BUG"
+      }
+    ],
+    time:"2024/7/16"
+  },
   "2.0.0-beta": {
     "updates": [
       {

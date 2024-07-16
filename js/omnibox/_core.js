@@ -87,7 +87,7 @@
       return true;
     },
     enter:function(text){
-      open(searchUtil.getSearchType().replace(searchUtil.keywordText,encodeURI(text)));
+      open(searchUtil.getSearchType().replace(searchUtil.keywordText,encodeURIComponent(text)));
     },
     icon:":searchtype",
     submit:util.getGoogleIcon('E8B6')
@@ -115,7 +115,7 @@
         icon:util.getGoogleIcon('E8B6'),
         text:text,
         click:function(){
-          open(searchUtil.getSearchType().replace(searchUtil.keywordText,text));
+          open(searchUtil.getSearchType().replace(searchUtil.keywordText,encodeURIComponent(text)));
         }
       });
       return a;
