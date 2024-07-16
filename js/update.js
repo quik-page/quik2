@@ -1,13 +1,13 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.0.0-dev',
+    version:'2.0.0-beta',
     version_code:window.version_code,
-    updateTime:'2024/6/29',
+    updateTime:'2024/7/16',
     log:[
       {
-        tag:"new",
-        content:"最后一次内核更新",
+        "tag": "thanks",
+        "content": "最终正式版更新，感谢您的测试和使用！"
       }
     ]
   }

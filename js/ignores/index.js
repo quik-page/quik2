@@ -36,6 +36,14 @@
       thaDialog.open();
     }
   });
+  var thankSi=new SettingItem({
+    type:'null',
+    title:"提供反馈",
+    index:5,
+    callback:function(){
+      window.open('./feedback.html')
+    }
+  });
   igsg.addNewItem(aboutSi);
   igsg.addNewItem(updateSi);
   igsg.addNewItem(licSi);

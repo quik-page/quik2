@@ -1,4 +1,49 @@
 var updatelog={
+  "2.0.0-beta": {
+    "updates": [
+      {
+        "tag": "change",
+        "content": "UI大优化，大整改，并对手机端进行了支持，更改使用Google Material Icon"
+      },
+      {
+        "tag": "change",
+        "content": "重写所有模块，优化代码逻辑和用户体验"
+      },
+      {
+        "tag": "change",
+        "content": "对背景设置进行重写"
+      },
+      {
+        "tag": "fix",
+        "content": "修复原来近乎无效的离线模式"
+      },
+      {
+        "tag": "del",
+        "content": "将便签、天气、计算器、问候、闹钟、热点、画板、翻译等功能移除（将会陆续移动到插件）"
+      },
+      {
+        "tag": "new",
+        "content": "新增插件系统，支持插件拓展"
+      },
+      {
+        "tag": "new",
+        "content": "新增用户可自己上传任意图片、视频作背景的功能"
+      },
+      {
+        "tag": "new",
+        "content": "新增背景图片/视频显示设置功能"
+      },
+      {
+        "tag": "new",
+        "content": "新增极简模式"
+      },
+      {
+        "tag": "del",
+        "content": "取消第二界面设计"
+      }
+    ],
+    "time": "2024/7/16"
+  },
   "1.7.8": {
     "updates": [
       {
