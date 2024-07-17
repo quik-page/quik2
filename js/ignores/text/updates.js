@@ -1,4 +1,13 @@
 var updatelog={
+  "2.0.0.2-beta":{
+    updates:[
+      {
+        "tag": "fix",
+        "content": "修复随机一言的BUG"
+      }
+    ],
+    time:"2024/7/17"
+  },
   "2.0.0.1-beta":{
     updates:[
       {

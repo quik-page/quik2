@@ -57,21 +57,26 @@
   _REQUIRE_('./js/safe.js');
   _REQUIRE_('./js/oobe/index.js');
 
+
+  var _upaddon={};
+  var pbls=['runAddon','enable','disable','upupdate','upinstallByUrl','upinstallByOfficialMarket','upuninstall','installByLocal'];
+  for(var k in addon){
+    if(pbls.indexOf(k)==-1){
+      _upaddon[k]=addon[k];
+    }
+  }
+  _upaddon.update=addon.upupdate;
+  _upaddon.installByUrl=addon.upinstallByUrl;
+  _upaddon.installByOfficialMarket=addon.upinstallByOfficialMarket;
+  _upaddon.uninstall=addon.upuninstall;
+
+
   window.quik={
     guidecreator,
     fcard,
     custom,
     sync,
-    addon:{
-      installByOfficialMarket:addon.upinstallByOfficialMarket,
-      installByUrl:addon.upinstallByUrl,
-      uninstall:addon.upuninstall,
-      update:addon.upupdate,
-      getAddonByUrl:addon.getAddonByUrl,
-      getAddonBySessionId:addon.getAddonBySessionId,
-      getAddonByMarketId:addon.getAddonByMarketId,
-      getAddonList:addon.getAddonList,
-    },
+    addon:_upaddon,
     storage,
     omnibox,
     util,
