@@ -14,7 +14,7 @@ var updatelog={
         "tag": "fix",
         "content": "修复插件商店安装插件时，百分比显示异常的问题"
       },{
-        "tag": "add",
+        "tag": "new",
         "content": "在搜索时按“Tab”“Shift+Tab”切换搜索引擎"
       },{
         "tag": "fix",
