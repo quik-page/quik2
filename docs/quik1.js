@@ -39,7 +39,7 @@
                     "ob_justsearch": data.jusearch,
                     "ob_http": data.qhttps,
                     "ob_autofocus": data.autofocuss,
-                    "theme": data['settings']['通用']['msqh']=='浅色'?"a":"b",
+                    "theme": data['settings']['通用']?(data['settings']['通用']['msqh']=='浅色'?"a":"b"):"a",
                     "ob_cal": data.casearch,
                     "ob_tran": data.trsearch
                 }
@@ -62,7 +62,7 @@
                 "title": "链接",
                 "desc": "QUIK起始页链接数据",
                 "data": {
-                    "linksize": ({'小':'s','中':'m','大':'l'})[data['settings']['通用']['ljdx']],
+                    "linksize": ({'小':'s','中':'m','大':'l'})[data['settings']['通用']?data['settings']['通用']['ljdx']:'中'],
                     "links": (function(){
                         var o=[],_o=data.pins;
                         for(var i=0;i<_o.length;i++){
@@ -82,7 +82,7 @@
                 "data": {
                     "usersay": data.says,
                     "saytype": (function(){
-                        if(data['settings']['一言']['atqd']){
+                        if(data['settings']['一言']&&data['settings']['一言']['atqd']){
                             if(data['settings']['一言']['apiq']=='今日诗词'){
                                 return 'jinrishici'
                             }else{
@@ -153,10 +153,15 @@
                             }
                         }
                     })(),
-                    "ivsetting": {
+                    "ivsetting": data['settings']['背景']?{
                         "mb": data['settings']['背景']['bgmb']*10,
                         "isbr": !!data['settings']['背景']['bgmf'],
                         "br": !!data['settings']['背景']['bgmf']?data['settings']['背景']['bgmf']:6,
+                        "th": 1
+                    }:{
+                        "mb": 30,
+                        "isbr": false,
+                        "br": 6,
                         "th": 1
                     }
                 }
