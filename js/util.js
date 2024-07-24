@@ -262,6 +262,13 @@
         if(xhr.readyState==4){
           if(xhr.status==200){
             cb(xhr.responseText);
+          }else if(xhr.status>=400){
+            err&&err({
+              status:xhr.status,
+              statusText:xhr.statusText,
+              readyState:xhr.readyState,
+              responseText:xhr.responseText
+            });
           }
         }
       }

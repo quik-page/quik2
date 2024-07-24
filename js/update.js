@@ -1,13 +1,28 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.0.0.2-beta',
+    version:'2.0.1-beta',
     version_code:window.version_code,
-    updateTime:'2024/7/17',
+    updateTime:'2024/7/24',
     log:[
       {
         "tag": "fix",
-        "content": "修复随机一言的BUG"
+        "content": "修复设置中的一个小BUG"
+      },{
+        "tag": "fix",
+        "content": "修复搜索框中搜索联想文字超出的样式问题"
+      },{
+        "tag": "fix",
+        "content": "修复通知中按钮渲染问题"
+      },{
+        "tag": "fix",
+        "content": "修复插件商店安装插件时，百分比显示异常的问题"
+      },{
+        "tag": "add",
+        "content": "在搜索时按“Tab”“Shift+Tab”切换搜索引擎"
+      },{
+        "tag": "fix",
+        "content": "修复一些小BUG，优化用户体验。"
       }
     ]
   }

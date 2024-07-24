@@ -140,6 +140,8 @@
             util.query(elr, '.setting-item-input').checked = v;
             if (v) {
               util.query(elr, '.check-box').classList.add('checked');
+            }else{
+              util.query(elr, '.check-box').classList.remove('checked');
             }
             util.query(elr, '.check-box').addEventListener('click', function () {
               util.query(elr, '.setting-item-input').click();
@@ -328,6 +330,8 @@
       }
     },
     _regetItem: function (item) {
+      console.log(item);
+      console.trace()
       item.getacb();
     }
   }

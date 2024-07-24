@@ -146,15 +146,19 @@
     var btncon=util.query(n.el,'.notice-btns');
     btncon.innerHTML='';
     for(var i=0;i<n.btns.length;i++){
-      var btn=n.btns[i];
-      var btnel=util.element('div',{
-        class:"btn"+(btn.style?" "+btn.style:""),
-      });
-      btnel.innerText=btn.text;
-      btnel.onclick=function(){
-        btn.click(n);
-      }
-      btncon.appendChild(btnel);
+      (function(i){
+        var btn=n.btns[i];
+        var btnel=util.element('div',{
+          class:"btn"+(btn.style?" "+btn.style:""),
+        });
+        btnel.innerText=btn.text;
+        btnel.onclick=function(){
+          console.log(btn.click);
+          btn.click(n);
+        }
+        btncon.appendChild(btnel);
+      })(i)
+
     }
   }
 
@@ -198,6 +202,7 @@
   }
   r();
 
+  _REQUIRE_('./tuisong.js');
   
   return notice;
 

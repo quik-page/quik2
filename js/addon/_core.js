@@ -17,7 +17,11 @@
         reject(xhr.status);
       }
       xhr.onprogress=function(pr){
-        p&&p(pr.loaded/pr.total);
+        if(pr.total){
+          p&&p(pr.loaded/pr.total);
+        }else{
+          p&&p(0);
+        }
       }
       xhr.send();
     })

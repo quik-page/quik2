@@ -1,10 +1,12 @@
 (function(){
+
+  // 因tenapi即将关停（https://5ime.cn/tenapi-issue-bankruptcy.html），所以换回hitokoto官方API。
   var hitokoto={
     load:function(fn){
       var i_=0;
       function g(){
-        util.xhr('https://tenapi.cn/v2/yiyan?format=json',function(res){
-          fn(JSON.parse(res).data);
+        util.xhr('https://v1.hitokoto.cn/',function(res){
+          fn(JSON.parse(res));
         },function(){
           i_++;
           if(i_<=5)g();
@@ -36,11 +38,11 @@
         hitokoto.load(function(res){
           resolve({
             say:res.hitokoto,
-            from:res.source,
-            uuid:res.id,
-            cat:res.cat,
-            from_who:res.author,
-            title:"该一言来自"+res.source+"，由"+res.author+"上传"
+            from:res.from,
+            uuid:res.uuid,
+            cat:res.type,
+            from_who:res.from_who,
+            title:"该一言来自"+res.from+"，由"+res.from_who+"上传"
           })
         })
       })
@@ -67,7 +69,7 @@
       click:function(){
         var c=hitokoto.cats[nowSay.cat];
         openSayDetailsDialog({
-          'API':"Ten·API（tenapi.cn） | Hitokoto (hitokoto.cn)",
+          'API':"Hitokoto (hitokoto.cn)",
           '内容':nowSay.say,
           '来源':nowSay.from,
           '上传者':nowSay.from_who,

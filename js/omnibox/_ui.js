@@ -64,9 +64,9 @@
       return new Promise(function(r,j){
         util.getFavicon(core.searchUtil.getSearchType(),function(fav){
           if(fav){
-            r('<img src="'+fav+'"/>');
+            r('<img src="'+fav+'" style="border-radius:50%;"/>');
           }else{
-            r('<img src="'+util.createIcon('S')+'"/>');
+            r('<img src="'+util.createIcon('S')+'" style="border-radius:50%;"/>');
           }
         })
       });
@@ -81,6 +81,7 @@
    * @returns {String} iconhtmlstr
    */
   function chuliteshusubmit(submit){
+    // 因为还没有特殊SubmitIcon
     return "";
   }
 
@@ -162,6 +163,23 @@
         input.value=util.query(actli,'.sa_text').innerText;
         inputInputEv.call(this);
       }
+    }else if(e.key=='Tab'){
+      e.preventDefault();
+      if(e.shiftKey){
+        if(util.query(sct,'li.active').previousElementSibling){
+          util.query(sct,'li.active').previousElementSibling.click();
+        }else{
+          var lis=util.query(sct,'li',true);
+          lis[lis.length-2].click();
+        }
+      }else{
+        if(!util.query(sct,'li.active').nextElementSibling.classList.contains('add')){
+          util.query(sct,'li.active').nextElementSibling.click();
+        }else{
+          util.query(sct,'li').click();
+        }
+      }
+      
     }
   }
 
@@ -189,6 +207,7 @@
     core.enter(input.value);
   }
 
+  // 搜索引擎选择
   var sct=util.element('div',{
     class:'searchtypeselector'
   })
@@ -225,13 +244,23 @@
         sct.classList.remove('active');
       }
     }
+    var li=util.element('li');
+    li.classList.add('add')
+    li.innerHTML=util.getGoogleIcon('e145');
+    ul.append(li);
+    li.onclick=function(){
+      searchEditor.open();
+    }
     sct.style.width=util.query(ul,'li',true).length*36+'px';
   }
   icon.addEventListener('click',function(){
+    // 避免link遮挡底部
     if(sct.classList.contains('active')){
       sct.classList.remove('active');
+      document.querySelector('main .links').classList.remove('duan');
     }else{
       sct.classList.add('active');
+      document.querySelector('main .links').classList.add('duan');
     }
   })
   

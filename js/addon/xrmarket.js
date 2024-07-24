@@ -58,7 +58,7 @@ function xrmarketItem(addon,id){
         ms[2].innerText='正在安装...(0%)';
         var p=core.installByOfficialMarket(id);
         p.on('progress',function(pr){
-            ms[2].innerText='正在安装...('+(pr*100)+'%)';
+            ms[2].innerText='正在安装...('+parseInt(pr*100)+'%)';
         })
         p.on('done',function(){
             ms[2].innerText='安装完成';

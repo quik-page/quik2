@@ -26,6 +26,10 @@
   display: none;
   background-color: #fff;
   position: relative;
+  padding-bottom: 40px;
+}
+body.dark .notice-item{
+  background-color: #333;
 }
 .notice-item .notice-actionbar{
   width: 100%;
@@ -49,6 +53,9 @@
 .notice-item .notice-close-btn:hover{
   background-color: #f3f3f3;
 }
+body.dark .notice-item .notice-close-btn:hover{
+  background-color: #555;
+}
 .notice-item .notice-close-btn span{
   font-size: 16px;
   text-align: center;
@@ -60,6 +67,9 @@
 }
 .notice-item .notice-btns{
   overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 .notice-item .notice-btns .btn{
   min-width: 60px;

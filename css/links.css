@@ -4,6 +4,9 @@
   height: calc(100% - 210px);
   width: calc(100% - 10px);
 }
+.links.duan{
+  height: calc(100% - 240px);
+}
 .links .cate-bar{
   width: 100%;
   height: 30px;
@@ -182,6 +185,9 @@
 @media (max-width:400px){
   .links{
     height: calc(100% - 180px);
+  }
+  .links.duan{
+    height: calc(100% - 210px);
   }
 }
 

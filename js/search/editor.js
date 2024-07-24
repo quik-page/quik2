@@ -10,7 +10,7 @@
   util.query(d,'.closeBtn').onclick=util.query(d,'.cancel.btn').onclick=function(){
     dia.close();
   }
-  util.query(d,'.ok.btn').onclick=util.query(d,'.cancel.btn').onclick=function(){
+  util.query(d,'.ok.btn').onclick=function(){
     var nlist={};
     util.query(d,'.searchlist .item',true).forEach(function(item){
       nlist[item.dataset.k]=item.querySelector('.url input').value;
@@ -102,4 +102,10 @@
     }
   })
   omnibox.sg.addNewItem(si);
+
+  return {
+    open:function(){
+      dia.open();
+    }
+  }
 })();

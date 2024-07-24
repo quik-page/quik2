@@ -72,6 +72,7 @@
 
 
   window.quik={
+    searchEditor,
     guidecreator,
     fcard,
     custom,

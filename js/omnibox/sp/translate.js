@@ -14,37 +14,42 @@
     })
 
     sg.addNewItem(si);
-var _t_re;
+var _t_re,_t_timeout;
 core.addNewSA({
     check:function(text){
         return (!!core.initsto.get('ob_tran'))&&(!util.checkUrl(text))&&checkLang(text);
     },
     get:function(text,getsa){
       return new Promise(function(r,j){
-        _t_re=util.xhr('https://api.gumengya.com/Api/Translate?text='+encodeURI(text)+'&from=auto&to=zh',function(res){
-            var a=getsa();    
-            var o=JSON.parse(res);
-            if(o.code==200){
-                var a=getsa();
-                var result=o.data.result;
-                a.unshift({
-                    icon:util.getGoogleIcon('e8e2'),
-                    text:result,
-                    click:function(){
-                        ui.setValue(result);
-                    }
-                })
-            }else{
-                console.log('Translate API Err:',o);
-            }
-            r(a);
-            
-        },function(err){
-            console.log('Translate API Err:',err);
-        })
+        // 降低调用次数
+        _t_timeout=setTimeout(function(){
+            _t_re=util.xhr('https://api.gumengya.com/Api/Translate?text='+encodeURI(text)+'&from=auto&to=zh',function(res){
+                var a=getsa();    
+                var o=JSON.parse(res);
+                if(o.code==200){
+                    var a=getsa();
+                    var result=o.data.result;
+                    a.unshift({
+                        icon:util.getGoogleIcon('e8e2'),
+                        text:result,
+                        click:function(){
+                            ui.setValue(result);
+                        }
+                    })
+                }else{
+                    console.log('Translate API Err:',o);
+                }
+                r(a);
+                
+            },function(err){
+                console.log('Translate API Err:',err);
+            })
+        },1500)
+        
       })
     },
     interrupt:function(){
+        clearTimeout(_t_timeout);
         if(_t_re){
             _t_re.abort();
         }

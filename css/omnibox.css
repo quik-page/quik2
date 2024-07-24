@@ -92,6 +92,10 @@ body.dark .searchbox{
   float: left;
   font-size: 14px;
   line-height: 24px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: calc(100% - 30px);
+  overflow: hidden;
 }
 .searchbox ul li:hover,
 .searchbox ul li.active
@@ -121,6 +125,7 @@ body.dark .searchbox ul li.active{
   border-radius: 15px;
   transition: height .3s;
   border:0;
+  backdrop-filter: blur(10px);
 }
 .searchtypeselector.active{
   height: 30px;
@@ -143,11 +148,29 @@ body.dark .searchbox ul li.active{
 .searchtypeselector li.active{
   background-color: #ddd;
 }
+body.dark .searchtypeselector li:hover,
+body.t-dark .searchtypeselector li:hover{
+  background-color: #555;
+}
+body.dark .searchtypeselector li.active,
+body.t-dark .searchtypeselector li.active{
+  background-color: #888;
+}
 .searchtypeselector li img{
   width: 20px;
   height: 20px;
   display:block;
   margin: 5px;
+  border-radius: 50%;
+}
+.searchtypeselector li{
+  text-align: center;
+  color: #888;
+  user-select: none;
+  cursor: pointer;
+}
+.searchtypeselector li span{
+  line-height: 30px;
 }
 @media (max-width:600px){
   .searchbox{
