@@ -394,6 +394,7 @@
         });
       }
       evn.doevent('uninstall',[{id,marketId:addon.marketId}])
+      uninstalleventons[id]&&uninstalleventons[id]();
       return true;
     }else{
       return false;
@@ -431,7 +432,8 @@
         this.isSession=true;
       };
       var addonData={
-        session:new Session('${id}')
+        session:new Session('${id}'),
+        uninstall:function(fn){quik.addon._doonun(this.session,fn)}
       };
       (function(){
         ${code}
@@ -551,6 +553,7 @@
   function getEnable(id){
     return !initsto.get(id).disabled;
   }
+  var uninstalleventons={};
   
   return {
     enable,
@@ -570,6 +573,11 @@
     getAddonByMarketId,
     getAddonList,
     getEnable,
+    _doonun:function(session,fn){
+      if(util.checkSession(session)&&typeof fn=='function'){
+        uninstalleventons[session.id]=fn;
+      }
+    },
     on:evn.on,
     off:evn.off
   }

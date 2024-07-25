@@ -9,7 +9,7 @@
       initsto.set('links', [], true, function () {
         initState++;
         if (initState == 2) {
-          readyfn();
+          readyfn.forEach(a=>a());
         }
       })
     } else {
@@ -21,7 +21,7 @@
       initsto.set('cate', {}, true, function () {
         initState++;
         if (initState == 2) {
-          readyfn();
+          readyfn.forEach(a=>a());
         }
       });
     } else {
@@ -30,9 +30,9 @@
   }
 
   init();
-  var readyfn = function () { };
+  var readyfn = [];
   if (initState == 2) {
-    readyfn();
+    readyfn.forEach(a=>a());
   }
 
   return {
@@ -348,6 +348,9 @@
       }
     },
     getCates: function (callback = function () { }) {
+      if (initState != 2) {
+        throw '初始化未完成';
+      }
       initsto.get('cate', true, function (c) {
         callback({
           code: 0,
@@ -357,6 +360,9 @@
       });
     },
     getCateAll: function (callback = function () { }) {
+      if (initState != 2) {
+        throw '初始化未完成';
+      }
       initsto.get('cate', true, function (c) {
         callback({
           code: 0,
@@ -369,7 +375,7 @@
       if (initState == 2) {
         fn();
       } else {
-        readyfn = fn;
+        readyfn.push(fn);
       }
     },
     on,off
