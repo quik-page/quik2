@@ -317,7 +317,7 @@
           cb = function (v) {
             util.query(elr, '.setting-item-input').value = v;
           }
-          if (guaqi) cb(guaqi);
+          // if (guaqi) cb(guaqi);
         }
       } else {
         return;
@@ -330,8 +330,6 @@
       }
     },
     _regetItem: function (item) {
-      console.log(item);
-      console.trace()
       item.getacb();
     }
   }

@@ -1,4 +1,13 @@
 var updatelog={
+  "2.0.1.2-beta":{
+    updates:[
+      {
+        "tag": "fix",
+        "content": "修复一些小问题"
+      }
+    ],
+    time:"2024/7/26"
+  },
   "2.0.1.1-beta":{
     updates:[
       {

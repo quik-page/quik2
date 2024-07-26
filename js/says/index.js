@@ -103,12 +103,13 @@
   _addSayType(_REQUIRE_('./saydep/shici.js'));
 
   function addSayType(details){
-    if(util.checkSession(details.session)){
+    if(!util.checkSession(details.session)){
       throw "错误的session";
     }
     details.key=details.session.id;
     _addSayType(details)
     typesi.reInit();
+    waitfn(details.key);
   }
 
   function setSayType(key,cb){
@@ -225,8 +226,21 @@
   mainSetting.addNewGroup(sg);
   sg.addNewItem(typesi);
   sg.addNewItem(showsi);
+  var _key;
+  function waitfn(id){
+    if(id==_key){
+      sayMenu.setList(sayTypes[id].menu);
+      sayI.onclick=sayTypes[id].click
+      refsay(id,cb);
+    }
+  }
   if(initsto.get('enabled')){
-    setSayType(initsto.get('saytype'));
+    _key=initsto.get('saytype');
+    if(sayTypes[_key]){
+      sayMenu.setList(sayTypes[_key].menu);
+      sayI.onclick=sayTypes[_key].click
+      refsay(_key,cb);
+    }
   }else{
     sayF.style.display='none';
     typesi.hide();
