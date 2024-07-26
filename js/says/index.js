@@ -231,7 +231,7 @@
     if(id==_key){
       sayMenu.setList(sayTypes[id].menu);
       sayI.onclick=sayTypes[id].click
-      refsay(id,cb);
+      refsay(id);
     }
   }
   if(initsto.get('enabled')){
@@ -239,7 +239,7 @@
     if(sayTypes[_key]){
       sayMenu.setList(sayTypes[_key].menu);
       sayI.onclick=sayTypes[_key].click
-      refsay(_key,cb);
+      refsay(_key);
     }
   }else{
     sayF.style.display='none';

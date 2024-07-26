@@ -297,6 +297,7 @@
       }
     },
     _reinitItem: function (group, item) {
+      console.log(item);
       var _init;
       var itemEle = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + '] .setting-item[data-id=' + item.id + ']');
       var elr = util.query(itemEle, '.setting-item-right')
@@ -315,9 +316,16 @@
             return html;
           })();
           cb = function (v) {
+            console.log(v);
+            console.trace();
             util.query(elr, '.setting-item-input').value = v;
           }
-          // if (guaqi) cb(guaqi);
+          var l=item.get();
+          if(l instanceof Promise){
+            l.then(cb);
+          }else{
+            cb(l);
+          }
         }
       } else {
         return;
