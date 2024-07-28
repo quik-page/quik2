@@ -1,9 +1,9 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.0.1.2-beta',
+    version:'2.0.1.3-beta',
     version_code:window.version_code,
-    updateTime:'2024/7/26',
+    updateTime:'2024/7/28',
     log:[
       {
         "tag": "fix",
