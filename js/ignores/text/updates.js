@@ -1,4 +1,16 @@
 var updatelog={
+  "2.0.2-beta":{
+    updates:[
+      {
+        "tag": "change",
+        "content": "重写自定义搜索引擎界面"
+      },{
+        "tag": "thanks",
+        "content": "感谢 are_you_died 提供的建议"
+      }
+    ],
+    time:"2024/7/28"
+  },
   "2.0.1.3-beta":{
     updates:[
       {

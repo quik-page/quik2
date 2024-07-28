@@ -18,11 +18,11 @@
   });
   var keyword="%keyword%";
   var deftypelist={
-    "bing":"https://cn.bing.com/search?q="+keyword,
-    "baidu":"https://www.baidu.com/s?wd="+keyword,
-    "so":"https://so.com/s?q="+keyword,
-    "sogou":"https://sogou.com/web?query="+keyword,
-    "google":"https://google.com/search?q="+keyword,
+    "bing":"",
+    "baidu":"",
+    "so":"",
+    "sogou":"",
+    "google":"",
   };
   if(!initsto.get('typelist')){
     initsto.set('typelist',deftypelist);
@@ -32,9 +32,103 @@
   }
 
   var events={};
+  var neizhi={
+    "bing": {
+      name: "必应",
+      link: "https://www.bing.com/search?q="
+    },
+    "baidu": {
+        name: "百度",
+        link: "https://www.baidu.com/s?ie=utf-8&wd="
+    },
+    "google": {
+        name: "Google",
+        link: "https://www.google.com/search?q="
+    },
+    "so": {
+        name: "360搜索",
+        link: "https://www.so.com/s?q="
+    },
+    "sogou": {
+        name: "搜狗",
+        link: "https://www.sogou.com/sogou?query="
+    },  
+    "stear": {
+      name: "林中木<span>赞助</span>",
+      link: "https://stear.cn/?q="
+    },
+    "yandex": {
+      name: "Yandex",
+      link: "https://yandex.com/search/?text="
+    },
+    "fsearch": {
+        name: "F搜",
+        link: "https://fsoufsou.com/search?q="
+    },
+    "github": {
+        name: "GitHub",
+        link: "https://github.com/search?q="
+    },
+    "bilibili": {
+        name: "哔哩哔哩",
+        link: "https://search.bilibili.com/all?keyword="
+    },
+    "douyin": {
+        name: "抖音",
+        link: "https://www.douyin.com/search/%s?ug_source=lenovo_stream"
+    },
+    "jd": {
+        name: "京东",
+        link: "https://search.jd.com/Search?keyword="
+    },
+    "weibo": {
+        name: "微博",
+        link: "https://s.weibo.com/weibo?q="
+    },
+    "taobao": {
+        name: "淘宝",
+        link: "https://ai.taobao.com/search/index.htm?pid=mm_31205575_2237000308_114588650482&union_lens=lensId%3APUB%401667806444%402104ee54_0bea_1845102bd01_03e9%4001&key="
+    },
+    "xiaohongshu": {
+        name: "小红书",
+        link: "https://www.xiaohongshu.com/search_result/?&m_source=itab&keyword="
+    },
+    "duckduckgo": {
+        name: "DuckDuckGo",
+        link: "https://duckduckgo.com/?q="
+    },
+    "stackoverflow": {
+        name: "StackOverflow",
+        link: "https://stackoverflow.com/nocaptcha?s="
+    },
+    "zhihu": {
+        name: "知乎",
+        link: "https://www.zhihu.com/search?type=content&q="
+    },
+    "yahoo": {
+        name: "Yahoo",
+        link: "https://hk.search.yahoo.com/search?p="
+    },
+    "mdn": {
+        name: "MDN",
+        link: "https://developer.mozilla.org/zh-CN/search?q="
+    },
+    "douban": {
+        name: "豆瓣",
+        link: "https://www.douban.com/search?q="
+    },
+    "toutiao": {
+        name: "头条搜索",
+        link: "https://so.toutiao.com/search?dvpf=pc&keyword="
+    }
+}
 
   var getSearchType=function(){
-    return initsto.get('typelist')[initsto.get('type')];
+    if(neizhi[initsto.get('type')]){
+      return neizhi[initsto.get('type')].link+'%keyword%';
+    }else{
+      return initsto.get('typelist')[initsto.get('type')];
+    }
   }
   var on=function(ev,fn){
     if(events[ev]){
@@ -80,7 +174,8 @@
     setSearchList:setSearchList,
     getSearchTypeList:getSearchTypeList,
     setSearchType:setSearchType,
-    getSearchTypeIndex:getSearchTypeIndex
+    getSearchTypeIndex:getSearchTypeIndex,
+    neizhi:neizhi
   }
 
   Object.defineProperty(retob,'keywordText',{

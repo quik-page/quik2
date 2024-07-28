@@ -1,13 +1,16 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.0.1.3-beta',
+    version:'2.0.2-beta',
     version_code:window.version_code,
     updateTime:'2024/7/28',
     log:[
       {
-        "tag": "fix",
-        "content": "修复一些小问题"
+        "tag": "change",
+        "content": "重写自定义搜索引擎界面"
+      },{
+        "tag": "thanks",
+        "content": "感谢 are_you_died 提供的建议"
       }
     ]
   }

@@ -26,6 +26,7 @@
     setSearchType:core.searchUtil.setSearchType,
     setSearchList:core.searchUtil.setSearchList,
     keywordText:core.searchUtil.keywordText,
+    neizhi:core.searchUtil.neizhi,
     search:{
       on:core.searchUtil.on
     },

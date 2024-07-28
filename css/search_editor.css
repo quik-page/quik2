@@ -4,64 +4,107 @@
   padding: 0;
   overflow: hidden;
 }
+.search_editor .neizhilist .item{
+  width: calc(25% - 10px);
+  height: 40px;
+  margin: 5px;
+  border-radius: 10px;
+  background-color: #f4f4f4;
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
 @media (max-width:600px){
   .dialog.mobile-show-full .d-c.search_editor{
     width: 100%;
     height: 100%;
   }
+  .search_editor .neizhilist .item{
+    width: calc(50% - 10px);
+  }
 }
 
-.d-c.search_editor .searchlist{
+.search_editor .list{
   overflow-y: auto;
   height: calc(100% - 95px);
   padding: 10px;
 }
-.d-c.search_editor .searchlist .item{
+.search_editor .list>*{
+  width: 100%;
+}
+.search_editor .neizhilist{
+  overflow: hidden;
+}
+
+.search_editor .neizhilist .item.active{
+  background-color: #09f;
+  color: #fff;
+}
+.search_editor .neizhilist .item img{
+  width: 20px;
+  height: 20px;
+  margin: 10px;
+}
+.search_editor .neizhilist .item div{
+  font-size: 14px;
+}
+.search_editor .neizhilist .item div span{
+  font-size: 12px;
+  background-color: #ccc;
+  border-radius: 4px;
+  padding: 3px;
+  color: #000;
+  margin-left: 3px;
+}
+.search_editor .searchlist .item{
   overflow: hidden;
   width: 100%;
   height: 30px;
 }
-.d-c.search_editor .searchlist .item>*{
+.search_editor .searchlist .item>*{
   float: left;
 }
-.d-c.search_editor .searchlist .item .icon{
+.search_editor .searchlist .item .icon{
   width: 30px;
   height: 30px;
 }
-.d-c.search_editor .searchlist .item .icon img{
+.search_editor .searchlist .item .icon img{
   width: 18px;
   height: 18px;
   margin: 6px;
 }
-.d-c.search_editor .searchlist .item .url{
+.search_editor .searchlist .item .url{
   width: calc(100% - 60px);
   height: 30px;
 }
-.d-c.search_editor .searchlist .item .url input{
+.search_editor .searchlist .item .url input{
   border:0;outline: 0;
   height: 30px;
   width: 100%;
   color: #666;
   background-color: transparent;
 }
-.d-c.search_editor .searchlist .item .url input:focus{
+.search_editor .searchlist .item .url input:focus{
   color: #000;
 }
-.d-c.search_editor .searchlist .item .remove{
+.search_editor .searchlist .item .remove{
   line-height: 30px;
   text-align: center;
   height: 30px;
   width: 30px;
   cursor: pointer;
 }
-.d-c.search_editor .searchlist .item .remove:hover{
+.search_editor .searchlist .item .remove:hover{
   background-color: #eee;
 }
-.d-c.search_editor .searchlist .item .remove .material-symbols-outlined{
+.search_editor .searchlist .item .remove .material-symbols-outlined{
   font-size: 16px;
 }
 
-.d-c.search_editor .searchlist .addnewitem{
+.search_editor .searchlist .addnewitem{
   width: 100%;
   height: 30px;
   color: #888;
@@ -70,21 +113,27 @@
   line-height: 30px;
   cursor: pointer;
 }
-.d-c.search_editor .searchlist .addnewitem .material-symbols-outlined{
+.search_editor .searchlist .addnewitem .material-symbols-outlined{
   font-size: inherit;
 }
-.d-c.search_editor .searchlist .addnewitem:hover{
+.search_editor .searchlist .addnewitem:hover{
   background-color: #eee;
 }
-body.dark .d-c.search_editor .searchlist .addnewitem:hover{
+body.dark .search_editor .searchlist .addnewitem:hover{
   background-color: #222;
 }
-body.dark .d-c.search_editor .searchlist .item .url input{
+body.dark .search_editor .searchlist .item .url input{
   color: #aaa;
 }
-body.dark .d-c.search_editor .searchlist .item .url input:focus{
+body.dark .search_editor .searchlist .item .url input:focus{
   color: #fff;
 }
-body.dark .d-c.search_editor .searchlist .item .remove:hover{
+body.dark .search_editor .searchlist .item .remove:hover{
   background-color: #222;
+}
+body.dark .search_editor .neizhilist .item{
+  background-color: #444;
+}
+body.dark .search_editor .neizhilist .item.active{
+  background-color: #09f;
 }

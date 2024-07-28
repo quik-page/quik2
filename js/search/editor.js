@@ -6,25 +6,46 @@
   });
 
   var d=dia.getDialogDom();
-  
-  util.query(d,'.closeBtn').onclick=util.query(d,'.cancel.btn').onclick=function(){
-    dia.close();
-  }
-  util.query(d,'.ok.btn').onclick=function(){
-    var nlist={};
-    util.query(d,'.searchlist .item',true).forEach(function(item){
-      nlist[item.dataset.k]=item.querySelector('.url input').value;
+  var neizhi=omnibox.neizhi;
+  var list=omnibox.getSearchTypeList();
+  var neizhilist_f=util.query(d,'.neizhilist');
+  for(var k in neizhi){
+    var item=util.element('div',{
+      class:"item",
+      'data-k':k
     });
-    list=nlist;
-    if(!list[omnibox.getSearchTypeIndex()]){
-      omnibox.setSearchType('bing');
+    item.innerHTML='<img/><div>'+neizhi[k].name+'</div>';
+    (function(k,item){
+      util.getFavicon(neizhi[k].link,function(fav){
+        if(fav){
+          util.query(item,'img').src=fav;
+        }else{
+          util.query(item,'img').src=util.createIcon('s');
+        }
+      });
+    })(k,item)
+    
+    neizhilist_f.append(item);
+    if(k=='bing'){
+      item.addEventListener('click',function(){
+        toast.show('该项不可取消')
+      })
+    }else{
+      item.addEventListener('click',function(){
+        if(this.classList.contains('active')){
+          this.classList.remove('active');
+        }else{
+          this.classList.add('active');
+        }
+      })
     }
-    omnibox.setSearchList(list);
-    dia.close();
-    toast.show('设置成功')
+    
+    if(list.hasOwnProperty(k)){
+      item.classList.add('active');
+      delete list[k];
+    }
   }
 
-  var list=omnibox.getSearchTypeList();
   var str='';
   for(var k in list){
     str+='<div class="item" data-k="'+k+'">'+
@@ -33,7 +54,7 @@
 '<div class="remove">'+util.getGoogleIcon('e5cd')+'</div>'+
 '</div>';
   }
-  str+=`<div class="addnewitem">${util.getGoogleIcon('e145')} 添加新的搜索引擎</div>`
+  str+=`<div class="addnewitem">${util.getGoogleIcon('e145')} 添加自定义的搜索引擎</div>`
   util.query(d,'.searchlist').innerHTML=str;
 
   util.query(d,'.searchlist .item',true).forEach(function(item){
@@ -48,24 +69,21 @@
     '<div class="url"><input value="https://cn.bing.com/search?q=%keyword%"/></div>'+
     '<div class="remove">'+util.getGoogleIcon('e5cd')+'</div>';
     util.query(d,'.searchlist').insertBefore(item,util.query(d,'.searchlist .addnewitem'));
-    clitem(item);
+    clitem(item,true);
   }
 
 
-  function clitem(item){
-    util.getFavicon(list[item.getAttribute('data-k')],function(fav){
+  function clitem(item,a){
+    if(!a){
+      util.getFavicon(list[item.getAttribute('data-k')],function(fav){
       if(fav){
         util.query(item,'.icon img').src=fav;
       }else{
         util.query(item,'.icon img').src=util.createIcon('s');
       }
     })
+  }
     util.query(item,'.url input').oninput=function(){
-      if(this.parentElement.parentElement.dataset.k=='bing'){
-        this.value=list['bing'];
-        toast.show('该项只读');
-        return;
-      }
       // @note 隐藏用户输入了不正确的URL的报错
       // @edit at 2024/1/30 15:28
       try{
@@ -82,16 +100,28 @@
       }
     }
     util.query(item,'.remove').onclick=function(){
-      if(this.parentElement.dataset.k=='bing'){
-        this.value=list['bing'];
-        toast.show('该项不可删除');
-        return;
-      }
       this.parentElement.remove();
     }
   }
-
-
+  util.query(d,'.closeBtn').onclick=util.query(d,'.cancel.btn').onclick=function(){
+    dia.close();
+  }
+  util.query(d,'.ok.btn').onclick=function(){
+    var nlist={};
+    util.query(d,'.searchlist .item',true).forEach(function(item){
+      nlist[item.dataset.k]=item.querySelector('.url input').value;
+    });
+    util.query(d,'.neizhilist .item.active',true).forEach(function(item){
+      nlist[item.dataset.k]='';
+    });
+    list=nlist;
+    if(!list[omnibox.getSearchTypeIndex()]){
+      omnibox.setSearchType('bing');
+    }
+    omnibox.setSearchList(list);
+    dia.close();
+    toast.show('设置成功')
+  }
   var si=new SettingItem({
     title:"自定义搜索引擎",
     index:2,

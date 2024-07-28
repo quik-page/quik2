@@ -176,6 +176,8 @@
           _ic='https://bing.com/favicon.ico';
         }else if(u.hostname.indexOf('google.com')!=-1){
           _ic='https://tse1-mm.cn.bing.net/th/id/OIP-C.aoNGSVIqKHtM-NWf3QrvdwHaHa?rs=1&pid=ImgDetMain';
+        }else if(u.hostname.indexOf('stear.cn')!=-1){
+          _ic='https://stear.cn/assets/img/216.png';
         }
         this.loadimg(_ic,function(st){
           if(st){
@@ -185,6 +187,7 @@
               if(st2){
                 cb(u.protocol+'//'+u.host+'/favicon.ico');
               }else{
+                console.log('cbfalse');
                 cb(false)
               }
             })

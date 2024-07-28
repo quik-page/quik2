@@ -222,6 +222,9 @@
       var li=util.element('li');
       li.innerHTML='<img/>';
       (function(li,k){
+        if(!list[k]&&core.searchUtil.neizhi[k]){
+          list[k]=core.searchUtil.neizhi[k].link;
+        }
         util.getFavicon(list[k],function(fav){
           if(fav){
             li.querySelector('img').src=fav;
