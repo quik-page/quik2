@@ -108,3 +108,11 @@ fs.writeFileSync(path.join(__dirname,'docs/index.html'),htmlMinifier.minify(_h,{
 }));
 
 fs.writeFileSync(path.join(__dirname,'docs/sw.js'),fs.readFileSync(path.join(__dirname,'sw.js')));
+var c=fs.readFileSync(path.join(__dirname,'updates.js')).toString();
+uglifyJs.minify(c,{
+  compress:{
+    drop_console:true
+  }
+}).then(function(result){
+  fs.writeFileSync(path.join(__dirname,'docs/updates.js'),result.code);
+})

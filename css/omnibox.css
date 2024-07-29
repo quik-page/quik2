@@ -17,6 +17,7 @@ body.t-dark .searchbox{
 }
 body.dark .searchbox{
   background-color: rgba(34, 34, 34, 0.7);
+  box-shadow: #666 0 1px 5px;
 }
 .searchpadding{
   width: 100%;

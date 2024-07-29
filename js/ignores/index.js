@@ -18,6 +18,9 @@
     index:2,
     callback:function(){
       updateDialog.open();
+      if(!isinner){
+        innerUpdate();
+      }
     }
   });
   var licSi=new SettingItem({
@@ -74,7 +77,6 @@
     util.query(addom,'.ver span').innerText=window.version.version;
   });
 
-  _REQUIRE_('./text/updates.js');
   var updateDialog=new dialog({
     content:`<div class="actionbar">
       <h1>更新日志</h1>
@@ -90,13 +92,29 @@
     updateDialog.close();
   }
 
-  util.query(updom,'.version_list').innerHTML=(function(){
-    var s='';
-    for(var k in updatelog){
-      s+=formatVersion(k,updatelog[k]);
+  var isinner=false;
+  function innerUpdate(){
+    isinner=true;
+    var s=util.element('script',{
+      src:"./updates.js"
+    })
+    document.body.append(s);
+    window.connectUpdates=function(updatelog){
+      util.query(updom,'.version_list').innerHTML=(function(){
+        var s='';
+        for(var k in updatelog){
+          s+=formatVersion(k,updatelog[k]);
+        }
+        return s;
+      })();
+      window.connectUpdates=null;
     }
-    return s;
-  })();
+    s.onload=function(){
+      s.remove();
+    }
+  }
+  util.query(updom,'.version_list').innerHTML='正在加载更新日志...'
+  
   function formatVersion(v,fv){
     var str='',gl={
       "new":"新增",

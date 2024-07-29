@@ -1,16 +1,13 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.0.2-beta',
+    version:'2.0.3-beta',
     version_code:window.version_code,
-    updateTime:'2024/7/28',
+    updateTime:'2024/7/29',
     log:[
       {
-        "tag": "change",
-        "content": "重写自定义搜索引擎界面"
-      },{
-        "tag": "thanks",
-        "content": "感谢 are_you_died 提供的建议"
+        "tag": "new",
+        "content": "新增全局毛玻璃效果设置(beta)"
       }
     ]
   }

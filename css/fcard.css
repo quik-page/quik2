@@ -17,9 +17,18 @@
     min-height: 50px;
     padding: 5px;
     position: relative;
+    box-shadow: #aaa 0 1px 4px;
+}
+body.dialogblur .fcard{
+    background-color: rgba(255,255,255,.7);
+    backdrop-filter: blur(10px);
+}
+body.dialogblur.dark .fcard{
+    background-color: rgba(51,51,51,.7);
 }
 body.dark .fcard{
     background-color: #333;
+    box-shadow: #666 0 1px 4px;
 }
 
 .fcard-mob-zd{

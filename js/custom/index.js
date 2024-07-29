@@ -7,6 +7,7 @@
     var lite=_REQUIRE_('./lite.js');
     var logo=_REQUIRE_('./logo.js');
     var theme=_REQUIRE_('./theme.js');
+    var dialogblur=_REQUIRE_('./blur.js');
 
     return {
         setLite:lite.set,
@@ -15,6 +16,8 @@
         setTheme:theme.setTheme,
         isTimeLogo:logo.get,
         setTimeLogo:theme.set,
+        isDialogBlur:dialogblur.get,
+        setDialogBlur:dialogblur.set,
         on,off
     }
 })();

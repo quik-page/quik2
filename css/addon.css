@@ -58,15 +58,27 @@ body.dark .d-c.addon-dialog .p ul li{
 .d-c.addon-dialog .p ul li:hover{
   background-color: #f4f4f4;
 }
+body.dialogblur .d-c.addon-dialog .p ul li:hover{
+  background-color: rgba(244, 244, 244, 0.7);
+}
 body.dark .d-c.addon-dialog .p ul li:hover{
   background-color: #555;
+}
+body.dialogblur.dark .d-c.addon-dialog .p ul li:hover{
+  background-color: rgba(85,85,85,.7);
 }
 body.dark .d-c.addon-dialog .p ul li.active{
   background-color: #333;
 }
+body.dialogblur.dark .d-c.addon-dialog .p ul li.active{
+  background-color: rgba(51,51,51,.7);
+}
 .d-c.addon-dialog .p ul li.active{
   height: 150px;
   background-color: #fff;
+}
+body.dialogblur .d-c.addon-dialog .p ul li.active{
+  background-color: rgba(255,255,255,.7);
 }
 .d-c.addon-dialog .p ul li .n{
   overflow: hidden;

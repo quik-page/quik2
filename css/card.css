@@ -19,6 +19,13 @@
   opacity: 0;
   display: none;
 }
+body.dialogblur .cards .card{
+  background-color: rgba(255,255,255,.7);
+  backdrop-filter: blur(10px);
+}
 body.dark .cards .card{
   background-color: #333;
+}
+body.dialogblur.dark .cards .card{
+  background-color: rgba(51,51,51,.7);
 }

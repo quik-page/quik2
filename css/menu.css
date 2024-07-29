@@ -6,9 +6,17 @@
   box-shadow: #888 0 1px 5px;
   display: none;
   overflow: hidden;
+  user-select: none;
+}
+body.dialogblur .contextMenu{
+  background-color: rgba(255,255,255,.5);
+  backdrop-filter: blur(10px);
 }
 body.dark .contextMenu{
   background-color: #333;
+}
+body.dialogblur.dark .contextMenu{
+  background-color: rgba(51,51,51,.5);
 }
 .contextMenu.show{
   display: block;
