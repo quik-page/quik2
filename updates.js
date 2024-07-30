@@ -1,4 +1,17 @@
 var updatelog={
+    "2.0.4-beta":{
+      updates:[
+        {
+          "tag": "new",
+          "content": "搜索框背景蒙版可在设置中关闭或设置模糊"
+        },
+        {
+          "tag":"thanks",
+          "content":"感谢 银海浮乐 提供的建议"
+        }
+      ],
+      time:"2024/7/30"
+    },
     "2.0.3-beta":{
         updates:[
           {

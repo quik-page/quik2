@@ -124,7 +124,7 @@
   }
   var si=new SettingItem({
     title:"自定义搜索引擎",
-    index:2,
+    index:0,
     type:'null',
     message:"",
     callback:function(value){

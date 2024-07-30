@@ -308,6 +308,52 @@
   })
   sg.addNewItem(si);
 
+  var si2=new SettingItem({
+    title:"聚焦时背景蒙版",
+    index:6,
+    type:'boolean',
+    message:"关闭后聚焦搜索框时不再出现背景蒙版",
+    get:function(){
+      return !core.initsto.get('ob_notshowb');
+    },
+    callback:function(value){
+      core.initsto.set('ob_notshowb',!value);
+      gshowb();
+      return true;
+    }
+  })
+  sg.addNewItem(si2);
+  var si3=new SettingItem({
+    title:"背景蒙版模糊",
+    index:7,
+    type:'boolean',
+    message:"背景蒙版模糊（可能会影响性能）",
+    get:function(){
+      return core.initsto.get('ob_bblur');
+    },
+    callback:function(value){
+      core.initsto.set('ob_bblur',value);
+      gshowb();
+      return true;
+    }
+  })
+  sg.addNewItem(si3);
+
+  function gshowb(){
+    if(core.initsto.get('ob_notshowb')){
+      searchcover.classList.add('notshow');
+      si3.hide();
+    }else{
+      searchcover.classList.remove('notshow');
+      si3.show();
+      if(core.initsto.get('ob_bblur')){
+        searchcover.classList.add('blur');
+      }else{
+        searchcover.classList.remove('blur');
+      }
+    }
+  }
+  gshowb();
   return {
     setValue:function(value){
       input.value=value;

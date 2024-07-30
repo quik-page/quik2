@@ -110,14 +110,24 @@ body.dark .searchbox ul li.active{
 
 .searchcover{
   z-index:3;
-  background-color: #000;
+  background-color: rgba(0,0,0,0);
   opacity: 0;
   pointer-events: none;
   transition: opacity .3s;
 }
+.searchcover.notshow{
+  display: none!important;
+}
+.searchcover.blur{
+  background-color: rgba(0,0,0,.7);
+}
 .searchcover.active{
   pointer-events: all;
   opacity: .7;
+}
+.searchcover.blur.active{
+  opacity: 1;
+  backdrop-filter: blur(6px);
 }
 .searchtypeselector{
   margin: 0 auto;

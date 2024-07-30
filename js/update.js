@@ -1,13 +1,17 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.0.3-beta',
+    version:'2.0.4-beta',
     version_code:window.version_code,
-    updateTime:'2024/7/29',
+    updateTime:'2024/7/30',
     log:[
       {
         "tag": "new",
-        "content": "新增全局毛玻璃效果设置(beta)"
+        "content": "搜索框背景蒙版可在设置中关闭或设置模糊"
+      },
+      {
+        "tag":"thanks",
+        "content":"感谢 银海浮乐 提供的建议"
       }
     ]
   }
