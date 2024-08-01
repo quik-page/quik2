@@ -79,4 +79,31 @@
             })
         }
     }
+
+    if(!initsto.get('jlcs')){
+        initsto.set('jlcs',1);
+    }else if(initsto.get('jlcs')!=-1){
+        initsto.set('jlcs',initsto.get('jlcs')+1);
+        if(initsto.get('jlcs')>=2){
+            initsto.set('jlcs',-1);
+            var _=new notice({
+                title:"作者想说",
+                content:"<div class='joinqqnot'>因为该起始页为纯前端项目，所以作者没有办法记录使用人数。</div><div class='joinqqnot'>如果你正在使用QUIK起始页的话，作者希望你能够加入QUIK起始页唯一官方QQ群，让作者知道QUIK起始页正在为人们发挥着作用，这将会给作者提供很大的动力来维护和更新QUIK起始页这个免费开源的项目。</div><div class='joinqqnot'>同时，QQ群是受理建议最快的渠道，并且你也有机会参与QUIK起始页的一些试验功能的测试。非常感谢！</div><div class='joinqqnot'>群号：971915865</div>",
+                btns:[{
+                    text:"前往加入",
+                    style:"ok",
+                    click:function(){
+                        _.hide();
+                        alert('再次表示感谢！',function(){
+                            window.open('https://qm.qq.com/q/6nOculioy4')
+                        })
+                    }
+                }]
+            })
+            _.show();
+        }
+    }
+
+    
+    
 })()

@@ -52,7 +52,11 @@
                     function c(){
                         prompt('请在下方输入“clearAll”，并再次确定是否要清除所有数据，此操作无法恢复。',function(t){
                             if(t=='clearAll'){
-                                localStorage.clear();
+                                var k=storage('oobe')
+                                var s=k.getAll();
+                                localStorage.quik2=JSON.stringify({
+                                    oobe:s
+                                })
                                 localforage.clear().then(function(){
                                     location.reload();
                                 });

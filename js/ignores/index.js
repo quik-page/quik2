@@ -47,16 +47,33 @@
       window.open('./feedback.html')
     }
   });
+  var joinqqSi=new SettingItem({
+    type:'null',
+    title:"加入官方QQ群",
+    message:"在官方QQ群可以查看最新消息，也是处理建议最快的地方，更有机会参与新功能测试",
+    index:5,
+    callback:function(){
+      window.open('./https://qm.qq.com/q/6nOculioy4')
+    }
+  });
   igsg.addNewItem(aboutSi);
   igsg.addNewItem(updateSi);
   igsg.addNewItem(licSi);
   igsg.addNewItem(thankSi);
+  igsg.addNewItem(joinqqSi);
 
   mainmenu.pushMenu({
     icon:util.getGoogleIcon('e88e'),
     title:"关于QUIK",
     click:function(){
       aboutDialog.open();
+    }
+  },1)
+  mainmenu.pushMenu({
+    icon:util.getGoogleIcon('e0bf'),
+    title:"加入官方QQ群",
+    click:function(){
+      window.open('https://qm.qq.com/q/6nOculioy4');
     }
   },1)
 

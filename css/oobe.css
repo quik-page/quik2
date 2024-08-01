@@ -95,3 +95,7 @@
 .oobedia .clist .item:hover{
     box-shadow: 0 0 3px #aaa;
 }
+.joinqqnot{
+    font-size: 12px;
+    text-indent: 2em;
+}

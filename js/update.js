@@ -1,17 +1,25 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.0.4-beta',
+    version:'2.0.0',
     version_code:window.version_code,
-    updateTime:'2024/7/30',
+    updateTime:'2024/8/1',
     log:[
       {
-        "tag": "new",
-        "content": "搜索框背景蒙版可在设置中关闭或设置模糊"
+        "tag": "fix",
+        "content": "搜索框背景蒙版BUG"
+      },
+      {
+        "tag":"change",
+        "content":"2.0-beta版正式更改为正式版"
       },
       {
         "tag":"thanks",
-        "content":"感谢 银海浮乐 提供的建议"
+        "content":"感谢所有使用和支持QUIK起始页的用户"
+      },
+      {
+        "tag":"new",
+        "content":"欢迎加入唯一官方QQ群：971915865"
       }
     ]
   }
