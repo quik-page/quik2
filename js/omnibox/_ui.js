@@ -108,7 +108,10 @@
         li.innerHTML=`<div class="saicon">${s.icon}</div><div class="sa_text"></div>`;
         li.querySelector('.sa_text').innerText=s.text;
         saul.append(li);
-        li.onclick=s.click;
+        li.onclick=function(){
+          s.click()
+          console.log('clicked')
+        };
       });
 
       // 恢复用户原本的active
@@ -196,11 +199,33 @@
   input.addEventListener('blur',function(){
     this.classList.remove('active');
     blurtimeout=setTimeout(function(){
-      searchcover.classList.remove('active');
-      searchbox.classList.remove('active');
-    },100)
+      if(hasmousedown){
+        mouseupf=function(){
+          setTimeout(function(){
+            searchcover.classList.remove('active');
+            searchbox.classList.remove('active');
+          },10)
+        }
+      }else{
+        searchcover.classList.remove('active');
+        searchbox.classList.remove('active');
+      }
+    },50)
     doevent('blur',[input]);
   });
+
+  document.addEventListener('mousedown',_down);
+  document.addEventListener('touchstart',_down);
+  document.addEventListener('mouseup',_up);
+  document.addEventListener('touchend',_up);
+  var hasmousedown=false,mouseupf=function(){};
+  function _down(){
+    hasmousedown=true;
+  }
+  function _up(){
+    mouseupf();
+    mouseupf=function(){}
+  }
 
   // ...
   submit.onclick=function(){

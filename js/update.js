@@ -1,25 +1,17 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.0.0',
+    version:'2.0.1',
     version_code:window.version_code,
-    updateTime:'2024/8/1',
+    updateTime:'2024/8/2',
     log:[
       {
-        "tag": "fix",
-        "content": "搜索框背景蒙版BUG"
+        tag:"new",
+        content:"全新时间LOGO样式"
       },
       {
-        "tag":"change",
-        "content":"2.0-beta版正式更改为正式版"
-      },
-      {
-        "tag":"thanks",
-        "content":"感谢所有使用和支持QUIK起始页的用户"
-      },
-      {
-        "tag":"new",
-        "content":"欢迎加入唯一官方QQ群：971915865"
+        tag:"fix",
+        content:"修复一些已知问题"
       }
     ]
   }

@@ -48,14 +48,86 @@ body.t-dark main .logo svg
   stroke: #fff;
 }
 main .logo .timelogo{
-  text-align: center;
-  line-height: 90px;
-  font-size: 46px;
-  color: #000;
-  text-shadow: #fff 0 1px 5px;
+  width: 200px;
+  margin: 0 auto;
+  overflow: hidden;
 }
-main .logo .timelogo span.i{
+main .logo .timelogo>div{
+  float: left;
+}
+main .logo .timelogo>div ._num{
+  width: 25px;
+  height: 50px;
+  float: left;
+  position: relative;
+  margin: 20px 10px;
+}
+._num .num_line{
+  width: 100%;
+  height: 2px;
+  position: absolute;
+}
+._num .num_line.show{
+  background-color: #000;
+}
+body.dark ._num .num_line.show,
+body.t-dark ._num .num_line.show
+{
+  background-color: #fff;
+}
+._num .a0,
+._num .a1,
+._num .a2
+{
+  top: 0;
+  left: 0;
+}
+._num .a1,
+._num .a4
+{
+  transform: rotate(90deg);
+  transform-origin: top left;
+}
+._num .a2,
+._num .a5
+{
+  transform: rotate(-90deg);
+  transform-origin: top right;
+}
+._num .a3,
+._num .a4,
+._num .a5{
+  top: 24px;
+  left: 0;
+}
+._num .a6{
+  top: 48px;
+  left: 0;
+}
+
+main .logo .timelogo>div.i{
   animation: xhshow 1.5s ease-in-out infinite;
+  width: 20px;
+  height: 60px;
+  margin: 15px 0;
+  position: relative;
+}
+main .logo .timelogo>div.i span{
+  width: 2px;
+  height: 8px;
+  position: absolute;
+  top: 15px;
+  left: 9px;
+  display: block;
+  background-color: #000;
+}
+body.dark main .logo .timelogo>div.i span,
+body.t-dark main .logo .timelogo>div.i span
+{
+  background-color: #fff;
+}
+main .logo .timelogo>div.i span:nth-child(2){
+  top: 37px;
 }
 @keyframes xhshow {
   0%{
@@ -135,7 +207,15 @@ li{
     padding-top: 30px;
   }
   main .logo .timelogo{
-    line-height: 60px;
+    transform: scale(.8);
+  }
+  main .logo .timelogo>div ._num{
+    margin: 0 10px;
+    margin-bottom: 20px;
+  }
+  main .logo .timelogo>div.i{
+    margin: 0;
+    margin-bottom: 10px;
   }
 }
 @media (max-height:400px){

@@ -1,4 +1,17 @@
 var updatelog={
+    "2.0.1":{
+      updates:[
+        {
+          tag:"new",
+          content:"全新时间LOGO样式"
+        },
+        {
+          tag:"fix",
+          content:"修复一些已知问题"
+        }
+      ],
+      time:"2024/8/2"
+    },
     "2.0.0":{
       updates:[
         {
