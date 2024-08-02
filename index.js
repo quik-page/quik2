@@ -13,6 +13,11 @@
     })
   }
 
+  var onshows_fns=[];
+  function Onshow(f){
+    onshows_fns.push(f)
+  }
+
   // (function(){
   //   function bodyResizer(){
   //     document.body.style.width=window.innerWidth+'px';
@@ -108,6 +113,7 @@
   setTimeout(function(){
     document.querySelector("main").style.display='block';
     document.querySelector("main").style.opacity='1';
+    onshows_fns.forEach(function(f){f()});
   })
 
   var f=`@font-face {

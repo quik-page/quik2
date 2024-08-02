@@ -12,7 +12,7 @@
     class:"searchpadding"
   })
 
-  searchbox.innerHTML=_REQUIRE_('./htmls/searchbox.html');
+  searchbox.innerHTML=_REQUIRE_('./htmls/searchbox.html').replace('{i}',core.initsto.get('ob_autofocus')?'autofocus':'');
 
   util.query(document,'main').append(searchbox);
   util.query(document,'main').append(searchcover);
@@ -188,13 +188,13 @@
 
   var blurtimeout;
   // ...
-  input.addEventListener('focus',function(){
+  input.addEventListener('focus',_focus);
+function _focus(){
     clearTimeout(blurtimeout)
     searchcover.classList.add('active');
     searchbox.classList.add('active');
     doevent('focus',[input]);
-  });
-
+}
   // ...
   input.addEventListener('blur',function(){
     this.classList.remove('active');
@@ -312,8 +312,11 @@
   if(core.initsto.get('ob_autofocus')){
     // @note 这样才能生效，也许是因为浏览器还没渲染好吧
     // @edit at 2024年1月30日 15点10分
-    setTimeout(function(){
-      input.focus();
+    Onshow(function(){
+      setTimeout(function(){
+        input.focus();
+        _focus();
+      },100)
     })
   }
   
