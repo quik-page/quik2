@@ -14,8 +14,14 @@
         isLite:lite.get,
         getTheme:theme.getTheme,
         setTheme:theme.setTheme,
-        isTimeLogo:logo.get,
-        setTimeLogo:theme.set,
+        isTimeLogo:function(){
+            return logo.get()=='b'
+        },
+        setTimeLogo:function(){
+            logo.set('b')
+        },
+        getLogo:logo.get,
+        setLogo:logo.set,
         isDialogBlur:dialogblur.get,
         setDialogBlur:dialogblur.set,
         on,off

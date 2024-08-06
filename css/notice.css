@@ -18,9 +18,9 @@
 }
 .notice-item{
   pointer-events: all;
-  width: 260px;
+  width: 270px;
   margin: 10px;
-  padding: 15px;
+  padding: 10px;
   border-radius: 5px;
   box-shadow: #aaa 0 1px 5px;
   display: none;
@@ -36,9 +36,14 @@ body.dark .notice-item{
   height: 24px;
 }
 .notice-item .notice-title{
-  line-height: 24px;
+  line-height: 20px;
   width: calc(100% - 24px);
   float: left;
+  padding-bottom: 4px;
+}
+.notice-item .notice-content{
+  padding: 5px;
+  font-size: 14px;
 }
 .notice-item .notice-close-btn{
   width: 24px;

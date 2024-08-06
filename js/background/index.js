@@ -139,7 +139,7 @@
   });
 
   var defDrawer=_REQUIRE_('./defaultDrawer.js');
-  var drawers = [defDrawer];
+  var drawers = [defDrawer.drawer];
   dodrawer(defDrawer);
 
   function pushBgTab(item) {
@@ -264,7 +264,12 @@
     getbg,
     setbg,
     on,
-    off
+    off,
+    neizhiDraw:{
+      img:defDrawer.draws.img,
+      video:defDrawer.draws.video,
+      color:defDrawer.draws.color
+    }
   }
 
 })();

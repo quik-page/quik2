@@ -59,6 +59,7 @@
   display: inline-block;
   text-align: center;
   font-size: 12px;
+  margin:0 4px;
 }
 .d-c img,
 .d-c video

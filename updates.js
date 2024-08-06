@@ -1,4 +1,21 @@
 var updatelog={
+    "2.1.0":{
+      updates:[
+        {
+          tag:"new",
+          content:"LOGO支持设置为空"
+        },
+        {
+          tag:"fix",
+          content:"对一些细节方面进行优化"
+        },
+        {
+          tag:"fix",
+          content:"修复一些已知问题"
+        }
+      ],
+      time:"2024/8/6"
+    },
     "2.0.1":{
       updates:[
         {

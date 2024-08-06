@@ -5,17 +5,19 @@
   left:50%;
   transform: translateX(-50%);
   width: 600px;
-  box-shadow: #aaa 0 1px 5px;
+  box-shadow: #ccc 0 1px 5px;
   border-radius: 20px;
   background-color: rgb(255,255,255);
   overflow: hidden;
   height: 40px;
   backdrop-filter: blur(10px);
 }
-body.t-dark .searchbox{
+body.t-dark .searchbox,
+body.t-dark .searchtypeselector{
   background-color: rgba(255,255,255,.7);
 }
-body.dark .searchbox{
+body.dark .searchbox,
+body.dark .searchtypeselector{
   background-color: rgba(34, 34, 34, 0.7);
   box-shadow: #666 0 1px 5px;
 }
@@ -137,10 +139,11 @@ body.dark .searchbox ul li.active{
   transition: height .3s;
   border:0;
   backdrop-filter: blur(10px);
+  background-color: rgb(255,255,255);
 }
 .searchtypeselector.active{
   height: 30px;
-  border: #ccc solid 1px;
+  box-shadow: #ccc 0 1px 5px;
 }
 
 .searchtypeselector ul{
@@ -153,19 +156,30 @@ body.dark .searchbox ul li.active{
   margin: 0 3px;
   border-radius: 50%;
 }
+.searchtypeselector li:nth-child(1){
+  margin-left: 0;
+}
+.searchtypeselector li:nth-last-child(1){
+  margin-right: 0;
+}
 .searchtypeselector li:hover{
   background-color: #eee;
 }
 .searchtypeselector li.active{
   background-color: #ddd;
 }
-body.dark .searchtypeselector li:hover,
 body.t-dark .searchtypeselector li:hover{
+  background-color: #eee;
+}
+
+body.dark .searchtypeselector li:hover{
   background-color: #555;
 }
-body.dark .searchtypeselector li.active,
-body.t-dark .searchtypeselector li.active{
+body.dark .searchtypeselector li.active{
   background-color: #888;
+}
+body.t-dark .searchtypeselector li.active{
+  background-color: #fff;
 }
 .searchtypeselector li img{
   width: 20px;

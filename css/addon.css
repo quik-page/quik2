@@ -126,7 +126,7 @@ body.dialogblur .d-c.addon-dialog .p ul li.active{
 .d-c.addon-dialog .controls .enable,
 .d-c.addon-dialog .controls .installed
 {
-  background-color: #0f0;
+  background-color: #42db23;
 }
 .d-c.addon-dialog .controls .uninstall{
   background-color: #f00;
@@ -143,7 +143,7 @@ body.dialogblur .d-c.addon-dialog .p ul li.active{
   background-color: #555;
 }
 .d-c.addon-dialog .controls .enable:hover{
-  background-color: #0e0;
+  background-color: #42db23;
 }
 .d-c.addon-dialog .controls .uninstall:hover{
   background-color: #c00;
@@ -256,12 +256,12 @@ body.dialogblur .d-c.addon-dialog .p ul li.active{
   color: #fff;
   display:block;
   float: left;
-  font-size: .5rem;
-  padding: 0 1em;
+  font-size: 12px;
+  padding: 0 10px;
   transform: scale(.8);
 }
 .official_state{
-  background-color: #0e0;
+  background-color: #42db23;
 }
 
 .d-c.addon-dialog .addon-search-box{

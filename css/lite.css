@@ -5,6 +5,9 @@ body.lite .links{
   height: calc(100% - 80px);
   transform: translateY(-110px);
 }
+body.lite main .logo{
+  cursor: pointer;
+}
 body.lite .says{
   transform: translateX(-50%) translateY(-50px) scale(1.1);
   transition: all .3s;

@@ -1,13 +1,17 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.0.1',
+    version:'2.1.0',
     version_code:window.version_code,
-    updateTime:'2024/8/2',
+    updateTime:'2024/8/6',
     log:[
       {
         tag:"new",
-        content:"全新时间LOGO样式"
+        content:"LOGO支持设置为空"
+      },
+      {
+        tag:"fix",
+        content:"对一些细节方面进行优化"
       },
       {
         tag:"fix",

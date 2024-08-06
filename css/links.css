@@ -82,7 +82,7 @@
   padding:10px 10px;
   margin: 5px 10px;
   border-radius: 10px;
-  background-color: rgba(243, 243, 243,.6);
+  background-color: rgba(230, 230, 230, 0.6);
   box-shadow: none;
 }
 .links ul.link-list li a p{

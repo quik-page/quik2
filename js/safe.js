@@ -9,12 +9,16 @@
         }
     })
     function hashcl(){
-        var hash=location.hash;
-        if(hash=='#safe'){
-            location.hash='#safe_called';
+        var hash=location.hash.slice(1),cjhash;
+        if(hash.indexOf(';')!=-1){
+            cjhash=hash.split(';')[0];
+            hash=hash.split(';')[1];
+        }
+        if(hash=='safe'){
+            location.hash='#'+(cjhash?cjhash+';':'')+'safe_called';
             location.reload();
-        }else if(hash=='#safe_called'){
-            location.hash='';
+        }else if(hash=='safe_called'){
+            location.hash='#'+(cjhash?cjhash+';':'');
             window.addon_=false;
             alert('已阻止所有插件运行，请修改设置或删除插件');
         }

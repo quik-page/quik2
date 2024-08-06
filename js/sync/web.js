@@ -78,12 +78,22 @@
         if(!isLogin){
             await syncM.login();
         }
-        if(location.hash=='#newnow'){
+        if(isNewNow()){
             await updateAll();
         }else{
             await syncData();
         }
         listenData();
+    }
+
+    function isNewNow(){
+        var hash=location.hash.slice(1);
+        if(hash.indexOf(';')!=-1){
+            hash=hash.split(';')[1]
+        }
+        if(hash=='newnow'){
+            return true;
+        }
     }
 
     var syncConfictDialog=new dialog({

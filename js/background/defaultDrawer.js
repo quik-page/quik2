@@ -254,6 +254,7 @@
   }
   
   return {
+    drawer:{
     type: "default",
     init: function (e) {
       setbg=e.setbg;
@@ -408,5 +409,5 @@
       _reset();
       draws[data.type](bgf,data);
     }
-  }
+  },draws}
 })();

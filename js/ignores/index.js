@@ -53,7 +53,7 @@
     message:"在官方QQ群可以查看最新消息，也是处理建议最快的地方，更有机会参与新功能测试",
     index:5,
     callback:function(){
-      window.open('./https://qm.qq.com/q/6nOculioy4')
+      window.open('https://qm.qq.com/q/6nOculioy4')
     }
   });
   igsg.addNewItem(aboutSi);
@@ -99,7 +99,7 @@
       <h1>更新日志</h1>
       <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
     </div>
-    <div class="version_list"></div>`,
+    <div class="version_list"><div></div></div>`,
     mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
     class:"update_dia"
   });
@@ -117,7 +117,7 @@
     })
     document.body.append(s);
     window.connectUpdates=function(updatelog){
-      util.query(updom,'.version_list').innerHTML=(function(){
+      util.query(updom,'.version_list div').innerHTML=(function(){
         var s='';
         for(var k in updatelog){
           s+=formatVersion(k,updatelog[k]);
@@ -130,7 +130,7 @@
       s.remove();
     }
   }
-  util.query(updom,'.version_list').innerHTML='正在加载更新日志...'
+  util.query(updom,'.version_list div').innerHTML='正在加载更新日志...'
   
   function formatVersion(v,fv){
     var str='',gl={

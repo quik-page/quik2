@@ -1,15 +1,27 @@
 (function(){
     var logoF=document.querySelector('main .center .logo');
+    if(initsto.get('timelogo')){
+      initsto.set('logo','b');
+    }else if(!initsto.get('logo')){
+      initsto.set('logo','a')
+    }
     var si=new SettingItem({
         index:4,
-        title:"时间LOGO",
-        message:"将当前时间作为LOGO",
-        type:"boolean",
+        title:"LOGO样式",
+        message:"切换LOGO显示的内容",
+        type:"select",
+        init:function(){
+          return {
+            a:"普通LOGO",
+            b:"LED时间",
+            c:"空"
+          }
+        },
         get:function(){
-          return !!initsto.get('timelogo');
+          return initsto.get('logo');
         },
         callback:function(v){
-          initsto.set('timelogo',v);
+          initsto.set('logo',v);
           d(v);
         }
       })
@@ -67,28 +79,27 @@
     
 
     function d(v){
-        if(v){
-            util.query(logoF,'.timelogo').style.display='block';
-            util.query(logoF,'.imglogo').style.display='none';
-            doTime();
-        }else{
+        util.query(logoF,'.timelogo').style.display='none';
+        util.query(logoF,'.imglogo').style.display='none';
+        if(v=='a'){
             util.query(logoF,'.imglogo').style.display='block';
-            util.query(logoF,'.timelogo').style.display='none';
+        }else if(v=='b'){
+            util.query(logoF,'.timelogo').style.display='block';
+            doTime();
         }
     }
-    d(initsto.get('timelogo'));
+    d(initsto.get('logo'));
 
     tyGroup.addNewItem(si);
 
     return {
         set:function(a){
-          a=!!a;
-          initsto.set('timelogo',a);
+          initsto.set('logo',a);
           d(a);
           si.reGet();
         },
         get:function(){
-          return initsto.get('timelogo');
+          return initsto.get('logo');
         }
       }
 })();

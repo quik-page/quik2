@@ -59,16 +59,32 @@
 .d-c.update_dia .version_list .version_item_title {
   position: relative;
 }
+.d-c.update_dia .version_list{
+  padding-left: 30px;
+  padding-right: 10px;
+}
+.d-c.update_dia .version_list>div{
+  position: relative;
+}
+.d-c.update_dia .version_list>div::before{
+  content: '';
+  width: 1px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -10px;
+  background-color: #ccc;
+}
 
 .d-c.update_dia .version_list .version_item_title::before {
   content: "";
-  width: 4px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   background-color: #0072ff;
   position: absolute;
   top: 3px;
-  border-radius: 3px;
-  left: -10px;
+  border-radius: 10px;
+  left: -20px;
 }
 @media (max-width:600px){
   .dialog.mobile-show-full .d-c.update_dia,

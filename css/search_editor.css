@@ -35,6 +35,13 @@
 .search_editor .list>*{
   width: 100%;
 }
+.search_editor .list h2{
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 50px;
+  padding-left: 20px;
+  width: auto;
+}
 .search_editor .neizhilist{
   overflow: hidden;
 }
@@ -112,12 +119,17 @@
   text-align: center;
   line-height: 30px;
   cursor: pointer;
+  background-color: #f4f4f4;
+  border-radius: 4px;
 }
 .search_editor .searchlist .addnewitem .material-symbols-outlined{
   font-size: inherit;
 }
 .search_editor .searchlist .addnewitem:hover{
   background-color: #eee;
+}
+body.dark .search_editor .searchlist .addnewitem{
+  background-color: #383838;
 }
 body.dark .search_editor .searchlist .addnewitem:hover{
   background-color: #222;
