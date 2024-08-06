@@ -138,8 +138,9 @@
     }
   });
 
-  var defDrawer=_REQUIRE_('./defaultDrawer.js');
-  var drawers = [defDrawer.drawer];
+  var defDraw=_REQUIRE_('./defaultDrawer.js')
+  var defDrawer=defDraw.drawer;
+  var drawers = [defDrawer];
   dodrawer(defDrawer);
 
   function pushBgTab(item) {
@@ -266,9 +267,9 @@
     on,
     off,
     neizhiDraw:{
-      img:defDrawer.draws.img,
-      video:defDrawer.draws.video,
-      color:defDrawer.draws.color
+      img:defDraw.draws.img,
+      video:defDraw.draws.video,
+      color:defDraw.draws.color
     }
   }
 
