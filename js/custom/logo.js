@@ -2,6 +2,7 @@
     var logoF=document.querySelector('main .center .logo');
     if(initsto.get('timelogo')){
       initsto.set('logo','b');
+      initsto.remove('timelogo')
     }else if(!initsto.get('logo')){
       initsto.set('logo','a')
     }
