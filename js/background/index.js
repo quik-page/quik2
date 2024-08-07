@@ -217,9 +217,29 @@
         drawer.draw({
           bgf:bgf,data:waitdraw.data
         })
+        waitdraw=null;
       }
     }
   }
+
+  setTimeout(function(){
+    addon.on('allrun',function(){
+      console.log('allrun');
+      if(waitdraw){
+        waitdraw=null;
+        initsto.set('bg',{
+          type: "default",
+          data: {
+            type: "color",
+            light: "#fff",
+            dark: "#333"
+          }
+        })
+        drawbg(initsto.get('bg'));
+        alert('您的背景数据由于插件缺失无法显示，已为您切换为默认。')
+      }
+    })
+  })
 
   var nowdraw=null;
   function drawbg(data){

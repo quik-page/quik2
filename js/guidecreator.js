@@ -6,7 +6,8 @@
                 content:"<div class=\"guide-text\"></div><div class=\"btn ok\">确定</div>",
                 class:"guide-card",
                 offset:{top:0,left:0},
-                width:200
+                width:200,
+                topper:true
             });
             var _cd=_card.getCardDom();
             var j=0;

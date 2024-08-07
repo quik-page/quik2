@@ -13,7 +13,9 @@
   backdrop-filter: blur(10px);
 }
 body.t-dark .searchbox,
-body.t-dark .searchtypeselector{
+body.t-dark .searchtypeselector,
+body.t-light .searchbox,
+body.t-light .searchtypeselector{
   background-color: rgba(255,255,255,.7);
 }
 body.dark .searchbox,
@@ -143,9 +145,14 @@ body.dark .searchbox ul li.active{
 }
 .searchtypeselector.active{
   height: 30px;
-  box-shadow: #ccc 0 1px 5px;
+  box-shadow: #ccc 0 1px 3px;
+  border:#eee solid 1px;
 }
-
+body.dark .searchtypeselector.active{
+  height: 30px;
+  box-shadow: #555 0 1px 3px;
+  border:#353535 solid 1px;
+}
 .searchtypeselector ul{
   width: 100%;
 }
@@ -173,10 +180,10 @@ body.t-dark .searchtypeselector li:hover{
 }
 
 body.dark .searchtypeselector li:hover{
-  background-color: #555;
+  background-color: #444;
 }
 body.dark .searchtypeselector li.active{
-  background-color: #888;
+  background-color: #666;
 }
 body.t-dark .searchtypeselector li.active{
   background-color: #fff;

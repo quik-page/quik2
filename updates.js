@@ -1,4 +1,21 @@
 var updatelog={
+    "2.2.0":{
+      updates:[
+        {
+          tag:"new",
+          content:"添加对开发者和用户友好的“主题”API和主题设置"
+        },
+        {
+          tag:"new",
+          content:"对“卡片”API添加不同层级的设置"
+        },
+        {
+          tag:"fix",
+          content:"修复一些已知问题"
+        }
+      ],
+      time:"2024/8/7"
+    },
     "2.1.0":{
       updates:[
         {

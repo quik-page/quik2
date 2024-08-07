@@ -532,11 +532,19 @@
   }
 
   if(!window.addon_){
+    var addonruns=[];
     getAddonList().forEach(id=>{
       if(!initsto.get(id).disabled){
-        runAddon(id);
+        addonruns.push(runAddon(id));
       }
     })
+    try{
+      Promise.all(addonruns).then(function(){
+        setTimeout(function(){
+          evn.doevent('allrun',[]);
+        },100)
+      })
+    }catch(e){};
   }
   
 

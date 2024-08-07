@@ -112,6 +112,16 @@
     waitfn(details.key);
   }
 
+  setTimeout(function(){
+    addon.on('allrun',function(){
+      if(_key){
+        initsto.set('saytype','user');
+        refsay('user');
+        alert('您的一言数据由于插件缺失无法显示，已为您切换为默认。');
+      }
+    })
+  })
+
   function setSayType(key,cb){
     if(util.checkSession(key)){
       key=key.id;
@@ -232,14 +242,17 @@
       sayMenu.setList(sayTypes[id].menu);
       sayI.onclick=sayTypes[id].click
       refsay(id);
+      _key=null;
     }
   }
   if(initsto.get('enabled')){
-    _key=initsto.get('saytype');
-    if(sayTypes[_key]){
-      sayMenu.setList(sayTypes[_key].menu);
-      sayI.onclick=sayTypes[_key].click
-      refsay(_key);
+    var __key=initsto.get('saytype');
+    if(sayTypes[__key]){
+      sayMenu.setList(sayTypes[__key].menu);
+      sayI.onclick=sayTypes[__key].click
+      refsay(__key);
+    }else{
+      _key=__key;
     }
   }else{
     sayF.style.display='none';

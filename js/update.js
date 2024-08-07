@@ -1,17 +1,17 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.1.0',
+    version:'2.2.0',
     version_code:window.version_code,
-    updateTime:'2024/8/6',
+    updateTime:'2024/8/7',
     log:[
       {
         tag:"new",
-        content:"LOGO支持设置为空"
+        content:"添加对开发者和用户友好的“主题”API和主题设置"
       },
       {
-        tag:"fix",
-        content:"对一些细节方面进行优化"
+        tag:"new",
+        content:"对“卡片”API添加不同层级的设置"
       },
       {
         tag:"fix",

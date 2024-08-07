@@ -6,14 +6,18 @@
     var doevent=eventHandle.doevent;
     var lite=_REQUIRE_('./lite.js');
     var logo=_REQUIRE_('./logo.js');
+    var color=_REQUIRE_('./color.js');
     var theme=_REQUIRE_('./theme.js');
     var dialogblur=_REQUIRE_('./blur.js');
 
     return {
         setLite:lite.set,
         isLite:lite.get,
-        getTheme:theme.getTheme,
+        getColor:color.getTheme,
+        setColor:color.setTheme,
         setTheme:theme.setTheme,
+        addTheme:theme.addTheme,
+        removeTheme:theme.removeTheme,
         isTimeLogo:function(){
             return logo.get()=='b'
         },

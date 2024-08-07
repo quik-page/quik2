@@ -57,7 +57,7 @@ main .logo .timelogo>div{
 }
 main .logo .timelogo>div ._num{
   width: 25px;
-  height: 50px;
+  height: 48px;
   float: left;
   position: relative;
   margin: 20px 10px;
@@ -97,11 +97,11 @@ body.t-dark ._num .num_line.show
 ._num .a3,
 ._num .a4,
 ._num .a5{
-  top: 24px;
+  top: 23px;
   left: 0;
 }
 ._num .a6{
-  top: 48px;
+  top: 46px;
   left: 0;
 }
 

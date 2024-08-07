@@ -1,94 +1,92 @@
 (function(){
-
-  // 等待重构
-  var n=null;
-  if(!initsto.get('theme')){
-    initsto.set('theme','a');
-  }
-  var si=new SettingItem({
-    index:0,
-    title:"主题颜色",
-    type:"select",
-    message:'',
-    get:function(){
-      return initsto.get('theme');
-    },
-    callback:function(v){
-      initsto.set('theme',v);
-      checkTheme(v);
-    },
-    init:function(){
-      return {
-        a:'浅色',b:'深色',c:'跟随时间',d:"跟随系统"
-      }
+    if(!initsto.get('themea')){
+        initsto.set('themea','def');
     }
-  });
 
+    var ys=['dark','t-dark','t-light','dialogblur','lite','hiden','showall'];
+    var themes={
+        'def':"默认主题"
+    };
+
+    var si=new SettingItem({
+        index:0,
+        title:"主题",
+        type:"select",
+        message:'',
+        get:function(){
+          return initsto.get('themea');
+        },
+        callback:function(v){
+          initsto.set('themea',v);
+          doTheme(v);
+        },
+        init:function(){
+          return themes;
+        }
+      });
   tyGroup.addNewItem(si);
 
-  var _g=3;
-  function checkTheme(v){
-    if(_g!=3){_g=false;}
-    if(v=='b'){
-      document.body.classList.add('dark');
-      doevent('themechange',['dark']);
-      n='dark';
-    }else if(v=='a'){
-      document.body.classList.remove('dark');
-      doevent('themechange',['light']);
-      n='light'
-    }else if(v=='c'){
-      if(new Date().getHours()>=18||new Date().getHours()<6){
-        document.body.classList.add('dark');
-        doevent('themechange',['dark']);
-        n='dark';
-      }else{
-        document.body.classList.remove('dark');
-        doevent('themechange',['light']);
-        n='light'
-      }
-    }else if(v=='d'){
-      if(window.matchMedia){
-        if(_g==3){
-          _g=true;
-          listenTheme();
-        }else{
-          _g=true;
+    function doTheme(f){
+        if(ys.indexOf(f)!=-1){
+            return;
         }
-      }else{
-        toast('你的浏览器不支持此功能')
-      }
+        if(!themes[f]){
+            return;
+        }
+        document.body.classList.forEach(function(a){
+            if(ys.indexOf(a)==-1){
+                document.body.classList.remove(a);
+            }
+        })
+        document.body.classList.add(f);
+        return true;
     }
-  }
-  function listenTheme(){
-    var d=window.matchMedia('(prefers-color-scheme: dark)');
-    d.matches?document.body.classList.add('dark'):document.body.classList.remove('dark');
-    d.addEventListener('change', e => {
-      if(e.matches){
-        document.body.classList.add('dark');
-        doevent('themechange',['dark']);
-        n='dark';
-      }else{
-        document.body.classList.remove('dark');
-        doevent('themechange',['light']);
-        n='light'
-      }
-    });
-  }
 
-  checkTheme(initsto.get('theme'));
+    function addTheme(f,n){
+        themes[f]=n;
+        si.reInit();
+        if(wait&&f==initsto.get('themea')){
+            wait=false;
+        }
+    }
 
-  function getTheme(){
-    return n;
-  }
-  return {
-    setTheme:function(v){
-      initsto.set('theme',v);
-      checkTheme(v);
-      si.reGet();
-    },
-    on,
-    off,
-    getTheme,
-  }
-})()
+    function removeTheme(f){
+        if(f=='def'){return}
+        delete themes[f]
+        if(initsto.get('themea')==f){
+            initsto.set('themea','def')
+            si.reGet();
+        }
+        si.reInit();
+    }
+
+    function setTheme(f){
+        if(!themes[f]){
+            return;
+        }
+        initsto.set('themea',f);
+        doTheme(f);
+        si.reGet();
+    }
+
+    var wait=false;
+    if(!doTheme(initsto.get('themea'))){
+        wait=true;
+        setTimeout(function(){
+            addon.on('allrun',function(){
+                if(wait){
+                    initsto.set('themea','def');
+                    doTheme('def');
+                    alert('您的主题由于插件缺失无法显示，已为您切换为默认。');
+                }
+            })
+        })
+    }
+    
+
+    return {
+        addTheme,
+        removeTheme,
+        setTheme
+    }
+})();

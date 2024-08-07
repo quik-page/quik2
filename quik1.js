@@ -3,6 +3,7 @@
 })(function(){
     function helper(_importData){
         quik.confirm('你确定要从QUIK1中导入数据吗？一些数据导入可能会不全。',function(ok){
+            if(!ok)return;
             var d=new quik.dialog({
                 content:"正在获取QUIK 1数据...",
                 clickOtherToClose:false

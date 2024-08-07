@@ -1,10 +1,12 @@
 (function(){
   var cardcon=util.query(document,'.cards');
+  var topcardcon=util.query(document,'.top.cards');
 
   /**
    * 
    * @param {object} detail 
    * @param {string} detail.content
+   * @param {Boolean} detail.topper
    * @param {number} detail.width
    * @param {number} detail.height
    * @param {string} detail.class?
@@ -42,7 +44,11 @@
       }
     }
     this.el=c_el;
-    cardcon.appendChild(c_el);
+    if(detail.topper){
+      topcardcon.appendChild(c_el);
+    }else{
+      cardcon.appendChild(c_el);
+    }
     this.isShow=false;
   }
 
