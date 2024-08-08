@@ -29,7 +29,6 @@
 }
 .setting-item{
   width: 100%;
-  overflow: hidden;
   height: 40px;
   margin: 5px 0;
   padding: 3px 5px;
@@ -38,6 +37,7 @@
 .setting-item .setting-item-left{
   float: left;
   height: 40px;
+  width: 75%;
 }
 .setting-item-title{
   line-height: 24px;
@@ -58,10 +58,12 @@
 }
 .setting-item .setting-item-right{
   float: right;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 40px;
+  position: relative;
+  width: 25%;
+  display: flex;
+  justify-content: right;
+  align-items: center;
 }
 .setting-item .null-click .material-symbols-outlined{
   font-size: 16px;
@@ -99,8 +101,75 @@
 .setting-item.just-callback-item{
   transition: background .2s;
 }
+.setting-item.just-callback-item .setting-item-left{
+  width: 90%;
+}
+.setting-item.just-callback-item .setting-item-right{
+  width: 10%;
+}
 .setting-item.just-callback-item:hover{
   background-color: #f4f4f4;
+}
+.setting-item .qui-select{
+  height: 30px;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: #aaa 0 1px 5px;
+  line-height: 30px;
+  margin: 5px 0;
+  width: 100%;
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.setting-item .qui-options{
+  position: absolute;
+  top: 40px;
+  right: 0;
+  z-index: 2;
+  background-color: #fff;
+  border-radius: 3px;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity .15s;
+  font-size: 13px;
+}
+body.dark .setting-item .qui-select,
+body.dark .setting-item .qui-options{
+  background-color: #333;
+}
+body.dark .setting-item .qui-options.active{
+  box-shadow: #666 0 1px 3px;
+}
+.setting-item .qui-options.active{
+  opacity: 1;
+  pointer-events: all;
+  box-shadow: #aaa 0 1px 3px;
+}
+.setting-item .qui-options .qui-option{
+  line-height: 30px;
+  height: 30px;
+  text-align: center;
+  width: calc(100% - 10px);
+  margin: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.setting-item .qui-options .qui-option.selected{
+  background-color: #eee;
+}
+.setting-item .qui-options .qui-option:hover{
+  background-color: #f4f4f4;
+}
+body.dark .setting-item .qui-options .qui-option.selected{
+  background-color: #444;
+}
+body.dark .setting-item .qui-options .qui-option:hover{
+  background-color: #3a3a3a;
 }
 body.dark .setting-item.just-callback-item:hover{
   background-color: #222;

@@ -1,4 +1,21 @@
 var updatelog={
+    "2.2.1":{
+      updates:[
+        {
+          tag:"change",
+          content:"修改设置中下拉菜单的UI"
+        },
+        {
+          tag:"fix",
+          content:"修复翻译API失效的问题"
+        },
+        {
+          tag:"fix",
+          content:"修复一些已知问题"
+        }
+      ],
+      time:"2024/8/8"
+    },
     "2.2.0":{
       updates:[
         {

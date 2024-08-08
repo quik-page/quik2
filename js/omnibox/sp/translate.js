@@ -23,12 +23,12 @@ core.addNewSA({
       return new Promise(function(r,j){
         // 降低调用次数
         _t_timeout=setTimeout(function(){
-            _t_re=util.xhr('https://api.gumengya.com/Api/Translate?text='+encodeURI(text)+'&from=auto&to=zh',function(res){
+            _t_re=util.xhr('https://api.oioweb.cn/api/txt/QQFanyi?sourceText='+encodeURIComponent(text),function(res){
                 var a=getsa();    
                 var o=JSON.parse(res);
                 if(o.code==200){
                     var a=getsa();
-                    var result=o.data.result;
+                    var result=o.result.targetText;
                     a.unshift({
                         icon:util.getGoogleIcon('e8e2'),
                         text:result,
@@ -36,14 +36,39 @@ core.addNewSA({
                             ui.setValue(result);
                         }
                     })
+                    r(a);
                 }else{
                     console.log('Translate API Err:',o);
+                    next();
                 }
-                r(a);
-                
             },function(err){
                 console.log('Translate API Err:',err);
+                next();
             })
+            function next(){
+                _t_re=util.xhr('https://api.gumengya.com/Api/Translate?text='+encodeURIComponent(text)+'&from=auto&to=zh',function(res){
+                    var a=getsa();    
+                    var o=JSON.parse(res);
+                    if(o.code==200){
+                        var a=getsa();
+                        var result=o.data.result;
+                        a.unshift({
+                            icon:util.getGoogleIcon('e8e2'),
+                            text:result,
+                            click:function(){
+                                ui.setValue(result);
+                            }
+                        })
+                    }else{
+                        console.log('Translate API Err:',o);
+                    }
+                    r(a);
+                    
+                },function(err){
+                    console.log('Translate API Err:',err);
+                })
+            }
+            
         },1500)
         
       })

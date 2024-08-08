@@ -170,7 +170,15 @@
           }
         },
         select: function () {
-          elr.innerHTML = `<select class="setting-item-input"></select>`;
+          elr.innerHTML = `<input class="setting-item-input" type="text" style="display:none"></input><div class="qui-select"></div><div class="qui-options"></div>`;
+          util.query(elr, '.qui-select').onclick=function(e){
+            e.stopPropagation();
+            var acted=util.query(document, '.qui-options.active');
+            if(acted){
+              acted.classList.remove('active');
+            }
+            util.query(elr, '.qui-options').classList.add('active');
+          }
           var guaqi;
           cb = function (v) {
             guaqi = v;
@@ -182,15 +190,35 @@
             _init(l);
           }
           function _init(inited) {
-            util.query(elr, '.setting-item-input').innerHTML = (() => {
+            util.query(elr, '.qui-options').innerHTML = (() => {
               var html = '';
               for (var k in inited) {
-                html += `<option value="${k}">${inited[k]}</option>`;
+                html += `<div class="qui-option" data-value="${k}">${inited[k]}</div>`;
               }
               return html;
             })();
+            util.query(elr, '.qui-options .qui-option',true).forEach(function(op){
+              op.onclick=function(){
+                var v=op.getAttribute('data-value');
+                util.query(elr, '.setting-item-input').value = v;
+                util.query(elr, '.qui-select').innerText = inited[v];
+                var acted=util.query(elr, '.qui-options .qui-option.selected');
+                if(acted){
+                  acted.classList.remove('selected');
+                }
+                op.classList.add('selected');
+                doCallback.call(util.query(elr, '.setting-item-input'));
+              }
+              
+            })
             cb = function (v) {
               util.query(elr, '.setting-item-input').value = v;
+              util.query(elr, '.qui-select').innerText = inited[v];
+              var acted=util.query(elr, '.qui-options .qui-option.selected');
+              if(acted){
+                acted.classList.remove('selected');
+              }
+              util.query(elr, '.qui-options .qui-option[data-value="'+v+'"]').classList.add('selected');
             }
             if (guaqi) cb(guaqi);
           }
@@ -223,7 +251,8 @@
         } else {
           return 'change'
         }
-      })(), function (e) {
+      })(), doCallback);
+      function doCallback() {
         if (this.classList.contains('null-click')) return;
         var v;
         if (this.type == 'checkbox') {
@@ -243,7 +272,7 @@
           item.callback(v);
         }
 
-      });
+      }
     },
     _dochangeGroup: function (group, dt) {
       var g = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + ']');
@@ -341,6 +370,13 @@
       item.getacb();
     }
   }
+
+  document.addEventListener('click',function(){
+    var acted=util.query(document, '.qui-options.active');
+    if(acted){
+      acted.classList.remove('active');
+    }
+  })
 
   return Setting;
 })();
