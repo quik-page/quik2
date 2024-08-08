@@ -45,14 +45,14 @@
 
 .d-c.bg_d .tab_con{
   width: calc(100% - 20px);
-  height:24px;
+  height:30px;
   margin:  0 10px;
 }
 .d-c.bg_d .tab_con .tabitem{
   float: left;
   height: 16px;
   padding: 4px;
-  margin: 4px;
+  margin: 7px;
   font-size: 14px;
   user-select: none;
   border-radius: 3px;
@@ -72,7 +72,7 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   margin: 0 10px;
   overflow: auto;
   width: calc(100% - 20px);
-  height: calc(100% - 64px);
+  height: calc(100% - 70px);
 }
 .d-c.bg_d .scroll_con .scrollitem{
   display: none;
@@ -82,8 +82,8 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
   padding: 5px 10px;
 }
 .d-c.bg_d .scroll_con .unit-item .unit-title{
-  font-size: 14px;
-  color: #00f;
+  font-size: 15px;
+  color: #06f;
   font-weight: bold;
   line-height: 20px;
   padding: 10px 0;

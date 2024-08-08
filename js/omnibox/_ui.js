@@ -279,7 +279,7 @@ function _focus(){
     li.onclick=function(){
       searchEditor.open();
     }
-    sct.style.width=util.query(ul,'li',true).length*36+'px';
+    sct.style.width=util.query(ul,'li',true).length*36-6+'px';
   }
   icon.addEventListener('click',function(){
     // 避免link遮挡底部

@@ -122,10 +122,10 @@ body.dark .d-c .actionbar{
   line-height: 40px;
 }
 .d-c .actionbar .closeBtn:hover{
-  background-color: #eee;
+  background-color: #f2f2f2;
 }
 body.dark .d-c .actionbar .closeBtn:hover{
-  background-color: #666;
+  background-color: #555;
 }
 .dialog form a{
   color: #09f;

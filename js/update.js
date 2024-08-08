@@ -1,21 +1,13 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.2.1',
+    version:'2.2.2',
     version_code:window.version_code,
     updateTime:'2024/8/8',
     log:[
       {
-        tag:"change",
-        content:"修改设置中下拉菜单的UI"
-      },
-      {
         tag:"fix",
-        content:"修复翻译API失效的问题"
-      },
-      {
-        tag:"fix",
-        content:"修复一些已知问题"
+        content:"对设置的一些细节方面进行优化"
       }
     ]
   }

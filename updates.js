@@ -1,4 +1,13 @@
 var updatelog={
+  "2.2.2":{
+    updates:[
+      {
+        tag:"fix",
+        content:"对设置的一些细节方面进行优化"
+      }
+    ],
+    time:"2024/8/8"
+  },
     "2.2.1":{
       updates:[
         {

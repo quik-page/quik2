@@ -166,7 +166,7 @@ body.dark .searchtypeselector.active{
 .searchtypeselector li:nth-child(1){
   margin-left: 0;
 }
-.searchtypeselector li:nth-last-child(1){
+.searchtypeselector li.add{
   margin-right: 0;
 }
 .searchtypeselector li:hover{

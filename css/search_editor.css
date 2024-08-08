@@ -5,9 +5,9 @@
   overflow: hidden;
 }
 .search_editor .neizhilist .item{
-  width: calc(25% - 10px);
+  width: calc(25% - 20px);
   height: 40px;
-  margin: 5px;
+  margin: 10px;
   border-radius: 10px;
   background-color: #f4f4f4;
   float: left;
@@ -17,6 +17,9 @@
   cursor: pointer;
   user-select: none;
 }
+.search_editor .footer{
+  margin: 7px 5px;
+}
 @media (max-width:600px){
   .dialog.mobile-show-full .d-c.search_editor{
     width: 100%;
@@ -24,12 +27,13 @@
   }
   .search_editor .neizhilist .item{
     width: calc(50% - 10px);
+    margin: 5px;
   }
 }
 
 .search_editor .list{
   overflow-y: auto;
-  height: calc(100% - 95px);
+  height: calc(100% - 105px);
   padding: 10px;
 }
 .search_editor .list>*{

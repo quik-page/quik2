@@ -11,7 +11,7 @@
 */
 .setting-root{
   width: calc(100% - 40px);
-  height: calc(100% - 60px);
+  height: calc(100% - 70px);
   overflow-y: auto;
 }
 .setting-root{
@@ -19,13 +19,15 @@
 }
 .setting-tree{
   padding-bottom: 10px;
-  margin: 5px 10px;
+  margin: 5px 0;
+  margin-left: 10px;
 }
 .setting-group-title{
-  font-size: 14px;
+  font-size: 15px;
   font-weight: bold;
   color: #06f;
-  padding-top: 10px;
+  padding: 10px 7px;
+  padding-bottom: 7px;
 }
 .setting-item{
   width: 100%;
@@ -100,6 +102,7 @@
 }
 .setting-item.just-callback-item{
   transition: background .2s;
+  cursor: pointer;
 }
 .setting-item.just-callback-item .setting-item-left{
   width: 90%;
@@ -112,9 +115,7 @@
 }
 .setting-item .qui-select{
   height: 30px;
-  background-color: #fff;
   border-radius: 3px;
-  box-shadow: #aaa 0 1px 5px;
   line-height: 30px;
   margin: 5px 0;
   width: 100%;
@@ -122,11 +123,30 @@
   user-select: none;
   cursor: pointer;
   font-size: 13px;
+  transition: all .15s;
+  color: #333;
+  border: #ddd solid 1px;
+  background-color: #f7f7f7;
 }
-
+.setting-item .qui-select:hover{
+  box-shadow: #ccc 0 1px 3px;
+  background-color: #fafafa;
+}
+.setting-item .qui-select:active{
+  box-shadow: #ccc 0 1px 1px;
+  background-color: #ccc;
+}
+body.dark .setting-item .qui-select:hover{
+  box-shadow: #666 0 1px 3px;
+  background-color: #343434;
+}
+body.dark .setting-item .qui-select:active{
+  box-shadow: #666 0 1px 1px;
+  background-color: #666;
+}
 .setting-item .qui-options{
   position: absolute;
-  top: 40px;
+  top: 37px;
   right: 0;
   z-index: 2;
   background-color: #fff;
@@ -137,10 +157,15 @@
   user-select: none;
   transition: opacity .15s;
   font-size: 13px;
+  color: #333;
 }
 body.dark .setting-item .qui-select,
 body.dark .setting-item .qui-options{
-  background-color: #333;
+  background-color: #373737;
+  color: #ddd;
+}
+body.dark .setting-item .qui-select{
+  border-color: #666;
 }
 body.dark .setting-item .qui-options.active{
   box-shadow: #666 0 1px 3px;
@@ -154,8 +179,8 @@ body.dark .setting-item .qui-options.active{
   line-height: 30px;
   height: 30px;
   text-align: center;
-  width: calc(100% - 10px);
-  margin: 5px;
+  width: calc(100% - 6px);
+  margin: 3px;
   border-radius: 3px;
   cursor: pointer;
 }
@@ -172,7 +197,7 @@ body.dark .setting-item .qui-options .qui-option:hover{
   background-color: #3a3a3a;
 }
 body.dark .setting-item.just-callback-item:hover{
-  background-color: #222;
+  background-color: #444;
 }
 body.dark .setting-group-title{
   color: #0af;
