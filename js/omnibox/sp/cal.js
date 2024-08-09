@@ -22,7 +22,7 @@ core.addNewSA({
       var a=getsa();
       try{
           text=text.substr(1);
-          if(!text) return;
+          if(!text) return a;
           var e=Math.E;
           var PI=Math.PI;
           var ln=Math.log;
@@ -42,6 +42,7 @@ core.addNewSA({
           .replaceAll('{','(')
           .replaceAll('}',')');
           var result=eval(text);
+          result=result.toString().replace('e+','*10^')
           a.unshift({
               icon:util.getGoogleIcon('ea5f'),
               text:result,
@@ -51,7 +52,7 @@ core.addNewSA({
           });
       }catch(e){}
       
-      r(a);
+      return a;
     }
   });
 })();

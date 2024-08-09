@@ -61,13 +61,14 @@
 }
 .links ul.link-list{
   width: 100%;
-  height:calc(100% - 30px);
+  height:calc(100% - 37px);
   overflow-y: auto;
   overflow-x: hidden;
+  padding-top: 7px;
 }
 .links ul.link-list li{
   float: left;
-  width: 75px;
+  width: 71px;
   height: 100px;
   position: relative;
 }
@@ -80,7 +81,7 @@
   width: 35px;
   height: 35px;
   padding:10px 10px;
-  margin: 5px 10px;
+  margin: 5px 7px;
   border-radius: 10px;
   background-color: rgba(230, 230, 230, 0.6);
   box-shadow: none;
@@ -94,20 +95,21 @@
   box-shadow: 0 0 5px rgba(0,0,0,.1);
 }
 .links ul.link-list.xs li{
-  width:40px;
-  height:60px;
+  width:49px;
+  height:70px;
 }
 .links ul.link-list.xs li a img{
   width: 24px;
   height: 24px;
-  padding:4px 4px;
+  padding:6px 6px;
   margin: 4px 4px;
   border-radius: 3px;
 }
 .links ul.link-list.s li{
   width:60px;
-  height:80px;
+  height:90px;
 }
+
 .links ul.link-list.s li a img{
   width: 30px;
   height: 30px;
@@ -115,33 +117,42 @@
   margin: 5px 5px;
   border-radius: 6px;
 }
+@media(max-width:400px){
+  .links ul.link-list.s li{
+    width:57px;
+    height:90px;
+  }
+  .links ul.link-list.s li a img{
+    margin: 5px 4px;
+  }
+}
 .links ul.link-list.l li{
-  width:80px;
+  width:79px;
   height:120px;
 }
 .links ul.link-list.l li a img{
   width: 40px;
   height: 40px;
   padding:10px 10px;
-  margin: 10px 10px;
+  margin: 10px 9px;
   border-radius: 12px;
 }
 .links ul.link-list.l li a p{
   font-size: 15px;
 }
 .links ul.link-list.xl li{
-  width:100px;
-  height:125px;
+  width:98px;
+  height:140px;
 }
 .links ul.link-list.xl li a img{
-  width: 50px;
-  height: 50px;
-  padding:15px 15px;
-  margin: 10px 10px;
+  width: 40px;
+  height: 40px;
+  padding:20px 20px;
+  margin: 10px 9px;
   border-radius: 15px;
 }
 .links ul.link-list.xl li a p{
-  font-size: 18px;
+  font-size: 15px;
 }
 .links ul.link-list li.link-add a{
   width: 43px;

@@ -52,9 +52,7 @@
     title:"加入官方QQ群",
     message:"在官方QQ群可以查看最新消息，也是处理建议最快的地方，更有机会参与新功能测试",
     index:5,
-    callback:function(){
-      window.open('https://qm.qq.com/q/6nOculioy4')
-    }
+    callback:joinQQqun
   });
   igsg.addNewItem(aboutSi);
   igsg.addNewItem(updateSi);
@@ -72,11 +70,17 @@
   mainmenu.pushMenu({
     icon:util.getGoogleIcon('e0bf'),
     title:"加入官方QQ群",
-    click:function(){
-      window.open('https://qm.qq.com/q/6nOculioy4');
-    }
+    click:joinQQqun
   },1)
 
+  function joinQQqun(){
+    window.open('https://qm.qq.com/q/6nOculioy4');
+    confirm('如果没有跳转至QQ，点击确定复制群号：971915865',function(ok){
+      if(ok){
+        util.copyText('971915865');
+      }
+    })
+  }
 
   var aboutDialog=new dialog({
     content:_REQUIRE_('./text/about.html').replace('{{close-btn}}',util.getGoogleIcon('e5cd')),

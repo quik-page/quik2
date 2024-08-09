@@ -210,7 +210,7 @@ function _focus(){
         searchcover.classList.remove('active');
         searchbox.classList.remove('active');
       }
-    },50)
+    })
     doevent('blur',[input]);
   });
 
@@ -223,6 +223,7 @@ function _focus(){
     hasmousedown=true;
   }
   function _up(){
+    hasmousedown=false;
     mouseupf();
     mouseupf=function(){}
   }

@@ -24,7 +24,6 @@ core.addNewSA({
         // 降低调用次数
         _t_timeout=setTimeout(function(){
             _t_re=util.xhr('https://api.oioweb.cn/api/txt/QQFanyi?sourceText='+encodeURIComponent(text),function(res){
-                var a=getsa();    
                 var o=JSON.parse(res);
                 if(o.code==200){
                     var a=getsa();
@@ -50,7 +49,6 @@ core.addNewSA({
                     var a=getsa();    
                     var o=JSON.parse(res);
                     if(o.code==200){
-                        var a=getsa();
                         var result=o.data.result;
                         a.unshift({
                             icon:util.getGoogleIcon('e8e2'),

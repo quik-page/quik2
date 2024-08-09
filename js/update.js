@@ -1,13 +1,17 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.2.2',
+    version:'2.2.3',
     version_code:window.version_code,
-    updateTime:'2024/8/8',
+    updateTime:'2024/8/9',
     log:[
       {
         tag:"fix",
-        content:"对设置的一些细节方面进行优化"
+        content:"修复一些已知问题"
+      },
+      {
+        tag:"fix",
+        content:"对一些细节方面进行优化"
       }
     ]
   }

@@ -1,4 +1,17 @@
 var updatelog={
+  "2.2.3":{
+    updates:[
+      {
+        tag:"fix",
+        content:"修复一些已知问题"
+      },
+      {
+        tag:"fix",
+        content:"对一些细节方面进行优化"
+      }
+    ],
+    time:"2024/8/9"
+  },
   "2.2.2":{
     updates:[
       {
@@ -21,6 +34,10 @@ var updatelog={
         {
           tag:"fix",
           content:"修复一些已知问题"
+        },
+        {
+          tag:"thanks",
+          content:"感谢 ⍢⃝、惊蛰 提供的建议"
         }
       ],
       time:"2024/8/8"
