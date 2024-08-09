@@ -47,6 +47,7 @@
         si.reInit();
         if(wait&&f==initsto.get('themea')){
             wait=false;
+            doTheme(f);
         }
     }
 

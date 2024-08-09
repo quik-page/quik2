@@ -190,27 +190,7 @@
             _init(l);
           }
           function _init(inited) {
-            util.query(elr, '.qui-options').innerHTML = (() => {
-              var html = '';
-              for (var k in inited) {
-                html += `<div class="qui-option" data-value="${k}">${inited[k]}</div>`;
-              }
-              return html;
-            })();
-            util.query(elr, '.qui-options .qui-option',true).forEach(function(op){
-              op.onclick=function(){
-                var v=op.getAttribute('data-value');
-                util.query(elr, '.setting-item-input').value = v;
-                util.query(elr, '.qui-select').innerText = inited[v];
-                var acted=util.query(elr, '.qui-options .qui-option.selected');
-                if(acted){
-                  acted.classList.remove('selected');
-                }
-                op.classList.add('selected');
-                doCallback.call(util.query(elr, '.setting-item-input'));
-              }
-              
-            })
+            initSelect(elr,inited,item);
             cb = function (v) {
               util.query(elr, '.setting-item-input').value = v;
               util.query(elr, '.qui-select').innerText = inited[v];
@@ -218,7 +198,11 @@
               if(acted){
                 acted.classList.remove('selected');
               }
-              util.query(elr, '.qui-options .qui-option[data-value="'+v+'"]').classList.add('selected');
+              try {
+                util.query(elr, '.qui-options .qui-option[data-value="'+v+'"]').classList.add('selected');
+              } catch (error) {
+                util.query(elr, '.qui-select').innerText = '';
+              }
             }
             if (guaqi) cb(guaqi);
           }
@@ -251,28 +235,9 @@
         } else {
           return 'change'
         }
-      })(), doCallback);
-      function doCallback() {
-        if (this.classList.contains('null-click')) return;
-        var v;
-        if (this.type == 'checkbox') {
-          v = this.checked;
-        } else {
-          v = this.value;
-        }
-        //@note 判断check方法是否存在，check是可选参数
-        //@edit at 2023/1/30 15:12
-        if (typeof item.check == 'function') {
-          if (item.check(v)) {
-            item.callback(v)
-          } else {
-            getacb();
-          }
-        } else {
-          item.callback(v);
-        }
-
-      }
+      })(), function(){
+        doCallback.call(this,item);
+      });
     },
     _dochangeGroup: function (group, dt) {
       var g = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + ']');
@@ -337,17 +302,19 @@
         }
       } else if (item.type == 'select') {
         _init = function (inited) {
-          util.query(elr, '.setting-item-input').innerHTML = (() => {
-            var html = '';
-            for (var k in inited) {
-              html += `<option value="${k}">${inited[k]}</option>`;
-            }
-            return html;
-          })();
+          initSelect(elr,inited,item);
           cb = function (v) {
-            console.log(v);
-            console.trace();
             util.query(elr, '.setting-item-input').value = v;
+              util.query(elr, '.qui-select').innerText = inited[v];
+              var acted=util.query(elr, '.qui-options .qui-option.selected');
+              if(acted){
+                acted.classList.remove('selected');
+              }
+              try {
+              util.query(elr, '.qui-options .qui-option[data-value="'+v+'"]').classList.add('selected');
+              } catch (error) {
+                
+              }
           }
           var l=item.get();
           if(l instanceof Promise){
@@ -378,5 +345,51 @@
     }
   })
 
+
+  function initSelect(elr,inited,item){
+    util.query(elr, '.qui-options').innerHTML = (() => {
+      var html = '';
+      for (var k in inited) {
+        html += `<div class="qui-option" data-value="${k}">${inited[k]}</div>`;
+      }
+      return html;
+    })();
+    util.query(elr, '.qui-options .qui-option',true).forEach(function(op){
+      op.onclick=function(){
+        var v=op.getAttribute('data-value');
+        util.query(elr, '.setting-item-input').value = v;
+        util.query(elr, '.qui-select').innerText = inited[v];
+        var acted=util.query(elr, '.qui-options .qui-option.selected');
+        if(acted){
+          acted.classList.remove('selected');
+        }
+        op.classList.add('selected');
+        doCallback.call(util.query(elr, '.setting-item-input'),item);
+      }
+      
+    })
+  }
+
+  function doCallback(item) {
+    if (this.classList.contains('null-click')) return;
+    var v;
+    if (this.type == 'checkbox') {
+      v = this.checked;
+    } else {
+      v = this.value;
+    }
+    //@note 判断check方法是否存在，check是可选参数
+    //@edit at 2023/1/30 15:12
+    if (typeof item.check == 'function') {
+      if (item.check(v)) {
+        item.callback(v)
+      } else {
+        getacb();
+      }
+    } else {
+      item.callback(v);
+    }
+
+  }
   return Setting;
 })();
