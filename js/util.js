@@ -178,7 +178,7 @@
         if(u.hostname.indexOf('bing.com')!=-1){
           _ic='https://bing.com/favicon.ico';
         }else if(u.hostname.indexOf('www.google.com')!=-1||u.hostname.indexOf('google.com')==0){
-          _ic='https://image.gumengya.com/i/2024/08/10/66b7140736bed.png';
+          _ic='https://s2.loli.net/2024/08/10/dVNZ4SzFxTMpj1a.png';
         }else if(u.hostname.indexOf('stear.cn')!=-1){
           _ic='https://stear.cn/assets/img/216.png';
         }
