@@ -6,6 +6,7 @@
             document.body.style.display='none';
         }else{
             document.body.style.display='block';
+            link.cateWidthShiPei();
         }
     })
     function hashcl(){

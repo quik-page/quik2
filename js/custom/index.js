@@ -28,6 +28,7 @@
         setLogo:logo.set,
         isDialogBlur:dialogblur.get,
         setDialogBlur:dialogblur.set,
-        on,off
+        on,off,
+        waitdotheme:theme.waitdotheme
     }
 })();

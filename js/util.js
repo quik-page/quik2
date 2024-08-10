@@ -1,17 +1,4 @@
 (function(){
-  if(location.hash.indexOf('extdheodqp2eidhjwe')!=-1){
-    console.log('插件模式');
-    window.isExt=true;
-    if(location.hash.indexOf(';')!=-1){
-      window.extid=location.hash.substring(location.hash.indexOf(':')+1,location.hash.indexOf(';'))
-    }else{
-      window.extid=location.hash.substring(location.hash.indexOf(':')+1,location.hash.length)
-    }
-  }else{
-    console.log('网页模式');
-    window.isExt=false;
-  }
-
   var extRequests=[],idmax=0;
   window.addEventListener('message',function(e){
     if(e.data.type=='xhr_cb'){

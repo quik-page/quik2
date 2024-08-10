@@ -39,7 +39,20 @@
             }
         })
         document.body.classList.add(f);
+        doevent('dotheme',[]);
+        if(!isdotheme){
+            isdotheme=true;
+            wf.forEach(f=>f());
+        }
         return true;
+    }
+    var isdotheme=false,wf=[];
+    function waitdotheme(f){
+        if(isdotheme){
+            f();
+        }else{
+            wf.push(f);
+        }
     }
 
     function addTheme(f,n){
@@ -88,6 +101,7 @@
     return {
         addTheme,
         removeTheme,
-        setTheme
+        setTheme,
+        waitdotheme
     }
 })();
