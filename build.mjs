@@ -101,7 +101,25 @@ cssmatch.forEach(function(item){
 })
 fs.writeFileSync(path.join(__dirname,'docs/index.bundle.css'),new cleanCSS().minify(css).styles);
 
-let _h=fs.readFileSync(path.join(__dirname,'index.html')).toString().replace(/<!-- dev -->[\s\S]*<!-- dev end -->/g,'').replace('index.css','index.bundle.css').replace('index.js','index.bundle.js').replace('type="text/rem"','');
+let _h=fs.readFileSync(path.join(__dirname,'index.html')).toString().replace(/<!-- dev -->[\s\S]*<!-- dev end -->/g,'')
+.replace('index.css','index.bundle.css')
+.replace('index.js','index.bundle.js')
+.replace('type="text/rem"','')
+.replace('<!-- register sw -->',`<script>
+// register sw
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js',{
+    scope:"./"
+  });
+}else{
+  setTimeout(function(){
+    new quik.notice({
+      title:"提示",
+      content:"当前浏览器不支持serviceWorker，无法使用离线缓存功能",
+    }).show();
+  })
+}
+</script>`)
 fs.writeFileSync(path.join(__dirname,'docs/index.html'),htmlMinifier.minify(_h,{
   collapseWhitespace: true,
   removeComments: true

@@ -1,4 +1,16 @@
 (function(){
+  if(location.hash.indexOf('extdheodqp2eidhjwe')!=-1){
+    console.log('插件模式');
+    window.isExt=true;
+    if(location.hash.indexOf(';')!=-1){
+      window.extid=location.hash.substring(location.hash.indexOf(':')+1,location.hash.indexOf(';'))
+    }else{
+      window.extid=location.hash.substring(location.hash.indexOf(':')+1,location.hash.length)
+    }
+  }else{
+    console.log('网页模式');
+    window.isExt=false;
+  }
   var extRequests=[],idmax=0;
   window.addEventListener('message',function(e){
     if(e.data.type=='xhr_cb'){
@@ -165,8 +177,8 @@
         var _ic='https://api.iowen.cn/favicon/'+u.host+'.png';
         if(u.hostname.indexOf('bing.com')!=-1){
           _ic='https://bing.com/favicon.ico';
-        }else if(u.hostname.indexOf('google.com')!=-1){
-          _ic='https://tse1-mm.cn.bing.net/th/id/OIP-C.aoNGSVIqKHtM-NWf3QrvdwHaHa?rs=1&pid=ImgDetMain';
+        }else if(u.hostname.indexOf('www.google.com')!=-1||u.hostname.indexOf('google.com')==0){
+          _ic='https://image.gumengya.com/i/2024/08/10/66b7140736bed.png';
         }else if(u.hostname.indexOf('stear.cn')!=-1){
           _ic='https://stear.cn/assets/img/216.png';
         }
@@ -314,6 +326,9 @@
     },
     getGoogleIcon:function(unicode,d){
       return '<span class="material-symbols-outlined'+(d&&d.type?' '+d.type:'')+'">&#x'+unicode+';</span>'
+    },
+    getGoogleIconByString:function(string,d){
+      return '<span class="material-symbols-outlined'+(d&&d.type?' '+d.type:'')+'">'+string+'</span>'
     },
     /**
      * 检查details中是否含有必选项

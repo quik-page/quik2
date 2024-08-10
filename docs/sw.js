@@ -2,7 +2,11 @@ const addResourcesToCache = async (resources) => {
   const cache = await caches.open('v1');
   for(let i=0;i<resources.length;i++){
     if((await cache.match(resources[i]))===undefined){
-      await cache.add(resources[i]);
+      try {
+        await cache.add(resources[i]);
+      } catch (error) {
+        console.log(resources[i]);
+      }
     }
   }
 };
@@ -12,18 +16,21 @@ const reAddResourcesToCache = async (resources) => {
   await cache.addAll(resources);
 };
 
+const gc=[
+  './',
+  './index.html',
+  './index.bundle.css',
+  './index.bundle.js',
+  './assets/localforage.js',
+  './assets/def_addon.png',
+  './assets/logo.svg',
+  'https://gstatic.loli.net/s/materialsymbolsoutlined/v164/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2'
+]
+
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
-    addResourcesToCache([
-      './',
-      './index.html',
-      './index.bundle.css',
-      './index.bundle.js',
-      './assets/localforage.js',
-      './assets/def_addon.png',
-      './assets/logo.svg',
-      'https://gstatic.loli.net/s/materialsymbolsoutlined/v164/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2'
-    ])
+    addResourcesToCache(gc)
   );
 });
 
@@ -35,8 +42,15 @@ const cacheFirst = async ({ request, preloadResponsePromise}) => {
     return responseFromCache;
   }
 
+  let r;
+  try {
+    r=await fetch(request)
+  } catch (error) {
+    return ;
+  }
+
   // Next try to get the resource from the network
-    return fetch(request);
+    return r;
 };
 
 self.addEventListener('fetch',(event)=>{
