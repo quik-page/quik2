@@ -32,7 +32,6 @@
       return new Promise(function(resolve, reject) {
         var a=initsto.getAll();
         delete a.upload;
-        debugger;
         if(a.bg.type!='default'){
           a.requireAddon=quik.addon.getAddonBySessionId(a.bg.type).url;
         }else{

@@ -578,6 +578,7 @@
     checkMarket,
     getAddonByUrl,
     getAddonBySessionId,
+    getAddonById:getAddonBySessionId,
     getAddonByMarketId,
     getAddonList,
     getEnable,

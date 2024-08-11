@@ -89,6 +89,7 @@
           value:ob
         }])
         if(details&&(!details.websync)&&details.sync){
+          console.log('websync',ck,ob);
           evn.doevent('websync',[{
             key:ck,
             value:ob
@@ -99,6 +100,7 @@
         return Object.keys(getAll()[ck]);
       }
       function websync(option){
+        console.log('websync',option);
         evn.doevent('websync',[{
           key:ck,
           value:option,

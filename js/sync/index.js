@@ -76,17 +76,9 @@
         li.classList.add('item');
         var ismarket = false;
         if (j.addon.indexOf('market:') == 0) {
-          li.innerHTML='加载中...'
           ismarket = true;
-          addon.loadMarketData().then(function (r) {
-            if (r[j.addon.replace('market:', '')])
-              setlihtml(r[j.addon.replace('market:', '')].name);
-            else
-              console.error('解析失败')
-          })
-        } else {
-          setlihtml(j.addon)
         }
+        setlihtml(j.addon)
         function setlihtml(_d) {
           li.innerHTML = `<input type="checkbox" disabled/><div class="message">
             <div class="title">${j.title || k}</div>

@@ -11,20 +11,26 @@
   if (!initsto.get('cate')) {
     initsto.set('cate', {});
   }
-  function doevents(ev, ar) {
-    eventfns[ev].forEach(function (fn) {
-      fn.apply(null, [ar]);
-    })
-  }
-
   return {
-    addLink: function (detail, callback = function () { }) {
+    setAll:function(link,cate,cb){
+      if(Array.isArray(link)&&typeof cate=='object'){
+        initsto.set('links',link)
+        initsto.set('cate',cate);
+        cb&&cb();
+        doevent('change',{
+          type:"all",
+          links:link,
+          cate:cate
+        })
+      }
+    },
+    addLink: function (detail, callback) {
       if (!util.checkDetailsCorrect(detail, ['title', 'url'])) {
         throw '参数不正确';
       }
       var lm = limitURL(detail);
       if (lm) {
-        callback({
+        callback&&callback({
           code: -3,
           msg: "受限模式下，" + lm + "长度过长",
           lm: lm
@@ -35,13 +41,13 @@
         // 包含分类 
         var c = initsto.get('cate');
         if (!c[detail.cate]) {
-          callback({
+          callback&&callback({
             code: -1,
             msg: "分组不存在"
           })
         } else {
           if (c[detail.cate].length > 100) {
-            callback({
+            callback&&callback({
               code: -4,
               msg: "受限模式下，分组下已超过100条链接，无法添加"
             })
@@ -49,11 +55,11 @@
           }
           c[detail.cate] = pushLink(detail, c[detail.cate]);
           initsto.set('cate', c);
-          callback({
+          callback&&callback({
             code: 0,
             msg: "添加成功"
           });
-          doevents('change', {
+          doevent('change', {
             cate: detail.cate,
             type: 'add',
             detail: detail
@@ -64,7 +70,7 @@
 
         var l = initsto.get('links');
         if (l.length > 100) {
-          callback({
+          callback&&callback({
             code: -4,
             msg: "受限模式下，分组下已超过100条链接，无法添加"
           })
@@ -72,11 +78,11 @@
         }
         l = pushLink(detail, l);
         initsto.set('links', l);
-        callback({
+        callback&&callback({
           code: 0,
           msg: "添加成功"
         });
-        doevents('change', {
+        doevent('change', {
           cate: null,
           type: 'add',
           detail: detail
@@ -84,13 +90,13 @@
 
       }
     },
-    changeLink: function (cate, index, detail, callback = function () { }) {
+    changeLink: function (cate, index, detail, callback) {
       if (!util.checkDetailsCorrect(detail, ['title', 'url']) || typeof index != 'number') {
         throw '参数错误';
       }
       var lm = limitURL(detail);
       if (lm) {
-        callback({
+        callback&&callback({
           code: -3,
           msg: "受限模式下，" + lm + "长度过长",
           lm: lm
@@ -101,7 +107,7 @@
         // 包含分类
         var c = initsto.get('cate');
         if (!c[cate]) {
-          callback({
+          callback&&callback({
             code: -1,
             msg: "分组不存在"
           })
@@ -110,7 +116,7 @@
 
         var r = writeLink(index, detail, c[cate]);
         if (!r) {
-          callback({
+          callback&&callback({
             code: -2,
             msg: "链接不存在"
           });
@@ -118,11 +124,11 @@
         }
         c[cate] = r;
         initsto.set('cate', c);
-        callback({
+        callback&&callback({
           code: 0,
           msg: "修改成功"
         });
-        doevents('change', {
+        doevent('change', {
           cate: cate,
           index: index,
           type: 'change',
@@ -133,7 +139,7 @@
         var links = initsto.get('links');
         var r = writeLink(index, detail, links);
         if (!r) {
-          callback({
+          callback&&callback({
             code: -2,
             msg: "链接不存在"
           });
@@ -141,11 +147,11 @@
         }
         links = r;
         initsto.set('links', links);
-        callback({
+        callback&&callback({
           code: 0,
           msg: "修改成功"
         });
-        doevents('change', {
+        doevent('change', {
           cate: null,
           index: index,
           type: 'change',
@@ -153,19 +159,19 @@
         });
       }
     },
-    deleteLink: function (cate, index, callback = function () { }) {
+    deleteLink: function (cate, index, callback) {
       if (cate) {
         // 包含分类
         var c = initsto.get('cate');
         if (!c[cate]) {
-          callback({
+          callback&&callback({
             code: -1,
             msg: "分组不存在"
           });
           return;
         }
         if (!c[cate][index]) {
-          callback({
+          callback&&callback({
             code: -2,
             msg: "链接不存在"
           });
@@ -173,11 +179,11 @@
         }
         c[cate].splice(index, 1);
         initsto.set('cate', c);
-        callback({
+        callback&&callback({
           code: 0,
           msg: "删除成功"
         });
-        doevents('change', {
+        doevent('change', {
           cate: cate,
           index: index,
           type: 'delete',
@@ -186,7 +192,7 @@
         // 不包含分类
         var r = initsto.get('links');
         if (!r[index]) {
-          callback({
+          callback&&callback({
             code: -2,
             msg: "链接不存在"
           });
@@ -194,28 +200,28 @@
         }
         r.splice(index, 1);
         initsto.set('links', r);
-        callback({
+        callback&&callback({
           code: 0,
           msg: "删除成功"
         });
-        doevents('change', {
+        doevent('change', {
           cate: null,
           index: index,
           type: 'delete',
         });
       }
     },
-    addCate: function (cate, callback = function () { }) {
+    addCate: function (cate, callback) {
       var c = initsto.get('cate');
       if (c[cate]) {
-        callback({
+        callback&&callback({
           code: -1,
           msg: "分组已存在"
         });
         return;
       }
       if (Object.keys(c).length >= 20) {
-        callback({
+        callback&&callback({
           code: -2,
           msg: "受限模式下，分组数量不能超过20个"
         });
@@ -223,26 +229,26 @@
       }
       c[cate] = [];
       initsto.set('cate', c);
-      callback({
+      callback&&callback({
         code: 0,
         msg: "添加成功"
       });
-      doevents('change', {
+      doevent('change', {
         cate: cate,
         type: 'cateadd',
       });
     },
-    renameCate: function (cate, catename, callback = function () { }) {
+    renameCate: function (cate, catename, callback) {
       var c = initsto.get('cate');
       if (!c[cate]) {
-        callback({
+        callback&&callback({
           code: -1,
           msg: "分组不存在"
         });
         return;
       }
       if (c[catename]) {
-        callback({
+        callback&&callback({
           code: -2,
           msg: "分组重名"
         });
@@ -250,20 +256,20 @@
       c[catename] = c[cate];
       delete c[cate];
       initsto.set('cate', c);
-      callback({
+      callback&&callback({
         code: 0,
         msg: "修改成功"
       });
-      doevents('change', {
+      doevent('change', {
         cate: cate,
         catename: catename,
         type: 'caterename',
       });
     },
-    deleteCate: function (cate, callback = function () { }) {
+    deleteCate: function (cate, callback) {
       var c = initsto.get('cate');
       if (!c[cate]) {
-        callback({
+        callback&&callback({
           code: -1,
           msg: "分组不存在"
         });
@@ -272,7 +278,7 @@
       if (c[cate].length <= 1) {
         delete c[cate];
         initsto.set('cate', c);
-        callback({
+        callback&&callback({
           code: 0,
           msg: "删除成功"
         });
@@ -281,16 +287,16 @@
           if(r){
             delete c[cate];
             initsto.set('cate', c);
-            callback({
+            callback&&callback({
               code: 0,
               msg: "删除成功"
             });
-            doevents('change', {
+            doevent('change', {
               cate: cate,
               type: 'catedelete',
             });
           }else{
-            callback({
+            callback&&callback({
               code: -2,
               msg: "用户取消删除"
             });
@@ -298,41 +304,41 @@
         })
       }
     },
-    getLinks: function (cate, callback = function () { }) {
+    getLinks: function (cate, callback) {
       if (cate) {
         var c = initsto.get('cate');
         if (!c[cate]) {
-          callback({
+          callback&&callback({
             code: -1,
             msg: "分组不存在"
           });
           return;
         }
-        callback({
+        callback&&callback({
           code: 0,
           msg: "获取成功",
           data: c[cate]
         });
       } else {
         var c = initsto.get('links');
-        callback({
+        callback&&callback({
           code: 0,
           msg: "获取成功",
           data: c
         });
       }
     },
-    getCates: function (callback = function () { }) {
+    getCates: function (callback) {
       var c = initsto.get('cate');
-      callback({
+      callback&&callback({
         code: 0,
         msg: "获取成功",
         data: Object.keys(c)
       });
     },
-    getCateAll: function (callback = function () { }) {
+    getCateAll: function (callback) {
       var c = initsto.get('cate');
-      callback({
+      callback&&callback({
         code: 0,
         msg: "获取成功",
         data: c

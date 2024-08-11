@@ -1,13 +1,13 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.2.4',
+    version:'2.3.0',
     version_code:window.version_code,
-    updateTime:'2024/8/10',
+    updateTime:'2024/8/11',
     log:[
       {
-        tag:"fix",
-        content:"修复一些已知问题"
+        tag:"new",
+        content:"添加了一个正在测试的云同步API(不会泄露数据)"
       }
     ]
   }

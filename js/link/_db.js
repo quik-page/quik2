@@ -36,7 +36,24 @@
   }
 
   return {
-    addLink: function (detail, callback = function () { }) {
+    setAll:function(link,cate,cb){
+      if (initState != 2) {
+        throw '初始化未完成';
+      }
+      if(Array.isArray(link)&&typeof cate=='object'){
+        initsto.set('links',link,true,function(){
+          initsto.set('cate',cate,true,function(){
+            cb&&cb();
+            doevent('change',{
+              type:"all",
+              links:link,
+              cate:cate
+            })
+          })
+        })
+      }
+    },
+    addLink: function (detail, callback) {
       if (initState != 2) {
         throw '初始化未完成';
       }
@@ -47,14 +64,14 @@
         // 包含分类 
         initsto.get('cate', true, function (c) {
           if (!c[detail.cate]) {
-            callback({
+            callback&&callback({
               code: -1,
               msg: "分组不存在"
             })
           } else {
             c[detail.cate] = pushLink(detail, c[detail.cate]);
             initsto.set('cate', c, true, function () {
-              callback({
+              callback&&callback({
                 code: 0,
                 msg: "添加成功"
               });
@@ -72,7 +89,7 @@
         initsto.get('links', true, function (l) {
           l = pushLink(detail, l);
           initsto.set('links', l, true, function () {
-            callback({
+            callback&&callback({
               code: 0,
               msg: "添加成功"
             });
@@ -85,7 +102,7 @@
         })
       }
     },
-    changeLink: function (cate, index, detail, callback = function () { }) {
+    changeLink: function (cate, index, detail, callback) {
       if (initState != 2) {
         throw '初始化未完成';
       }
@@ -96,7 +113,7 @@
         // 包含分类
         initsto.get('cate', true, function (c) {
           if (!c[cate]) {
-            callback({
+            callback&&callback({
               code: -1,
               msg: "分组不存在"
             })
@@ -105,7 +122,7 @@
 
           var r = writeLink(index, detail, c[cate]);
           if (!r) {
-            callback({
+            callback&&callback({
               code: -2,
               msg: "链接不存在"
             });
@@ -113,7 +130,7 @@
           }
           c[cate] = r;
           initsto.set('cate', c, true, function () {
-            callback({
+            callback&&callback({
               code: 0,
               msg: "修改成功"
             });
@@ -130,7 +147,7 @@
         initsto.get('links', true, function (links) {
           var r = writeLink(index, detail, links);
           if (!r) {
-            callback({
+            callback&&callback({
               code: -2,
               msg: "链接不存在"
             });
@@ -138,7 +155,7 @@
           }
           links = r;
           initsto.set('links', links, true, function () {
-            callback({
+            callback&&callback({
               code: 0,
               msg: "修改成功"
             });
@@ -152,7 +169,7 @@
         });
       }
     },
-    deleteLink: function (cate, index, callback = function () { }) {
+    deleteLink: function (cate, index, callback) {
       if (initState != 2) {
         throw '初始化未完成';
       }
@@ -160,14 +177,14 @@
         // 包含分类
         initsto.get('cate', true, function (c) {
           if (!c[cate]) {
-            callback({
+            callback&&callback({
               code: -1,
               msg: "分组不存在"
             });
             return;
           }
           if (!c[cate][index]) {
-            callback({
+            callback&&callback({
               code: -2,
               msg: "链接不存在"
             });
@@ -175,7 +192,7 @@
           }
           c[cate].splice(index, 1);
           initsto.set('cate', c, true, function () {
-            callback({
+            callback&&callback({
               code: 0,
               msg: "删除成功"
             });
@@ -190,7 +207,7 @@
         // 不包含分类
         initsto.get('links', true, function (r) {
           if (!r[index]) {
-            callback({
+            callback&&callback({
               code: -2,
               msg: "链接不存在"
             });
@@ -198,7 +215,7 @@
           }
           r.splice(index, 1);
           initsto.set('links', r, true, function () {
-            callback({
+            callback&&callback({
               code: 0,
               msg: "删除成功"
             });
@@ -211,13 +228,13 @@
         });
       }
     },
-    addCate: function (cate, callback = function () { }) {
+    addCate: function (cate, callback) {
       if (initState != 2) {
         throw '初始化未完成';
       }
       initsto.get('cate', true, function (c) {
         if (c[cate]) {
-          callback({
+          callback&&callback({
             code: -1,
             msg: "分组已存在"
           });
@@ -225,7 +242,7 @@
         }
         c[cate] = [];
         initsto.set('cate', c, true, function () {
-          callback({
+          callback&&callback({
             code: 0,
             msg: "添加成功"
           });
@@ -236,20 +253,20 @@
         });
       });
     },
-    renameCate: function (cate, catename, callback = function () { }) {
+    renameCate: function (cate, catename, callback) {
       if (initState != 2) {
         throw '初始化未完成';
       }
       initsto.get('cate', true, function (c) {
         if (!c[cate]) {
-          callback({
+          callback&&callback({
             code: -1,
             msg: "分组不存在"
           });
           return;
         }
         if (c[catename]) {
-          callback({
+          callback&&callback({
             code: -2,
             msg: "分组重名"
           });
@@ -257,7 +274,7 @@
         c[catename] = c[cate];
         delete c[cate];
         initsto.set('cate', c, true, function () {
-          callback({
+          callback&&callback({
             code: 0,
             msg: "修改成功"
           });
@@ -269,13 +286,13 @@
         });
       });
     },
-    deleteCate: function (cate, callback = function () { }) {
+    deleteCate: function (cate, callback) {
       if (initState != 2) {
         throw '初始化未完成';
       }
       initsto.get('cate', true, function (c) {
         if (!c[cate]) {
-          callback({
+          callback&&callback({
             code: -1,
             msg: "分组不存在"
           });
@@ -284,7 +301,7 @@
         if (c[cate].length <= 1) {
           delete c[cate];
           initsto.set('cate', c, true, function () {
-            callback({
+            callback&&callback({
               code: 0,
               msg: "删除成功"
             });
@@ -298,7 +315,7 @@
             if(r){
               delete c[cate];
               initsto.set('cate', c, true, function () {
-                callback({
+                callback&&callback({
                   code: 0,
                   msg: "删除成功"
                 });
@@ -308,7 +325,7 @@
                 });
               });
             }else{
-              callback({
+              callback&&callback({
                 code: -2,
                 msg: "用户取消删除"
               });
@@ -318,20 +335,20 @@
 
       });
     },
-    getLinks: function (cate, callback = function () { }) {
+    getLinks: function (cate, callback) {
       if (initState != 2) {
         throw '初始化未完成';
       }
       if (cate) {
         initsto.get('cate', true, function (c) {
           if (!c[cate]) {
-            callback({
+            callback&&callback({
               code: -1,
               msg: "分组不存在"
             });
             return;
           }
-          callback({
+          callback&&callback({
             code: 0,
             msg: "获取成功",
             data: c[cate]
@@ -339,7 +356,7 @@
         });
       } else {
         initsto.get('links', true, function (c) {
-          callback({
+          callback&&callback({
             code: 0,
             msg: "获取成功",
             data: c
@@ -347,24 +364,24 @@
         });
       }
     },
-    getCates: function (callback = function () { }) {
+    getCates: function (callback) {
       if (initState != 2) {
         throw '初始化未完成';
       }
       initsto.get('cate', true, function (c) {
-        callback({
+        callback&&callback({
           code: 0,
           msg: "获取成功",
           data: Object.keys(c)
         });
       });
     },
-    getCateAll: function (callback = function () { }) {
+    getCateAll: function (callback) {
       if (initState != 2) {
         throw '初始化未完成';
       }
       initsto.get('cate', true, function (c) {
-        callback({
+        callback&&callback({
           code: 0,
           msg: "获取成功",
           data: c

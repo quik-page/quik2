@@ -1,4 +1,13 @@
 var updatelog={
+  "2.3.0":{
+    updates:[
+      {
+        tag:"new",
+        content:"添加了一个正在测试的云同步API(不会泄露数据)"
+      }
+    ],
+    time:"2024/8/11"
+  },
   "2.2.4":{
     updates:[
       {

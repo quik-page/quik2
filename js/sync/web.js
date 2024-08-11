@@ -2,6 +2,7 @@
     // websync
 
     var initsto=storage('websync');
+    console.log(initsto.getAll());
     if(!initsto.get('wait')){
         initsto.set('wait',[]);
     }
@@ -23,11 +24,11 @@
             return;
         }
         if(nsyncM!=session.id){
-            comfirm('插件 "'+addon.getAddonById(session.id)+'" 申请提供数据云同步功能，是否同意？',function(r){
+            confirm('插件 "'+addon.getAddonById(session.id)+'" 申请提供数据云同步功能，是否同意？',function(r){
                 if(r){
                     nsyncM=session.id;
                     initsto.set('yesid',nsyncM);
-                    initsto.remove('last_reqid')
+                    initsto.remove('last_req')
                     cb({
                         code:0,
                         msg:"OK"
@@ -65,6 +66,9 @@
         }
         if(nsyncM==session.id){
             initsto.remove('yesid');
+            initsto.remove('last_req');
+            console.log(initsto.getAll());
+            location.reload();
         }
     }
 
@@ -118,6 +122,7 @@
     function syncData(){
         return new Promise(function(r,j){
             syncM.getLastReq().then((last_req)=>{
+                console.log(last_req,initsto.get('last_req'));
                 if(last_req!=initsto.get('last_req')){
                     var d=syncConfictDialog.getDialogDom();
                     if(last_req=='no'){
@@ -131,8 +136,11 @@
                         util.query(d,'.btn.cancel').onclick=function(){
                             updateAll().then(r).catch(j);
                         }
+                        syncConfictDialog.open();
                     }
-                    
+                }else{
+                    r()
+                    console.log('syncis');
                 }
             }).catch(j);
         })
@@ -140,7 +148,10 @@
 
     async function updateAll(){
         syncIcon.show();
-        var a=getJSON(Object.keys(getStorageList()));
+        var al=getStorageList();
+        var a=await getJSON(Object.keys(al).filter((v)=>{
+            return al[v]?al[v].sync:false;
+        }));
         var reqId=Date.now();
         await syncM.updateAll(a,reqId);
         initsto.set('last_req',reqId);
@@ -154,11 +165,15 @@
         _d.open();
         var a=await syncM.getAll();
         _d.close();
-        _importData(a.data);
+        _importData(a);
     }
 
     function listenData(){
+        console.log('listen');
         var o=initsto.get('wait');
+        if(o.length>0){
+            syncIcon.show();
+        }
         for(var i=0;i<o.length;i++){
             if(!o[i].sp){
                 o[i].value=storage(o[i].key).getAll();
@@ -166,17 +181,19 @@
             syncChange(o[i]);
         }
         storage.on('websync',function(e){
+            console.log('websync');
             var reqId=Date.now();
             e.id=reqId
             pushChange(e);
             syncChange(e);
+            console.log('ps');
         })
     }
 
 
     function syncChange(e){
-        syncM.update(e,function(r){
-            if(r){
+        syncM.update(e,function(reqId){
+            if(reqId){
                 initsto.set('last_req',reqId);
                 dealChange(reqId);
             }else{
@@ -198,6 +215,7 @@
     }
 
     function pushChange(e){
+        console.log('pushChange');
         var o=initsto.get('wait');
         if(e.sp){
             o.push(e);
@@ -209,6 +227,7 @@
         }
         initsto.set('wait',o);
         syncIcon.show();
+        console.log('show');
     }
 
     function dealChange(id){
@@ -221,6 +240,7 @@
             }
         }
         initsto.set('wait',o);
+        console.log(o,id);
         if(o.length==0){
             syncIcon.hide();
         }
