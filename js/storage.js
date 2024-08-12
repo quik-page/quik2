@@ -90,6 +90,7 @@
         }])
         if(details&&(!details.websync)&&details.sync){
           console.log('websync',ck,ob);
+          console.trace();
           evn.doevent('websync',[{
             key:ck,
             value:ob

@@ -71,6 +71,7 @@
 
   async function setJSON(json,config){
     console.log(json);
+    abortSync();
     var jl=getStorageList();
     var alls=getAllStorage();
     var ast={};

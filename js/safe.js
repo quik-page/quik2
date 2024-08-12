@@ -16,11 +16,8 @@
             hash=hash.split(';')[1];
         }
         if(hash=='safe'){
-            location.hash='#'+(cjhash?cjhash+';':'')+'safe_called';
-            location.reload();
-        }else if(hash=='safe_called'){
             location.hash='#'+(cjhash?cjhash+';':'');
-            window.addon_=false;
+            window.addon_=true;
             alert('已阻止所有插件运行，请修改设置或删除插件');
         }
     }

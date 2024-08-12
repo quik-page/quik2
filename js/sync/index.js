@@ -213,7 +213,7 @@
     importDataDialog.close();
   }
 
-  var { registerWebSync, unregister, isSync } = _REQUIRE_('./web.js');
+  var { registerWebSync, unregister, isSync,abortSync } = _REQUIRE_('./web.js');
 
 
   var quik1=_REQUIRE_('./quik1.js')

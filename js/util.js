@@ -117,12 +117,16 @@
       var o=sto.get(key);
       if(typeof ob=='object'&&ob){
         if(typeof o=='object'&&o){
+          var a=false;
           for(var k in ob){
             if(!o[k]){
+              a=true;
               o[k]=ob[k];
             }
           }
-          sto.set(key,o);
+          if(a){
+            sto.set(key,o);
+          }
         }else if(typeof o=='undefined'){
           sto.set(key,ob);
         }

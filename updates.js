@@ -1,4 +1,21 @@
 var updatelog={
+  "2.3.1":{
+    updates:[
+      {
+        tag:"new",
+        content:"添加了一个内置壁纸"
+      },
+      {
+        tag:"new",
+        content:"浏览器扩展更新，此版本需要安装新的浏览器扩展，请使用浏览器扩展的用户前往官网下载新的浏览器扩展（ver 1.1.0）"
+      },
+      {
+        tag:"fix",
+        content:"完善正在开发的云同步API"
+      }
+    ],
+    time:"2024/8/12"
+  },
   "2.3.0":{
     updates:[
       {

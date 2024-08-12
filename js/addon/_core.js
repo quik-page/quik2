@@ -1,6 +1,11 @@
 (function(){
   var marketData;
   var evn=getEventHandle();
+  var h=[
+    "浏览器不支持IndexedDB",
+    "安全模式下安装程序被禁止",
+    "确定是否安装此插件？"
+  ]
 
   function getCode(jsurl,p){
     return new Promise(function(resolve,reject){
@@ -269,7 +274,10 @@
   function installByOfficialMarket(id){
     var p=new addonInstallProcess();
     if(!storage.checkIDB()){
-      p.setError(0,"浏览器不支持IndexedDB");
+      p.setError(0,h[0]);
+    }
+    if(window.addon_){
+      p.setError(0,h[1])
     }
     if(!marketData){
       loadMarketData().then(getmarketData);
@@ -303,7 +311,11 @@
   function installByUrl(url){
     var p=new addonInstallProcess();
     if(!storage.checkIDB()){
-      p.setError(0,"浏览器不支持IndexedDB");
+      p.setError(0,h[0]);
+    }
+    if(window.addon_){
+      p.setError(0,h[1])
+      return;
     }
     p.setProgress(0.1);
     p.setStatu(2);
@@ -320,7 +332,7 @@
         p.setStatu(3);
         p.wait({
           meta:meta,
-          msg:"确定是否安装此插件？"
+          msg:h[2]
         },function(n){
           if(n){
             installAddon(code,meta,{
@@ -340,7 +352,11 @@
   function installByLocal(code,p){
     var p=new addonInstallProcess();
     if(!storage.checkIDB()){
-      p.setError(0,"浏览器不支持IndexedDB");
+      p.setError(0,h[0]);
+    }
+    if(window.addon_){
+      p.setError(0,h[1])
+      return;
     }
     p.setProgress(0.1);
     p.setStatu(1);
@@ -352,7 +368,7 @@
       p.setStatu(3);
       p.wait({
         meta:meta,
-        msg:"确定是否安装此插件？"
+        msg:h[2]
       },function(n){
         if(n){
           installAddon(code,meta,{
@@ -370,6 +386,10 @@
   function installByDev(devurl){
     if(!window.isExt){
       alert('请在浏览器扩展中安装开发端口')
+      return;
+    }
+    if(window.addon_){
+      p.setError(0,h[1])
       return;
     }
     var adid=util.getRandomHashCache();
@@ -426,19 +446,9 @@
       code=await new Promise((r)=>codesto.get(id,true,r));
     }
     script.innerHTML=`(function(){
-      function Session(id){
-        this.id="ext_"+id;
-        this.session_token="Hvm_session_token_eoi1j2j";
-        this.isSession=true;
-      };
-      var addonData={
-        session:new Session('${id}'),
-        uninstall:function(fn){quik.addon._doonun(this.session,fn)}
-      };
-      (function(){
-        ${code}
-      })();
-    })()`;
+function Session(id){this.id="ext_"+id;this.session_token="Hvm_session_token_eoi1j2j";this.isSession=true}
+var addonData={session:new Session('${id}'),uninstall:function(fn){quik.addon._doonun(this.session,fn)}};
+(function(){${code}})();})()`;
     document.body.appendChild(script);
     
   }
@@ -531,6 +541,7 @@
     return initsto.list()
   }
 
+  console.log(window.addon_);
   if(!window.addon_){
     var addonruns=[];
     getAddonList().forEach(id=>{

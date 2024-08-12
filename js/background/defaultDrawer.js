@@ -17,7 +17,7 @@
     neizhiImg=_REQUIRE_('./_defaultDrawer/neizhi_ext.json')
     for(var i=0;i<neizhiImg.length;i++){
       for(var k in neizhiImg[i]){
-        neizhiImg[i][k]=neizhiImg[i][k].replace('{id}',window.extid);
+        neizhiImg[i][k]='chrome-extension://'+window.extid+'/assets/'+neizhiImg[i][k]
       }
     }
   }else{

@@ -34,6 +34,7 @@
   var iconc=_REQUIRE_('./js/iconc/index.js');
   var {storage,getStorageList,getAllStorage,dbTool}=_REQUIRE_('./js/storage.js');
   var dialog=_REQUIRE_('./js/dialog/index.js');
+  let {alert,confirm,prompt}=_REQUIRE_('./js/dialog/dialog_utils.js');
   var menu=_REQUIRE_('./js/menu/index.js');
   var mainmenu=_REQUIRE_('./js/menu/mainmenu.js');
   var setting=_REQUIRE_('./js/setting/index.js');
@@ -52,14 +53,13 @@
   var searchEditor=_REQUIRE_('./js/search/editor.js');
   var notice=_REQUIRE_('./js/notice/index.js');
   var custom=_REQUIRE_('./js/custom/index.js');
+  _REQUIRE_('./js/safe.js');
   var addon=_REQUIRE_('./js/addon/index.js');
-  let {alert,confirm,prompt}=_REQUIRE_('./js/dialog/dialog_utils.js');
   var sync=_REQUIRE_('./js/sync/index.js');
   var hotkey=_REQUIRE_('./js/hotkey.js');
 
   var ignores=_REQUIRE_('./js/ignores/index.js');
   _REQUIRE_('./js/update.js');
-  _REQUIRE_('./js/safe.js');
   _REQUIRE_('./js/oobe/index.js');
 
 

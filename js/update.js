@@ -1,13 +1,21 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.3.0',
+    version:'2.3.1',
     version_code:window.version_code,
-    updateTime:'2024/8/11',
+    updateTime:'2024/8/12',
     log:[
       {
         tag:"new",
-        content:"添加了一个正在测试的云同步API(不会泄露数据)"
+        content:"添加了一个内置壁纸"
+      },
+      {
+        tag:"new",
+        content:"浏览器扩展更新，此版本需要安装新的浏览器扩展，请使用浏览器扩展的用户前往官网下载新的浏览器扩展（ver 1.1.0）"
+      },
+      {
+        tag:"fix",
+        content:"完善正在开发的云同步API"
       }
     ]
   }

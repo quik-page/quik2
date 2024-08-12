@@ -7,6 +7,9 @@
         initsto.set('wait',[]);
     }
     var nsyncM=initsto.get('yesid');
+    if(nsyncM){
+        listenData();
+    }
     var syncM;
     function registerWebSync(syncM,session,cb){
         if(!util.checkDetailsCorrect(syncM,['isLogin','login','getLastReq','getAll','update','updateAll'])){
@@ -33,6 +36,7 @@
                         code:0,
                         msg:"OK"
                     });
+                    listenData();
                     startSync(syncM);
                 }else{
                     cb({
@@ -54,6 +58,10 @@
                 console.log(e);
             });
         }
+    }
+
+    function abortSync(){
+        syncM=null;
     }
 
     function unregister(session){
@@ -84,10 +92,13 @@
         }
         if(isNewNow()){
             await updateAll();
+            syncChange();
         }else{
-            await syncData();
+            var n=await syncData();
+            if(n){
+                syncChange();
+            }
         }
-        listenData();
     }
 
     function isNewNow(){
@@ -96,6 +107,7 @@
             hash=hash.split(';')[1]
         }
         if(hash=='newnow'){
+            location.hash=location.hash.replace('newnow','');
             return true;
         }
     }
@@ -135,12 +147,12 @@
                         }
                         util.query(d,'.btn.cancel').onclick=function(){
                             updateAll().then(r).catch(j);
+                            syncConfictDialog.close();
                         }
                         syncConfictDialog.open();
                     }
                 }else{
-                    r()
-                    console.log('syncis');
+                    r('n')
                 }
             }).catch(j);
         })
@@ -155,6 +167,7 @@
         var reqId=Date.now();
         await syncM.updateAll(a,reqId);
         initsto.set('last_req',reqId);
+        initsto.set('wait',[]);
         syncIcon.hide();
     }
 
@@ -170,32 +183,31 @@
 
     function listenData(){
         console.log('listen');
-        var o=initsto.get('wait');
-        if(o.length>0){
-            syncIcon.show();
-        }
-        for(var i=0;i<o.length;i++){
-            if(!o[i].sp){
-                o[i].value=storage(o[i].key).getAll();
-            }
-            syncChange(o[i]);
-        }
         storage.on('websync',function(e){
             console.log('websync');
             var reqId=Date.now();
             e.id=reqId
             pushChange(e);
-            syncChange(e);
             console.log('ps');
         })
     }
 
 
-    function syncChange(e){
+    function syncChange(){
+        if(!syncM){
+            return;
+        }
+        var o=initsto.get('wait');
+        var e=o[0];
+        console.log(e);
+        if(!e)return;
         syncM.update(e,function(reqId){
             if(reqId){
                 initsto.set('last_req',reqId);
                 dealChange(reqId);
+                o=null;
+                e=null;
+                syncChange();
             }else{
                 new notice({
                     title:"云同步",
@@ -220,6 +232,12 @@
         if(e.sp){
             o.push(e);
         }else{
+            for(var i=0;i<o.length;i++){
+                if(o[i].key==e.key){
+                    o.splice(i,1);
+                    break;
+                }
+            }
             o.push({
                 key:e.key,
                 id:e.id
@@ -227,7 +245,11 @@
         }
         initsto.set('wait',o);
         syncIcon.show();
-        console.log('show');
+        console.log('show',o);
+        if(o.length==1&&syncM){
+            console.log('sync');
+            syncChange();
+        }
     }
 
     function dealChange(id){
@@ -248,7 +270,8 @@
     return {
         registerWebSync,
         unregister,
-        isSync
+        isSync,
+        abortSync
     };
 
 
