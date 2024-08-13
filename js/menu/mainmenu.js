@@ -17,7 +17,7 @@
   });
 
   function glist(){
-    main_menu.setList(mainmenulist_top.concat(mainmenulist_bottom));
+    main_menu.setList(mainmenulist_top.concat([{type:"hr"}],mainmenulist_bottom));
   }
 
   mainmenu_icon.getIcon().onclick=function(e){

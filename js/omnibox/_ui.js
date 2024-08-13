@@ -23,6 +23,10 @@
   var submit=util.query(searchbox,'div.submit');
   var saul=util.query(searchbox,'ul.sas');
 
+  if(initsto.get('ob_justsearch')){
+    input.placeholder='搜索'
+  }
+
   /**
    * 渲染指定文字的Type至页面
    * @param {String} text 
@@ -401,6 +405,7 @@ function _focus(){
     setAutoFocus:function(value){
       core.initsto.set('ob_autofocus',value);
       si.reGet();
-    }
+    },
+    input:input
   }
 })();

@@ -70,14 +70,6 @@
     });
     addon_menu.show();
   });
-
-  var addon_icon = new iconc.icon({
-    offset: "tr",
-    content: util.getGoogleIcon("e87b", { type: "fill" })
-  });
-  addon_icon.getIcon().onclick = function () {
-    addon_dialog.open();
-  }
   var tmenu = util.query(addon_dialog_d, '.addon-bar .l .item', true);
   var ps = util.query(addon_dialog_d, '.content .p', true);
   tmenu.forEach(function (a) {

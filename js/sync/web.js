@@ -194,6 +194,7 @@
 
 
     function syncChange(){
+        syncIcon.show();
         if(!syncM){
             return;
         }
@@ -244,7 +245,6 @@
             })
         }
         initsto.set('wait',o);
-        syncIcon.show();
         console.log('show',o);
         if(o.length==1&&syncM){
             console.log('sync');
@@ -267,6 +267,21 @@
             syncIcon.hide();
         }
     }
+
+    addon.on('allrun',function(){
+        setTimeout(function(){
+            if(nsyncM&&(!syncM)){
+                confirm('正在使用的云同步插件已被卸载或禁用，是否取消当前的云同步服务？',function(ok){
+                    if(ok){
+                        initsto.remove('yesid');
+                        initsto.remove('last_req');
+                        location.reload();
+                    }
+                })
+            }
+        },1000)
+    })
+
     return {
         registerWebSync,
         unregister,

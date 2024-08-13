@@ -28,10 +28,22 @@ body.dialogblur.dark .contextMenu{
   margin: 5px;
   border-radius: 4px;
 }
+.contextMenu .hr{
+  width: 80%;
+  height: 1px;
+  margin: 0 10%;
+  background-color: #eee;
+}
+body.dark .contextMenu .hr{
+  background-color: #555;
+}
 .contextMenu .item>*{
   float: left;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 24px;
+}
+.contextMenu .item .title{
+  padding-right: 5px;
 }
 .contextMenu .item>.icon{
   width: 24px;

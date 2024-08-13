@@ -16,24 +16,35 @@
       el.style.bottom=options.offset.bottom+"px";
       el.style.right=options.offset.right+"px";
     }
-
-    options.list.forEach(function(itemr){
-      var item=util.element('div',{
-        class:"item"
-      });
-      item.innerHTML=`<div class="icon">${itemr.icon}</div><div class="title">${itemr.title}</div>`;
-      item.onclick=function(){
-        itemr.click();
-      }
-      el.appendChild(item);
-    })
-
+    drawList(options.list,el);
     document.body.appendChild(el);
     this.element=el;
   }
 
+  function drawList(list,el){
+    list.forEach(function(itemr){
+      if(itemr.type=='hr'){
+        var item=util.element('div',{
+          class:"hr"
+        });
+        el.appendChild(item);
+      }else{
+        var item=util.element('div',{
+          class:"item"
+        });
+        item.innerHTML=`<div class="icon">${itemr.icon}</div><div class="title">${itemr.title}</div>`;
+        item.onclick=function(){
+          itemr.click();
+        }
+        el.appendChild(item);
+      }
+      
+    })
+  }
+
   contextMenu.prototype={
     show:function(){
+      resetmenu(this.element);
       this.element.classList.add('show');
       this.element.style.height='auto';
       var h=this.element.getBoundingClientRect().height;
@@ -80,30 +91,28 @@
     },
     setList:function(list){
       this.options.list=list;
-      var options=this.options,el=this.element;
+      var el=this.element;
       el.innerHTML="";
-      options.list.forEach(function(itemr){
-        var item=util.element('div',{
-          class:"item"
-        });
-        item.innerHTML=`<div class="icon">${itemr.icon}</div><div class="title">${itemr.title}</div>`;
-        item.onclick=function(){
-          itemr.click();
-        }
-        el.appendChild(item);
-      })
+      drawList(list,el);
     }
   };
 
   document.addEventListener('click',function(){
+    resetmenu();
+  });
+  document.addEventListener('contextmenu',function(){
+    resetmenu();
+  });
+  function resetmenu(el){
     document.querySelectorAll(".contextMenu").forEach(function(e){
+      if(el&&e.isSameNode(el))return;
       e.style.height='0px';
       setTimeout(function(){
         e.style.transition='none';
         e.classList.remove('show');
       },200)
     })
-  })
+  }
 
   return contextMenu;
 })();

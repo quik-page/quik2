@@ -4,7 +4,6 @@
     enter:[],
   }
 
-  var initsto=setting.settingSto;
   if(initsto.get('ob_justsearch')==undefined){
     initsto.set('ob_justsearch',false);
   }
@@ -205,6 +204,11 @@
     },
     callback:function(value){
       initsto.set('ob_justsearch',value);
+      if(value){
+        ui.input.placeholder='搜索'
+      }else{
+        ui.input.placeholder='搜索或输入网址'
+      }
       return true;
     }
   })

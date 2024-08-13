@@ -42,6 +42,7 @@
   line-height: inherit;
 }
 .links .cate-bar .cate-item:hover,
+.links .cate-bar .cate-item.menued,
 .links .cate-bar .cate-bar-controls>*:hover{
   background-color: #f4f4f4;
 }
@@ -90,7 +91,9 @@
   font-size: 12px;
   text-align: center;
 }
-.links ul.link-list li a:hover img{
+.links ul.link-list li a:hover img,
+.links ul.link-list li.menued a img
+{
   background-color: rgb(210, 210, 210,.6);
   box-shadow: 0 0 5px rgba(0,0,0,.1);
 }
@@ -209,6 +212,7 @@ body.t-dark .links ul.link-list li.link-add a{
   color: rgba(85, 85, 85, 0.8);
 }
 body.t-dark .links .cate-bar .cate-item:hover,
+body.t-dark .links .cate-bar .cate-item.menued,
 body.t-dark .links .cate-bar .cate-bar-controls>*:hover{
   background-color: rgba(220,220,220, 0.5);
 }
@@ -222,7 +226,8 @@ body.t-dark .links .cate-bar .cate-item{
 body.dark .links ul.link-list li a img{
   background-color: rgba(75, 75, 75, 0.6);
 }
-body.dark .links ul.link-list li a:hover img{
+body.dark .links ul.link-list li a:hover img,
+body.dark .links ul.link-list li.menued a img{
   background-color: rgba(109, 109, 109, 0.6);
   box-shadow: 0 0 5px rgba(255,255,255,.1);
 }
@@ -234,12 +239,13 @@ body.dark .links ul.link-list li.link-add a:hover{
   background-color: rgba(71, 71, 71, 0.8);
 }
 body.dark .links .cate-bar .cate-item:hover,
+body.dark .links .cate-bar .cate-item.menued,
 body.dark .links .cate-bar .cate-bar-controls>*:hover{
-  background-color: rgba(42, 42, 42, 0.6);
+  background-color: rgba(72, 72, 72, 0.7);
 }
 
 body.dark .links .cate-bar .cate-item.active
 {
-  background-color: rgba(22, 22, 22, 0.7);
+  background-color: rgba(102, 102, 102, 0.7);
 }
 

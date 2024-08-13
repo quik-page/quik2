@@ -1,4 +1,21 @@
 var updatelog={
+  "2.3.2":{
+    updates:[
+      {
+        tag:"change",
+        content:"修改了菜单的样式"
+      },
+      {
+        tag:"change",
+        content:"在主菜单中添加浏览器扩展菜单（浏览器扩展用户不会显示）"
+      },
+      {
+        tag:"fix",
+        content:"修复一些已知问题，完善用户体验"
+      }
+    ],
+    time:"2024/8/13"
+  },
   "2.3.1":{
     updates:[
       {

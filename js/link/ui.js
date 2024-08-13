@@ -3,6 +3,14 @@
     class:"links"
   });
 
+  document.addEventListener('click',resetmenued)
+  document.addEventListener('contextmenu',resetmenued)
+
+  function resetmenued(){
+    menuedCate&&menuedCate.classList.remove('menued');
+    menuedLi&&menuedLi.classList.remove('menued');
+  }
+
   util.query(document,'main .center').append(linkF);
 
   function getIndex(a,b){
@@ -89,12 +97,15 @@
     }
     li.oncontextmenu=function(e){
       e.preventDefault();
+      e.stopPropagation();
+      resetmenued();
       menuedCate=this;
       cateMenu.setOffset({
         top:e.pageY,
         left:e.pageX
-     })
-     cateMenu.show();
+      })
+      this.classList.add('menued');
+      cateMenu.show();
     }
   }
   function init(){
@@ -263,11 +274,14 @@
         });
         li.oncontextmenu=function(e){
           e.preventDefault()
+          e.stopPropagation();
+          resetmenued();
            menuedLi=this;
            linkMenu.setOffset({
               top:e.pageY,
               left:e.pageX
            })
+            this.classList.add('menued');
            linkMenu.show();
          }
       })

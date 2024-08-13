@@ -1,4 +1,5 @@
 (function(){
+  var initsto=setting.settingSto;
   var {on,off,doevent}=getEventHandle();
   var sg=new SettingGroup({
     title:"搜索框",

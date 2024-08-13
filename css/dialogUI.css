@@ -22,6 +22,7 @@
   border-bottom: #e6e6e6 solid 1px;
   background-color: transparent;
   color: inherit;
+  transition: all .2s;
 }
 @media(max-width:650px) {
     .d-c .content input[type=text],
@@ -44,6 +45,7 @@
 }
 .d-c .footer{
   float: right;
+  padding-top: 10px;
 }
 .d-c .btn{
   min-width: 60px;

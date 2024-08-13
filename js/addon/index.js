@@ -16,6 +16,14 @@
     addon_dialog.close();
   });
 
+  var addon_icon = new iconc.icon({
+    offset: "tr",
+    content: util.getGoogleIcon("e87b", { type: "fill" })
+  });
+  addon_icon.getIcon().onclick = function () {
+    addon_dialog.open();
+  }
+
   _REQUIRE_('./xrmenu.js');
   _REQUIRE_('./xrlist.js');
   _REQUIRE_('./xrmarket.js');

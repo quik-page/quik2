@@ -72,6 +72,23 @@
     title:"加入官方QQ群",
     click:joinQQqun
   },1)
+  if(!window.isExt){
+    mainmenu.pushMenu({
+      icon:util.getGoogleIcon("e87b"),
+      title:"浏览器扩展",
+      click:function(){
+        alert('浏览器扩展尚处于测试中，只支持chromium内核的浏览器（chrome,edge,360浏览器等），暂未上传至扩展商店，请下载crx后手动安装。',function(){
+          if(location.href.indexOf('quik.web42.io')!=-1){
+            window.open('/intro/#h');
+          }else{
+            window.open('/#h');
+          }
+        })
+        
+      }
+    },1)
+  }
+
 
   function joinQQqun(){
     window.open('https://qm.qq.com/q/6nOculioy4');
