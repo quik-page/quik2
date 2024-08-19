@@ -1,16 +1,7 @@
 (function () {
   function Setting(details) {
     this.title = details.title;
-    this.dialog = new dialog({
-      content: `<div class="actionbar"><h1>设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div></div><ul class="setting-root"></ul>`,
-      class: "setting_dia",
-      mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN
-    });
-    this.dialogDom = this.dialog.getDialogDom();
-    util.query(this.dialogDom, '.closeBtn').addEventListener('click', () => {
-      this.dialog.close();
-    });
-    util.query(this.dialogDom, '.actionbar h1').innerText = this.title;
+    this.ifo=false;
     this.groups = [];
     this._events = {
       change: []
@@ -18,6 +9,24 @@
   }
 
   Setting.prototype = {
+    drawAll:function(){
+      if(this.ifo)return;
+      this.ifo=true;
+      this.dialog = new dialog({
+        content: `<div class="actionbar"><h1>设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div></div><ul class="setting-root"></ul>`,
+        class: "setting_dia",
+        mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN
+      });
+      this.dialogDom = this.dialog.getDialogDom();
+      util.query(this.dialogDom, '.closeBtn').addEventListener('click', () => {
+        this.dialog.close();
+      });
+      util.query(this.dialogDom, '.actionbar h1').innerText = this.title;
+      var _=this;
+      this.groups.forEach(function(group){
+        _._drawGroup(group);
+      })
+    },
     addNewGroup: function (group) {
       this.groups.push(group);
       var _ = this;
@@ -48,14 +57,24 @@
     },
     setTitle: function (title) {
       this.title = title;
-      util.query(this.dialogDom, '.actionbar h1').innerText = title;
+      if(this.ifo){
+        util.query(this.dialogDom, '.actionbar h1').innerText = title;
+      }
       _._dochange({
         type: "changetitle",
         title: title
       })
     },
     open: function () {
-      this.dialog.open()
+      var _=this;
+      if(!_.ifo){
+        _.drawAll();
+        setTimeout(function(){
+          _.dialog.open();
+        },10);
+      }else{
+        _.dialog.open();
+      }
     },
     close: function () {
       this.dialog.close();
@@ -72,6 +91,7 @@
       });
     },
     _drawGroup: function (group) {
+      if(!this.ifo)return;
       var _=this;
       var groupEle = util.element('li', {
         class: 'setting-group',
@@ -96,6 +116,7 @@
       })
     },
     _drawItem: function (group, item) {
+      if(!this.ifo)return;
       var itemEle = util.element('li', {
         class: 'setting-item',
         'data-index': item.index,
@@ -135,7 +156,7 @@
           }
         },
         boolean: function () {
-          elr.innerHTML = `<div class="check-box"><div class="check-box-inner"></div><input type="checkbox" class="setting-item-input"></div>`;
+          elr.innerHTML = `<div class="check-box"><div class="check-box-inner"></div></div><input type="checkbox" class="setting-item-input">`;
           cb = function (v) {
             util.query(elr, '.setting-item-input').checked = v;
             if (v) {
@@ -143,15 +164,16 @@
             }else{
               util.query(elr, '.check-box').classList.remove('checked');
             }
-            util.query(elr, '.check-box').addEventListener('click', function () {
-              util.query(elr, '.setting-item-input').click();
-              if (util.query(elr, '.setting-item-input').checked) {
-                this.classList.add('checked');
-              } else {
-                this.classList.remove('checked');
-              }
-            })
           }
+          util.query(elr, '.check-box').addEventListener('click', function () {
+            util.query(elr, '.setting-item-input').click();
+            console.log(util.query(elr, '.setting-item-input').checked);
+            if (util.query(elr, '.setting-item-input').checked) {
+              this.classList.add('checked');
+            } else {
+              this.classList.remove('checked');
+            }
+          })
         },
         range: function () {
           elr.innerHTML = `<input type="range" class="setting-item-input">`;
@@ -240,6 +262,7 @@
       });
     },
     _dochangeGroup: function (group, dt) {
+      if(!this.ifo)return;
       var g = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + ']');
       if (dt.attr == 'title') {
         util.query(g, '.setting-group-title').innerText = dt.content;
@@ -262,6 +285,7 @@
       }
     },
     _dochangeItem: function (group, item, dt) {
+      if(!this.ifo)return;
       var g = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + '] .setting-item[data-id=' + item.id + ']');
       if (dt.attr == 'title') {
         util.query(g, '.setting-group-title').innerText = dt.content;
@@ -291,6 +315,7 @@
       }
     },
     _reinitItem: function (group, item) {
+      if(!this.ifo)return;
       console.log(item);
       var _init;
       var itemEle = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + '] .setting-item[data-id=' + item.id + ']');
@@ -334,6 +359,7 @@
       }
     },
     _regetItem: function (item) {
+      if(!this.ifo)return;
       item.getacb();
     }
   }

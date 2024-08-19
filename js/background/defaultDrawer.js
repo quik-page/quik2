@@ -210,10 +210,10 @@
     getVideoCaptrue,
     getUserUploadUrl,
     hasUploadedImg,
-    iovuploader
+    uploadIov
   }=_REQUIRE_('./_defaultDrawer/userupload.js');
 
-  var {colorchanger,colorchangerf}=_REQUIRE_('./_defaultDrawer/zdycolor.js');
+  var {colorChange}=_REQUIRE_('./_defaultDrawer/zdycolor.js');
 
   function selectbgitem(data){
     util.query(tab1,'.bgitem',true).forEach(function(it){
@@ -238,10 +238,7 @@
       }
     }
   }
-  setTimeout(function(){
-    selectbgitem(quik.background.getbg());
-    quik.background.on('change',selectbgitem)
-  });
+ 
 
   function _reset(){
     document.body.classList.remove('t-dark');
@@ -282,20 +279,11 @@
             }
           })
         }else{
-          iovuploader.open();
+          uploadIov();
         }
       })
       util.query(tab1,'.zdy .editbtn').addEventListener('click',function(){
-        iovuploader.open();
-        var j=initsto.get('userbg');
-        if(j){
-          util.query(iovuploaderf,'input[type="url"]').value=j.url;
-          if(j.type=='image'){
-            util.query(iovuploaderf,'.uploadi').checked=true;
-          }else{
-            util.query(iovuploaderf,'.uploadv').checked=true;
-          }
-        }
+        uploadIov(true);
       });
 
       // 内置图片
@@ -358,10 +346,7 @@
         })
       }
       util.query(tab2,'.zdy .btn').onclick=function(){
-        var c=initsto.get('usercolor');
-        util.query(colorchangerf,'.lightbgcolor').value=c.light;
-        util.query(colorchangerf,'.darkbgcolor').value=c.dark;
-        colorchanger.open();
+        colorChange();
       }
       var cd=getNowColor();
       util.query(tab2,'.api .color-left').style.backgroundColor=cd.light;
@@ -398,6 +383,10 @@
         })
         quik.toast.show('设置成功')
       }
+      setTimeout(function(){
+        selectbgitem(quik.background.getbg());
+        quik.background.on('change',selectbgitem)
+      });
     },
     cancel: function (n) {
       n.bgf.innerHTML='';

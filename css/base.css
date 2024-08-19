@@ -280,6 +280,9 @@ body.dialogblur.dark ::-webkit-scrollbar-thumb:hover
   background-color:#000;
   animation:t-l 1s linear infinite;
 }
+body.dark .loading-p .g{
+  background-color: #fff;
+}
 @keyframes t-l{
   0%{
     margin-left:-100px;

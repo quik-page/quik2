@@ -1,13 +1,13 @@
 (function(){
     return {
-        create:function(steps,cb){
+        create:function(steps,cb,istopper){
             if(steps.length==0){cb();return;}
             var _card=new card({
                 content:"<div class=\"guide-text\"></div><div class=\"btn ok\">确定</div>",
                 class:"guide-card",
                 offset:{top:0,left:0},
                 width:200,
-                topper:true
+                topper:istopper
             });
             var _cd=_card.getCardDom();
             var j=0;

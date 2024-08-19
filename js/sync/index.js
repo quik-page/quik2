@@ -13,7 +13,9 @@
     callback: openExport
   });
   function openExport() {
-    exportDataDialog.open();
+    if(!exportDataDialog){
+      drawExportDialog();
+    }
     var jl = getStorageList();
     for (var k in jl) {
       if (!jl[k] || !jl[k].sync) {
@@ -30,6 +32,9 @@
       util.query(dm, '.exportslist').appendChild(li);
       util.query(li, 'input').checked = true;
     }
+    setTimeout(function(){
+      exportDataDialog.open();
+    },10)
   }
   var importDataSi = new SettingItem({
     title: "导入数据",
@@ -58,10 +63,15 @@
   function _importData(_sl) {
     sl=_sl;
     var jl = getStorageList();
-    importDataDialog.open();
+    if(!importDataDialog){
+      drawImportDialog();
+    }
     for (var k in _sl) {
       importaixr(_sl[k], k, jl);
     }
+    setTimeout(function(){
+      importDataDialog.open();
+    },10)
   }
   sg.addNewItem(exportDataSi);
   sg.addNewItem(importDataSi);
@@ -85,7 +95,8 @@
             <div class="desc">需要安装插件以同步：${_d}</div>
           </div>
           <div class="installbtn">安装</div>`;
-          li.querySelector('.installbtn').addEventListener('click', function () {
+          var installbtn=li.querySelector('.installbtn');
+          installbtn.addEventListener('click', function () {
             if (this.classList.contains('ing')) return;
             if (this.classList.contains('err')) {
               this.classList.remove('err');
@@ -99,8 +110,8 @@
               p = addon.installByUrl(j.addon);
             }
             p.on('error', function (e) {
-              li.querySelector('.installbtn').innerHTML = '安装失败';
-              this.classList.add('err');
+              installbtn.innerHTML = '安装失败';
+              installbtn.classList.add('err');
             })
             p.on('wait', function (r) {
               r(true);
@@ -139,36 +150,41 @@
 
   var sl = null;
 
-  var exportDataDialog = new dialog({
-    content: `<div class="actionbar">
-      <h1>导出数据</h1>
-      <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
-    </div>
-    <div class="exportslist">
-    </div>
-    <div class="btns">
-      <div class="btn cancel">取消</div>
-      <div class="btn ok">导出</div>
-    </div>`,
-    class: "sync-dialog",
-    mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
-  });
-  var dm = exportDataDialog.getDialogDom();
-  util.query(dm, '.closeBtn').onclick = util.query(dm, '.cancel').onclick = function () {
-    exportDataDialog.close();
+  var exportDataDialog,importDataDialog,dm,dm2;
+
+  function drawExportDialog(){
+    exportDataDialog = new dialog({
+      content: `<div class="actionbar">
+        <h1>导出数据</h1>
+        <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
+      </div>
+      <div class="exportslist">
+      </div>
+      <div class="btns">
+        <div class="btn cancel">取消</div>
+        <div class="btn ok">导出</div>
+      </div>`,
+      class: "sync-dialog",
+      mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
+    });
+    dm = exportDataDialog.getDialogDom();
+    util.query(dm, '.closeBtn').onclick = util.query(dm, '.cancel').onclick = function () {
+      exportDataDialog.close();
+    }
+    util.query(dm, '.ok').onclick = function () {
+      var op = [];
+      util.query(dm, '.exportslist .item', true).forEach(function (l) {
+        if (util.query(l, 'input').checked) {
+          op.push(l.dataset.key);
+        }
+      })
+      getJSON(op).then(function (res) {
+        download(JSON.stringify(res), 'quik-2-exportdata.json');
+      })
+      exportDataDialog.close();
+    }
   }
-  util.query(dm, '.ok').onclick = function () {
-    var op = [];
-    util.query(dm, '.exportslist .item', true).forEach(function (l) {
-      if (util.query(l, 'input').checked) {
-        op.push(l.dataset.key);
-      }
-    })
-    getJSON(op).then(function (res) {
-      download(JSON.stringify(res), 'quik-2-exportdata.json');
-    })
-    exportDataDialog.close();
-  }
+  
 
   function download(data, filename) {
     var a = document.createElement('a');
@@ -177,40 +193,42 @@
     a.click();
   }
 
-  var importDataDialog = new dialog({
-    content: `<div class="actionbar">
-      <h1>导入数据</h1>
-      <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
-    </div>
-    <div class="importslist">
-    </div>
-    <div class="btns">
-      <div class="btn cancel">取消</div>
-      <div class="btn ok">导入</div>
-    </div>`,
-    class: "sync-dialog",
-    mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
-  });
-  var dm2 = importDataDialog.getDialogDom();
-  util.query(dm2, '.closeBtn').onclick = util.query(dm2, '.cancel').onclick = function () {
-    sl = null;
-    importDataDialog.close();
-  }
-
-  util.query(dm2, '.ok').onclick = function () {
-    var op = {};
-    util.query(dm2, '.importslist .item', true).forEach(function (l) {
-      if (util.query(l, 'input').checked) {
-        if (util.query(l, 'select')) {
-          op[l.dataset.key] = util.query(l, 'select').value;
-        } else {
-          op[l.dataset.key] = 'rewrite';
+  function drawImportDialog(){
+    importDataDialog = new dialog({
+      content: `<div class="actionbar">
+        <h1>导入数据</h1>
+        <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
+      </div>
+      <div class="importslist">
+      </div>
+      <div class="btns">
+        <div class="btn cancel">取消</div>
+        <div class="btn ok">导入</div>
+      </div>`,
+      class: "sync-dialog",
+      mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
+    });
+    dm2 = importDataDialog.getDialogDom();
+    util.query(dm2, '.closeBtn').onclick = util.query(dm2, '.cancel').onclick = function () {
+      sl = null;
+      importDataDialog.close();
+    }
+  
+    util.query(dm2, '.ok').onclick = function () {
+      var op = {};
+      util.query(dm2, '.importslist .item', true).forEach(function (l) {
+        if (util.query(l, 'input').checked) {
+          if (util.query(l, 'select')) {
+            op[l.dataset.key] = util.query(l, 'select').value;
+          } else {
+            op[l.dataset.key] = 'rewrite';
+          }
         }
-      }
-    })
-    console.log('set');
-    setJSON(sl, op);
-    importDataDialog.close();
+      })
+      console.log('set');
+      setJSON(sl, op);
+      importDataDialog.close();
+    }
   }
 
   var { registerWebSync, unregister, isSync,abortSync } = _REQUIRE_('./web.js');

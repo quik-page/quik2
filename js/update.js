@@ -1,21 +1,33 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.3.2',
+    version:'2.3.5',
     version_code:window.version_code,
-    updateTime:'2024/8/13',
+    updateTime:'2024/8/19',
     log:[
       {
-        tag:"change",
-        content:"修改了菜单的样式"
-      },
-      {
-        tag:"change",
-        content:"在主菜单中添加浏览器扩展菜单（浏览器扩展用户不会显示）"
+        tag:"fix",
+        content:"稍稍优化了图标的位置"
       },
       {
         tag:"fix",
-        content:"修复一些已知问题，完善用户体验"
+        content:"优化了自定义搜索引擎的样式"
+      },
+      {
+        tag:"change",
+        content:"添加了酷狗、QQ、网易云三个音乐搜索引擎，并重新调整内置搜索引擎的排序"
+      },
+      {
+        tag:"change",
+        content:"在极简模式下，搜索框会较靠近中间显示"
+      },
+      {
+        tag:"fix",
+        content:"优化代码逻辑，整体提升打开时的性能"
+      },
+      {
+        tag:"fix",
+        content:"修复一些小问题"
       }
     ]
   }

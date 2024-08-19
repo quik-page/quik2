@@ -111,18 +111,21 @@
             return true;
         }
     }
-
-    var syncConfictDialog=new dialog({
-        content:`<div>
-            <p>您的在线存档与本地存档存在冲突:</p>
-            <p class="last_req"></p>
-            <p>你要：</p>
-        </div>
-        <div class="btns">
-            <div class="btn ok">从在线同步</div>
-            <div class="btn cancel">本地覆盖在线</div>
-        </div>`
-    })
+    var syncConfictDialog;
+    function drawSyncConfict(){
+        syncConfictDialog=new dialog({
+            content:`<div>
+                <p>您的在线存档与本地存档存在冲突:</p>
+                <p class="last_req"></p>
+                <p>你要：</p>
+            </div>
+            <div class="btns">
+                <div class="btn ok">从在线同步</div>
+                <div class="btn cancel">本地覆盖在线</div>
+            </div>`
+        })
+    }
+    
 
     var syncIcon=new iconc.icon({
         content:util.getGoogleIcon('eb5a'),
@@ -149,7 +152,12 @@
                             updateAll().then(r).catch(j);
                             syncConfictDialog.close();
                         }
-                        syncConfictDialog.open();
+                        if(!syncConfictDialog){
+                            drawSyncConfict();
+                        }
+                        setTimeout(function(){
+                            syncConfictDialog.open();
+                        },10)
                     }
                 }else{
                     r('n')

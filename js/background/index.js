@@ -9,9 +9,7 @@
     message:"点击设置背景",
     index:0,
     type:'null',
-    callback:function(){
-      bg_set_d.open();
-    }
+    callback:opendia
   })
 
   mainSetting.addNewGroup(backgroundsg);
@@ -106,15 +104,19 @@
     return url + (url.indexOf('?') > -1 ? '&' : '?') + 't=' + new Date().getTime();
   }
 
+
+  var bg_set_d,tab_con,scroll_con,d;
+
+  function drawDialog(){
   // 背景设置对话框
-  var bg_set_d = new dialog({
+  bg_set_d = new dialog({
     content: `<div class="actionbar"><h1>背景设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div></div><div class="tab_con"></div><div class="scroll_con"></div>`,
     class: "bg_d",
     mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN
   });
 
   // 背景设置对话框Dom
-  var d = bg_set_d.getDialogDom();
+  d = bg_set_d.getDialogDom();
 
   // 关闭按钮
   util.query(d, '.closeBtn').onclick = function () {
@@ -122,10 +124,14 @@
   }
 
   // 背景设置对话框Tab
-  var tab_con = util.query(d, 'div.tab_con');
+  tab_con = util.query(d, 'div.tab_con');
 
   // 背景设置对话框内容
-  var scroll_con = util.query(d, 'div.scroll_con');
+  scroll_con = util.query(d, 'div.scroll_con');
+  drawers.forEach(function(drawer){
+    dodrawer(drawer);
+  })
+}
 
   // 初始化用户存储
   util.initSet(initsto,'bg', {
@@ -201,12 +207,15 @@
   }
 
   function dodrawer(drawer) {
-    drawer.init({
-      bgf: bgf,
-      pushBgTab:pushBgTab,
-      setbg:setbg,
-      type:drawer.type
-    });
+    if(bg_set_d){
+      drawer.init({
+        bgf: bgf,
+        pushBgTab:pushBgTab,
+        setbg:setbg,
+        type:drawer.type
+      });
+    }
+
   }
 
   var waitdraw=null;
@@ -264,8 +273,7 @@
   }
 
   drawbg(initsto.get('bg'));
-  //开始activeTab0
-    activeTab('0');
+  
 
   function getbg(){
     return initsto.get('bg');
@@ -274,10 +282,22 @@
   mainmenu.pushMenu({
     icon:util.getGoogleIcon('e1bc'),
     title:'背景设置',
-    click:function(){
+    click:opendia
+  },mainmenu.MAIN_MENU_TOP)
+
+
+  function opendia(){
+    if(!bg_set_d){
+      drawDialog();
+      setTimeout(function(){
+        bg_set_d.open();
+        //开始activeTab0
+        activeTab('0');
+      },10)
+    }else{
       bg_set_d.open();
     }
-  },mainmenu.MAIN_MENU_TOP)
+  }
 
   return{
     pushBgDrawer,

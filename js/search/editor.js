@@ -1,5 +1,7 @@
 (function(){
-  var dia=new dialog({
+  var dia;
+  function drawAll(){
+  dia=new dialog({
     content:_REQUIRE_('./editor.html').replace('{{close}}',util.getGoogleIcon('e5cd')),
   mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
     class:"search_editor"
@@ -122,13 +124,21 @@
     dia.close();
     toast.show('设置成功')
   }
+}
   var si=new SettingItem({
     title:"自定义搜索引擎",
     index:0,
     type:'null',
     message:"",
     callback:function(value){
-      dia.open();
+      if(!dia){
+        drawAll();
+        setTimeout(function(){
+          dia.open();
+        },10)
+      }else{
+        dia.open();
+      }
     }
   })
   omnibox.sg.addNewItem(si);

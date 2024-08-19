@@ -17,9 +17,13 @@
     title:"更新日志",
     index:2,
     callback:function(){
-      updateDialog.open();
       if(!isinner){
         innerUpdate();
+        setTimeout(function(){
+          updateDialog.open();
+        },10)
+      }else{
+        updateDialog.open();
       }
     }
   });
@@ -28,7 +32,14 @@
     title:"用户协议和隐私政策",
     index:3,
     callback:function(){
-      licDialog.open();
+      if(!licDialog){
+        drawLic();
+        setTimeout(function(){
+          licDialog.open();
+        },10)
+      }else{
+        licDialog.open();
+      }
     }
   });
   var thankSi=new SettingItem({
@@ -36,7 +47,14 @@
     title:"特别鸣谢",
     index:4,
     callback:function(){
-      thaDialog.open();
+      if(!thaDialog){
+        drawThank();
+        setTimeout(function(){
+          thaDialog.open();
+        },10)
+      }else{
+        thaDialog.open();
+      }
     }
   });
   var thankSi=new SettingItem({
@@ -115,23 +133,25 @@
     util.query(addom,'.ver span').innerText=window.version.version;
   });
 
-  var updateDialog=new dialog({
-    content:`<div class="actionbar">
-      <h1>更新日志</h1>
-      <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
-    </div>
-    <div class="version_list"><div></div></div>`,
-    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
-    class:"update_dia"
-  });
-
-  var updom=updateDialog.getDialogDom();
-  util.query(updom,'.closeBtn').onclick=function(){
-    updateDialog.close();
-  }
+  var updateDialog,updom;
 
   var isinner=false;
   function innerUpdate(){
+    updateDialog=new dialog({
+      content:`<div class="actionbar">
+        <h1>更新日志</h1>
+        <div class="closeBtn">${util.getGoogleIcon('e5cd')}</div>
+      </div>
+      <div class="version_list"><div></div></div>`,
+      mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
+      class:"update_dia"
+    });
+  
+    updom=updateDialog.getDialogDom();
+    util.query(updom,'.version_list div').innerHTML='正在加载更新日志...'
+    util.query(updom,'.closeBtn').onclick=function(){
+      updateDialog.close();
+    }
     isinner=true;
     var s=util.element('script',{
       src:"./updates.js"
@@ -151,7 +171,6 @@
       s.remove();
     }
   }
-  util.query(updom,'.version_list div').innerHTML='正在加载更新日志...'
   
   function formatVersion(v,fv){
     var str='',gl={
@@ -174,26 +193,34 @@
     return lichtml;
   }
 
-  var licDialog=new dialog({
-    content:` <div class="close">${util.getGoogleIcon('e5cd')}</div><div class="lic-con">${getLicense()}</div>`,
-    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
-    class:"lic-dialog"
-  });
-
-  util.query(licDialog.getDialogDom(),'.close').onclick=function(){
-    licDialog.close();
+  var licDialog,thaDialog;
+  function drawLic(){
+    licDialog=new dialog({
+      content:` <div class="close">${util.getGoogleIcon('e5cd')}</div><div class="lic-con">${getLicense()}</div>`,
+      mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
+      class:"lic-dialog"
+    });
+  
+    util.query(licDialog.getDialogDom(),'.close').onclick=function(){
+      licDialog.close();
+    }
   }
 
-  var thankhtml=_REQUIRE_('./text/thanks.html');
-  var thaDialog=new dialog({
-    content:`<div class="close">${util.getGoogleIcon('e5cd')}</div><div class="thank-con">${thankhtml}</div>`,
-    class:"thank-dialog",
-    mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN
-  });
-
-  util.query(thaDialog.getDialogDom(),'.close').onclick=function(){
-    thaDialog.close();
+  function drawThank(){
+    var thankhtml=_REQUIRE_('./text/thanks.html');
+    thaDialog=new dialog({
+      content:`<div class="close">${util.getGoogleIcon('e5cd')}</div><div class="thank-con">${thankhtml}</div>`,
+      class:"thank-dialog",
+      mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN
+    });
+  
+    util.query(thaDialog.getDialogDom(),'.close').onclick=function(){
+      thaDialog.close();
+    }
   }
+  
+
+  
 
   return {
     lic:lichtml

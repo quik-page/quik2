@@ -97,7 +97,7 @@
   left: 20px;
   box-shadow: #09f 0 0 3px;
 }
-.setting-item .setting-item-right .check-box input{
+.setting-item .setting-item-right .check-box+input{
   display: none;
 }
 .setting-item.just-callback-item{

@@ -42,16 +42,19 @@ body.lite.showall main.noblur{
   backdrop-filter: none;
 }
 body.lite main .center .logo{
-  padding-top: 60px;
+  padding-top: calc(25vh - 60px);
   opacity: 1;
   pointer-events: all;
+}
+body.lite.showall main .center .logo{
+  padding-top: 60px;
 }
 body.lite.showall .fcard-frame{
   opacity: 0;
   pointer-events: none;
 }
 body.lite .searchbox{
-  top:200px;
+  top:calc(25vh + 80px);
   opacity: 1;
   pointer-events: all;
   transition: all .3s;
@@ -114,5 +117,8 @@ body.lite.showall .searchtypeselector{
   }
   body.lite .links{
     transform: translateY(-50px);
+  }
+  body.lite .says{
+    transform: translateX(-50%);
   }
 }

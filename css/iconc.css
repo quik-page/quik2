@@ -4,7 +4,7 @@
   height: 30px;
   text-align: center;
   user-select: none;
-  margin: 0 5px;
+  margin: 5px;
   border-radius: 30px;
 }
 .topper .item:hover,

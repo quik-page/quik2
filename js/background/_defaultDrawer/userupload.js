@@ -1,76 +1,104 @@
 (function () {
-  // 图片、视频上传器
-  var iovuploader = new dialog({
-    content: _REQUIRE_('../htmls/iovuploader.html'),
-    class: "iovuploader",
-  })
-  // @note 将cancel按钮修改为div，防止表单submit到cancel
-  // @edit at 2024/1/30 15:20
+  var iovuploader,iovuploaderf;
+  function drawIovUploader(){
+    // 图片、视频上传器
+    iovuploader = new dialog({
+      content: _REQUIRE_('../htmls/iovuploader.html'),
+      class: "iovuploader",
+    })
+    // @note 将cancel按钮修改为div，防止表单submit到cancel
+    // @edit at 2024/1/30 15:20
 
-  // Dom
-  var iovuploaderf = iovuploader.getDialogDom();
-  // 取消
-  util.query(iovuploaderf, '.cancel').onclick = function (e) {
-    e.preventDefault();
-    iovuploader.close();
-  }
-  // 提交
-  util.query(iovuploaderf, 'form').onsubmit = function (e) {
-    e.preventDefault();
-    // 类型 image(图片) / video(视频)
-    var type = util.query(iovuploaderf, '.uploadi').checked ? 'image' : 'video';
-    // url?
-    var url = util.query(iovuploaderf, 'input[type="url"]').value;
-    // File?
-    var file = util.query(iovuploaderf, 'input[type="file"]').files[0];
-    // 先把背景设置对话框中的图片src重置
-    util.query(d, '.zdy .left img').src = '';
-    if (file) {
-      // File优先
+    // Dom
+    iovuploaderf = iovuploader.getDialogDom();
+    // 取消
+    util.query(iovuploaderf, '.cancel').onclick = function (e) {
+      e.preventDefault();
+      iovuploader.close();
+    }
+    // 提交
+    util.query(iovuploaderf, 'form').onsubmit = function (e) {
+      e.preventDefault();
+      // 类型 image(图片) / video(视频)
+      var type = util.query(iovuploaderf, '.uploadi').checked ? 'image' : 'video';
+      // url?
+      var url = util.query(iovuploaderf, 'input[type="url"]').value;
+      // File?
+      var file = util.query(iovuploaderf, 'input[type="file"]').files[0];
+      // 先把背景设置对话框中的图片src重置
+      util.query(d, '.zdy .left img').src = '';
+      if (file) {
+        // File优先
 
-      // 将内容写入idb
-      initsto.set('upload', file, true, function () {
+        // 将内容写入idb
+        initsto.set('upload', file, true, function () {
+          iovuploader.close();
+          getUserUploadUrl(function (r) {
+            // 获取并设置背景设置对话框中的图片src
+            util.query(d, '.zdy .left img').src = r;
+          })
+          setbg({
+            type: "default",
+            data: {
+              type: "userbg"
+            }
+          })
+        });
+
+        // 设置存储
+        initsto.set('userbg', {
+          type: type,
+          useidb: true
+        })
+      } else {
+        initsto.set('userbg', {
+          type: type,
+          url: url
+        })
         iovuploader.close();
         getUserUploadUrl(function (r) {
           // 获取并设置背景设置对话框中的图片src
-          util.query(d, '.zdy .left img').src = r;
+          util.query(tab1, '.zdy .left img').src = r;
+          setbg({
+            type: "default",
+            data: {
+              type: "userbg"
+            }
+          })
         })
-        setbg({
-          type: "default",
-          data: {
-            type: "userbg"
-          }
-        })
-      });
+      }
 
-      // 设置存储
-      initsto.set('userbg', {
-        type: type,
-        useidb: true
-      })
-    } else {
-      initsto.set('userbg', {
-        type: type,
-        url: url
-      })
-      iovuploader.close();
-      getUserUploadUrl(function (r) {
-        // 获取并设置背景设置对话框中的图片src
-        util.query(tab1, '.zdy .left img').src = r;
-        setbg({
-          type: "default",
-          data: {
-            type: "userbg"
-          }
-        })
-      })
+      util.query(tab1, '.noBg').style.display = 'none';
+      util.query(tab1, '.hasBg').style.display = 'block';
+      util.query(tab1, '.zdy .editbtn').style.display = 'block';
     }
 
-    util.query(tab1, '.noBg').style.display = 'none';
-    util.query(tab1, '.hasBg').style.display = 'block';
-    util.query(tab1, '.zdy .editbtn').style.display = 'block';
   }
 
+
+  function uploadIov(a){
+    if(!iovuploader){
+      drawIovUploader();
+      setTimeout(function(){
+        iovuploader.open();
+      },10)
+    }else{
+      iovuploader.open();
+    }
+
+    if(a){
+      var j=initsto.get('userbg');
+      if(j){
+        if(j.type=='image'){
+          util.query(iovuploaderf,'input[type="url"]').value=j.url;
+          util.query(iovuploaderf,'.uploadi').checked=true;
+        }else{
+          util.query(iovuploaderf,'.uploadv').checked=true;
+        }
+      }
+    }
+  }
+  
   // 获取用户上传图片、视频URL
   function getUserUploadUrl(cb) {
     var a = initsto.get('userbg');
@@ -146,6 +174,6 @@
     hasUploadedImg,
     getUserUploadUrl,
     getVideoCaptrue,
-    iovuploader
+    uploadIov
   }
 })();

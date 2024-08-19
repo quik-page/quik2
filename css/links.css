@@ -204,6 +204,11 @@
     height: calc(100% - 210px);
   }
 }
+@media(min-width:2000px){
+  .links{
+    max-width: 1200px;
+  }
+}
 
 body.t-dark .links ul.link-list li a{
   color: #eee;

@@ -1,4 +1,33 @@
 var updatelog={
+  "2.3.5":{
+    updates:[
+      {
+        tag:"fix",
+        content:"稍稍优化了图标的位置"
+      },
+      {
+        tag:"fix",
+        content:"优化了自定义搜索引擎的样式"
+      },
+      {
+        tag:"change",
+        content:"添加了酷狗、QQ、网易云三个音乐搜索引擎，并重新调整内置搜索引擎的排序"
+      },
+      {
+        tag:"change",
+        content:"在极简模式下，搜索框会较靠近中间显示"
+      },
+      {
+        tag:"fix",
+        content:"优化代码逻辑，整体提升打开时的性能"
+      },
+      {
+        tag:"fix",
+        content:"修复一些小问题"
+      }
+    ],
+    time:"2024/8/19"
+  },
   "2.3.2":{
     updates:[
       {
