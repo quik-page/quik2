@@ -1,13 +1,13 @@
-;(function(){
+;(()=>{
     // 一些重要通知的推送
     var tuisongsto=storage('tuisong');
     util.initSet(tuisongsto,'d',0);
     var last_d=tuisongsto.get('d');
     console.log('t');
-    util.xhr('/quik-notice.json',function(res){
+    util.xhr('/quik-notice.json',res=>{
         res=JSON.parse(res);
         if(res.date>last_d){
-            setTimeout(function(){
+            setTimeout(()=>{
                 tuisongsto.set('d',res.date);
             },10000)
 
@@ -18,13 +18,13 @@
                     var fn;
                     if(v.link){
                         console.log('link');
-                        fn=function(){
+                        fn=()=>{
                             tsn.hide();
                             window.open(v.link)
                         }
                     }else{
                         console.log('hide');
-                        fn=function(){
+                        fn=()=>{
                             tsn.hide();
                         }
                     }
@@ -40,7 +40,7 @@
 
             console.log(tsn);
         }
-    },function(){
+    },()=>{
         // 请求失败
         console.log('通知数据请求失败')
     })

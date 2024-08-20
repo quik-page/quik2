@@ -1,4 +1,4 @@
-(function () {
+(()=> {
   function Setting(details) {
     this.title = details.title;
     this.ifo=false;
@@ -9,7 +9,7 @@
   }
 
   Setting.prototype = {
-    drawAll:function(){
+    drawAll(){
       if(this.ifo)return;
       this.ifo=true;
       this.dialog = new dialog({
@@ -23,14 +23,14 @@
       });
       util.query(this.dialogDom, '.actionbar h1').innerText = this.title;
       var _=this;
-      this.groups.forEach(function(group){
+      this.groups.forEach(group=>{
         _._drawGroup(group);
       })
     },
-    addNewGroup: function (group) {
+    addNewGroup(group) {
       this.groups.push(group);
       var _ = this;
-      group.on('change', function (dt, _this) {
+      group.on('change', (dt, _this)=>{
         _._dochange({
           type: dt.type,
           details: dt.details,
@@ -55,7 +55,7 @@
       })
       _._drawGroup(group);
     },
-    setTitle: function (title) {
+    setTitle(title) {
       this.title = title;
       if(this.ifo){
         util.query(this.dialogDom, '.actionbar h1').innerText = title;
@@ -65,32 +65,32 @@
         title: title
       })
     },
-    open: function () {
+    open() {
       var _=this;
       if(!_.ifo){
         _.drawAll();
-        setTimeout(function(){
+        setTimeout(()=>{
           _.dialog.open();
         },10);
       }else{
         _.dialog.open();
       }
     },
-    close: function () {
+    close() {
       this.dialog.close();
     },
-    on: function (event, callback) {
+    on(event, callback) {
       if (this._events[event]) {
         this._events[event].push(callback);
       }
     },
-    _dochange: function (dt) {
+    _dochange(dt) {
       var _ = this;
-      this._events.change.forEach(function (callback) {
+      this._events.change.forEach((callback)=>{
         callback(dt, _);
       });
     },
-    _drawGroup: function (group) {
+    _drawGroup(group) {
       if(!this.ifo)return;
       var _=this;
       var groupEle = util.element('li', {
@@ -111,17 +111,20 @@
       }
       if (q) sr.appendChild(groupEle);
       util.query(groupEle, '.setting-group-title').innerText = group.title;
-      group.items.forEach(function(item){
+      group.items.forEach((item)=>{
         _._drawItem(group,item);
       })
     },
-    _drawItem: function (group, item) {
+    _drawItem(group, item) {
       if(!this.ifo)return;
       var itemEle = util.element('li', {
         class: 'setting-item',
         'data-index': item.index,
         'data-id': item.id
       });
+      if(!item._show){
+        itemEle.style.display='none';
+      }
       itemEle.innerHTML = `<div class="setting-item-left"><div class="setting-item-title"></div><div class="setting-item-message"></div></div><div class="setting-item-right"></div>`;
       var sr = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + '] .setting-tree');
       var srls = sr.children;
@@ -141,23 +144,23 @@
         itemEle.classList.add('no-message');
       }
       var elr = util.query(itemEle, '.setting-item-right');
-      var cb = function () { }
+      var cb = ()=>{};
       var types = {
-        string: function () {
+        string() {
           elr.innerHTML = `<input type="text" class="setting-item-input">`;
-          cb = function (v) {
+          cb = (v)=>{
             util.query(elr, '.setting-item-input').value = v;
           }
         },
-        number: function () {
+        number() {
           elr.innerHTML = `<input type="number" class="setting-item-input">`;
-          cb = function (v) {
+          cb = (v)=>{
             util.query(elr, '.setting-item-input').value = v;
           }
         },
-        boolean: function () {
+        boolean() {
           elr.innerHTML = `<div class="check-box"><div class="check-box-inner"></div></div><input type="checkbox" class="setting-item-input">`;
-          cb = function (v) {
+          cb = (v)=>{
             util.query(elr, '.setting-item-input').checked = v;
             if (v) {
               util.query(elr, '.check-box').classList.add('checked');
@@ -175,9 +178,9 @@
             }
           })
         },
-        range: function () {
+        range() {
           elr.innerHTML = `<input type="range" class="setting-item-input">`;
-          cb = function (v) {
+          cb = (v)=>{
             util.query(elr, '.setting-item-input').value = v;
           }
           var l = item.init()
@@ -191,7 +194,7 @@
             util.query(elr, '.setting-item-input').min = inited[0];
           }
         },
-        select: function () {
+        select() {
           elr.innerHTML = `<input class="setting-item-input" type="text" style="display:none"></input><div class="qui-select"></div><div class="qui-options"></div>`;
           util.query(elr, '.qui-select').onclick=function(e){
             e.stopPropagation();
@@ -202,7 +205,7 @@
             util.query(elr, '.qui-options').classList.add('active');
           }
           var guaqi;
-          cb = function (v) {
+          cb = (v)=>{
             guaqi = v;
           }
           var l = item.init()
@@ -213,7 +216,7 @@
           }
           function _init(inited) {
             initSelect(elr,inited,item);
-            cb = function (v) {
+            cb = (v)=>{
               util.query(elr, '.setting-item-input').value = v;
               util.query(elr, '.qui-select').innerText = inited[v];
               var acted=util.query(elr, '.qui-options .qui-option.selected');
@@ -229,10 +232,10 @@
             if (guaqi) cb(guaqi);
           }
         },
-        'null': function () {
+        'null'() {
           elr.innerHTML = `<div class="setting-item-input null-click">${util.getGoogleIcon('e5e1')}</div>`;
           itemEle.classList.add('just-callback-item');
-          itemEle.onclick = function () {
+          itemEle.onclick = ()=> {
             item.callback();
           }
         }
@@ -257,11 +260,11 @@
         } else {
           return 'change'
         }
-      })(), function(){
+      })(), ()=>{
         doCallback.call(this,item);
       });
     },
-    _dochangeGroup: function (group, dt) {
+    _dochangeGroup(group, dt) {
       if(!this.ifo)return;
       var g = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + ']');
       if (dt.attr == 'title') {
@@ -284,7 +287,7 @@
         g.style.display = dt.content ? 'block' : 'none';
       }
     },
-    _dochangeItem: function (group, item, dt) {
+    _dochangeItem(group, item, dt) {
       if(!this.ifo)return;
       var g = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + '] .setting-item[data-id=' + item.id + ']');
       if (dt.attr == 'title') {
@@ -314,21 +317,21 @@
         g.style.display = dt.content ? 'block' : 'none';
       }
     },
-    _reinitItem: function (group, item) {
+    _reinitItem(group, item) {
       if(!this.ifo)return;
       console.log(item);
       var _init;
       var itemEle = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + '] .setting-item[data-id=' + item.id + ']');
       var elr = util.query(itemEle, '.setting-item-right')
       if (item.type == 'range') {
-        _init = function (inited) {
+        _init =  (inited)=> {
           util.query(elr, '.setting-item-input').max = inited[1];
           util.query(elr, '.setting-item-input').min = inited[0];
         }
       } else if (item.type == 'select') {
-        _init = function (inited) {
+        _init =  (inited)=> {
           initSelect(elr,inited,item);
-          cb = function (v) {
+          cb = (v)=>{
             util.query(elr, '.setting-item-input').value = v;
               util.query(elr, '.qui-select').innerText = inited[v];
               var acted=util.query(elr, '.qui-options .qui-option.selected');
@@ -358,13 +361,13 @@
         _init(l);
       }
     },
-    _regetItem: function (item) {
+    _regetItem(item) {
       if(!this.ifo)return;
       item.getacb();
     }
   }
 
-  document.addEventListener('click',function(){
+  document.addEventListener('click',()=>{
     var acted=util.query(document, '.qui-options.active');
     if(acted){
       acted.classList.remove('active');
@@ -380,8 +383,8 @@
       }
       return html;
     })();
-    util.query(elr, '.qui-options .qui-option',true).forEach(function(op){
-      op.onclick=function(){
+    util.query(elr, '.qui-options .qui-option',true).forEach((op)=>{
+      op.onclick=()=>{
         var v=op.getAttribute('data-value');
         util.query(elr, '.setting-item-input').value = v;
         util.query(elr, '.qui-select').innerText = inited[v];

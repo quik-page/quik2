@@ -1,4 +1,4 @@
-(function(){
+(()=>{
     var quik1si=new SettingItem({
         title: "QUIK 1",
         message: "从 QUIK 1 中导入数据",
@@ -17,7 +17,7 @@
             src:"./quik1.js"
         })
         document.body.append(s);
-        window.quik1to2=function(f){
+        window.quik1to2=(f)=>{
             window.quik1to2=null;
             f(_importData);
             d.close();

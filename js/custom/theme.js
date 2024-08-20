@@ -1,4 +1,4 @@
-(function(){
+(()=>{
     if(!initsto.get('themea')){
         initsto.set('themea','def');
     }
@@ -13,14 +13,14 @@
         title:"主题",
         type:"select",
         message:'',
-        get:function(){
+        get(){
           return initsto.get('themea');
         },
-        callback:function(v){
+        callback(v){
           initsto.set('themea',v);
           doTheme(v);
         },
-        init:function(){
+        init(){
           return themes;
         }
       });
@@ -33,7 +33,7 @@
         if(!themes[f]){
             return;
         }
-        document.body.classList.forEach(function(a){
+        document.body.classList.forEach((a)=>{
             if(ys.indexOf(a)==-1){
                 document.body.classList.remove(a);
             }
@@ -86,8 +86,8 @@
     var wait=false;
     if(!doTheme(initsto.get('themea'))){
         wait=true;
-        setTimeout(function(){
-            addon.on('allrun',function(){
+        setTimeout(()=>{
+            addon.on('allrun',()=>{
                 if(wait){
                     initsto.set('themea','def');
                     doTheme('def');

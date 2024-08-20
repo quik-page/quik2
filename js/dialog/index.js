@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var allDialog=[],d_index=1,idmax=0;
 
   /**
@@ -43,7 +43,7 @@
 
   function getDialogById(id){
     var d=null;
-    allDialog.forEach(function(dd){
+    allDialog.forEach((dd)=>{
       if(dd.id==id){
         d=dd;
       }
@@ -61,7 +61,7 @@
       mobileShowtype:mobileShowtype
     });
     var q=d.getDialogDom();
-    util.query(q,'.closebtn').onclick=function(){
+    util.query(q,'.closebtn').onclick=()=>{
       d.close();
     }
     this.closed=true;
@@ -70,7 +70,7 @@
   dialog.getDialogById=getDialogById;
 
   dialog.prototype={
-    open:function(){
+    open(){
       this.element.classList.add('show');
       this.element.style.zIndex=d_index;
       d_index++;
@@ -83,18 +83,18 @@
         lazyimg.removeAttribute('data-src');
       })
     },
-    close:function(){
+    close(){
       this.element.classList.remove('show');
       this.closed=true;
       if(this.onclose){
         this.onopen();
       }
     },
-    destroy:function(){
+    destroy(){
       this.element.remove();
       allDialog.splice(allDialog.indexOf(this),1);
     },
-    getDialogDom:function(){
+    getDialogDom(){
       return util.query(this.element,'.d-c');
     }
   }

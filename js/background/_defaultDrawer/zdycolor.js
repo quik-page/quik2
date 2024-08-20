@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var colorchanger,colorchangerf;
   function drawColorDialog(){
     // 自定义颜色修改对话框
@@ -43,7 +43,7 @@
   function colorChange(){
     if(!colorchanger){
       drawColorDialog();
-      setTimeout(function(){
+      setTimeout(()=>{
         colorchanger.open();
       },10)
     }else{

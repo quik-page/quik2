@@ -40,7 +40,6 @@ body.dark main .logo .timelogo,
 body.t-dark main .logo .timelogo
 {
   color: #fff;
-  text-shadow: #000 0 1px 5px;
 }
 body.dark main .logo svg,
 body.t-dark main .logo svg
@@ -50,12 +49,20 @@ body.t-dark main .logo svg
 main .logo .timelogo{
   width: 200px;
   margin: 0 auto;
+}
+main .logo .timelogo.showxx{
+  margin-top: -20px;
+}
+main .logo .timelogo.showxx .xxxx{
+  display: block;
+}
+main .logo .timelogo .t{
   overflow: hidden;
 }
-main .logo .timelogo>div{
+main .logo .timelogo .t>div{
   float: left;
 }
-main .logo .timelogo>div ._num{
+main .logo .timelogo .t>div ._num{
   width: 25px;
   height: 48px;
   float: left;
@@ -105,14 +112,14 @@ body.t-dark ._num .num_line.show
   left: 0;
 }
 
-main .logo .timelogo>div.i{
+main .logo .timelogo .t>div.i{
   animation: xhshow 1.5s ease-in-out infinite;
   width: 20px;
   height: 60px;
   margin: 15px 0;
   position: relative;
 }
-main .logo .timelogo>div.i span{
+main .logo .timelogo .t>div.i span{
   width: 2px;
   height: 8px;
   position: absolute;
@@ -121,12 +128,20 @@ main .logo .timelogo>div.i span{
   display: block;
   background-color: #000;
 }
-body.dark main .logo .timelogo>div.i span,
-body.t-dark main .logo .timelogo>div.i span
+main .logo .timelogo .xxxx{
+  text-align: center;
+  width: 120%;
+  white-space: nowrap;
+  letter-spacing: 2px;
+  display: none;
+  margin-left: -10%;
+}
+body.dark main .logo .timelogo .t>div.i span,
+body.t-dark main .logo .timelogo .t>div.i span
 {
   background-color: #fff;
 }
-main .logo .timelogo>div.i span:nth-child(2){
+main .logo .timelogo .t>div.i span:nth-child(2){
   top: 37px;
 }
 @keyframes xhshow {
@@ -206,17 +221,21 @@ li{
     height: 60px;
     padding-top: 30px;
   }
-  main .logo .timelogo{
+  main .logo .timelogo .t{
     transform: scale(.8);
   }
-  main .logo .timelogo>div ._num{
+  main .logo .timelogo .t>div ._num{
     margin: 0 10px;
     margin-bottom: 20px;
   }
-  main .logo .timelogo>div.i{
+  main .logo .timelogo .t>div.i{
     margin: 0;
     margin-bottom: 10px;
   }
+   main .logo .timelogo .xxxx{
+    margin-top: -10px;
+    letter-spacing: 1px;
+   }
 }
 @media (max-height:400px){
   main .logo{

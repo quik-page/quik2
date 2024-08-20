@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var icners={
     tl:util.query(document,'.topper .left'),
     tr:util.query(document,'.topper .right'),
@@ -29,27 +29,27 @@
     }
   }
   icon.prototype={
-    getIcon:function(){
+    getIcon(){
       return this.element;
     },
-    setIcon:function(content){
+    setIcon(content){
       this.content=content;
       this.element.innerHTML=this.content;
     },
-    setWidth:function(w){
+    setWidth(w){
       this.width=w;
       if(this.width){
         ic.style.width=this.width+'px';
       }
     },
-    getWidth:function(){
+    getWidth(){
       return this.width;
     },
-    show:function(){
+    show(){
       this.element.classList.remove('hide');
       this.element.classList.add('show');
     },
-    hide:function(){
+    hide(){
       this.element.classList.add('hide');
       this.element.classList.remove('show');
     }

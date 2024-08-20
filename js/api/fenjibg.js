@@ -1,8 +1,8 @@
-(function(){
+(()=>{
   return {
-    getImg:function(cb){
+    getImg(cb){
       var u='https://img.gumengya.com/api/fj/'+(parseInt(Math.random()*4000)+1)+'.jpg';
-      util.loadimg(u,function(ok){
+      util.loadimg(u,(ok)=>{
         if(ok){
           cb({
             url:u,
@@ -10,7 +10,7 @@
           });
         }else{
           u="https://api.gumengya.com/Api/FjImg?format=image&_="+Date.now();
-          util.loadimg(u,function(){
+          util.loadimg(u,()=>{
             cb({
               url:u,
               candoanload:false

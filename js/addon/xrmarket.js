@@ -9,14 +9,14 @@ util.query(addon_dialog_d,'.l .item[data-p="1"]').addEventListener('click',funct
 })
 
 function loadmarket(){
-    core.loadMarketData().then(function(res){
+    core.loadMarketData().then((res)=>{
         market_l.querySelector('.loading-p').remove();
         for(var k in res){
             xrmarketItem(res[k],k);
         }
-    }).catch(function(){
+    }).catch(()=>{
         market_l.innerHTML='<p>加载失败，点击<a href="javascript:;">重试</a></p>'
-        util.query(market_l,'a').onclick=function(){
+        util.query(market_l,'a').onclick=()=>{
             market_l.innerHTML='<div class="loading-p"><div class="g"></div></div>'
             loadmarket();
         };
@@ -27,11 +27,11 @@ function xrmarketItem(addon,id){
     var li = util.element('li');
     li.innerHTML = _REQUIRE_('./market_item.mb.html').replace(/{deficon}/g,def_addon_icon);
     li.dataset.id = id;
-    li.onclick = function (e) {
-        market_l.querySelectorAll('li').forEach(function (li) {
+    li.onclick = ()=> {
+        market_l.querySelectorAll('li').forEach((li)=>{
             li.classList.remove('active');
         })
-        this.classList.add('active');
+        li.classList.add('active');
     }
     util.query(li, '.n>img').src = addon.icon || def_addon_icon;
     util.query(li, '.n .ds .name span').innerText = addon.name;
@@ -75,7 +75,7 @@ function xrmarketItem(addon,id){
     util.query(li,'.btn.update').addEventListener('click',function(){
         this.style.display='';
         ms[2].innerText='正在更新...';
-        core.update(hastheaddon.id).then(function(){
+        core.update(hastheaddon.id).then(()=>{
             ms[2].innerText='更新完成';
             util.query(li,'.btn.installed').style.display='block';
             toast.show('插件 “'+addon.name+'” 更新完成')
@@ -103,7 +103,7 @@ util.query(searchbox,'input').addEventListener('keydown',function(e){
 
 util.query(searchbox,'input').addEventListener('input',function(){
     if(!this.value.trim()){
-        util.query(market_l,'li',true).forEach(function(li){
+        util.query(market_l,'li',true).forEach(li=>{
             li.style.display='';
         })
     }
@@ -115,7 +115,7 @@ util.query(searchbox,'button').addEventListener('click',function(e){
 })
 
 function dosearch(v){
-    util.query(market_l,'li',true).forEach(function(li){
+    util.query(market_l,'li',true).forEach(li=>{
         if(util.query(li,'.name span').innerText.indexOf(v)==-1){
             li.style.display='none';
         }else{

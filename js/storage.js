@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   if(!localStorage.quik2){
     localStorage.quik2='{}';
   }
@@ -8,16 +8,16 @@
   var idbsupport=localforage._getSupportedDrivers([localforage.INDEXEDDB])[0]==localforage.INDEXEDDB;
   // var idbsupport=false;
   var filerecv={
-    get:function(hash,cb){
+    get(hash,cb){
       localforage.getItem(hash).then(cb);
     },
-    set:function(file,hash,cb){
+    set(file,hash,cb){
       hash=hash||('^'+util.getRandomHashCache());
-      localforage.setItem(hash,file).then(function(){
+      localforage.setItem(hash,file).then(()=>{
         cb(hash);
       });
     },
-    delete:function(hash,cb){
+    delete(hash,cb){
       localforage.removeItem(hash).then(cb);
     }
   }
@@ -37,7 +37,7 @@
           if(!idbsupport){
             throw new Error('indexedDB is not support in this browser');
           }
-          filerecv.get(getAll()[ck][k],function(file){
+          filerecv.get(getAll()[ck][k],file=>{
             callback(file);
           });
         }
@@ -51,7 +51,7 @@
           if(!idbsupport){
             throw new Error('indexedDB is not support in this browser');
           }
-          filerecv.set(v,get(k),function(hash){
+          filerecv.set(v,get(k),hash=>{
             var a=getAll();
             a[ck][k]=hash;
             setAll(a[ck]);
@@ -69,7 +69,7 @@
           if(!idbsupport){
             throw new Error('indexedDB is not support in this browser');
           }
-          filerecv.delete(a[ck][k],function(){
+          filerecv.delete(a[ck][k],()=>{
             var a=getAll();
             delete a[ck][k];
             setAll(a[ck]);
@@ -111,10 +111,10 @@
         set:set,
         remove:remove,
         list:list,
-        getAll:function(){
+        getAll(){
           return getAll()[ck];
         },
-        clear:function(){
+        clear(){
           var a=getAll()[ck];
           for(var k in a){
             var b=k[a];
@@ -134,17 +134,17 @@
    * 检查浏览器是否支持indexedDB
    * @returns {Boolean} indexedDB support
    */
-  f.checkIDB=function(){
+  f.checkIDB=()=>{
     return idbsupport;
   }
   f.on=evn.on;
   f.off=evn.off;
   return {
     storage:f,
-    getStorageList:function(){
+    getStorageList(){
       return jl;
     },
-    getAllStorage:function(){
+    getAllStorage(){
       return JSON.parse(localStorage.getItem("quik2"));
     },
     dbTool:filerecv

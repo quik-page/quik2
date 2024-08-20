@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var marketData;
   var evn=getEventHandle();
   var h=[
@@ -8,7 +8,7 @@
   ]
 
   function getCode(jsurl,p){
-    return new Promise(function(resolve,reject){
+    return new Promise((resolve,reject)=>{
       var xhr=new XMLHttpRequest();
       xhr.open('GET',jsurl,true);
       xhr.onreadystatechange=function(){
@@ -18,10 +18,10 @@
           }
         }
       }
-      xhr.onerror=function(){
+      xhr.onerror=()=>{
         reject(xhr.status);
       }
-      xhr.onprogress=function(pr){
+      xhr.onprogress=(pr)=>{
         if(pr.total){
           p&&p(pr.loaded/pr.total);
         }else{
@@ -136,7 +136,7 @@
     sync:true,
     title:"插件",
     desc:"QUIK起始页插件数据",
-    rewrite:function(ast,k2,a){
+    rewrite(ast,k2,a){
       return new Promise(function(r){
         if(Object.keys(a).length==0){r();return;}
         var d=new dialog({
@@ -160,14 +160,14 @@
           }else{
             _pu();
           }
-          p.on('done',function(){
+          p.on('done',()=>{
             _pu();
           })
-          p.on('error',function(){
+          p.on('error',()=>{
             _pu();
             alert('安装一个插件时失败');
           })
-          p.on('wait',function(r){r(true)});
+          p.on('wait',r=>r(true));
         }
         function _pu(){
           i++;
@@ -219,11 +219,11 @@
     this.off=this.ev.off;
   }
   addonInstallProcess.prototype={
-    setProgress:function(n){
+    setProgress(n){
       this.progress=n;
       this.ev.doevent('progress',[n]);
     },
-    setStatu:function(n){
+    setStatu(n){
       this.statuCode=n;
       this.statuMsg=ainstatus[n];
       this.ev.doevent('statu',[{
@@ -231,7 +231,7 @@
         msg:ainstatus[n]
       }])
     },
-    setError:function(n,m){
+    setError(n,m){
       this.errorCode=n;
       this.errorMsg=ainerrors[n]+' '+m;
       this.ev.doevent('error',[{
@@ -239,11 +239,11 @@
         msg:ainerrors[n]+' '+m
       }])
     },
-    setDone:function(res){
+    setDone(res){
       this.result=res;
       this.ev.doevent('done',[res]);
     },
-    wait:function(d,fn){
+    wait(d,fn){
       this.waiting=true;
       var _=this;
       this.ev.doevent('wait',[function(a){
@@ -289,15 +289,15 @@
         p.setProgress(0.1);
         p.setStatu(2);
         var url=marketData[id].url;
-        getCode(url,function(pr){
+        getCode(url,pr=>{
           p.setProgress(0.1+pr*0.5);
-        }).then(function(code){
+        }).then(code=>{
           p.setProgress(0.6);
           p.setStatu(3);
           installAddon(code,deAddon(code),{
             marketId:id
           }).then(_install_end(p))
-        }).catch(function(){
+        }).catch(()=>{
           p.setError(2,url);
         });
       }else{
@@ -319,11 +319,11 @@
     }
     p.setProgress(0.1);
     p.setStatu(2);
-    getCode(url,function(pr){
+    getCode(url,pr=>{
       p.setProgress(0.1+pr*0.5);
-    }).catch(function(err){
+    }).catch(()=>{
       p.setError(2,url);
-    }).then(function(code){
+    }).then(code=>{
       p.setProgress(0.6);
       var meta=deAddon(code);
       if(meta.error){
@@ -333,7 +333,7 @@
         p.wait({
           meta:meta,
           msg:h[2]
-        },function(n){
+        },n=>{
           if(n){
             installAddon(code,meta,{
               url:url
@@ -369,7 +369,7 @@
       p.wait({
         meta:meta,
         msg:h[2]
-      },function(n){
+      },n=>{
         if(n){
           installAddon(code,meta,{
             local:true
@@ -398,7 +398,7 @@
       url:devurl,
       type:"dev"
     });
-    evn.doevent('installnew',[{id:adid}])
+    evn.doevent('installnew',{id:adid})
     runAddon(adid);
     return adid;
   }
@@ -413,7 +413,7 @@
           codesto.remove(id,true,r)
         });
       }
-      evn.doevent('uninstall',[{id,marketId:addon.marketId}])
+      evn.doevent('uninstall',{id,marketId:addon.marketId})
       uninstalleventons[id]&&uninstalleventons[id]();
       return true;
     }else{
@@ -432,11 +432,11 @@
           url:data.url+'index.js',
           method:"get",
           responseType:"text",
-          then:function(res){
+          then(res){
             code=res.data;
             r()
           },
-          catch:function(){
+          catch(){
             alert('开发端口出错');
             j();
           }
@@ -445,9 +445,9 @@
     }else{
       code=await new Promise((r)=>codesto.get(id,true,r));
     }
-    script.innerHTML=`(function(){
+    script.innerHTML=`(()=>{
 function Session(id){this.id="ext_"+id;this.session_token="Hvm_session_token_eoi1j2j";this.isSession=true}
-var addonData={session:new Session('${id}'),uninstall:function(fn){quik.addon._doonun(this.session,fn)}};
+var addonData={session:new Session('${id}'),uninstall(fn){quik.addon._doonun(this.session,fn)}};
 (function(){${code}})();})()`;
     document.body.appendChild(script);
     
@@ -490,7 +490,7 @@ var addonData={session:new Session('${id}'),uninstall:function(fn){quik.addon._d
         for(var k in meta){
           addon[k]=meta[k];
         }
-        await new Promise(function(r){
+        await new Promise(r=>{
           codesto.set(id,code,true,r);
         });
         initsto.set(id,addon);
@@ -550,8 +550,8 @@ var addonData={session:new Session('${id}'),uninstall:function(fn){quik.addon._d
       }
     })
     try{
-      Promise.all(addonruns).then(function(){
-        setTimeout(function(){
+      Promise.all(addonruns).then(()=>{
+        setTimeout(()=>{
           evn.doevent('allrun',[]);
         },100)
       })
@@ -593,7 +593,7 @@ var addonData={session:new Session('${id}'),uninstall:function(fn){quik.addon._d
     getAddonByMarketId,
     getAddonList,
     getEnable,
-    _doonun:function(session,fn){
+    _doonun(session,fn){
       if(util.checkSession(session)&&typeof fn=='function'){
         uninstalleventons[session.id]=fn;
       }

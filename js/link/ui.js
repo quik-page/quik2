@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var linkF=util.element('div',{
     class:"links"
   });
@@ -28,7 +28,7 @@
     list:[{
       icon:util.getGoogleIcon('e3c9'),
       title:"修改",
-      click:function(){
+      click(){
         var index=getIndex(menuedLi,util.query(linkF,'.link-list li',true));
         var cate=util.query(linkF,'.cate-bar-items .cate-item.active');
         if(cate.classList.contains('mr')){
@@ -41,7 +41,7 @@
     },{
       icon:util.getGoogleIcon('e92e'),
       title:"删除",
-      click:function(){
+      click(){
         var index=getIndex(menuedLi,util.query(linkF,'.link-list li',true));
         var cate=util.query(linkF,'.cate-bar-items .cate-item.active');
         if(cate.classList.contains('mr')){
@@ -56,7 +56,7 @@
     },{
       icon:util.getGoogleIcon('e14d'),
       title:"复制链接",
-      click:function(){
+      click(){
         util.copyText(util.query(menuedLi,'a').href);
       }
     }]
@@ -66,16 +66,16 @@
     list:[{
       icon:util.getGoogleIcon('e3c9'),
       title:"重命名",
-      click:function(){
+      click(){
         var cate=menuedCate.innerText;
         openCateEditDialog(cate);
       }
     },{
       icon:util.getGoogleIcon('e92e'),
       title:"删除",
-      click:function(){
+      click(){
         var cate=menuedCate.innerText;
-        link.deleteCate(cate,function(result){
+        link.deleteCate(cate,result=>{
           if(result==0){
             toast.show('删除成功')
           }else{
@@ -110,7 +110,7 @@
   }
   function init(){
     linkF.innerHTML=_REQUIRE_('./htmls/linkinit.html').replace('{{cate-left}}',util.getGoogleIcon('e314')).replace('{{cate-right}}',util.getGoogleIcon('e315')).replace('{{cate-add}}',util.getGoogleIcon('e145'))
-    link.ready(function(){
+    link.ready(()=>{
       dcate(initsto.get('enabledCate'));
       dsize(initsto.get('linksize'));
     })
@@ -121,8 +121,8 @@
   function initCate(){
     console.log('initCate');
     if(isinitcate)return;
-    link.getCates(function(r){
-      r.data.forEach(function(g){
+    link.getCates(r=>{
+      r.data.forEach(g=>{
         bcate(g);
       });
     })
@@ -131,10 +131,10 @@
       this.classList.add('active');
       actCate();
     }
-    util.query(linkF,'.cate-add-btn').onclick=function(){
+    util.query(linkF,'.cate-add-btn').onclick=()=>{
       openCateEditDialog();
     }
-    util.query(linkF,'.cate-left-btn').onclick=function(){
+    util.query(linkF,'.cate-left-btn').onclick=()=>{
       util.query(linkF,'.cate-bar-scrolls').scrollTo({
         left:
           c(util.query(linkF,'.cate-bar-scrolls').scrollLeft-
@@ -142,7 +142,7 @@
         behavior: 'smooth'
       })
     }
-    util.query(linkF,'.cate-right-btn').onclick=function(){
+    util.query(linkF,'.cate-right-btn').onclick=()=>{
       util.query(linkF,'.cate-bar-scrolls').scrollTo({
         left:
           c(util.query(linkF,'.cate-bar-scrolls').scrollLeft+
@@ -177,7 +177,7 @@
     }
     this.style.width='calc(100% - '+(120-a*40)+'px)';
   }
-  window.addEventListener('resize',function(){
+  window.addEventListener('resize',()=>{
     checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
   })
 
@@ -198,7 +198,7 @@
     checkScrollBtn.call(util.query(linkF,'.cate-bar-scrolls'));
   }
   function observeCate(){
-    var ob=new MutationObserver(function(){
+    var ob=new MutationObserver(()=>{
       setTimeout(cateWidthShiPei,1)
     });
     ob.observe(util.query(linkF,'.cate-bar-items'),{
@@ -206,7 +206,7 @@
     });
   }
 
-  link.on('change',function(cl){
+  link.on('change',cl=>{
     var actcate=util.query(linkF,'.cate-bar-items .cate-item.active');
     if(cl.cate==actcate.innerText||(cl.cate==null&&actcate.classList.contains('mr'))){
       if(['add','change','delete'].indexOf(cl.type)!=-1){
@@ -264,14 +264,14 @@
     }
     
 
-    link.getLinks(cate,function(ls){
+    link.getLinks(cate,ls=>{
       linklist=ls.data;
-      ls.data.forEach(function(l){
+      ls.data.forEach(l=>{
         var li=util.element('li');
         li.innerHTML=`<a href="${l.url}" target="_blank" rel="noopener noreferer"><img/><p></p></a>`
         util.query(linkF,'.link-list').append(li);
         util.query(li,'p').innerText=l.title;
-        util.getFavicon(l.url,function(favicon){
+        util.getFavicon(l.url,favicon=>{
           if(favicon){
             util.query(li,'img').src=favicon;
           }else{
@@ -296,7 +296,7 @@
       });
       li.innerHTML=`<a href="javascript:void(0)" class="material-symbols-outlined">&#xe145;</a>`;
       util.query(linkF,'.link-list').append(li);
-      li.onclick=function(){
+      li.onclick=()=>{
         var cate=util.query(linkF,'.cate-bar-items .cate-item.active');
         if(cate.classList.contains('mr')){
           cate=null
@@ -326,12 +326,12 @@
         linkaddDialog.close();
       }
     }
-    setTimeout(function(){
+    setTimeout(()=>{
       linkaddDialog.open();
       var d=linkaddDialog.getDialogDom();
       var ll=linklist.length;
       if(index==-1){
-        _n('添加链接','添加','','',ll,ll,function(e){
+        _n('添加链接','添加','','',ll,ll,(e)=>{
           e.preventDefault();
           var url=util.query(d,'.link-add-url').value;
           if(url.indexOf('://')==-1){
@@ -342,7 +342,7 @@
           index3=index3==''?ll:(index3-0);
           link.addLink({
             url,title,index: index3,cate
-          },function(r){
+          },r=>{
             if(r.code!=0){
               toast.show(r.msg);
             }else{
@@ -352,7 +352,7 @@
           })
         });
       }else{
-        _n('修改链接','修改',linklist[index].url,linklist[index].title,ll-1,index,function(e){
+        _n('修改链接','修改',linklist[index].url,linklist[index].title,ll-1,index,(e)=>{
           e.preventDefault();
           var url=util.query(d,'.link-add-url').value;
           if(url.indexOf('://')==-1){
@@ -365,7 +365,7 @@
             url:url,
             title:title,
             index:index2
-          },function(back){
+          },(back)=>{
             if(back.code!=0){
               toast.show(back.msg);
             }else{
@@ -400,19 +400,19 @@
       // @edit at 2024/1/30 15:20
     }
       var d=cateeditDialog.getDialogDom();
-      util.query(d,'.cancel.btn').onclick=function(e){
+      util.query(d,'.cancel.btn').onclick=(e)=>{
         e.preventDefault();
         cateeditDialog.close();
       }
-    setTimeout(function(){
+    setTimeout(()=>{
       cateeditDialog.open();
       if(cate){
         util.query(d,'h1').innerHTML='修改分组';
         util.query(d,'.cate-name').value=cate;
-        util.query(d,'form').onsubmit=function(e){
+        util.query(d,'form').onsubmit=(e)=>{
           e.preventDefault();
           var catename=util.query(d,'.cate-name').value;
-          link.renameCate(cate,catename,function(result){
+          link.renameCate(cate,catename,(result)=>{
             if(result.code<0){
               toast.show(result.msg);
               return;
@@ -424,10 +424,10 @@
       }else{
         util.query(d,'h1').innerHTML='添加分组';
         util.query(d,'.cate-name').value='';
-        util.query(d,'form').onsubmit=function(e){
+        util.query(d,'form').onsubmit=(e)=>{
           e.preventDefault();
           var catename=util.query(d,'.cate-name').value;
-          link.addCate(catename,function(result){
+          link.addCate(catename,(result)=>{
             if(result.code<0){
               toast.show(result.msg);
               return;
@@ -457,10 +457,10 @@
     type:'boolean',
     title:"链接分组",
     message:"(Alt+G)启用链接分组功能来管理链接",
-    get:function(){
+    get(){
       return initsto.get('enabledCate');
     },
-    callback:function(v){
+    callback(v){
       initsto.set('enabledCate',v);
       dcate(v);
     }
@@ -469,7 +469,7 @@
     type:'select',
     title:"链接大小",
     message:"修改链接显示的大小",
-    init:function(){
+    init(){
       return {
         xs:"很小",
         s:"小",
@@ -478,10 +478,10 @@
         xl:"很大"
       }
     },
-    get:function(){
+    get(){
       return initsto.get('linksize');
     },
-    callback:function(v){
+    callback(v){
       initsto.set('linksize',v);
       dsize(v);
     }
@@ -496,7 +496,7 @@
     if(v){
       util.query(linkF,'.cate-bar').style.display='block';
       initCate();
-      setTimeout(function(){cateWidthShiPei();},10);
+      setTimeout(()=>{cateWidthShiPei();},10);
     }else{
       util.query(linkF,'.cate-bar').style.display='none';
     }
@@ -507,18 +507,18 @@
   }
 
   return {
-    isShowCate:function(){
+    isShowCate(){
       return initsto.get('enabledCate');
     },
-    setShowCate:function(v){
+    setShowCate(v){
       initsto.set('enabledCate',v);
       dcate(v);
       enabledCateSi.reGet();
     },
-    getLinkSize:function(){
+    getLinkSize(){
       return initsto.get('linksize');
     },
-    setLinkSize:function(v){
+    setLinkSize(v){
       if(['xs','s','m','l','xl'].indexOf(v)!=-1){
         initsto.set('linksize',v);
         dsize(v);

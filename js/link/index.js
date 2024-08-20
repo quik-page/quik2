@@ -1,4 +1,4 @@
-(function () {
+(()=>{
   _REQUIRE_('./_core.js');
   var link;
   if (storage.checkIDB()) {

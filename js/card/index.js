@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var cardcon=util.query(document,'.cards');
   var topcardcon=util.query(document,'.top.cards');
 
@@ -53,25 +53,25 @@
   }
 
   card.prototype={
-    show:function(transition){
+    show(transition){
       var _=this;
       _.isShow=true;
       this.el.style.display='block';
       if(transition&&transition>0){
         this.el.style.transition='all '+transition+'ms';
         this.el.offsetHeight;
-        setTimeout(function(){
+        setTimeout(()=>{
           _.el.style.transition='none';
         },transition);
       }
       this.el.style.opacity='1';
     },
-    hide:function(transition){
+    hide(transition){
       var _=this;
       _.isShow=false;
       if(transition&&transition>0){
         this.el.style.transition='all '+transition+'ms';
-        setTimeout(function(){
+        setTimeout(()=>{
           _.el.style.transition='none';
           _.el.style.display='none';
         },transition);
@@ -80,29 +80,29 @@
       }
       this.el.style.opacity='0';
     },
-    destroy:function(){
+    destroy(){
       this.el.remove();
     },
-    getCardDom:function(){
+    getCardDom(){
       return this.el;
     },
-    getOffset:function(){
+    getOffset(){
       return this.offset;
     },
-    getWidth:function(){
+    getWidth(){
       return this.width;
     },
-    getHeight:function(){
+    getHeight(){
       return this.height;
     },
-    setWidth:function(width){
+    setWidth(width){
       this.width=width;
       this.el.style.width=width+'px';
     },
-    setHeight:function(height){
+    setHeight(height){
       this.el.style.height=height+'px';
     },
-    setOffset:function(offset,transition){
+    setOffset(offset,transition){
       var _=this;
       var old=this.offset;
       if(transition&&transition>0){
@@ -134,7 +134,7 @@
             this.el.style.right=offset.right+"px";
           }
         }
-        setTimeout(function(){
+        setTimeout(()=>{
           _.el.style.transition='none';
           sz.call(_);
         },transition);

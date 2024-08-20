@@ -1,4 +1,29 @@
 var updatelog={
+  "2.4.0":{
+    updates:[
+      {
+        tag:"new",
+        content:"时间LOGO可以显示日期"
+      },
+      {
+        tag:"fix",
+        content:"时间LOGO居中问题"
+      },
+      {
+        tag:"new",
+        content:"搜索框可以关闭"
+      },
+      {
+        tag:"fix",
+        content:"优化代码，全面使用更先进的ES6语法"
+      },
+      {
+        tag:"fix",
+        content:"修复一些小问题"
+      }
+    ],
+    time:"2024/8/20"
+  },
   "2.3.5":{
     updates:[
       {

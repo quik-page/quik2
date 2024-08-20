@@ -1,4 +1,4 @@
-(function(){
+(()=>{
     document.addEventListener('keydown',function(e){
         if(e.key=='s'&&e.altKey){
             e.preventDefault();

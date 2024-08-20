@@ -1,12 +1,12 @@
-(function(){
+(()=>{
   function showOpenFilePicker(){
-    return new Promise(function(resolve,reject){
+    return new Promise((resolve,reject)=>{
       var inp=document.createElement('input');
       inp.type='file';
       document.body.append(inp);
       inp.style.display='none';
       inp.click();
-      inp.onchange=function(){
+      inp.onchange=()=>{
         resolve(inp.files);
         inp.remove();
       }
@@ -107,13 +107,13 @@
     getEventHandle
   }
   window.util=util;
-  custom.waitdotheme(function(){
+  custom.waitdotheme(()=>{
     clearTimeout(loadingtimeout);
     document.querySelector(".loading-f").classList.add('h');
     document.querySelector(".loading-f").style.display='none';
     document.querySelector("main").style.display='block';
     document.querySelector("main").style.opacity='1';
-    onshows_fns.forEach(function(f){f()});
+    onshows_fns.forEach(f=>f());
     link.cateWidthShiPei();
   });
 

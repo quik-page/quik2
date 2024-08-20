@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var notice_con=document.querySelector(".notice-con");
   var notip=document.querySelector(".no-notice-tip");
   var notice_mb=_REQUIRE_('./notice.mb.html');
@@ -18,7 +18,7 @@
     drawNotice(this);
   }
   notice.prototype={
-    show:function(time){
+    show(time){
       notip.classList.remove('show');
       r(1);
       clearTimeout(this._timeouthide);
@@ -31,12 +31,12 @@
       this.el.style.animation='noticein .3s';
 
       if(time){
-        setTimeout(function(){
+        setTimeout(()=>{
           _.hide();
         },time)
       }
     },
-    hide:function(){
+    hide(){
       this.el.classList.remove('show');
       if(!document.querySelector(".notice-con .notice-item.show")){
         notip.classList.add('show');
@@ -44,34 +44,34 @@
       }
       this.el.style.animation='noticeout .3s';
       var _=this;
-      this._timeouthide=setTimeout(function(){
+      this._timeouthide=setTimeout(()=>{
         _.el.style.display='none';
       },300)
     },
-    focus:function(){
+    focus(){
       this.show();
       upfocus(this);
     },
-    destroy:function(){
+    destroy(){
       this.hide();
       var _=this;
-      setTimeout(function(){
+      setTimeout(()=>{
         _.el.remove();
       },300)
     },
-    setTitle:function(title){
+    setTitle(title){
       this.title=title;
       drawNoticeTitle(this);
     },
-    setContent:function(content){
+    setContent(content){
       this.content=content;
       drawNoticeContent(this);
     },
-    setBtn:function(btns){
+    setBtn(btns){
       this.btns=btns;
       drawNoticeBtn(this);
     },
-    setProgress:function(progress){
+    setProgress(progress){
       if(!this.useprogress||progress>1||progress<0){
         return;
       }
@@ -105,14 +105,14 @@
     drawNoticeBtn({
       el:cloneNoticeEl,
       btns:readyFocusNotice.btns,
-      hide:function(){
+      hide(){
         readyFocusNotice.hide();
         clearTimeout(focus_timeout);
         cloneNoticeEl.remove();
       },
-      show:function(){}
+      show(){}
     });
-    focus_timeout=setTimeout(function(){
+    focus_timeout=setTimeout(()=>{
       cloneNoticeEl.remove();
       focus_arr.shift();
       if(focus_arr.length>0){
@@ -123,7 +123,7 @@
 
   function drawNotice(n){
     n.el.innerHTML=notice_mb.replace('{{close-btn}}',util.getGoogleIcon('e5cd'));
-    util.query(n.el,'.notice-close-btn').onclick=function(){
+    util.query(n.el,'.notice-close-btn').onclick=()=>{
       n.hide();
     }
     drawNoticeTitle(n);
@@ -146,13 +146,13 @@
     var btncon=util.query(n.el,'.notice-btns');
     btncon.innerHTML='';
     for(var i=0;i<n.btns.length;i++){
-      (function(i){
+      (i=>{
         var btn=n.btns[i];
         var btnel=util.element('div',{
           class:"btn"+(btn.style?" "+btn.style:""),
         });
         btnel.innerText=btn.text;
-        btnel.onclick=function(){
+        btnel.onclick=()=>{
           console.log(btn.click);
           btn.click(n);
         }
@@ -177,8 +177,8 @@
     class:"notice-icon"
   });
   
-  window.addEventListener('resize',function(){r()});
-  mbicon.getIcon().addEventListener('click',function(){
+  window.addEventListener('resize',()=>{r()});
+  mbicon.getIcon().addEventListener('click',()=>{
     document.querySelector(".notice-sc").classList.add('show');
   })
   document.querySelector(".notice-sc").addEventListener('click',function(){

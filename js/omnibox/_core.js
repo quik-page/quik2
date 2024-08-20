@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var k={
     SA:[],
     enter:[],
@@ -10,12 +10,15 @@
   if(initsto.get('ob_http')==undefined){
     initsto.set('ob_http',false);
   }
-  var sawait=[];
+  if(initsto.get('ob_enable')==undefined){
+    initsto.set('ob_enable',true);
+  }
+  var sawait=[],sis=[];
 
 
   /**
    * @param {String} text
-   * @param {Function} updateFn(salist:{icon:String,text:String,click:Function}[])
+   * @param {Function} updateFn(salist:{icon:String,text:String,click}[])
    */
   var getSA=function(text,updateFn){
     if(sawait.length>0){
@@ -81,133 +84,147 @@
     return util.checkUrl(text);
   };
 
-  addNewType({
-    check:function(){
-      return true;
-    },
-    enter:function(text){
-      open(searchUtil.getSearchType().replace(searchUtil.keywordText,encodeURIComponent(text)));
-    },
-    icon:":searchtype",
-    submit:util.getGoogleIcon('E8B6')
-  });
-
-  addNewType({
-    check:checkUrl,
-    enter:function(text){
-      if(text.indexOf('://')==-1){
-        text=((!!initsto.get('ob_http'))?'https://':'http://')+text;
-      }
-      open(text);
-    },
-    icon:util.getGoogleIcon('E80B'),
-    submit:util.getGoogleIcon('E89E')
-  });
-
-  addNewSA({
-    check:function(text){
-      return !!text;
-    },
-    get:function(text,getsa){
-      var a=getsa();
-      a.unshift({
-        icon:util.getGoogleIcon('E8B6'),
-        text:text,
-        click:function(){
-          open(searchUtil.getSearchType().replace(searchUtil.keywordText,encodeURIComponent(text)));
+  function initNative(){
+    addNewType({
+      check(){
+        return true;
+      },
+      enter(text){
+        open(searchUtil.getSearchType().replace(searchUtil.keywordText,encodeURIComponent(text)));
+      },
+      icon:":searchtype",
+      submit:util.getGoogleIcon('E8B6')
+    });
+  
+    addNewType({
+      check:checkUrl,
+      enter(text){
+        if(text.indexOf('://')==-1){
+          text=((!!initsto.get('ob_http'))?'https://':'http://')+text;
         }
-      });
-      return a;
-    }
-  })
-
-
-  var searchfetch=null;
-  addNewSA({
-    check:function(text){
-      return !!text;
-    },
-    get:function(text,getsa){
-      return new Promise(function(r,j){
-        searchfetch=util.jsonp('https://www.baidu.com/sugrec?pre=1&p=3&ie=utf-8&json=1&prod=pc&from=pc_web&wd='+text,function(res){
-          var a2=getsa();
-          searchfetch=null;
-          if(!res.g){
-            r(a2);
-            return;
-          } 
-          res.g.forEach(function(item){
-            a2.push({
-              icon:util.getGoogleIcon('E8B6'),
-              text:item.q,
-              click:function(){
-                open(searchUtil.getSearchType().replace(searchUtil.keywordText,item.q));
-              }
-            });
-          })
-          r(a2);
-        },'cb');
-      })
-    },
-    interrupt:function(){
-      if(searchfetch){
-        searchfetch.abort();
-        searchfetch=null;
-      }
-    }
-  });
-
-  addNewSA({
-    check:checkUrl,
-    get:function(text,getsa){
-      return new Promise(function(r,j){
+        open(text);
+      },
+      icon:util.getGoogleIcon('E80B'),
+      submit:util.getGoogleIcon('E89E')
+    });
+  
+    addNewSA({
+      check(text){
+        return !!text;
+      },
+      get(text,getsa){
         var a=getsa();
         a.unshift({
-          icon:util.getGoogleIcon('E80B'),
+          icon:util.getGoogleIcon('E8B6'),
           text:text,
-          click:function(){
-            if(text.indexOf('://')==-1){
-              text=((!!initsto.get('ob_http'))?'https://':'http://')+text;
-            }
-            open(text);
+          click(){
+            open(searchUtil.getSearchType().replace(searchUtil.keywordText,encodeURIComponent(text)));
           }
         });
-        r(a);
-      })
-    }
-  });
-
+        return a;
+      }
+    })
   
-  /*setting.registerSetting({
+  
+    var searchfetch=null;
+    addNewSA({
+      check(text){
+        return !!text;
+      },
+      get(text,getsa){
+        return new Promise(function(r,j){
+          searchfetch=util.jsonp('https://www.baidu.com/sugrec?pre=1&p=3&ie=utf-8&json=1&prod=pc&from=pc_web&wd='+text,function(res){
+            var a2=getsa();
+            searchfetch=null;
+            if(!res.g){
+              r(a2);
+              return;
+            } 
+            res.g.forEach(function(item){
+              a2.push({
+                icon:util.getGoogleIcon('E8B6'),
+                text:item.q,
+                click(){
+                  open(searchUtil.getSearchType().replace(searchUtil.keywordText,item.q));
+                }
+              });
+            })
+            r(a2);
+          },'cb');
+        })
+      },
+      interrupt(){
+        if(searchfetch){
+          searchfetch.abort();
+          searchfetch=null;
+        }
+      }
+    });
+  
+    addNewSA({
+      check:checkUrl,
+      get(text,getsa){
+        return new Promise(function(r,j){
+          var a=getsa();
+          a.unshift({
+            icon:util.getGoogleIcon('E80B'),
+            text:text,
+            click(){
+              if(text.indexOf('://')==-1){
+                text=((!!initsto.get('ob_http'))?'https://':'http://')+text;
+              }
+              open(text);
+            }
+          });
+          r(a);
+        })
+      }
+    });
+    var cal=_REQUIRE_('./sp/cal.js');
+    var tr=_REQUIRE_('./sp/translate.js');
+    sis.push(cal.si);
+    sis.push(tr.si);
+    init_state=true;
+  }
+
+  var init_state=false;
+  function isInit(){
+    return init_state;
+  }
+
+  var sic=new SettingItem({
+    title:"启用搜索框",
     index:1,
-    unit:'搜索框',
-    title:"搜索框仅搜索",
     type:'boolean',
-    message:"打开后，搜索框将失去打开链接的功能",
-    get:function(){
-      return !!initsto.get('justsearch');
+    message:"关闭将不显示搜索框",
+    get(){
+      return !!initsto.get('ob_enable');
     },
-    callback:function(value){
-      initsto.set('justsearch',value);
+    callback(value){
+      initsto.set('ob_enable',value);
+      if(value&&!init_state){
+        initNative();
+      }
+      initSett(value);
+      ui.uiEnable(value);
       return true;
     }
-  })*/
-
+  })
 
   var si=new SettingItem({
     title:"搜索框仅搜索",
     index:1,
     type:'boolean',
     message:"打开后，搜索框将失去打开链接的功能",
-    get:function(){
+    get(){
       return !!initsto.get('ob_justsearch');
     },
-    callback:function(value){
+    callback(value){
       initsto.set('ob_justsearch',value);
       if(value){
-        ui.input.placeholder='搜索'
+        ui.getInput().placeholder='搜索'
       }else{
-        ui.input.placeholder='搜索或输入网址'
+        ui.getInput().placeholder='搜索或输入网址'
       }
       return true;
     }
@@ -218,16 +235,27 @@
     index:1,
     type:'boolean',
     message:"打开后，搜索框打开链接在默认情况下使用HTTPS",
-    get:function(){
+    get(){
       return !!initsto.get('ob_http');
     },
-    callback:function(value){
+    callback(value){
       initsto.set('ob_http',value);
       return true;
     }
   })
+  sg.addNewItem(sic);
   sg.addNewItem(si);
   sg.addNewItem(si2);
+  sis.push(si);
+  sis.push(si2);
+
+  function initSett(a){
+    if(a){
+      sis.forEach(si=>si.show());
+    }else{
+      sis.forEach(si=>si.hide());
+    }
+  }
   
   return {
     getSA:getSA,
@@ -237,9 +265,12 @@
     addNewSA:addNewSA,
     searchUtil:searchUtil,
     initsto:initsto,
-    setJustSearch:function(value){
+    setJustSearch(value){
       initsto.set('ob_justsearch',value);
       si.reGet();
-    }
+    },
+    isInit,
+    initNative,
+    initSett
   }
 })();

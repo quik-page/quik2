@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var jinrishicisto=storage('jrsc');
   var jinrishici={}, tokenStorageKey="jinrishici-token";
   function request(callback,url){
@@ -6,7 +6,7 @@
     xhr.open("get",url);
     xhr.withCredentials=false;
     xhr.send();
-    xhr.onreadystatechange=function(){
+    xhr.onreadystatechange=()=>{
       if(4===xhr.readyState){
         var res=JSON.parse(xhr.responseText);
         if("success"===res.status){
@@ -17,12 +17,12 @@
       }
     }
   }
-  jinrishici.load=function(callback){
+  jinrishici.load=(callback)=>{
     var key=jinrishicisto.get(tokenStorageKey);
     if(key){
       return request(callback,"https://v2.jinrishici.com/one.json?client=browser-sdk/1.2&X-User-Token="+encodeURIComponent(key))
     }else{
-      return request(function(res){
+      return request((res)=>{
         jinrishicisto.set(tokenStorageKey,res.token);
         callback(res);
       },"https://v2.jinrishici.com/one.json?client=browser-sdk/1.2")
@@ -31,9 +31,9 @@
   return {
     key:"jinrishici",
     name:"今日诗词",
-    callback:function(){
-      return new Promise(function(resolve,reject){
-        jinrishici.load(function(res){
+    callback(){
+      return new Promise((resolve,reject)=>{
+        jinrishici.load((res)=>{
           resolve({
             say:res.data.content,
             author:'('+res.data.origin.dynasty+')'+res.data.origin.author,
@@ -45,26 +45,26 @@
         })
       })
     },
-    click:function(){
+    click(){
       refsay('jinrishici');
     },
     menu:[{
       icon:util.getGoogleIcon('e5d5'),
       title:'刷新',
-      click:function(){
+      click(){
         refsay('jinrishici');
       }
     },{
       icon:util.getGoogleIcon('e14d'),
       title:'复制',
-      click:function(){
+      click(){
         var value=nowSay.say;
         util.copyText(value);
       }
     },{
       icon:util.getGoogleIcon('e88e'),
       title:'诗词详情',
-      click:function(){
+      click(){
         openSayDetailsDialog({
           'API':"今日诗词（jinrishici.com）",
           '内容':nowSay.say,

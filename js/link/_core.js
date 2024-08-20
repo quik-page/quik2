@@ -13,15 +13,15 @@ var initsto = storage('link', {
     delete a['storage-mode'];
     return a;
   },
-  rewrite:function(ast,k,a){
-    return new Promise(function(r){
+  rewrite(ast,k,a){
+    return new Promise(r=>{
       a['storage-mode']=initsto.get('storage-mode');
       if(initsto.get('storage-mode')=='db'){
-        initsto.remove('links',true,function(){
-          dbTool.set(a.links,void 0,function(hash){
+        initsto.remove('links',true,()=>{
+          dbTool.set(a.links,void 0,(hash)=>{
             a.links=hash;
-            initsto.remove('cate',true,function(){
-              dbTool.set(a.cate,void 0,function(hash){
+            initsto.remove('cate',true,()=>{
+              dbTool.set(a.cate,void 0,(hash)=>{
                 a.cate=hash;
                 ast[k]=a;
                 r();
@@ -37,23 +37,23 @@ var initsto = storage('link', {
     })
     
   },
-  compare:function(ast,km,a){
-    return new Promise(function(r){
+  compare(ast,km,a){
+    return new Promise(r=>{
       a['storage-mode']=initsto.get('storage-mode');
       if(a['storage-mode']=='db'){
-        initsto.get('links',true,function(old){
-          initsto.remove('links',true,function(){
+        initsto.get('links',true,(old)=>{
+          initsto.remove('links',true,()=>{
             a.links=compareLinks(old,a.links);
-            dbTool.set(a.links,void 0,function(hash){
+            dbTool.set(a.links,void 0,(hash)=>{
               a.links=hash;
-              dbTool.get(ast[km].cate,function(ocate){
-                dbTool.delete(ast[km].cate,function(){
+              dbTool.get(ast[km].cate,(ocate)=>{
+                dbTool.delete(ast[km].cate,()=>{
                   var d=ocate;
                   for(var k in a.cate){
                     d[k]=compareLinks(d[k],a.cate[k]);
                   }
                   a.cate=d;
-                  dbTool.set(a.cate,void 0,function(hash){
+                  dbTool.set(a.cate,void 0,(hash)=>{
                     a.cate=hash;
                     ast[km]=a;
                     r();

@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var dia;
   function drawAll(){
   dia=new dialog({
@@ -17,8 +17,8 @@
       'data-k':k
     });
     item.innerHTML='<img/><div>'+neizhi[k].name+'</div>';
-    (function(k,item){
-      util.getFavicon(neizhi[k].link,function(fav){
+    ((k,item)=>{
+      util.getFavicon(neizhi[k].link,(fav)=>{
         if(fav){
           util.query(item,'img').src=fav;
         }else{
@@ -29,7 +29,7 @@
     
     neizhilist_f.append(item);
     if(k=='bing'){
-      item.addEventListener('click',function(){
+      item.addEventListener('click',()=>{
         toast.show('该项不可取消')
       })
     }else{
@@ -59,10 +59,10 @@
   str+=`<div class="addnewitem">${util.getGoogleIcon('e145')} 添加自定义的搜索引擎</div>`
   util.query(d,'.searchlist').innerHTML=str;
 
-  util.query(d,'.searchlist .item',true).forEach(function(item){
+  util.query(d,'.searchlist .item',true).forEach(item=>{
     clitem(item);
   });
-  util.query(d,'.searchlist .addnewitem').onclick=function(){
+  util.query(d,'.searchlist .addnewitem').onclick=()=>{
     var item=util.element('div',{
       class:'item',
       'data-k':"user_"+Date.now().toString().slice(3)
@@ -77,7 +77,7 @@
 
   function clitem(item,a){
     if(!a){
-      util.getFavicon(list[item.getAttribute('data-k')],function(fav){
+      util.getFavicon(list[item.getAttribute('data-k')],(fav)=>{
       if(fav){
         util.query(item,'.icon img').src=fav;
       }else{
@@ -90,7 +90,7 @@
       // @edit at 2024/1/30 15:28
       try{
         var img=this.parentElement.parentElement.querySelector('.icon img')
-        util.getFavicon(this.value,function(fav){
+        util.getFavicon(this.value,(fav)=>{
           if(fav){
             img.src=fav;
           }else{
@@ -105,15 +105,15 @@
       this.parentElement.remove();
     }
   }
-  util.query(d,'.closeBtn').onclick=util.query(d,'.cancel.btn').onclick=function(){
+  util.query(d,'.closeBtn').onclick=util.query(d,'.cancel.btn').onclick=()=>{
     dia.close();
   }
-  util.query(d,'.ok.btn').onclick=function(){
+  util.query(d,'.ok.btn').onclick=()=>{
     var nlist={};
-    util.query(d,'.searchlist .item',true).forEach(function(item){
+    util.query(d,'.searchlist .item',true).forEach(item=>{
       nlist[item.dataset.k]=item.querySelector('.url input').value;
     });
-    util.query(d,'.neizhilist .item.active',true).forEach(function(item){
+    util.query(d,'.neizhilist .item.active',true).forEach(item=>{
       nlist[item.dataset.k]='';
     });
     list=nlist;
@@ -130,10 +130,10 @@
     index:0,
     type:'null',
     message:"",
-    callback:function(value){
+    callback(value){
       if(!dia){
         drawAll();
-        setTimeout(function(){
+        setTimeout(()=>{
           dia.open();
         },10)
       }else{
@@ -144,7 +144,7 @@
   omnibox.sg.addNewItem(si);
 
   return {
-    open:function(){
+    open(){
       dia.open();
     }
   }

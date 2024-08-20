@@ -1,11 +1,11 @@
-(function () {
+(()=>{
     var initsto = storage('oobe');
     if (!initsto.get('agree')) {
         var lichtml = ignores.lic;
         var i = 0;
         var all = _REQUIRE_('./htmls/all.html');
         var parts = [_REQUIRE_('./htmls/part1.html'), _REQUIRE_('./htmls/part2.html')]
-        parts.forEach(function (a, i) {
+        parts.forEach( (a, i)=> {
             all = all.replace('{{part' + (i + 1) + '}}', a);
         })
         all = all.replace('{{lic}}', lichtml);
@@ -17,22 +17,22 @@
         })
         var d = oobeDia.getDialogDom();
 
-        util.query(d, '.part.a1 .btn.ok').onclick = function () {
+        util.query(d, '.part.a1 .btn.ok').onclick = ()=>{
             initsto.set('agree', true);
             nextPart();
         }
 
-        util.query(d, '.part.a1 .btn.cancel').onclick = function () {
+        util.query(d, '.part.a1 .btn.cancel').onclick = ()=>{
             location.href = 'about:blank'
         }
-        util.query(d, '.part.a2 .item.a').onclick = function () {
+        util.query(d, '.part.a2 .item.a').onclick = ()=>{
             nextPart();
         }
-        util.query(d, '.part.a2 .item.b').onclick = function () {
+        util.query(d, '.part.a2 .item.b').onclick = ()=>{
             nextPart();
             sync.openImport();
         }
-        util.query(d, '.part.a2 .item.c').onclick = function () {
+        util.query(d, '.part.a2 .item.c').onclick = ()=>{
             nextPart();
             sync.openQUIK1();
         }
@@ -48,7 +48,7 @@
                 return;
             }
             i++;
-            setTimeout(function () {
+            setTimeout(()=>{
                 util.query(d, '.part.a' + i).classList.add('show');
             }, 200);
         }
@@ -74,7 +74,7 @@
                         right:40
                     }
                 }
-            ],function(){
+            ],()=>{
                 initsto.set('guided',true);
             })
         }
@@ -92,9 +92,9 @@
                 btns:[{
                     text:"前往加入",
                     style:"ok",
-                    click:function(){
+                    click(){
                         _.hide();
-                        alert('再次表示感谢！',function(){
+                        alert('再次表示感谢！',()=>{
                             window.open('https://qm.qq.com/q/6nOculioy4')
                         })
                     }

@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   async function getJSON(config){
     var jl=getStorageList();
     var ast=getAllStorage();
@@ -109,7 +109,7 @@
       o[k]=ast[k];
     }
     localStorage.quik2=JSON.stringify(o);
-    alert('数据导入成功，请重新加载页面',function(){
+    alert('数据导入成功，请重新加载页面',()=>{
       if(location.hash.indexOf(';')!=-1){
         location.hash=location.hash.split(';')[0]+';newnow'
       }else{

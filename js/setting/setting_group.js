@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var idmax=0;
 function SettingGroup(details){
   this.title=details.title;
@@ -13,10 +13,10 @@ function SettingGroup(details){
 }
 
 SettingGroup.prototype={
-  addNewItem:function(item){
+  addNewItem(item){
     this.items.push(item);
     var _=this;
-    item.on('change',function(dt,_this){
+    item.on('change',(dt,_this)=>{
       _._dochange({
         type:"change",
         details:dt,
@@ -27,7 +27,7 @@ SettingGroup.prototype={
       type:"add"
     })
   },
-  setTitle:function(title){
+  setTitle(title){
     this.title=title;
     this._dochange({
       type:"it",
@@ -37,7 +37,7 @@ SettingGroup.prototype={
       }
     })
   },
-  setIndex:function(index){
+  setIndex(index){
     this.index=index;
     this._dochange({
       type:"it",
@@ -47,12 +47,12 @@ SettingGroup.prototype={
       }
     })
   },
-  on:function(event,callback){
+  on(event,callback){
     if(this._events[event]){
       this._events[event].push(callback);
     }
   },
-  show:function(){
+  show(){
     this.show=true;
     this._dochange({
       type:"it",
@@ -61,7 +61,7 @@ SettingGroup.prototype={
       content:true
     }})
   },
-  hide:function(){
+  hide(){
     this.show=false;
     this._dochange({
       type:"it",
@@ -70,9 +70,9 @@ SettingGroup.prototype={
       content:false
     }})
   },
-  _dochange:function(dt){
+  _dochange(dt){
     var _=this;
-    this._events.change.forEach(function(callback){
+    this._events.change.forEach((callback)=>{
       callback(dt,_);
     });
   }

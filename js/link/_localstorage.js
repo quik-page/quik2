@@ -1,4 +1,4 @@
-(function () {
+(()=> {
   console.warn('浏览器不支持indexedDB，将在限制模式下使用');
 
   initsto.set('storage-mode','localstorage');
@@ -12,7 +12,7 @@
     initsto.set('cate', {});
   }
   return {
-    setAll:function(link,cate,cb){
+    setAll(link,cate,cb){
       if(Array.isArray(link)&&typeof cate=='object'){
         initsto.set('links',link)
         initsto.set('cate',cate);
@@ -24,7 +24,7 @@
         })
       }
     },
-    addLink: function (detail, callback) {
+    addLink(detail, callback) {
       if (!util.checkDetailsCorrect(detail, ['title', 'url'])) {
         throw '参数不正确';
       }
@@ -90,7 +90,7 @@
 
       }
     },
-    changeLink: function (cate, index, detail, callback) {
+    changeLink(cate, index, detail, callback) {
       if (!util.checkDetailsCorrect(detail, ['title', 'url']) || typeof index != 'number') {
         throw '参数错误';
       }
@@ -159,7 +159,7 @@
         });
       }
     },
-    deleteLink: function (cate, index, callback) {
+    deleteLink(cate, index, callback) {
       if (cate) {
         // 包含分类
         var c = initsto.get('cate');
@@ -211,7 +211,7 @@
         });
       }
     },
-    addCate: function (cate, callback) {
+    addCate(cate, callback) {
       var c = initsto.get('cate');
       if (c[cate]) {
         callback&&callback({
@@ -238,7 +238,7 @@
         type: 'cateadd',
       });
     },
-    renameCate: function (cate, catename, callback) {
+    renameCate(cate, catename, callback) {
       var c = initsto.get('cate');
       if (!c[cate]) {
         callback&&callback({
@@ -266,7 +266,7 @@
         type: 'caterename',
       });
     },
-    deleteCate: function (cate, callback) {
+    deleteCate(cate, callback) {
       var c = initsto.get('cate');
       if (!c[cate]) {
         callback&&callback({
@@ -283,7 +283,7 @@
           msg: "删除成功"
         });
       } else{
-        confirm('确定要删除分组吗？无法恢复！',function(r){
+        confirm('确定要删除分组吗？无法恢复！',r=>{
           if(r){
             delete c[cate];
             initsto.set('cate', c);
@@ -304,7 +304,7 @@
         })
       }
     },
-    getLinks: function (cate, callback) {
+    getLinks(cate, callback) {
       if (cate) {
         var c = initsto.get('cate');
         if (!c[cate]) {
@@ -328,7 +328,7 @@
         });
       }
     },
-    getCates: function (callback) {
+    getCates(callback) {
       var c = initsto.get('cate');
       callback&&callback({
         code: 0,
@@ -336,7 +336,7 @@
         data: Object.keys(c)
       });
     },
-    getCateAll: function (callback) {
+    getCateAll(callback) {
       var c = initsto.get('cate');
       callback&&callback({
         code: 0,
@@ -344,7 +344,7 @@
         data: c
       });
     },
-    ready: function (fn) {
+    ready(fn) {
       fn();
     },
     on,off

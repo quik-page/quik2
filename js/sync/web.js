@@ -1,4 +1,4 @@
-(function(){
+(()=>{
     // websync
 
     var initsto=storage('websync');
@@ -27,7 +27,7 @@
             return;
         }
         if(nsyncM!=session.id){
-            confirm('插件 "'+addon.getAddonById(session.id)+'" 申请提供数据云同步功能，是否同意？',function(r){
+            confirm('插件 "'+addon.getAddonById(session.id)+'" 申请提供数据云同步功能，是否同意？',r=>{
                 if(r){
                     nsyncM=session.id;
                     initsto.set('yesid',nsyncM);
@@ -50,7 +50,7 @@
                 code:0,
                 msg:"OK"
             });
-            startSync(syncM).catch(function(e){
+            startSync(syncM).catch(e=>{
                 new notice({
                     title:"云同步",
                     content:"云同步初始化失败，请检查网络连接后刷新"
@@ -135,7 +135,7 @@
     syncIcon.hide();
 
     function syncData(){
-        return new Promise(function(r,j){
+        return new Promise((r,j)=>{
             syncM.getLastReq().then((last_req)=>{
                 console.log(last_req,initsto.get('last_req'));
                 if(last_req!=initsto.get('last_req')){
@@ -145,17 +145,17 @@
                     }else{
                         var _a=new Date(last_req).toLocaleString()+"的更改"
                         util.query(d,'.last_req').innerText=_a;
-                        util.query(d,'.btn.ok').onclick=function(){
+                        util.query(d,'.btn.ok').onclick=()=>{
                             getData();
                         }
-                        util.query(d,'.btn.cancel').onclick=function(){
+                        util.query(d,'.btn.cancel').onclick=()=>{
                             updateAll().then(r).catch(j);
                             syncConfictDialog.close();
                         }
                         if(!syncConfictDialog){
                             drawSyncConfict();
                         }
-                        setTimeout(function(){
+                        setTimeout(()=>{
                             syncConfictDialog.open();
                         },10)
                     }
@@ -191,7 +191,7 @@
 
     function listenData(){
         console.log('listen');
-        storage.on('websync',function(e){
+        storage.on('websync',(e)=>{
             console.log('websync');
             var reqId=Date.now();
             e.id=reqId
@@ -210,7 +210,7 @@
         var e=o[0];
         console.log(e);
         if(!e)return;
-        syncM.update(e,function(reqId){
+        syncM.update(e,(reqId)=>{
             if(reqId){
                 initsto.set('last_req',reqId);
                 dealChange(reqId);
@@ -223,12 +223,12 @@
                     content:"数据（"+new Date(reqId).toLocaleString()+"的更改）同步失败了，是否重试？",
                     btns:[{
                         text:"确定",
-                        click:function(){
+                        click(){
                             syncChange(e);
                         }
                     },{
                         text:"取消",
-                        click:function(){}
+                        click(){}
                     }]
                 }).show();
             }
@@ -276,10 +276,10 @@
         }
     }
 
-    addon.on('allrun',function(){
-        setTimeout(function(){
+    addon.on('allrun',()=>{
+        setTimeout(()=>{
             if(nsyncM&&(!syncM)){
-                confirm('正在使用的云同步插件已被卸载或禁用，是否取消当前的云同步服务？',function(ok){
+                confirm('正在使用的云同步插件已被卸载或禁用，是否取消当前的云同步服务？',(ok)=>{
                     if(ok){
                         initsto.remove('yesid');
                         initsto.remove('last_req');

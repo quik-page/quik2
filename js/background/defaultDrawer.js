@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var tab1,setbg,tab2,tab3;
   util.initSet(initsto,'usercolor',{
     dark:"#333333",
@@ -33,7 +33,7 @@
     content:util.getGoogleIcon('f090'),
     offset:"br"
   });
-  downloadIcon.getIcon().onclick=function(){
+  downloadIcon.getIcon().onclick=()=>{
     window.open(document.querySelector(".bgf img").src);
   }
 
@@ -53,7 +53,7 @@
     },
     class:"bing_info"
   });
-  infoIcon.getIcon().onclick=function(){
+  infoIcon.getIcon().onclick=()=>{
     if(infoCard.isShow){
       infoCard.hide(400);
     }else{
@@ -76,7 +76,7 @@
       a.style.opacity='0';
     }
     var _=this;
-    setTimeout(function(){
+    setTimeout(()=>{
       refreshFn.call(_);
     },300)
   };
@@ -96,7 +96,7 @@
     if(infocache){
       fn(infocache);
     }else{
-      util.xhr('https://bing.shangzhenyang.com/api/json',function(r){
+      util.xhr('https://bing.shangzhenyang.com/api/json',r=>{
         r=JSON.parse(r);
         var a=r.images[0];
         var b=a.copyright.split('(');
@@ -108,7 +108,7 @@
           title:a.title
         };
         fn(infocache)
-      },function(){
+      },()=>{
         fn({
           copyright:"加载失败",
           second_copyright:"(© Bing)",
@@ -126,7 +126,7 @@
   var timeb=null;
 
   var draws={
-    img:function(bgf,data){
+    img(bgf,data){
       bgf.innerHTML='<div class="img-sp full"><div class="cover"></div><img src="'+(data.url||neizhiImg[data.index].img)+'"/></div>';
       bgf.querySelector('img').onload=function(){
         this.style.opacity='1';
@@ -134,7 +134,7 @@
       checkBgCoverStyle();
       ImgOrVideoSi.show();
     },
-    video:function(bgf,data){
+    video(bgf,data){
       bgf.innerHTML='<div class="video-sp full"><div class="cover"></div><video src="" muted loop></video></div>'
       util.query(bgf,'.video-sp video').src=data.url||neizhiImg[data.index].img;
       util.query(bgf,'.video-sp video').oncanplay=function(){
@@ -144,7 +144,7 @@
       checkBgCoverStyle();
       ImgOrVideoSi.show();
     },
-    color:function(bgf,data){
+    color(bgf,data){
       bgf.innerHTML='<div class="color-sp full"></div>'
       if(!util.query(document.head,'style.colorSpControl')){
         var style=document.createElement('style');
@@ -154,7 +154,7 @@
       util.query(document.head,'style.colorSpControl').innerHTML=`.color-sp{background-color:${data.light};}body.dark .color-sp{background-color:${data.dark};}`
     },
     api:_REQUIRE_('./_defaultDrawer/apidraw.js'),
-    userbg:function(bgf,data){
+    userbg(bgf,data){
       // 图片或视频
       var a=initsto.get('userbg');
       if(!a) return;
@@ -163,7 +163,7 @@
       if(a.type=='video'){
         var b=a.useidb;
         if(b){
-          initsto.get('upload',true,function(blob){
+          initsto.get('upload',true,(blob)=>{
             draws.video(bgf,{
               url:URL.createObjectURL(blob)
             })
@@ -176,7 +176,7 @@
       }else if(a.type=='image'){
         var b=a.useidb;
         if(b){
-          initsto.get('upload',true,function(blob){
+          initsto.get('upload',true,(blob)=>{
             draws.img(bgf,{
               url:URL.createObjectURL(blob)
             })
@@ -188,7 +188,7 @@
         }
       }
     },
-    zdy:function(bgf,data){
+    zdy(bgf,data){
       if(!util.query(bgf,'.zdy-sp')){
         bgf.innerHTML='<div class="zdy-sp full"></div>'
       }
@@ -216,22 +216,22 @@
   var {colorChange}=_REQUIRE_('./_defaultDrawer/zdycolor.js');
 
   function selectbgitem(data){
-    util.query(tab1,'.bgitem',true).forEach(function(it){
+    util.query(tab1,'.bgitem',true).forEach(it=>{
       it.classList.remove('selected');
     })
-    util.query(tab2,'.bgitem',true).forEach(function(it){
+    util.query(tab2,'.bgitem',true).forEach(it=>{
       it.classList.remove('selected');
     })
     if(data.type=='default'){
       if(data.data.type=='img'){
-        try{util.query(tab1,'.neizhi .bgitem[data-id="'+data.data.index+'"]').classList.add('selected');}catch(e){}
+        try{util.query(tab1,`.neizhi .bgitem[data-id="${data.data.index}"]`).classList.add('selected');}catch(e){}
       }else if(data.data.type=='userbg'){
         util.query(tab1,'.zdy .bgitem').classList.add('selected');
       }else if(data.data.type=='api'){
         if(data.data.api=='time'){
           util.query(tab2,'.api .bgitem').classList.add('selected');
         }else{
-          util.query(tab1,'.api .bgitem[data-api="'+data.data.api+'"]').classList.add('selected');
+          util.query(tab1,`.api .bgitem[data-api="${data.data.api}"]`).classList.add('selected');
         }
       }else if(data.data.type=='color'){
         util.query(tab2,'.zdy .bgitem').classList.add('selected');
@@ -243,7 +243,7 @@
   function _reset(){
     document.body.classList.remove('t-dark');
     refreshApiIcon.hide();
-    refreshFn=function(){}
+    refreshFn=()=>{}
     clearInterval(timeb);
     downloadIcon.hide();
     ImgOrVideoSi.hide();
@@ -253,7 +253,7 @@
   return {
     drawer:{
     type: "default",
-    init: function (e) {
+    init (e) {
       setbg=e.setbg;
       // pushTab 图片/视频
       tab1=e.pushBgTab({
@@ -266,11 +266,11 @@
         util.query(tab1,'.zdy .editbtn').style.display='none';
       }else{
         util.query(tab1,'.noBg').style.display='none';
-        getUserUploadUrl(function(url){
+        getUserUploadUrl((url)=>{
           util.query(tab1,'.zdy .left img').src=url;
         })
       }
-      util.query(tab1,'.zdy .left').addEventListener('click',function(){
+      util.query(tab1,'.zdy .left').addEventListener('click',()=>{
         if(hasUploadedImg()){
           e.setbg({
             type:e.type,
@@ -282,21 +282,21 @@
           uploadIov();
         }
       })
-      util.query(tab1,'.zdy .editbtn').addEventListener('click',function(){
+      util.query(tab1,'.zdy .editbtn').addEventListener('click',()=>{
         uploadIov(true);
       });
 
       // 内置图片
       var u=util.query(tab1,'.neizhi .unit-content');
       var _=this;
-      neizhiImg.forEach(function(im,id){
+      neizhiImg.forEach((im,id)=>{
         var bgitem=util.element('div',{
           class:"bgitem def",
           'data-id':id,
         });
         bgitem.innerHTML='<div class="left"><img data-src="'+im.thumbnail+'" loading="lazy"/></div>'
         u.appendChild(bgitem);
-        util.query(bgitem,'.left').onclick=function(){
+        util.query(bgitem,'.left').onclick=()=>{
           e.setbg({
             type:e.type,
             data:{
@@ -308,13 +308,13 @@
       });
 
       var se=util.query(tab1,'.u-se');
-      se.onclick=function(){
+      se.onclick=()=>{
         ImgOrVideoSi.callback();
       }
 
       // API
-      util.query(tab1,'.api.unit-item .left',true).forEach(function(l){
-        l.addEventListener('click',function(){
+      util.query(tab1,'.api.unit-item .left',true).forEach(l=>{
+        l.addEventListener('click',()=>{
           e.setbg({
             type:e.type,
             data:{
@@ -334,7 +334,7 @@
       var c=initsto.get('usercolor');
       util.query(tab2,'.zdy .color-left').style.backgroundColor=c.light;
       util.query(tab2,'.zdy .color-right').style.backgroundColor=c.dark;
-      util.query(tab2,'.zdy .left').onclick=function(){
+      util.query(tab2,'.zdy .left').onclick=()=>{
         var c=initsto.get('usercolor');
         e.setbg({
           type:e.type,
@@ -345,7 +345,7 @@
           }
         })
       }
-      util.query(tab2,'.zdy .btn').onclick=function(){
+      util.query(tab2,'.zdy .btn').onclick=()=>{
         colorChange();
       }
       var cd=getNowColor();
@@ -370,7 +370,7 @@
       var _d_=initsto.get('custombgdark');
       util.query(tab3,'.gjzdytlight').value=_l_?_l_:'';
       util.query(tab3,'.gjzdytdark').value=_d_?_d_:'';
-      util.query(tab3,'.gjzdysetbtn').onclick=function(){
+      util.query(tab3,'.gjzdysetbtn').onclick=()=>{
         initsto.set('custombglight',util.query(tab3,'.gjzdytlight').value);
         initsto.set('custombgdark',util.query(tab3,'.gjzdytdark').value);
         e.setbg({
@@ -383,16 +383,16 @@
         })
         quik.toast.show('设置成功')
       }
-      setTimeout(function(){
+      setTimeout(()=>{
         selectbgitem(quik.background.getbg());
         quik.background.on('change',selectbgitem)
       });
     },
-    cancel: function (n) {
+    cancel(n) {
       n.bgf.innerHTML='';
       _reset();
     },
-    draw:function(n){
+    draw(n){
       var bgf=n.bgf;
       var data=n.data;
       _reset();

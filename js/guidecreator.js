@@ -1,6 +1,6 @@
-(function(){
+(()=>{
     return {
-        create:function(steps,cb,istopper){
+        create(steps,cb,istopper){
             if(steps.length==0){cb();return;}
             var _card=new card({
                 content:"<div class=\"guide-text\"></div><div class=\"btn ok\">确定</div>",
@@ -21,7 +21,7 @@
                 }
             }
             dostep();
-            util.query(_cd,'.btn.ok').addEventListener('click',function(){
+            util.query(_cd,'.btn.ok').addEventListener('click',()=>{
                 j++;
                 if(j>=steps.length){
                     _card.hide(300);

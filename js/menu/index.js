@@ -1,8 +1,8 @@
-(function(){
+(()=>{
   /**
    * @class contextMenu
    * @param {Object} options 
-   * @param {{icon:String,title:String,click:Function}[]} options.list
+   * @param {{icon:String,title:String,click}[]} options.list
    * @param {{top?:Number,left?:Number,bottom?:Number,right?:Number}} options.offset 位置
    */
   var contextMenu=function(options){
@@ -43,7 +43,7 @@
   }
 
   contextMenu.prototype={
-    show:function(){
+    show(){
       resetmenu(this.element);
       this.element.classList.add('show');
       this.element.style.height='auto';
@@ -51,25 +51,25 @@
       this.element.style.height='0px';
       this.element.style.transition='height .2s';
       var _this=this;
-      setTimeout(function(){
+      setTimeout(()=>{
         _this.element.style.height=h+'px';
       })
     },
-    hide:function(){
+    hide(){
       this.element.style.height='0px';
       var _this=this;
-      setTimeout(function(){
+      setTimeout(()=>{
         _this.element.style.transition='none';
         _this.element.classList.remove('show');
       },200)
     },
-    isShow:function(){
+    isShow(){
       return this.element.classList.contains('show');
     },
-    destroy:function(){
+    destroy(){
       this.element.remove();
     },
-    setOffset:function(offset){
+    setOffset(offset){
       this.options.offset=offset;
       var options=this.options,el=this.element;
       el.style.top="";
@@ -89,7 +89,7 @@
         }
       }
     },
-    setList:function(list){
+    setList(list){
       this.options.list=list;
       var el=this.element;
       el.innerHTML="";
@@ -97,17 +97,17 @@
     }
   };
 
-  document.addEventListener('click',function(){
+  document.addEventListener('click',()=>{
     resetmenu();
   });
-  document.addEventListener('contextmenu',function(){
+  document.addEventListener('contextmenu',()=>{
     resetmenu();
   });
   function resetmenu(el){
-    document.querySelectorAll(".contextMenu").forEach(function(e){
+    document.querySelectorAll(".contextMenu").forEach(e=>{
       if(el&&e.isSameNode(el))return;
       e.style.height='0px';
-      setTimeout(function(){
+      setTimeout(()=>{
         e.style.transition='none';
         e.classList.remove('show');
       },200)

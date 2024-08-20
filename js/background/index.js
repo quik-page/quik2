@@ -1,4 +1,4 @@
-(function () {
+(()=>{
   var backgroundsg=new SettingGroup({
     title:"背景",
     index:3
@@ -26,8 +26,8 @@
   util.query(document, 'body').appendChild(bgf);
   var initsto = storage('background',{
     sync:true,
-    get:function(){
-      return new Promise(function(resolve, reject) {
+    get(){
+      return new Promise((resolve, reject)=> {
         var a=initsto.getAll();
         delete a.upload;
         if(a.bg.type!='default'){
@@ -54,8 +54,8 @@
         }
       });
     },
-    rewrite:function(ast,k,a){
-      return new Promise(function(resolve, reject){
+    rewrite(ast,k,a){
+      return new Promise((resolve, reject)=>{
         if(a.requireAddon){
           var raddon=quik.addon.getAddonByUrl(a.requireAddon);
           if(raddon){
@@ -63,25 +63,25 @@
             ast[k]=a;
             resolve();
           }else{
-            confirm('该背景数据需要安装插件以同步，是否安装？',function(v){
+            confirm('该背景数据需要安装插件以同步，是否安装？',(v)=>{
               if(v){
                 var p=addon.installAddon(a.requireAddon);
-                p.on('error', function (e) {
-                  alert('插件安装失败，同步取消',function(){
+                p.on('error', e=>{
+                  alert('插件安装失败，同步取消',()=>{
                     resolve();
                   })
                 });
-                p.on('wait',function(r){
+                p.on('wait',r=>{
                   r(true);
                 });
-                p.on('done', function (e) {
+                p.on('done', e=> {
                   a.bg.type=e.id;
                   ast[k]=a;
                   resolve();
                 });
                 
               }else{
-                alert('已取消背景同步',function(){
+                alert('已取消背景同步',()=>{
                   resolve();
                 })
               }
@@ -119,7 +119,7 @@
   d = bg_set_d.getDialogDom();
 
   // 关闭按钮
-  util.query(d, '.closeBtn').onclick = function () {
+  util.query(d, '.closeBtn').onclick = ()=> {
     bg_set_d.close();
   }
 
@@ -128,7 +128,7 @@
 
   // 背景设置对话框内容
   scroll_con = util.query(d, 'div.scroll_con');
-  drawers.forEach(function(drawer){
+  drawers.forEach((drawer)=>{
     dodrawer(drawer);
   })
 }
@@ -176,10 +176,10 @@
 
   // activeTab
   function activeTab(i){
-    util.query(d,'.tabitem',true).forEach(function(t){
+    util.query(d,'.tabitem',true).forEach(t=>{
       t.classList.remove('active');
     });
-    util.query(d,'.scrollitem',true).forEach(function(t){
+    util.query(d,'.scrollitem',true).forEach(t=>{
       t.style.display='';
     });
     util.query(d,'.tabitem[data-tab="'+i+'"]').classList.add('active');
@@ -230,8 +230,8 @@
     }
   }
 
-  setTimeout(function(){
-    addon.on('allrun',function(){
+  setTimeout(()=>{
+    addon.on('allrun',()=>{
       console.log('allrun');
       if(waitdraw){
         waitdraw=null;
@@ -289,7 +289,7 @@
   function opendia(){
     if(!bg_set_d){
       drawDialog();
-      setTimeout(function(){
+      setTimeout(()=>{
         bg_set_d.open();
         //开始activeTab0
         activeTab('0');

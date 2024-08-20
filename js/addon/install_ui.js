@@ -1,4 +1,4 @@
-(function(){
+(()=>{
     function installui(){
         var n=new dialog({
             content:_REQUIRE_('./install_ui.html').replace('{deficon}',def_addon_icon),
@@ -11,7 +11,7 @@
     }
 
     installui.prototype={
-        bind:function(p){
+        bind(p){
             var _=this;
             var d=this._d.getDialogDom();
             util.query(d,'.msg').innerText=p.statuMsg+'...';
@@ -21,9 +21,9 @@
                 util.query(d,'.progress').className='progress error';
                 util.query(d,'.btns').style.display='block';
                 util.query(d,'.btn.l').onclick=
-                util.query(d,'.btn.r').onclick=function(){
+                util.query(d,'.btn.r').onclick=()=>{
                     _.hide();
-                    setTimeout(function(){
+                    setTimeout(()=>{
                         _.destroy();
                     },200)
                 }
@@ -38,10 +38,10 @@
                 }
                 util.query(d,'.msg').innerText=d2.msg;
                 util.query(d,'.btns').style.display='block';
-                util.query(d,'.btn.l').onclick=function(){
+                util.query(d,'.btn.l').onclick=()=>{
                     e(false)
                 }
-                util.query(d,'.btn.r').onclick=function(){
+                util.query(d,'.btn.r').onclick=()=>{
                     e(true)
                 }
             }
@@ -56,9 +56,9 @@
                 util.query(d,'.progress').className='progress error';
                 util.query(d,'.btns').style.display='block';
                 util.query(d,'.btn.l').onclick=
-                util.query(d,'.btn.r').onclick=function(){
+                util.query(d,'.btn.r').onclick=()=>{
                     _.hide();
-                    setTimeout(function(){
+                    setTimeout(()=>{
                         _.destroy();
                     },200)
                 }
@@ -71,43 +71,43 @@
                 }
                 util.query(d,'.msg').innerText=d2.msg;
                 util.query(d,'.btns').style.display='block';
-                util.query(d,'.btn.l').onclick=function(){
+                util.query(d,'.btn.l').onclick=()=>{
                     e(false)
                 }
-                util.query(d,'.btn.r').onclick=function(){
+                util.query(d,'.btn.r').onclick=()=>{
                     e(true)
                 }
             });
             p.on('done',function(){
                 _.hide();
-                setTimeout(function(){
+                setTimeout(()=>{
                     _.destroy();
                 },200)
             });
         },
-        ask:function(msg,fn,de={}){
+        ask(msg,fn,de={}){
             var d=this._d.getDialogDom();
             util.query(d,'.sth img').src=de.img||"assets/def_addon.png";
             util.query(d,'.sth .name').innerText=de.name||"-";
             util.query(d,'.sth .version').innerText='版本：'+de.version||'-';
             util.query(d,'.msg').innerText=msg;
             util.query(d,'.btns').style.display='block';
-            util.query(d,'.btn.l').onclick=function(){
+            util.query(d,'.btn.l').onclick=()=>{
                 fn(false);
                 util.query(d,'.btns').style.display='none';
             };
-            util.query(d,'.btn.r').onclick=function(){
+            util.query(d,'.btn.r').onclick=()=>{
                 fn(true);
                 util.query(d,'.btns').style.display='none';
             }
         },
-        show:function(){
+        show(){
             this._d.open();
         },
-        hide:function(){
+        hide(){
             this._d.close();
         },
-        destroy:function(){
+        destroy(){
             this._d.destroy();
         }
     }

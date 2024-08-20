@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   
   var initsto=storage('setting',{
     title:"设置",

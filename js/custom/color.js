@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var n=null;
   if(!initsto.get('theme')){
     initsto.set('theme','a');
@@ -8,14 +8,14 @@
     title:"主题颜色",
     type:"select",
     message:'',
-    get:function(){
+    get(){
       return initsto.get('theme');
     },
-    callback:function(v){
+    callback(v){
       initsto.set('theme',v);
       checkTheme(v);
     },
-    init:function(){
+    init(){
       return {
         a:'浅色',b:'深色',c:'跟随时间',d:"跟随系统"
       }
@@ -80,7 +80,7 @@
     return n;
   }
   return {
-    setTheme:function(v){
+    setTheme(v){
       initsto.set('theme',v);
       checkTheme(v);
       si.reGet();

@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   if(!initsto.get('usersay')){
     initsto.set('usersay',def);
   }
@@ -13,17 +13,17 @@
       // @note 将cancel按钮修改为div，防止表单submit到cancel
       // @edit at 2024/1/30 15:20
       var d=sayseditordialog.getDialogDom();
-      util.query(d,'.cancel.btn').onclick=function(){
+      util.query(d,'.cancel.btn').onclick=()=>{
         sayseditordialog.close();
       }
-      util.query(d,'.ok.btn').onclick=function(){
+      util.query(d,'.ok.btn').onclick=()=>{
         var v=util.query(d,'.says-input').value;
         initsto.set('usersay',v);
         refsay('user');
         sayseditordialog.close();
       }
     }
-    setTimeout(function(){
+    setTimeout(()=>{
       var d=sayseditordialog.getDialogDom();
       sayseditordialog.open();
       util.query(d,'.says-input').value=initsto.get('usersay');
@@ -32,26 +32,26 @@
   return {
     key:"user",
     name:"用户自定义",
-    callback:function(){
-      return new Promise(function(resolve,reject){
+    callback(){
+      return new Promise((resolve,reject)=>{
         resolve({
         say:initsto.get('usersay'),
         title:"点击修改"});
       });
     },
-    click:function(){
+    click(){
       openSaysEditor();
     },
     menu:[{
       icon:util.getGoogleIcon('e3c9'),
       title:'修改',
-      click:function(){
+      click(){
         openSaysEditor();
       }
     },{
       icon:util.getGoogleIcon('e14d'),
       title:'复制',
-      click:function(){
+      click(){
         var value=nowSay.say;
         util.copyText(value);
       }

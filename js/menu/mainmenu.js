@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var mainmenu_icon=new iconc.icon({
     class:"main_menu",
     content:util.getGoogleIcon('e5d2'),
@@ -20,7 +20,7 @@
     main_menu.setList(mainmenulist_top.concat([{type:"hr"}],mainmenulist_bottom));
   }
 
-  mainmenu_icon.getIcon().onclick=function(e){
+  mainmenu_icon.getIcon().onclick=e=>{
     e.stopPropagation();
     main_menu.show();
   }

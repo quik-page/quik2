@@ -1,4 +1,4 @@
-(function(){
+(()=>{
     var initsto=setting.settingSto;
     var eventHandle=getEventHandle();
     var on=eventHandle.on;
@@ -18,10 +18,10 @@
         setTheme:theme.setTheme,
         addTheme:theme.addTheme,
         removeTheme:theme.removeTheme,
-        isTimeLogo:function(){
+        isTimeLogo(){
             return logo.get()=='b'
         },
-        setTimeLogo:function(){
+        setTimeLogo(){
             logo.set('b')
         },
         getLogo:logo.get,

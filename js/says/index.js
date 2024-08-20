@@ -1,9 +1,9 @@
-(function(){
+(()=>{
   var initsto=storage('says',{
     sync:true,
     title:"一言",
     desc:"QUIK起始页一言相关配置",
-    get:async function(){
+    get:async ()=>{
       var a=initsto.getAll();
       var ra=quik.addon.getAddonBySessionId(a.saytype);
       if(ra){
@@ -11,8 +11,8 @@
       }
       return a;
     },
-    rewrite:function(ast,k,a){
-      return new Promise(function(resolve, reject){
+    rewrite(ast,k,a){
+      return new Promise((resolve, reject)=>{
         if(a.requireAddon){
           var raddon=quik.addon.getAddonByUrl(a.requireAddon);
           if(raddon){
@@ -20,25 +20,25 @@
             ast[k]=a;
             resolve();
           }else{
-            confirm('该一言数据需要安装插件以同步，是否安装？',function(v){
+            confirm('该一言数据需要安装插件以同步，是否安装？',(v)=>{
               if(v){
-                quik.addon.installAddon(a.requireAddon).then(function(_addon){
+                quik.addon.installAddon(a.requireAddon).then((_addon)=>{
                   a.saytype=_addon.session.id;
                   ast[k]=a;
                   resolve();
-                }).catch(function(code){
+                }).catch((code)=>{
                   if(code==0){
-                    alert('插件取消安装，同步取消',function(){
+                    alert('插件取消安装，同步取消',()=>{
                       resolve();
                     })
                   }else{
-                    alert('插件安装失败，同步取消',function(){
+                    alert('插件安装失败，同步取消',()=>{
                       resolve();
                     })
                   }
                 });
               }else{
-                alert('已取消一言同步',function(){
+                alert('已取消一言同步',()=>{
                   resolve();
                 })
               }
@@ -75,7 +75,7 @@
   });
 
   var infd=sayinfoDialog.getDialogDom();
-  util.query(infd,'div.closeBtn').onclick=function(){
+  util.query(infd,'div.closeBtn').onclick=()=>{
     sayinfoDialog.close();
   }
 
@@ -84,12 +84,12 @@
     sayTypes[details.key]={
       name:details.name,
       callback:details.callback,
-      click:details.click||function(){},
+      click:details.click||(()=>{}),
       menu:details.menu||[
         {
           icon:util.getGoogleIcon('e14d'),
           title:'复制',
-          click:function(){
+          click(){
             var value=nowSay.say;
             util.copyText(value);
           }
@@ -112,8 +112,8 @@
     waitfn(details.key);
   }
 
-  setTimeout(function(){
-    addon.on('allrun',function(){
+  setTimeout(()=>{
+    addon.on('allrun',()=>{
       if(_key){
         initsto.set('saytype','user');
         refsay('user');
@@ -147,7 +147,7 @@
     }
     sayI.innerText='...';
     sayI.title='加载中';
-    sayTypes[key].callback().then(function(say){
+    sayTypes[key].callback().then((say)=>{
       sayI.innerText=say.say;
       sayI.setAttribute('title',say.title);
       nowSay=say;
@@ -160,7 +160,7 @@
   }
 
   function openSayDetailsDialog(op){
-    util.query(infd,'ul').innerHTML=(function(){
+    util.query(infd,'ul').innerHTML=(()=>{
       var str='';
       for(var k in op){
         str+='<li><b>'+k+':</b> '+op[k]+'</li>';
@@ -170,7 +170,7 @@
     sayinfoDialog.open();
   }
 
-  sayC.onclick=function(e){
+  sayC.onclick=(e)=>{
     e.stopPropagation();
     var bo=sayC.getBoundingClientRect()
     sayMenu.setOffset({
@@ -199,17 +199,17 @@
     type:'select',
     index:1,
     message:"页面底部显示的一言类型",
-    init:function(){
+    init(){
       var ks={};
       for(var k in sayTypes){
         ks[k]=sayTypes[k].name;
       }
       return ks;
     },
-    callback:function(v){
+    callback(v){
       setSayType(v);
     },
-    get:function(){
+    get(){
       return initsto.get('saytype');
     }
   })
@@ -218,7 +218,7 @@
     type:'boolean',
     message:"是否页面底部显示的一言",
     index:0,
-    callback:function(v){
+    callback(v){
       initsto.set('enabled',v);
       if(v){
         setSayType(initsto.get('saytype'));
@@ -229,7 +229,7 @@
         typesi.hide();
       }
     },
-    get:function(){
+    get(){
       return initsto.get('enabled');
     }
   })

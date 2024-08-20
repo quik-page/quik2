@@ -2,7 +2,7 @@ function api(bgf,data){
   function showAcgOrFj(a){
     refreshApiIcon.show();
     refreshApiIcon.getIcon().classList.add('round-anim');
-    a.getImg(function(d){
+    a.getImg((d)=>{
       refreshApiIcon.getIcon().classList.remove('round-anim');
       draws.img(bgf,{
         url:d.url
@@ -11,9 +11,9 @@ function api(bgf,data){
         downloadIcon.show();
       }
     })
-    refreshFn=function(){
+    refreshFn=()=>{
       refreshApiIcon.getIcon().classList.add('round-anim');
-      a.getImg(function(d){
+      a.getImg((d)=>{
         refreshApiIcon.getIcon().classList.remove('round-anim');
         draws.img(bgf,{
           url:d.url
@@ -40,7 +40,7 @@ function api(bgf,data){
     break;
     case 'time':
       // at ../defaultDrawer.js dot-timeb
-      timeb=setInterval(function(){
+      timeb=setInterval(()=>{
         draws.color(bgf,getNowColor());
       },200)
     break;

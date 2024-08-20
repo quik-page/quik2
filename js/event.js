@@ -1,15 +1,15 @@
-(function(){
+(()=>{
   var events=[];
   function getEventHandle(){
     var ev_i=events.length;
     events.push({});
     return {
-      on:function(ev,fn){
+      on(ev,fn){
         if(!events[ev_i][ev]) events[ev_i][ev]=[];
         events[ev_i][ev].push(fn);
         return true;
       },
-      off:function(ev,fn){
+      off(ev,fn){
         if(!events[ev_i][ev]) return false;
         for(var i=0;i<events[ev_i][ev].length;i++){
           if(events[ev_i][ev][i]===fn){
@@ -19,7 +19,7 @@
         }
         return false;
       },
-      doevent:function(ev,args){
+      doevent(ev,args){
         if(!events[ev_i][ev]) return false;
         if(!Array.isArray(args))args=[args];
         for(var i=0;i<events[ev_i][ev].length;i++){

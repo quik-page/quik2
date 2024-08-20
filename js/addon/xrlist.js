@@ -13,7 +13,7 @@ var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
       li.dataset.id = id;
       addon_l.appendChild(li);
       li.onclick = function (e) {
-        addon_l.querySelectorAll('li').forEach(function (li) {
+        addon_l.querySelectorAll('li').forEach((li)=> {
           li.classList.remove('active');
         })
         this.classList.add('active');
@@ -22,7 +22,7 @@ var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
         st.innerHTML = '检查更新中...';
         var _ = this;
         _.style.display = '';
-        core.checkUpdate(id).then(function (a) {
+        core.checkUpdate(id).then(a=> {
           if (!a) {
             _.style.display = 'block';
             st.innerHTML = '已是最新版本';
@@ -37,7 +37,7 @@ var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
         st.innerHTML = '更新中...';
         var _ = this;
         _.style.display = '';
-        core.update(id).then(function (r) {
+        core.update(id).then(r=> {
           if (r.error) {
             st.innerHTML = '更新失败:' + r.msg;
             _.style.display = 'block';
@@ -67,7 +67,7 @@ var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
         confirm('你真的要卸载吗？此操作不可恢复！', function (as) {
           if (as) {
             st.innerHTML = '正在卸载...'
-            core.uninstall(id).then(function (r) {
+            core.uninstall(id).then(r=> {
               if (r.error) {
                 alert('卸载出现错误：' + r.msg)
               } else {
@@ -105,18 +105,18 @@ var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
 
   }
 
-  core.getAddonList().forEach(function (a) {
+  core.getAddonList().forEach(a=> {
     xraddon(a);
   })
 
-  core.on('installnew',function(e){
+  core.on('installnew',e=>{
     xraddon(e.id);
   })
-  core.on('update',function(e){
+  core.on('update',e=>{
     xraddon(e.id);
   })
 
-  core.on('uninstall',function(e){
+  core.on('uninstall',e=>{
     var li = util.query(addon_l, 'li[data-id="' + e.id + '"]');
     if(li){li.remove()}
   })

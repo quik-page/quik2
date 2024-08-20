@@ -1,4 +1,4 @@
-(function () {
+(()=>{
   var { getJSON, setJSON } = _REQUIRE_('./core.js');
 
   var sg = new SettingGroup({
@@ -32,7 +32,7 @@
       util.query(dm, '.exportslist').appendChild(li);
       util.query(li, 'input').checked = true;
     }
-    setTimeout(function(){
+    setTimeout(()=>{
       exportDataDialog.open();
     },10)
   }
@@ -43,12 +43,12 @@
     callback: openImport
   });
   function openImport() {
-    showOpenFilePicker().then(function (files) {
+    showOpenFilePicker().then(files=> {
       var file = files[0];
       if (file) {
         try {
           var reader = new FileReader();
-          reader.onload = function (e) {
+          reader.onload = e=>{
             sl = JSON.parse(e.target.result);
             _importData(sl);
           }
@@ -69,7 +69,7 @@
     for (var k in _sl) {
       importaixr(_sl[k], k, jl);
     }
-    setTimeout(function(){
+    setTimeout(()=>{
       importDataDialog.open();
     },10)
   }
@@ -109,16 +109,16 @@
             } else {
               p = addon.installByUrl(j.addon);
             }
-            p.on('error', function (e) {
+            p.on('error', ()=> {
               installbtn.innerHTML = '安装失败';
               installbtn.classList.add('err');
             })
-            p.on('wait', function (r) {
+            p.on('wait',(r)=> {
               r(true);
             })
-            p.on('done', function (e) {
+            p.on('done',()=> {
               li.remove();
-              setTimeout(function () {
+              setTimeout(()=>{
                 importaixr(j, k, getStorageList());
               }, 10)
             })
@@ -168,17 +168,17 @@
       mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
     });
     dm = exportDataDialog.getDialogDom();
-    util.query(dm, '.closeBtn').onclick = util.query(dm, '.cancel').onclick = function () {
+    util.query(dm, '.closeBtn').onclick = util.query(dm, '.cancel').onclick = ()=> {
       exportDataDialog.close();
     }
-    util.query(dm, '.ok').onclick = function () {
+    util.query(dm, '.ok').onclick = ()=> {
       var op = [];
-      util.query(dm, '.exportslist .item', true).forEach(function (l) {
+      util.query(dm, '.exportslist .item', true).forEach(l=> {
         if (util.query(l, 'input').checked) {
           op.push(l.dataset.key);
         }
       })
-      getJSON(op).then(function (res) {
+      getJSON(op).then((res)=> {
         download(JSON.stringify(res), 'quik-2-exportdata.json');
       })
       exportDataDialog.close();
@@ -209,14 +209,14 @@
       mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
     });
     dm2 = importDataDialog.getDialogDom();
-    util.query(dm2, '.closeBtn').onclick = util.query(dm2, '.cancel').onclick = function () {
+    util.query(dm2, '.closeBtn').onclick = util.query(dm2, '.cancel').onclick = ()=>{
       sl = null;
       importDataDialog.close();
     }
   
-    util.query(dm2, '.ok').onclick = function () {
+    util.query(dm2, '.ok').onclick = ()=> {
       var op = {};
-      util.query(dm2, '.importslist .item', true).forEach(function (l) {
+      util.query(dm2, '.importslist .item', true).forEach((l)=> {
         if (util.query(l, 'input').checked) {
           if (util.query(l, 'select')) {
             op[l.dataset.key] = util.query(l, 'select').value;

@@ -1,13 +1,13 @@
-(function(){
+(()=>{
 
   // 因tenapi即将关停（https://5ime.cn/tenapi-issue-bankruptcy.html），所以换回hitokoto官方API。
   var hitokoto={
-    load:function(fn){
+    load(fn){
       var i_=0;
       function g(){
-        util.xhr('https://v1.hitokoto.cn/',function(res){
+        util.xhr('https://v1.hitokoto.cn/',(res)=>{
           fn(JSON.parse(res));
-        },function(){
+        },()=>{
           i_++;
           if(i_<=5)g();
         })
@@ -33,9 +33,9 @@
   return {
     key:"hitokoto",
     name:"随机一言",
-    callback:function(){
-      return new Promise(function(resolve,reject){
-        hitokoto.load(function(res){
+    callback(){
+      return new Promise((resolve,reject)=>{
+        hitokoto.load((res)=>{
           resolve({
             say:res.hitokoto,
             from:res.from,
@@ -47,26 +47,26 @@
         })
       })
     },
-    click:function(){
+    click(){
       refsay('hitokoto');
     },
     menu:[{
       icon:util.getGoogleIcon('e5d5'),
       title:'刷新',
-      click:function(){
+      click(){
         refsay('hitokoto');
       }
     },{
       icon:util.getGoogleIcon('e14d'),
       title:'复制',
-      click:function(){
+      click(){
         var value=nowSay.say;
         util.copyText(value);
       }
     },{
       icon:util.getGoogleIcon('e88e'),
       title:'一言详情',
-      click:function(){
+      click(){
         var c=hitokoto.cats[nowSay.cat];
         openSayDetailsDialog({
           'API':"Hitokoto (hitokoto.cn)",

@@ -1,4 +1,4 @@
-(function () {
+(()=>{
   var iovuploader,iovuploaderf;
   function drawIovUploader(){
     // 图片、视频上传器
@@ -12,12 +12,12 @@
     // Dom
     iovuploaderf = iovuploader.getDialogDom();
     // 取消
-    util.query(iovuploaderf, '.cancel').onclick = function (e) {
+    util.query(iovuploaderf, '.cancel').onclick = e=> {
       e.preventDefault();
       iovuploader.close();
     }
     // 提交
-    util.query(iovuploaderf, 'form').onsubmit = function (e) {
+    util.query(iovuploaderf, 'form').onsubmit = e=> {
       e.preventDefault();
       // 类型 image(图片) / video(视频)
       var type = util.query(iovuploaderf, '.uploadi').checked ? 'image' : 'video';
@@ -56,7 +56,7 @@
           url: url
         })
         iovuploader.close();
-        getUserUploadUrl(function (r) {
+        getUserUploadUrl(r=>{
           // 获取并设置背景设置对话框中的图片src
           util.query(tab1, '.zdy .left img').src = r;
           setbg({
@@ -79,7 +79,7 @@
   function uploadIov(a){
     if(!iovuploader){
       drawIovUploader();
-      setTimeout(function(){
+      setTimeout(()=>{
         iovuploader.open();
       },10)
     }else{
@@ -113,7 +113,7 @@
       var b = a.useidb;
       if (b) {
         // 来自用户本地上传，从idb提取，获取视频快照返回
-        initsto.get('upload', true, function (blob) {
+        initsto.get('upload', true, (blob)=>{
           getVideoCaptrue(URL.createObjectURL(blob), function (c) {
             cb(c);
           });
@@ -121,7 +121,7 @@
       } else {
         // 来自外站，尝试获取视频快照返回
         try {
-          getVideoCaptrue(a.url, function (c) {
+          getVideoCaptrue(a.url, c=>{
             cb(c);
           });
         } catch (e) {
@@ -133,7 +133,7 @@
       var b = a.useidb;
       if (b) {
         // 来自用户本地上传，从idb提取返回
-        initsto.get('upload', true, function (blob) {
+        initsto.get('upload', true, (blob)=> {
           cb(URL.createObjectURL(blob));
         })
       } else {

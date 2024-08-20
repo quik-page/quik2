@@ -3,8 +3,8 @@
     list: [{
       icon: util.getGoogleIcon('e157'),
       title: "从第三方链接添加插件",
-      click: function () {
-        prompt("请输入插件链接", function (link) {
+      click() {
+        prompt("请输入插件链接", link=> {
           if (!link) {
             return false;
           }
@@ -12,7 +12,7 @@
           var u = new ui();
           u.show();
           u.bind(p);
-          p.on('done', function (a) {
+          p.on('done', a=> {
             alert('安装成功');
           });
           return true;
@@ -21,8 +21,8 @@
     }, {
       icon: util.getGoogleIcon('e66d'),
       title: "从第三方文件添加插件",
-      click: function () {
-        showOpenFilePicker().then(function (files) {
+      click() {
+        showOpenFilePicker().then(files=> {
           var f = files[0];
           var n = f.name;
           var r = new FileReader();
@@ -31,7 +31,7 @@
           r.onload = function () {
             var p = core.installByLocal(r.result);
             u.bind(p);
-            p.ondone = function (a) {
+            p.ondone = a=> {
               installing_notice.destroy();
               alert('安装成功');
             };
@@ -42,12 +42,12 @@
     }, {
       icon: util.getGoogleIcon('e86f'),
       title: "添加开发者端口",
-      click: function () {
+      click() {
         if(!window.isExt){
           alert('请在浏览器扩展中安装开发端口')
           return;
         }
-        prompt("请输入开发者端口链接", function (link) {
+        prompt("请输入开发者端口链接", link=> {
           if (!link) {
             return false;
           }
@@ -72,13 +72,13 @@
   });
   var tmenu = util.query(addon_dialog_d, '.addon-bar .l .item', true);
   var ps = util.query(addon_dialog_d, '.content .p', true);
-  tmenu.forEach(function (a) {
+  tmenu.forEach(a=> {
     a.onclick = function () {
-      tmenu.forEach(function (b) {
+      tmenu.forEach(b=> {
         b.classList.remove('active');
       })
       this.classList.add('active');
-      ps.forEach(function (c) {
+      ps.forEach(c=> {
         c.style.display = '';
       })
       ps[this.dataset.p].style.display = 'block';

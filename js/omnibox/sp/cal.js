@@ -1,13 +1,13 @@
-(function(){
+(()=>{
     var si=new SettingItem({
         title:"自动计算",
         index:2,
         type:'boolean',
         message:"搜索框输入=自动计算后面的内容",
-        get:function(){
+        get(){
             return !!core.initsto.get('ob_cal');
         },
-        callback:function(value){
+        callback(value){
             core.initsto.set('ob_cal',value);
             return true;
         }
@@ -15,10 +15,10 @@
 
     sg.addNewItem(si);
 core.addNewSA({
-    check:function(text){
+    check(text){
         return (!!core.initsto.get('ob_cal'))&&text[0]=='='
     },
-    get:function(text,getsa){
+    get(text,getsa){
       var a=getsa();
       try{
           text=text.substr(1);
@@ -46,7 +46,7 @@ core.addNewSA({
           a.unshift({
               icon:util.getGoogleIcon('ea5f'),
               text:result,
-              click:function(){
+              click(){
                   ui.setValue(result);
               }
           });
@@ -55,4 +55,8 @@ core.addNewSA({
       return a;
     }
   });
+
+  return {
+    si:si
+  }
 })();

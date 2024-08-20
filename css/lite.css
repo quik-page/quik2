@@ -37,6 +37,11 @@ body.lite.showall .liteback{
 }
 body.lite.showall main{
   backdrop-filter: blur(20px);
+  background-color: rgba(255,255,255,.3);
+}
+body.lite.showall.t-dark main,
+body.lite.showall.dark main{
+  background-color: rgba(0,0,0,.3);
 }
 body.lite.showall main.noblur{
   backdrop-filter: none;

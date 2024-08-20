@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   if(location.hash.indexOf('extdheodqp2eidhjwe')!=-1){
     console.log('插件模式');
     window.isExt=true;
@@ -30,7 +30,7 @@
   })
   return {
     // https://blog.csdn.net/qq_25257229/article/details/117969685
-    deepClone:function deepClone(target) {
+    deepClone(target) {
       const map = new WeakMap()
       
       function isObject(target) {
@@ -92,7 +92,7 @@
   
       return clone(target)
   },
-    requestByExt:function(details){
+    requestByExt(details){
       idmax++;
       details.id=idmax;
       extRequests.push(details);
@@ -108,12 +108,12 @@
         id:idmax
       },'*')
     },
-    addStyle:function addStyle(css){
+    addStyle(css){
       var style=util.element('style');
       style.innerHTML=css;
       document.head.appendChild(style);
     },
-    initSet:function(sto,key,ob){
+    initSet(sto,key,ob){
       var o=sto.get(key);
       if(typeof ob=='object'&&ob){
         if(typeof o=='object'&&o){
@@ -137,7 +137,7 @@
       }
       
     },
-    joinObj:function(){
+    joinObj(){
       var obs=arguments;
       var n=obs[0];
       function jt(a,b){
@@ -151,7 +151,7 @@
       }
       return n;
     },
-    loadimg:function (url,cb){
+    loadimg (url,cb){
       var img=new Image();
       img.src=url;
       img.onload=function(){
@@ -161,17 +161,17 @@
         cb(false);
       }
     },
-    element:function(tagname,options={}){
+    element(tagname,options={}){
       var a=document.createElement(tagname);
       for(var i in options){
         a.setAttribute(i,options[i]);
       }
       return a;
     },
-    query:function(element,qstr,isall){
+    query(element,qstr,isall){
       return element['querySelector'+(isall?'All':'')](qstr);
     },
-    getFavicon:function(url,cb){
+    getFavicon(url,cb){
       try{
         var u=new URL(url);
       }catch(e){
@@ -204,7 +204,7 @@
       
       // 删除多余代码，统一体验
     },
-    createIcon:function(t){
+    createIcon(t){
       var canvas=document.createElement('canvas');
       canvas.width=64;
       canvas.height=64;
@@ -214,20 +214,20 @@
       ctx.fillText(t,20,40);
       return canvas.toDataURL();
     },
-    getRandomColor:function(){
+    getRandomColor(){
       return '#'+Math.random().toString(16).substring(2,8).toUpperCase();
     },
-    fangdou:function(fn,time){
+    fangdou(fn,time){
       var timer=null;
       return function(){
         if(timer) clearTimeout(timer);
         var _this=this;
-        timer=setTimeout(function(){
+        timer=setTimeout(()=>{
           fn.apply(_this,arguments);
         },time);
       }
     },
-    jsonp:function(url,cb,cbkey){
+    jsonp(url,cb,cbkey){
       function getRandom(){
         return 'a'+Math.random().toString(36).slice(2);
       }
@@ -257,7 +257,7 @@
         delete window[a];
       }
       return {
-        abort:function(){
+        abort(){
           try {
             script.remove();
           } catch (error) {
@@ -266,7 +266,7 @@
         }
       }
     },
-    xhr:function(url,cb,err){
+    xhr(url,cb,err){
       var xhr=new XMLHttpRequest();
       xhr.onreadystatechange=function(){
         if(xhr.readyState==4){
@@ -293,18 +293,18 @@
       xhr.open('GET',url,true);
       xhr.send();
       return{
-        abort:function(){
+        abort(){
           xhr.abort();
         }
       }
     },
-    checkSession:function (session){
+    checkSession (session){
       return session.isSession&&session.session_token==="Hvm_session_token_eoi1j2j";
     },
-    getRandomHashCache:function(){
+    getRandomHashCache(){
       return Math.random().toString(36).slice(2)+Date.now().toString(36);
     },
-    copyText:function(value){
+    copyText(value){
       if(window.isExt){
         parent.postMessage({
           type:"copy",
@@ -328,10 +328,10 @@
       }
       toast.show('复制成功');
     },
-    getGoogleIcon:function(unicode,d){
+    getGoogleIcon(unicode,d){
       return '<span class="material-symbols-outlined'+(d&&d.type?' '+d.type:'')+'">&#x'+unicode+';</span>'
     },
-    getGoogleIconByString:function(string,d){
+    getGoogleIconByString(string,d){
       return '<span class="material-symbols-outlined'+(d&&d.type?' '+d.type:'')+'">'+string+'</span>'
     },
     /**
@@ -339,7 +339,7 @@
      * @param {Object} details 
      * @param {String[]} requires 
      */
-    checkDetailsCorrect:function(details,requires){
+    checkDetailsCorrect(details,requires){
       for(var i=0;i<requires.length;i++){
         if(details.hasOwnProperty(requires[i])==false){
           return false;
@@ -347,10 +347,10 @@
       }
       return true;
     },
-    checkUrl:function(text){
+    checkUrl(text){
       return /^(https?:\/\/)?([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&%\$\-]+)*@)?((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.[a-zA-Z]{2,4})(\:[0-9]+)?(\/[^\/][a-zA-Z0-9\.\,\?\'\\\/\+&%\$#\=~_\-@]*)*(\/)?$/.test(text);
     },
-    b0:function b0(a){
+    b0(a){
       return a<10?'0'+a:a;
     }
   }

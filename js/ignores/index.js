@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var igsg=new SettingGroup({
     title:"关于",
     index:5
@@ -8,7 +8,7 @@
     type:'null',
     title:"关于QUIK起始页",
     index:1,
-    callback:function(){
+    callback(){
       aboutDialog.open();
     }
   });
@@ -16,10 +16,10 @@
     type:'null',
     title:"更新日志",
     index:2,
-    callback:function(){
+    callback(){
       if(!isinner){
         innerUpdate();
-        setTimeout(function(){
+        setTimeout(()=>{
           updateDialog.open();
         },10)
       }else{
@@ -31,10 +31,10 @@
     type:'null',
     title:"用户协议和隐私政策",
     index:3,
-    callback:function(){
+    callback(){
       if(!licDialog){
         drawLic();
-        setTimeout(function(){
+        setTimeout(()=>{
           licDialog.open();
         },10)
       }else{
@@ -46,10 +46,10 @@
     type:'null',
     title:"特别鸣谢",
     index:4,
-    callback:function(){
+    callback(){
       if(!thaDialog){
         drawThank();
-        setTimeout(function(){
+        setTimeout(()=>{
           thaDialog.open();
         },10)
       }else{
@@ -61,7 +61,7 @@
     type:'null',
     title:"提供反馈",
     index:5,
-    callback:function(){
+    callback(){
       window.open('./feedback.html')
     }
   });
@@ -81,7 +81,7 @@
   mainmenu.pushMenu({
     icon:util.getGoogleIcon('e88e'),
     title:"关于QUIK",
-    click:function(){
+    click(){
       aboutDialog.open();
     }
   },1)
@@ -94,7 +94,7 @@
     mainmenu.pushMenu({
       icon:util.getGoogleIcon("e87b"),
       title:"浏览器扩展",
-      click:function(){
+      click(){
         alert('浏览器扩展尚处于测试中，只支持chromium内核的浏览器（chrome,edge,360浏览器等），暂未上传至扩展商店，请下载crx后手动安装。',function(){
           if(location.href.indexOf('quik.web42.io')!=-1){
             window.open('/intro/#h');
@@ -110,7 +110,7 @@
 
   function joinQQqun(){
     window.open('https://qm.qq.com/q/6nOculioy4');
-    confirm('如果没有跳转至QQ，点击确定复制群号：971915865',function(ok){
+    confirm('如果没有跳转至QQ，点击确定复制群号：971915865',(ok)=>{
       if(ok){
         util.copyText('971915865');
       }
@@ -123,13 +123,13 @@
   });
 
   var addom=aboutDialog.getDialogDom();
-  util.query(addom,'.close').onclick=function(){
+  util.query(addom,'.close').onclick=()=>{
     aboutDialog.close();
   }
-  util.query(addom,'.t.thanks a').onclick=function(){
+  util.query(addom,'.t.thanks a').onclick=()=>{
     thaDialog.open();
   }
-  setTimeout(function(){
+  setTimeout(()=>{
     util.query(addom,'.ver span').innerText=window.version.version;
   });
 
@@ -149,7 +149,7 @@
   
     updom=updateDialog.getDialogDom();
     util.query(updom,'.version_list div').innerHTML='正在加载更新日志...'
-    util.query(updom,'.closeBtn').onclick=function(){
+    util.query(updom,'.closeBtn').onclick=()=>{
       updateDialog.close();
     }
     isinner=true;
@@ -158,7 +158,7 @@
     })
     document.body.append(s);
     window.connectUpdates=function(updatelog){
-      util.query(updom,'.version_list div').innerHTML=(function(){
+      util.query(updom,'.version_list div').innerHTML=(()=>{
         var s='';
         for(var k in updatelog){
           s+=formatVersion(k,updatelog[k]);
@@ -167,7 +167,7 @@
       })();
       window.connectUpdates=null;
     }
-    s.onload=function(){
+    s.onload=()=>{
       s.remove();
     }
   }
@@ -201,7 +201,7 @@
       class:"lic-dialog"
     });
   
-    util.query(licDialog.getDialogDom(),'.close').onclick=function(){
+    util.query(licDialog.getDialogDom(),'.close').onclick=()=>{
       licDialog.close();
     }
   }
@@ -214,7 +214,7 @@
       mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN
     });
   
-    util.query(thaDialog.getDialogDom(),'.close').onclick=function(){
+    util.query(thaDialog.getDialogDom(),'.close').onclick=()=>{
       thaDialog.close();
     }
   }

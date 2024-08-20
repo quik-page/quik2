@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   var initsto=setting.settingSto;
   var {on,off,doevent}=getEventHandle();
   var sg=new SettingGroup({
@@ -9,8 +9,12 @@
   var core=_REQUIRE_('./_core.js')
   var ui=_REQUIRE_('./_ui.js')
 
-  _REQUIRE_('./sp/cal.js');
-  _REQUIRE_('./sp/translate.js');
+  var _isen=initsto.get('ob_enable')
+  if(_isen&&!core.isInit()){
+    core.initNative();
+  }
+  core.initSett(_isen);
+  ui.uiEnable(_isen);
 
   return{
     value:ui.setValue,

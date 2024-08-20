@@ -1,95 +1,40 @@
-(function(){
+(()=>{
   'use strict';
-  var searchbox=util.element('div',{
-    class:"searchbox"
-  });
 
-  var searchcover=util.element('div',{
-    class:"cover searchcover"
-  })
 
-  var searchpadding=util.element('div',{
+
+  var searchbox,searchcover,icon,input,submit,saul,searchpadding;
+  searchpadding=util.element('div',{
     class:"searchpadding"
   })
 
-  searchbox.innerHTML=_REQUIRE_('./htmls/searchbox.html').replace('{i}',core.initsto.get('ob_autofocus')?'autofocus':'');
-
-  util.query(document,'main').append(searchbox);
-  util.query(document,'main').append(searchcover);
   util.query(document,'main .center').append(searchpadding);
 
-  var icon=util.query(searchbox,'div.icon');
-  var input=util.query(searchbox,'div.input input');
-  var submit=util.query(searchbox,'div.submit');
-  var saul=util.query(searchbox,'ul.sas');
+  function initSearchBox(){
 
-  if(initsto.get('ob_justsearch')){
-    input.placeholder='搜索'
-  }
-
-  /**
-   * 渲染指定文字的Type至页面
-   * @param {String} text 
-   */
-  function chulitype(text){
-    var i=core.getType(text);
-    if(i.icon[0]==':'){
-      icon.setAttribute('data-teshu',i.icon);
-      var _ts=chuliteshuicon(i.icon);
-      if(_ts instanceof Promise){
-        _ts.then(function(r){
-          icon.innerHTML=r;
-        })
-      }else{
-        icon.innerHTML=_ts;
-      }
-    }else{
-      icon.innerHTML=i.icon;
-      icon.removeAttribute('data-teshu');
-    }
-    if(i.submit[0]==':'){
-      submit.setAttribute('data-teshu',i.submit);
-      submit.innerHTML=chuliteshusubmit(i.submit);
-    }else{
-      submit.innerHTML=i.submit;
-      submit.removeAttribute('data-teshu');
+    searchbox=util.element('div',{
+      class:"searchbox"
+    });
+  
+    searchcover=util.element('div',{
+      class:"cover searchcover"
+    })
+  
+    searchbox.innerHTML=_REQUIRE_('./htmls/searchbox.html').replace('{i}',core.initsto.get('ob_autofocus')?'autofocus':'');
+  
+    util.query(document,'main').append(searchbox);
+    util.query(document,'main').append(searchcover);
+  
+    icon=util.query(searchbox,'div.icon');
+    input=util.query(searchbox,'div.input input');
+    submit=util.query(searchbox,'div.submit');
+    saul=util.query(searchbox,'ul.sas');
+  
+    if(initsto.get('ob_justsearch')){
+      input.placeholder='搜索'
     }
 
-
-  }
-
-  /**
-   * 渲染特殊Icon
-   * @param {String} text 
-   * @returns {String} iconhtmlstr
-   */
-  function chuliteshuicon(icon){
-    if(icon==':searchtype'){
-      return new Promise(function(r,j){
-        util.getFavicon(core.searchUtil.getSearchType(),function(fav){
-          if(fav){
-            r('<img src="'+fav+'" style="border-radius:50%;"/>');
-          }else{
-            r('<img src="'+util.createIcon('S')+'" style="border-radius:50%;"/>');
-          }
-        })
-      });
-    }else{
-      return '';
-    }
-  }
-
-  /**
-   * 渲染特殊SubmitIcon
-   * @param {String} text 
-   * @returns {String} iconhtmlstr
-   */
-  function chuliteshusubmit(submit){
-    // 因为还没有特殊SubmitIcon
-    return "";
-  }
-
-  /* 集中处理input事件 */
+      /* 集中处理input事件 */
   input.oninput=util.fangdou(inputInputEv,300)
   function inputInputEv(){
     // 渲染Type
@@ -193,19 +138,19 @@
   var blurtimeout;
   // ...
   input.addEventListener('focus',_focus);
-function _focus(){
-    clearTimeout(blurtimeout)
-    searchcover.classList.add('active');
-    searchbox.classList.add('active');
-    doevent('focus',[input]);
-}
+  function _focus(){
+      clearTimeout(blurtimeout)
+      searchcover.classList.add('active');
+      searchbox.classList.add('active');
+      doevent('focus',[input]);
+  }
   // ...
   input.addEventListener('blur',function(){
     this.classList.remove('active');
-    blurtimeout=setTimeout(function(){
+    blurtimeout=setTimeout(()=>{
       if(hasmousedown){
         mouseupf=function(){
-          setTimeout(function(){
+          setTimeout(()=>{
             searchcover.classList.remove('active');
             searchbox.classList.remove('active');
           },10)
@@ -242,7 +187,7 @@ function _focus(){
     class:'searchtypeselector'
   })
   sct.innerHTML='<ul></ul>'
-  util.query(document,'main .center').append(sct);
+  util.query(document,'main .center').insertBefore(sct,searchpadding.nextElementSibling);
   function chuliSearchTypeSelector(){
     var ul=util.query(sct,'ul');
     var nowset=core.searchUtil.getSearchTypeIndex();
@@ -310,6 +255,74 @@ function _focus(){
 
   // 初始化处理（默认是搜索模式）
   chulitype('');
+  gshowb();
+
+  }
+
+
+  /**
+   * 渲染指定文字的Type至页面
+   * @param {String} text 
+   */
+  function chulitype(text){
+    var i=core.getType(text);
+    if(i.icon[0]==':'){
+      if(icon.getAttribute('data-teshu')==i.icon)return;
+      icon.setAttribute('data-teshu',i.icon);
+      var _ts=chuliteshuicon(i.icon);
+      if(_ts instanceof Promise){
+        _ts.then(function(r){
+          icon.innerHTML=r;
+        })
+      }else{
+        icon.innerHTML=_ts;
+      }
+    }else{
+      icon.innerHTML=i.icon;
+      icon.removeAttribute('data-teshu');
+    }
+    if(i.submit[0]==':'){
+      submit.setAttribute('data-teshu',i.submit);
+      submit.innerHTML=chuliteshusubmit(i.submit);
+    }else{
+      submit.innerHTML=i.submit;
+      submit.removeAttribute('data-teshu');
+    }
+
+
+  }
+
+  /**
+   * 渲染特殊Icon
+   * @param {String} text 
+   * @returns {String} iconhtmlstr
+   */
+  function chuliteshuicon(icon){
+    if(icon==':searchtype'){
+      return new Promise(function(r,j){
+        util.getFavicon(core.searchUtil.getSearchType(),function(fav){
+          if(fav){
+            r('<img src="'+fav+'" style="border-radius:50%;"/>');
+          }else{
+            r('<img src="'+util.createIcon('S')+'" style="border-radius:50%;"/>');
+          }
+        })
+      });
+    }else{
+      return '';
+    }
+  }
+
+  /**
+   * 渲染特殊SubmitIcon
+   * @param {String} text 
+   * @returns {String} iconhtmlstr
+   */
+  function chuliteshusubmit(submit){
+    // 因为还没有特殊SubmitIcon
+    return "";
+  }
+
   if(core.initsto.get('ob_autofocus')==undefined){
     core.initsto.set('ob_autofocus',false);
   }
@@ -317,8 +330,8 @@ function _focus(){
   if(core.initsto.get('ob_autofocus')){
     // @note 这样才能生效，也许是因为浏览器还没渲染好吧
     // @edit at 2024年1月30日 15点10分
-    Onshow(function(){
-      setTimeout(function(){
+    Onshow(()=>{
+      setTimeout(()=>{
         input.focus();
         _focus();
       },100)
@@ -331,10 +344,10 @@ function _focus(){
     index:1,
     type:'boolean',
     message:"打开页面自动聚焦搜索框",
-    get:function(){
+    get(){
       return !!core.initsto.get('ob_autofocus');
     },
-    callback:function(value){
+    callback(value){
       core.initsto.set('ob_autofocus',value);
       return true;
     }
@@ -346,10 +359,10 @@ function _focus(){
     index:6,
     type:'boolean',
     message:"关闭后聚焦搜索框时不再出现背景蒙版",
-    get:function(){
+    get(){
       return !core.initsto.get('ob_notshowb');
     },
-    callback:function(value){
+    callback(value){
       core.initsto.set('ob_notshowb',!value);
       gshowb();
       return true;
@@ -361,10 +374,10 @@ function _focus(){
     index:7,
     type:'boolean',
     message:"背景蒙版模糊（可能会影响性能）",
-    get:function(){
+    get(){
       return core.initsto.get('ob_bblur');
     },
-    callback:function(value){
+    callback(value){
       core.initsto.set('ob_bblur',value);
       gshowb();
       return true;
@@ -386,26 +399,50 @@ function _focus(){
       }
     }
   }
-  gshowb();
+
+  function uiEnable(a){
+    if(a){
+      if(!searchbox){
+        initSearchBox();
+      }
+      searchbox.style.display='block';
+      searchpadding.style.height='';
+      si.show();
+      si2.show();
+      si3.show();
+    }else{ 
+      if(searchbox){
+        searchbox.style.display='none';
+      }
+      searchpadding.style.height='20px';
+      si.hide();
+      si2.hide();
+      si3.hide();
+      
+    }
+  }
   return {
-    setValue:function(value){
+    setValue(value){
       input.value=value;
       input.focus();
       inputInputEv.call(input);
     },
-    focus:function(){
+    focus(){
       input.focus();
     },
-    blur:function(){
+    blur(){
       input.blur();
     },
-    isblur:function(){
+    isblur(){
       return !input.classList.contains('active');
     },
-    setAutoFocus:function(value){
+    setAutoFocus(value){
       core.initsto.set('ob_autofocus',value);
       si.reGet();
     },
-    input:input
+    getInput(){
+      return input;
+    },
+    uiEnable
   }
 })();

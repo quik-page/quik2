@@ -1,7 +1,7 @@
-(function(){
+(()=>{
     var initsto=storage('safe');
     window.addEventListener('hashchange',hashcl);
-    window.addEventListener('visibilitychange',function(){
+    window.addEventListener('visibilitychange',()=>{
         if(document.visibilityState=='hidden'){
             document.body.style.display='none';
         }else{
@@ -33,10 +33,10 @@
         message:"强制关闭所有滤镜和动画效果",
         index:1,
         type:"boolean",
-        get:function(){
+        get(){
             return !!initsto.get('xnse')
         },
-        callback:function(n){
+        callback(n){
             initsto.set('xnse',n);
             doxnse(n);
         }
@@ -48,18 +48,18 @@
         message:"清除QUIK起始页的所有数据",
         index:2,
         type:"null",
-        callback:function(){
-            confirm('确定要清除所有数据吗？',function(r){
+        callback(){
+            confirm('确定要清除所有数据吗？',r=>{
                 if(r){
                     function c(){
-                        prompt('请在下方输入“clearAll”，并再次确定是否要清除所有数据，此操作无法恢复。',function(t){
+                        prompt('请在下方输入“clearAll”，并再次确定是否要清除所有数据，此操作无法恢复。',t=>{
                             if(t=='clearAll'){
                                 var k=storage('oobe')
                                 var s=k.getAll();
                                 localStorage.quik2=JSON.stringify({
                                     oobe:s
                                 })
-                                localforage.clear().then(function(){
+                                localforage.clear().then(()=>{
                                     location.reload();
                                 });
                             }else{

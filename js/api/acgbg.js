@@ -1,4 +1,4 @@
-(function(){
+(()=>{
 
   function ce(cb){
     var u='';
@@ -7,7 +7,7 @@
     }else{
       u='https://img.loliapi.cn/i/pc/img'+(parseInt(Math.random()*696)+1)+'.webp'
     }
-    util.loadimg(u,function(ok){
+    util.loadimg(u,ok=>{
       if(ok){
         cb({
           url:u,
@@ -15,16 +15,16 @@
         });
       }else{
         if(window.location.host=='siquan001.github.io'){
-          return function(cb){
+          return (cb)=>{
             util.xhr('https://stear.cn/api/quik.php?m=bg&key=sys81a1g519lsokh0e8&host=siquan001.github.io',function(r){
               r=JSON.parse(r);
               cb({
                 url:r.url,
                 candoanload:true
               });
-            },function(){
+            },()=>{
               u="https://loliapi.com/acg/?_="+Date.now();
-              util.loadimg(u,function(){
+              util.loadimg(u,()=>{
                 cb({
                   url:u,
                   candoanload:false
@@ -34,7 +34,7 @@
           }
         }else{
           u="https://loliapi.com/acg/?_="+Date.now();
-          util.loadimg(u,function(){
+          util.loadimg(u,()=>{
             cb({
               url:u,
               candoanload:false

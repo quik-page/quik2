@@ -1,4 +1,4 @@
-(function(){
+(()=>{
   if(!storage){
     return;
   }
@@ -7,7 +7,7 @@
     sync:true,
     title:"搜索引擎",
     desc:"搜索引擎配置",
-    compare:function(ast,k,a){
+    compare(ast,k,a){
       var o=getSearchTypeList();
       for(var k in a.typelist){
         o[k]=a.typelist[k];
@@ -138,29 +138,16 @@
     },
 }
 
-  var getSearchType=function(){
+  var getSearchType=()=>{
     if(neizhi[initsto.get('type')]){
       return neizhi[initsto.get('type')].link+'%keyword%';
     }else{
       return initsto.get('typelist')[initsto.get('type')];
     }
   }
-  var on=function(ev,fn){
-    if(events[ev]){
-      events[ev].push(fn);
-    }else{
-      events[ev]=[fn];
-    }
-  }
-
-  var doevents=function(ev,data){
-    if(events[ev]){
-      events[ev].forEach(function(item){
-        item.apply(null,data);
-      })
-    }
-  }
-  var setSearchList=function(newList){
+  var {on,off,doevent}=getEventHandle();
+  var doevents=doevent;
+  var setSearchList=(newList)=>{
     if(Object.keys(newList).length==0){
       throw new Error('newList is empty');
     }
@@ -172,14 +159,14 @@
       doevents('nowtypechange');
     }
   }
-  var getSearchTypeList=function(){
+  var getSearchTypeList=()=>{
     return initsto.get('typelist')
   }
-  var setSearchType=function(type){
+  var setSearchType=(type)=>{
     initsto.set('type',type);
     doevents('nowtypechange');
   }
-  var getSearchTypeIndex=function(){
+  var getSearchTypeIndex=()=>{
     return initsto.get('type');
   }
 
@@ -194,7 +181,7 @@
   }
 
   Object.defineProperty(retob,'keywordText',{
-    get:function(){
+    get(){
       return keyword;
     }
   });

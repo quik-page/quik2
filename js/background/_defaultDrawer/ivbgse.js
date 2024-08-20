@@ -1,9 +1,9 @@
-(function(){
+(()=>{
   var ImgOrVideoSi=new SettingItem({
     title:"背景图片/视频显示设置",
     message:"设置背景图片/视频显示的蒙版和模糊等",
     type:"null",
-    callback:function(){
+    callback(){
       ImgOrVideoSe.open();
     }
   });
@@ -23,17 +23,17 @@
     title:"背景蒙版颜色主题",
     index:0,
     type:"select",
-    init:function(){
+    init(){
       return {
         0:"跟随主题",
         1:"黑色",
         2:"白色"
       }
     },
-    get:function(){
+    get(){
       return initsto.get('ivsetting').th||1;
     },
-    callback:function(v){
+    callback(v){
       var o=initsto.get('ivsetting');
       o.th=parseInt(v);
       initsto.set('ivsetting',o);
@@ -45,13 +45,13 @@
     title:"背景蒙版浓度",
     index:1,
     type:"range",
-    init:function(){
+    init(){
       return [0,90]
     },
-    get:function(){
+    get(){
       return initsto.get('ivsetting').mb;
     },
-    callback:function(v){
+    callback(v){
       var o=initsto.get('ivsetting');
       o.mb=v;
       initsto.set('ivsetting',o);
@@ -64,10 +64,10 @@
     message:"可能会影响性能",
     type:"boolean",
     index:2,
-    get:function(){
+    get(){
       return initsto.get('ivsetting').isbr;
     },
-    callback:function(v){
+    callback(v){
       if(v){
         ivse_br.show();
       }else{
@@ -85,13 +85,13 @@
     title:"背景模糊程度",
     index:3,
     type:"range",
-    init:function(){
+    init(){
       return [1,20]
     },
-    get:function(){
+    get(){
       return initsto.get('ivsetting').br;
     },
-    callback:function(v){
+    callback(v){
       var o=initsto.get('ivsetting');
       o.br=v;
       initsto.set('ivsetting',o);

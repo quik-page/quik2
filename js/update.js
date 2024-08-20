@@ -1,29 +1,25 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.3.5',
+    version:'2.4.0',
     version_code:window.version_code,
     updateTime:'2024/8/19',
     log:[
       {
-        tag:"fix",
-        content:"稍稍优化了图标的位置"
+        tag:"new",
+        content:"时间LOGO可以显示日期"
       },
       {
         tag:"fix",
-        content:"优化了自定义搜索引擎的样式"
+        content:"时间LOGO居中问题"
       },
       {
-        tag:"change",
-        content:"添加了酷狗、QQ、网易云三个音乐搜索引擎，并重新调整内置搜索引擎的排序"
-      },
-      {
-        tag:"change",
-        content:"在极简模式下，搜索框会较靠近中间显示"
+        tag:"new",
+        content:"搜索框可以关闭"
       },
       {
         tag:"fix",
-        content:"优化代码逻辑，整体提升打开时的性能"
+        content:"优化代码，全面使用更先进的ES6语法"
       },
       {
         tag:"fix",
@@ -32,21 +28,21 @@
     ]
   }
   if ('serviceWorker' in navigator&&!window._dev) {
-    navigator.serviceWorker.ready.then(function (registration) {
+    navigator.serviceWorker.ready.then(registration=> {
       window.swReg=registration;
-      quik.util.xhr('./version', function (r) {
+      quik.util.xhr('./version', r=> {
         var nv = parseInt(r);
         if (nv > version_code) {
           quik.toast.show('发现新版本(版本序号：'+nv+')，正在更新');
           registration.active.postMessage('update');
         }
-      }, function () {
+      }, ()=> {
         console.log('获取版本失败');
       })
     });
-    navigator.serviceWorker.addEventListener('message', function (e) {
+    navigator.serviceWorker.addEventListener('message', e=> {
       if (e.data == 'updated') {
-        quik.confirm('新版本已准备就绪，是否刷新页面', function (v) {
+        quik.confirm('新版本已准备就绪，是否刷新页面',v=> {
           if (v) {
             localStorage.setItem('__q__s__','1');
             location.reload();
@@ -66,12 +62,12 @@
 </div><div class="footer"><div class="btn ok">我知道了</div></div>`,
         class:"update_dialog"
       });
-      util.query(version_dia.getDialogDom(),'.btn.ok').onclick=function(){
+      util.query(version_dia.getDialogDom(),'.btn.ok').onclick=()=>{
         version_dia.close();
       }
     }
     
-    setTimeout(function(){
+    setTimeout(()=>{
       version_dia.open();
     })
   }
