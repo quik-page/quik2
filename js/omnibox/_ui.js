@@ -246,7 +246,7 @@
 
   core.searchUtil.on('nowtypechange',function(){
     if(icon.getAttribute('data-teshu')==':searchtype'){
-      chulitype(input.value);
+      chulitype(input.value,true);
     }
   })
   core.searchUtil.on('typelistchange',function(){
@@ -265,10 +265,10 @@
    * 渲染指定文字的Type至页面
    * @param {String} text 
    */
-  function chulitype(text){
+  function chulitype(text,isMust){
     var i=core.getType(text);
     if(i.icon[0]==':'){
-      if(icon.getAttribute('data-teshu')==i.icon)return;
+      if((!isMust)&&icon.getAttribute('data-teshu')==i.icon)return;
       icon.setAttribute('data-teshu',i.icon);
       var _ts=chuliteshuicon(i.icon);
       if(_ts instanceof Promise){

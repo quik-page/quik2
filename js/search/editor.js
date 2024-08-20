@@ -145,7 +145,14 @@
 
   return {
     open(){
-      dia.open();
+      if(!dia){
+        drawAll();
+        setTimeout(()=>{
+          dia.open();
+        },10)
+      }else{
+        dia.open();
+      }
     }
   }
 })();
