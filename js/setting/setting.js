@@ -260,7 +260,7 @@
         } else {
           return 'change'
         }
-      })(), ()=>{
+      })(), function(){
         doCallback.call(this,item);
       });
     },

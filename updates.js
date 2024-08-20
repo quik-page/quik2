@@ -1,4 +1,13 @@
 var updatelog={
+  "2.4.0.1":{
+    updates:[
+      {
+        tag:"fix",
+        content:"紧急修复2.4.0的BUG"
+      }
+    ],
+    time:"2024/8/20"
+  },
   "2.4.0":{
     updates:[
       {

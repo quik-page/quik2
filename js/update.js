@@ -1,10 +1,14 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.4.0',
+    version:'2.4.0.1',
     version_code:window.version_code,
-    updateTime:'2024/8/19',
+    updateTime:'2024/8/20',
     log:[
+      {
+        tag:"fix",
+        content:"紧急修复2.4.0的BUG，以下为2.4.0的更新"
+      },
       {
         tag:"new",
         content:"时间LOGO可以显示日期"

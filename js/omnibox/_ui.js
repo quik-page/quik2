@@ -3,7 +3,7 @@
 
 
 
-  var searchbox,searchcover,icon,input,submit,saul,searchpadding;
+  var searchbox,searchcover,icon,input,submit,saul,searchpadding,inputInputEv;
   searchpadding=util.element('div',{
     class:"searchpadding"
   })
@@ -35,8 +35,8 @@
     }
 
       /* 集中处理input事件 */
-  input.oninput=util.fangdou(inputInputEv,300)
-  function inputInputEv(){
+  inputInputEv=function(){
+    console.log('input');
     // 渲染Type
     chulitype(this.value.trim());
     saul.innerHTML='';
@@ -52,12 +52,12 @@
 
       // 渲染搜索联想
       saul.innerHTML='';
-      salist.forEach(function(s){
+      salist.forEach(s=>{
         var li=util.element('li');
         li.innerHTML=`<div class="saicon">${s.icon}</div><div class="sa_text"></div>`;
         li.querySelector('.sa_text').innerText=s.text;
         saul.append(li);
-        li.onclick=function(){
+        li.onclick=()=>{
           s.click()
           console.log('clicked')
         };
@@ -65,15 +65,16 @@
 
       // 恢复用户原本的active
       if(actli){
-        util.query(saul,'li',true).forEach(function(li){
+        util.query(saul,'li',true).forEach(li=>{
           if(util.query(li,'div.saicon').innerHTML&&util.query(li,'div.sa_text').innerHTML==actli.text){
             li.classList.add('active');
           }
         })
       }
-    })
+    });
     doevent('input',[input.value]);
   }
+  input.oninput=util.fangdou(inputInputEv,300);
   /* * */
 
   /* 集中处理keydown事件 */
