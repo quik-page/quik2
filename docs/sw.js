@@ -36,21 +36,19 @@ self.addEventListener('install', (event) => {
 
 
 const cacheFirst = async ({ request, preloadResponsePromise}) => {
-  // First try to get the resource from the cache
-  const responseFromCache = await caches.match(request);
+  // First try to get the resource from the 
+  if(request.url.indexOf('http://')!=0){
+    request.url=request.url.replace('http://','https://')
+  }
+  const cache=await caches.open('v1');
+  const responseFromCache = await cache.match(request);
   if (responseFromCache) {
     return responseFromCache;
   }
 
-  let r;
-  try {
-    r=await fetch(request)
-  } catch (error) {
-    return ;
-  }
 
   // Next try to get the resource from the network
-    return r;
+    return fetch(request);
 };
 
 self.addEventListener('fetch',(event)=>{

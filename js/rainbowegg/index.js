@@ -9,25 +9,33 @@
 
     setTimeout(()=>{
         if(window.eggnow__){
-            var audio=util.element('audio',{
-                src:'https://music.163.com/song/media/outer/url?id=22660279.mp3',
-                loop:true,
-            })
+            
             console.log('egg');
             setTimeout(()=>{
-                document.querySelector(".loading-f").innerHTML='<p>CLICK TO PLAY 点击开始播放</p><img src="https://image.gumengya.com/i/2024/08/22/66c694973aba5.gif"/>'
-                document.querySelector(".loading-f").classList.add('rainbow');
-                try {
-                    audio.play();   
-                    dozm();
-                } catch (error) {
-                    document.addEventListener('click',playAudio);
-                    function playAudio(){
-                        audio.play();
+                var audio=util.element('audio',{
+                    src:'https://quik-page.github.io/quik2/assets/nyan.mp3',
+                    // src:'./assets/nyan.mp3',
+                    loop:true,
+                    preload:true,
+                });
+                document.body.append(audio);
+                document.querySelector(".loading-f").innerHTML='<p>正在加载音频中...</p><img src="https://image.gumengya.com/i/2024/08/22/66c694973aba5.gif"/>'
+                audio.oncanplay=function(){
+                    try {
+                        audio.play();   
                         dozm();
-                        document.removeEventListener('click',playAudio);
+                    } catch (error) {
+                        document.querySelector(".loading-f p").innerHTML='CLICK TO PLAY 点击播放音乐';
+                        document.addEventListener('click',playAudio);
+                        function playAudio(){
+                            audio.play();
+                            dozm();
+                            document.removeEventListener('click',playAudio);
+                        }
                     }
                 }
+                document.querySelector(".loading-f").classList.add('rainbow');
+                
 
                 function dozm(){
                     var a;
