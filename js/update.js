@@ -1,34 +1,14 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.4.0.1',
+    version:'2.4.1',
     version_code:window.version_code,
-    updateTime:'2024/8/20',
+    updateTime:'2024/8/22',
     log:[
       {
-        tag:"fix",
-        content:"紧急修复2.4.0的BUG，以下为2.4.0的更新"
-      },
-      {
         tag:"new",
-        content:"时间LOGO可以显示日期"
+        content:"UVVJSyUyMDIuNC4xJTIwJUU1JUJEJUE5JUU4JTlCJThCJTIwLSUyMFJhaW5ib3dDYXQlMjAtJTIwTnlhbiUyMENhdCUyMC0lMjB0cnklMjB0byUyMHNlYXJjaCUyMCUyMnJhaW5ib3djYXRYcXVpayUyMg=="
       },
-      {
-        tag:"fix",
-        content:"时间LOGO居中问题"
-      },
-      {
-        tag:"new",
-        content:"搜索框可以关闭"
-      },
-      {
-        tag:"fix",
-        content:"优化代码，全面使用更先进的ES6语法"
-      },
-      {
-        tag:"fix",
-        content:"修复一些小问题"
-      }
     ]
   }
   if ('serviceWorker' in navigator&&!window._dev) {

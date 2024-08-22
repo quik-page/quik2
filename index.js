@@ -61,6 +61,7 @@
   var ignores=_REQUIRE_('./js/ignores/index.js');
   _REQUIRE_('./js/update.js');
   _REQUIRE_('./js/oobe/index.js');
+  _REQUIRE_('./js/rainbowegg/index.js');
 
 
   var _upaddon={};
@@ -107,15 +108,23 @@
     getEventHandle
   }
   window.util=util;
-  custom.waitdotheme(()=>{
+  if(localStorage.__quik_egg__){
+    delete localStorage.__quik_egg__;
+    window.eggnow__=true;
     clearTimeout(loadingtimeout);
-    document.querySelector(".loading-f").classList.add('h');
-    document.querySelector(".loading-f").style.display='none';
-    document.querySelector("main").style.display='block';
-    document.querySelector("main").style.opacity='1';
-    onshows_fns.forEach(f=>f());
-    link.cateWidthShiPei();
-  });
+    document.querySelector(".loading-f").style.display='block';
+  }else{
+    custom.waitdotheme(()=>{
+      clearTimeout(loadingtimeout);
+      document.querySelector(".loading-f").classList.add('h');
+      document.querySelector(".loading-f").style.display='none';
+      document.querySelector("main").style.display='block';
+      document.querySelector("main").style.opacity='1';
+      onshows_fns.forEach(f=>f());
+      link.cateWidthShiPei();
+    });
+  }
+  
 
   var f=`@font-face {
     font-family: 'Material Symbols Outlined';

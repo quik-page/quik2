@@ -1,4 +1,13 @@
 var updatelog={
+  "2.4.2":{
+    updates:[
+      {
+        tag:"new",
+        content:"UVVJSyUyMDIuNC4xJTIwJUU1JUJEJUE5JUU4JTlCJThCJTIwLSUyMFJhaW5ib3dDYXQlMjAtJTIwTnlhbiUyMENhdCUyMC0lMjB0cnklMjB0byUyMHNlYXJjaCUyMCUyMnJhaW5ib3djYXRYcXVpayUyMg=="
+      },
+    ],
+    time:"2024/8/22"
+  },
   "2.4.0.1":{
     updates:[
       {
