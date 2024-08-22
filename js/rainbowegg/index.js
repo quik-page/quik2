@@ -10,7 +10,7 @@
     setTimeout(()=>{
         if(window.eggnow__){
             var audio=util.element('audio',{
-                src:'http://music.163.com/song/media/outer/url?id=22660279.mp3',
+                src:'https://music.163.com/song/media/outer/url?id=22660279.mp3',
                 loop:true,
             })
             console.log('egg');
