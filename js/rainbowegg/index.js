@@ -20,18 +20,17 @@
                 });
                 document.body.append(audio);
                 document.querySelector(".loading-f").innerHTML='<p>正在加载音频中...</p><img src="https://image.gumengya.com/i/2024/08/22/66c694973aba5.gif"/>'
-                audio.oncanplay=function(){
-                    try {
-                        audio.play();   
+                audio.oncanplaythrough=function(){
+                    try{audio.play();}catch(e){}   
+                    if(!audio.paused){
                         dozm();
-                    } catch (error) {
-                        document.querySelector(".loading-f p").innerHTML='CLICK TO PLAY 点击播放音乐';
-                        document.addEventListener('click',playAudio);
-                        function playAudio(){
-                            audio.play();
-                            dozm();
-                            document.removeEventListener('click',playAudio);
-                        }
+                    }
+                    document.querySelector(".loading-f p").innerHTML='CLICK TO PLAY 点击播放音乐';
+                    document.addEventListener('click',playAudio);
+                    function playAudio(){
+                        audio.play();
+                        dozm();
+                        document.removeEventListener('click',playAudio);
                     }
                 }
                 document.querySelector(".loading-f").classList.add('rainbow');
