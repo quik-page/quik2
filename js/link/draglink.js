@@ -96,7 +96,6 @@
                 }
 
                 function _up(e){
-                    e.preventDefault();
                     clearTimeout(gtimeout);
                     li.classList.remove('touching');
                     setTimeout(()=>li.querySelector('a').removeEventListener('click',pv),10);

@@ -2,47 +2,67 @@
   initsto.set('storage-mode','db');
 
   // 初始化进度，2为初始化完毕
-  var initState = 0;
+  var initState = 0,readySatae=3;
+  var readyfn = [];
   function init() {
     // 初始化默认分组
     if (!initsto.get('links')) {
       initsto.set('links', [], true, ()=>{
         initState++;
-        if (initState == 2) {
+        if (initState == readySatae) {
           readyfn.forEach(a=>a());
         }
       })
     } else {
       initState++;
+      if (initState == readySatae) {
+        readyfn.forEach(a=>a());
+      }
     }
 
     // 初始化分组
     if (!initsto.get('cate')) {
       initsto.set('cate', {}, true, ()=>{
         initState++;
-        if (initState == 2) {
+        initsto.set('catelist',[]);
+        initState++;
+        if (initState == readySatae) {
           readyfn.forEach(a=>a());
         }
       });
     } else {
       initState++;
+      if(!initsto.get('catelist')){
+        initsto.get('cate',true,cates=>{
+          initsto.set('catelist',Object.keys(cates));
+          initState++;
+          if (initState == readySatae) {
+            readyfn.forEach(a=>a());
+          }
+        })
+      }else{
+        initState++
+        if (initState == readySatae) {
+          readyfn.forEach(a=>a());
+        }
+      }
     }
   }
 
   init();
-  var readyfn = [];
-  if (initState == 2) {
+  if (initState == readySatae) {
     readyfn.forEach(a=>a());
   }
 
   return {
     setAll(link,cate,cb){
-      if (initState != 2) {
+      if (initState != readySatae) {
         throw '初始化未完成';
       }
       if(Array.isArray(link)&&typeof cate=='object'){
         initsto.set('links',link,true,()=>{
           initsto.set('cate',cate,true,()=>{
+            initsto.set('catelist',Object.keys(cate));
             cb&&cb();
             doevent('change',{
               type:"all",
@@ -54,7 +74,7 @@
       }
     },
     addLink(detail, callback) {
-      if (initState != 2) {
+      if (initState != readySatae) {
         throw '初始化未完成';
       }
       if (!util.checkDetailsCorrect(detail, ['title', 'url'])) {
@@ -103,7 +123,7 @@
       }
     },
     changeLink(cate, index, detail, callback,other={}) {
-      if (initState != 2) {
+      if (initState != readySatae) {
         throw '初始化未完成';
       }
       if (!util.checkDetailsCorrect(detail, ['title', 'url']) || typeof index != 'number') {
@@ -172,7 +192,7 @@
       }
     },
     deleteLink(cate, index, callback) {
-      if (initState != 2) {
+      if (initState != readySatae) {
         throw '初始化未完成';
       }
       if (cate) {
@@ -230,8 +250,8 @@
         });
       }
     },
-    addCate(cate, callback) {
-      if (initState != 2) {
+    addCate(cate, callback,index) {
+      if (initState != readySatae) {
         throw '初始化未完成';
       }
       initsto.get('cate', true, c=> {
@@ -244,6 +264,13 @@
         }
         c[cate] = [];
         initsto.set('cate', c, true, ()=>{
+          var o=initsto.get('catelist');
+          if(typeof index=='undefined'){
+            o.splice(index,0,cate);
+          }else{
+            o.push(cate);
+          }
+          initsto.set('catelist',o);
           callback&&callback({
             code: 0,
             msg: "添加成功"
@@ -255,9 +282,32 @@
         });
       });
     },
-    renameCate(cate, catename, callback) {
-      if (initState != 2) {
+    renameCate(cate, catename, callback,index) {
+      if (initState != readySatae) {
         throw '初始化未完成';
+      }
+      var o=initsto.get('catelist');
+      if(o.indexOf(cate)<0){
+        callback&&callback({
+          code: -1,
+          msg: "分组不存在"
+        });
+        return;
+      }
+      if (cate == catename) {
+        o.splice(o.indexOf(cate),1);
+        o.splice(index,0,cate);
+        initsto.set('catelist',o);
+        callback&&callback({
+          code: 0,
+          msg: "修改成功"
+        });
+        doevent('change', {
+          cate: cate,
+          catename: catename,
+          type: 'caterename',
+        });
+        return;
       }
       initsto.get('cate', true, c=> {
         if (!c[cate]) {
@@ -276,6 +326,12 @@
         c[catename] = c[cate];
         delete c[cate];
         initsto.set('cate', c, true, ()=>{
+          if(typeof index!='number'){
+            index=o.indexOf(cate);
+          }
+          o.splice(o.indexOf(cate),1);
+          o.splice(index,0,catename);
+          initsto.set('catelist',o);
           callback&&callback({
             code: 0,
             msg: "修改成功"
@@ -289,10 +345,22 @@
       });
     },
     deleteCate(cate, callback) {
-      if (initState != 2) {
+      if (initState != readySatae) {
         throw '初始化未完成';
       }
+      var o=initsto.get('catelist');
+      if(o.indexOf(cate)<0){
+        callback&&callback({
+          code: -1,
+          msg: "分组不存在"
+        });
+        return;
+      }else{
+        o.splice(o.indexOf(cate),1);
+        initsto.set('catelist',o);
+      }
       initsto.get('cate', true, c=> {
+        
         if (!c[cate]) {
           callback&&callback({
             code: -1,
@@ -338,7 +406,7 @@
       });
     },
     getLinks(cate, callback) {
-      if (initState != 2) {
+      if (initState != readySatae) {
         throw '初始化未完成';
       }
       if (cate) {
@@ -367,19 +435,18 @@
       }
     },
     getCates(callback) {
-      if (initState != 2) {
+      if (initState != readySatae) {
         throw '初始化未完成';
       }
-      initsto.get('cate', true, c=> {
-        callback&&callback({
-          code: 0,
-          msg: "获取成功",
-          data: Object.keys(c)
-        });
+
+      callback&&callback({
+        code: 0,
+        msg: "获取成功",
+        data: initsto.get('catelist')
       });
     },
     getCateAll(callback) {
-      if (initState != 2) {
+      if (initState != readySatae) {
         throw '初始化未完成';
       }
       initsto.get('cate', true, c=> {
@@ -391,7 +458,7 @@
       });
     },
     ready(fn) {
-      if (initState == 2) {
+      if (initState == readySatae) {
         fn();
       } else {
         readyfn.push(fn);

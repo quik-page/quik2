@@ -1,4 +1,21 @@
 var updatelog={
+  "2.4.4":{
+    updates:[
+      {
+        tag:"new",
+        content:"链接分组支持修改位置"
+      },
+      {
+        tag:"fix",
+        content:"修复链接拖动排序在移动端的部分问题"
+      },
+      {
+        tag:"thanks",
+        content:"感谢 川上星林 的问题反馈"
+      }
+    ],
+    time:"2024/8/26"
+  },
   "2.4.3":{
     updates:[
       {

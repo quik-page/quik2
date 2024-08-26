@@ -1,17 +1,21 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.4.3',
+    version:'2.4.4',
     version_code:window.version_code,
     updateTime:'2024/8/26',
     log:[
       {
         tag:"new",
-        content:"链接可以拖动排序了（beta），如果影响操作可以在设置中关掉"
+        content:"链接分组支持修改位置"
       },
       {
         tag:"fix",
-        content:"修复deepClone方法在某些情况下会报错的问题"
+        content:"修复链接拖动排序在移动端的部分问题"
+      },
+      {
+        tag:"thanks",
+        content:"感谢 川上星林 的问题反馈"
       }
     ]
   }

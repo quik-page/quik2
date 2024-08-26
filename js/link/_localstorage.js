@@ -10,12 +10,20 @@
   // 初始化分组
   if (!initsto.get('cate')) {
     initsto.set('cate', {});
+    initsto.set('catelist', []);
+  }else{
+    if(!initsto.get('catelist')){
+      initsto.set('catelist', Object.keys(initsto.get('cate')));
+    }
   }
+
+
   return {
     setAll(link,cate,cb){
       if(Array.isArray(link)&&typeof cate=='object'){
         initsto.set('links',link)
         initsto.set('cate',cate);
+        initsto.set('catelist',Object.keys(cate));
         cb&&cb();
         doevent('change',{
           type:"all",
@@ -331,11 +339,11 @@
       }
     },
     getCates(callback) {
-      var c = initsto.get('cate');
+      var c = initsto.get('catelist');
       callback&&callback({
         code: 0,
         msg: "获取成功",
-        data: Object.keys(c)
+        data: c
       });
     },
     getCateAll(callback) {
