@@ -74,6 +74,9 @@
   height: 100px;
   position: relative;
 }
+.links *{
+  -webkit-user-drag: none;
+}
 .links ul.link-list li.touching{
   animation: doudong .3s linear infinite;
   transform: scale(1.1);

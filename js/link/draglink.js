@@ -25,13 +25,16 @@
         function g(a){
             var gtimeout=null;
             li.addEventListener(a?'mousedown':'touchstart',(e)=>{
+                if(e.which==3){return;}
                 if(!initsto.get('draglink'))return;
                 let startX =a? e.offsetX:(e.targetTouches[0].pageX-li.getBoundingClientRect().left);
                 let startY =a? e.offsetY:(e.targetTouches[0].pageY-li.getBoundingClientRect().top);
                 console.log(startX,startY);
                 console.log(li.offsetTop);
                 if(a){
-                    document.addEventListener('mousemove',_move,{passive:false})
+                    gtimeout=setTimeout(()=>{
+                        document.addEventListener('mousemove',_move,{passive:false})
+                    },50);
                     document.addEventListener('mouseup',_up,{passive:false});
                 }else{
                     gtimeout=setTimeout(()=>{

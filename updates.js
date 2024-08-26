@@ -1,4 +1,13 @@
 var updatelog={
+  "2.4.4.1":{
+    updates:[
+      {
+        tag:"fix",
+        content:"修复链接拖动排序的部分问题"
+      }
+    ],
+    time:"2024/8/26"
+  },
   "2.4.4":{
     updates:[
       {
