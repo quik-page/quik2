@@ -1,4 +1,17 @@
 var updatelog={
+  "2.4.3":{
+    updates:[
+      {
+        tag:"new",
+        content:"链接可以拖动排序了（beta），如果影响操作可以在设置中关掉"
+      },
+      {
+        tag:"fix",
+        content:"修复deepClone方法在某些情况下会报错的问题"
+      }
+    ],
+    time:"2024/8/26"
+  },
   "2.4.2":{
     updates:[
       {

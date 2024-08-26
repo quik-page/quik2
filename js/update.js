@@ -1,14 +1,18 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.4.1',
+    version:'2.4.3',
     version_code:window.version_code,
-    updateTime:'2024/8/22',
+    updateTime:'2024/8/26',
     log:[
       {
         tag:"new",
-        content:"UVVJSyUyMDIuNC4xJTIwJUU1JUJEJUE5JUU4JTlCJThCJTIwLSUyMFJhaW5ib3dDYXQlMjAtJTIwTnlhbiUyMENhdCUyMC0lMjB0cnklMjB0byUyMHNlYXJjaCUyMCUyMnJhaW5ib3djYXRYcXVpayUyMg=="
+        content:"链接可以拖动排序了（beta），如果影响操作可以在设置中关掉"
       },
+      {
+        tag:"fix",
+        content:"修复deepClone方法在某些情况下会报错的问题"
+      }
     ]
   }
   if ('serviceWorker' in navigator&&!window._dev) {

@@ -90,7 +90,7 @@
 
       }
     },
-    changeLink(cate, index, detail, callback) {
+    changeLink(cate, index, detail, callback,other={}) {
       if (!util.checkDetailsCorrect(detail, ['title', 'url']) || typeof index != 'number') {
         throw '参数错误';
       }
@@ -132,7 +132,8 @@
           cate: cate,
           index: index,
           type: 'change',
-          detail: detail
+          detail: detail,
+          other:other
         });
       } else {
         // 不包含分类
@@ -155,7 +156,8 @@
           cate: null,
           index: index,
           type: 'change',
-          detail: detail
+          detail: detail,
+          other:other
         });
       }
     },

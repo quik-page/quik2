@@ -102,7 +102,7 @@
         })
       }
     },
-    changeLink(cate, index, detail, callback) {
+    changeLink(cate, index, detail, callback,other={}) {
       if (initState != 2) {
         throw '初始化未完成';
       }
@@ -138,7 +138,8 @@
               cate: cate,
               index: index,
               type: 'change',
-              detail: detail
+              detail: detail,
+              other: other
             });
           })
         })
@@ -163,7 +164,8 @@
               cate: null,
               index: index,
               type: 'change',
-              detail: detail
+              detail: detail,
+              other: other
             });
           });
         });

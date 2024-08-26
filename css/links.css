@@ -66,12 +66,58 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding-top: 7px;
+  position: relative;
 }
 .links ul.link-list li{
   float: left;
   width: 71px;
   height: 100px;
   position: relative;
+}
+.links ul.link-list li.touching{
+  animation: doudong .3s linear infinite;
+  transform: scale(1.1);
+}
+@keyframes doudong{
+  0%{
+    transform: scale(1.1) rotate(-6deg);
+  }
+  50%{
+    transform: scale(1.1) rotate(6deg);
+  }
+  100%{
+    transform: scale(1.1) rotate(-6deg);
+  }
+}
+.links ul.link-list .insert-line{
+  position: absolute;
+  display: none;
+  background-color: #09f;
+  width: 1px;
+}
+.dragging-link{
+  position: fixed;
+  z-index: 999;
+  opacity: .5;
+}
+.dragging-link a{
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  pointer-events: none;
+}
+.dragging-link a img{
+  width: 35px;
+  height: 35px;
+  padding:10px 10px;
+  margin: 5px 7px;
+  border-radius: 10px;
+  background-color: rgba(230, 230, 230, 0.6);
+  box-shadow: none;
+}
+.dragging-link a p{
+  font-size: 12px;
+  text-align: center;
 }
 .links ul.link-list li a{
   text-decoration: none;

@@ -34,7 +34,7 @@
       const map = new WeakMap()
       
       function isObject(target) {
-          return (typeof target === 'object' && target ) || typeof target === 'function'
+          return typeof target === 'object' && target 
       }
   
       function clone(data) {
@@ -43,9 +43,6 @@
           }
           if ([Date, RegExp].includes(data.constructor)) {
               return new data.constructor(data)
-          }
-          if (typeof data === 'function') {
-              return new Function('return ' + data.toString())()
           }
           const exist = map.get(data)
           if (exist) {

@@ -209,8 +209,33 @@
   link.on('change',cl=>{
     var actcate=util.query(linkF,'.cate-bar-items .cate-item.active');
     if(cl.cate==actcate.innerText||(cl.cate==null&&actcate.classList.contains('mr'))){
-      if(['add','change','delete'].indexOf(cl.type)!=-1){
-        actCate(cl.cate);
+      if(cl.type=='add'){
+        var li=glinkli(cl.detail);
+        util.query(linkF,'.link-list').insertBefore(li,util.query(linkF,'.link-list .link-add'));
+        linklist.push(cl.detail);
+      }else if(cl.type=='change'){
+        console.log(cl.other);
+        if(!(cl.other&&cl.other.justindex)){
+          console.log(cl.other);
+          linklist.splice(cl.index,1)
+          linklist.splice(cl.detail.index,0,cl.detail);
+          var lis=util.query(linkF,'.link-list li',true);
+          var tli=lis[cl.index];
+          util.query(linkF,'.link-list').insertBefore(tli,lis[cl.detail.index+1]);
+          util.query(tli,'a').href=cl.detail.url;
+          util.query(tli,'p').innerText=cl.detail.title;
+          util.getFavicon(cl.detail.url,favicon=>{
+            if(favicon){
+              util.query(tli,'img').src=favicon;
+            }else{
+              util.query(tli,'img').src=util.createIcon(cl.detail.title[0]);
+            }
+          });
+        }
+      }else if(cl.type=='delete'){
+        var li=util.query(linkF,'.link-list li',true)[cl.index];
+        li.remove();
+        linklist.splice(cl.index,1);
       }
     }
     if(cl.type=='cateadd'){
@@ -238,8 +263,10 @@
     }
   })
 
+  var draglink=_REQUIRE_('./draglink.js');
+
   function actCate(cateEl){
-    util.query(linkF,'.link-list').innerHTML='';
+    util.query(linkF,'.link-list').innerHTML='<div class="insert-line"></div>';
     var cate=null;
     if(typeof cateEl=='string'){
       try{util.query(linkF,'.cate-bar-items .cate-item.active').classList.remove('active');}catch(e){};
@@ -267,9 +294,29 @@
     link.getLinks(cate,ls=>{
       linklist=ls.data;
       ls.data.forEach(l=>{
-        var li=util.element('li');
-        li.innerHTML=`<a href="${l.url}" target="_blank" rel="noopener noreferer"><img/><p></p></a>`
+        var li=glinkli(l);
         util.query(linkF,'.link-list').append(li);
+      })
+      var li=util.element('li',{
+        class:"link-add"
+      });
+      li.innerHTML=`<a href="javascript:void(0)" class="material-symbols-outlined">&#xe145;</a>`;
+      util.query(linkF,'.link-list').append(li);
+      li.onclick=()=>{
+        var cate=util.query(linkF,'.cate-bar-items .cate-item.active');
+        if(cate.classList.contains('mr')){
+          cate=null
+        }else{
+          cate=cate.innerText;
+        }
+        openLinkEditDialog(-1,cate);
+      }
+    })
+  }
+
+  function glinkli(l){
+    var li=util.element('li');
+        li.innerHTML=`<a href="${l.url}" target="_blank" rel="noopener noreferer"><img/><p></p></a>`
         util.query(li,'p').innerText=l.title;
         util.getFavicon(l.url,favicon=>{
           if(favicon){
@@ -290,22 +337,8 @@
             this.classList.add('menued');
            linkMenu.show();
          }
-      })
-      var li=util.element('li',{
-        class:"link-add"
-      });
-      li.innerHTML=`<a href="javascript:void(0)" class="material-symbols-outlined">&#xe145;</a>`;
-      util.query(linkF,'.link-list').append(li);
-      li.onclick=()=>{
-        var cate=util.query(linkF,'.cate-bar-items .cate-item.active');
-        if(cate.classList.contains('mr')){
-          cate=null
-        }else{
-          cate=cate.innerText;
-        }
-        openLinkEditDialog(-1,cate);
-      }
-    })
+         draglink(li);
+        return li;
   }
 
   init();
