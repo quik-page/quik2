@@ -1,9 +1,9 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.4.4.1',
+    version:'2.4.4.2',
     version_code:window.version_code,
-    updateTime:'2024/8/26',
+    updateTime:'2024/8/27',
     log:[
       {
         tag:"fix",

@@ -23,10 +23,22 @@
 
     function f(li){
         function g(a){
-            var gtimeout=null;
+            var gtimeout=null,ttimeout=null;
             li.addEventListener(a?'mousedown':'touchstart',(e)=>{
-                if(e.which==3){return;}
-                if(!initsto.get('draglink'))return;
+                if(e.which==3){return true;}
+                if(!a){
+                    ttimeout=setTimeout(()=>{
+                        resetmenued();
+                        menuedLi=li;
+                        linkMenu.setOffset({
+                            top:e.targetTouches[0].pageY,
+                            left:e.targetTouches[0].pageX
+                        })
+                        li.classList.add('menued');
+                        linkMenu.show();
+                    },600);
+                }
+                if(!initsto.get('draglink'))return true;
                 let startX =a? e.offsetX:(e.targetTouches[0].pageX-li.getBoundingClientRect().left);
                 let startY =a? e.offsetY:(e.targetTouches[0].pageY-li.getBoundingClientRect().top);
                 console.log(startX,startY);
@@ -40,6 +52,7 @@
                     gtimeout=setTimeout(()=>{
                         document.addEventListener('touchmove',_move,{passive:false});
                         li.classList.add('touching');
+                        linkMenu.hide();
                     },1000);
                     document.addEventListener('touchend',_up,{passive:false});
                 }
@@ -47,6 +60,7 @@
                 var b=null,n=null;
                 function _move(e){
                     e.preventDefault();
+                    clearTimeout(ttimeout);
                     if(!b){
                         li.querySelector('a').addEventListener('click',pv);
                         b=li.cloneNode(true);
@@ -100,6 +114,7 @@
 
                 function _up(e){
                     clearTimeout(gtimeout);
+                    clearTimeout(ttimeout);
                     li.classList.remove('touching');
                     setTimeout(()=>li.querySelector('a').removeEventListener('click',pv),10);
                     document.removeEventListener(a?'mousemove':'touchmove',_move)
@@ -138,6 +153,7 @@
                             justindex:true
                         })
                     }
+                    return true;
                 }
                 return true;
             });
