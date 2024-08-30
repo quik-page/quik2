@@ -115,15 +115,25 @@
     document.querySelector(".loading-f").style.display='block';
   }else{
     custom.waitdotheme(()=>{
-      clearTimeout(loadingtimeout);
-      document.querySelector(".loading-f").classList.add('h');
-      document.querySelector(".loading-f").style.display='none';
-      document.querySelector("main").style.display='block';
-      document.querySelector("main").style.opacity='1';
-      onshows_fns.forEach(f=>f());
-      link.cateWidthShiPei();
+      showmain();
     });
   }
+
+  var isshowmain=false;
+  function showmain(){
+    if(isshowmain)return;
+    clearTimeout(loadingtimeout);
+    document.querySelector(".loading-f").classList.add('h');
+    document.querySelector(".loading-f").style.display='none';
+    document.querySelector("main").style.display='block';
+    document.querySelector("main").style.opacity='1';
+    onshows_fns.forEach(f=>f());
+    link.cateWidthShiPei();
+    isshowmain=true;
+  }
+  setTimeout(()=>{
+    showmain();
+  },500);
   
 
   var f=`@font-face {

@@ -63,9 +63,9 @@
   height: 40px;
   position: relative;
   width: 25%;
-  display: flex;
-  justify-content: right;
-  align-items: center;
+}
+.setting-item .setting-item-right>*{
+  float: right;
 }
 .setting-item .null-click .material-symbols-outlined{
   font-size: 16px;

@@ -1,4 +1,13 @@
 var updatelog={
+  "2.4.4.3":{
+    updates:[
+      {
+        tag:"fix",
+        content:"修复一个小问题"
+      }
+    ],
+    time:"2024/8/30"
+  },
   "2.4.4.1~2":{
     updates:[
       {

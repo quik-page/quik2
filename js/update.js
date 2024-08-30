@@ -1,13 +1,13 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.4.4.2',
+    version:'2.4.4.3',
     version_code:window.version_code,
-    updateTime:'2024/8/27',
+    updateTime:'2024/8/30',
     log:[
       {
         tag:"fix",
-        content:"修复链接拖动排序的部分问题"
+        content:"修复一个小问题"
       },
     ]
   }

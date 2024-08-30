@@ -107,17 +107,18 @@ let _h=fs.readFileSync(path.join(__dirname,'index.html')).toString().replace(/<!
 .replace('type="text/rem"','')
 .replace('<!-- register sw -->',`<script>
 // register sw
-if('serviceWorker' in navigator){
+if('serviceWorker' in navigator&&!window.isExtNative){
   navigator.serviceWorker.register('./sw.js',{
     scope:"./"
   });
-}else{
+}else if(localStorage.getItem('no-sw')){
   setTimeout(function(){
     new quik.notice({
       title:"提示",
       content:"当前浏览器不支持serviceWorker，无法使用离线缓存功能",
     }).show();
   })
+  localStorage.setItem('no-sw','1');
 }
 </script>`)
 fs.writeFileSync(path.join(__dirname,'docs/index.html'),htmlMinifier.minify(_h,{
