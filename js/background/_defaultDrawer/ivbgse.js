@@ -133,6 +133,7 @@
       document.body.classList.add('t-light')
     }else if(o.th==0){
       glisten();
+      console.log(quik.custom.getColor());
       if(quik.custom.getColor()=='dark'){
         document.body.classList.add('t-dark')
         document.body.classList.remove('t-light')

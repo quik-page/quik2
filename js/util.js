@@ -116,7 +116,7 @@
         if(typeof o=='object'&&o){
           var a=false;
           for(var k in ob){
-            if(!o[k]){
+            if(typeof o[k]=='undefined'){
               a=true;
               o[k]=ob[k];
             }

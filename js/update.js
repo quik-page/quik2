@@ -1,14 +1,14 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.4.4.3',
+    version:'2.4.4.4',
     version_code:window.version_code,
-    updateTime:'2024/8/30',
+    updateTime:'2024/9/1',
     log:[
       {
         tag:"fix",
-        content:"修复一个小问题"
-      },
+        content:"修复一个背景显示设置的问题，修复一个内核问题，修复内置图片的显示问题"
+      }
     ]
   }
   if ('serviceWorker' in navigator&&!window._dev) {
