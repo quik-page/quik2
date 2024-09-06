@@ -170,6 +170,12 @@ main .bottomer
   width: calc(100% - 20px);
   height: 40px;
   padding: 0 10px;
+  opacity: 0;
+  transition: opacity .3s;
+}
+main.sicon .topper,
+main.sicon .bottomer{
+  opacity: 1;
 }
 main .topper .left,
 main .bottomer .left,

@@ -113,6 +113,10 @@
     link.ready(()=>{
       dcate(initsto.get('enabledCate'));
       dsize(initsto.get('linksize'));
+      dstyle(initsto.get('linkstyle'));
+      setTimeout(function(){
+        linkF.style.opacity=1;
+      },300)
     })
     observeCate();
   }
@@ -509,6 +513,9 @@
   if(!initsto.get('linksize')){
     initsto.set('linksize','m');
   }
+  if(!initsto.get('linkstyle')){
+    initsto.set('linkstyle','round');
+  }
 
   var linksg=new SettingGroup({
     title:"链接",
@@ -547,10 +554,30 @@
       dsize(v);
     }
   });
+  var linkStyleSi=new SettingItem({
+    type:'select',
+    title:"链接样式",
+    message:"修改链接显示的样式",
+    init(){
+      return {
+        def:"圆方",
+        round:"圆形",
+        square:"方形",
+      }
+    },
+    get(){
+      return initsto.get('linkstyle');
+    },
+    callback(v){
+      initsto.set('linkstyle',v);
+      dstyle(v);
+    }
+  });
 
   mainSetting.addNewGroup(linksg);
   linksg.addNewItem(enabledCateSi);
   linksg.addNewItem(linkSizeSi);
+  linksg.addNewItem(linkStyleSi);
 
   function dcate(v){
     actCate();
@@ -562,6 +589,10 @@
       util.query(linkF,'.cate-bar').style.display='none';
     }
   }
+  function dstyle(v){
+    linkF.className='links '+v;
+  }
+
 
   function dsize(v){
     util.query(linkF,'.link-list').className='link-list '+v;

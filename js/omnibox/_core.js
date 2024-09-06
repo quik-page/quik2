@@ -133,7 +133,7 @@
       },
       get(text,getsa){
         return new Promise(function(r,j){
-          searchfetch=util.jsonp('https://www.baidu.com/sugrec?pre=1&p=3&ie=utf-8&json=1&prod=pc&from=pc_web&wd='+text,function(res){
+          searchfetch=util.jsonp('https://www.baidu.com/sugrec?pre=1&p=3&ie=utf-8&json=1&prod=pc&from=pc_web&wd='+encodeURIComponent(text),function(res){
             var a2=getsa();
             searchfetch=null;
             if(!res.g){
@@ -145,7 +145,7 @@
                 icon:util.getGoogleIcon('E8B6'),
                 text:item.q,
                 click(){
-                  open(searchUtil.getSearchType().replace(searchUtil.keywordText,item.q));
+                  open(searchUtil.getSearchType().replace(searchUtil.keywordText,encodeURIComponent(item.q)));
                 }
               });
             })

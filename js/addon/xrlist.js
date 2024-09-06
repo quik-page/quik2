@@ -9,7 +9,7 @@ var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
     var li = util.query(addon_l, 'li[data-id="' + id + '"]');
     if (!li) {
       li = util.element('li');
-      li.innerHTML = _REQUIRE_('./addon_item.mb.html').replace(/{deficon}/g,def_addon_icon);
+      li.innerHTML = _REQUIRE_('./mb/addon_item.mb.html').replace(/{deficon}/g,def_addon_icon);
       li.dataset.id = id;
       addon_l.appendChild(li);
       li.onclick = function (e) {

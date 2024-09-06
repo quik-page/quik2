@@ -1,13 +1,33 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.4.4.4',
+    version:'2.5.0',
     version_code:window.version_code,
-    updateTime:'2024/9/1',
+    updateTime:'2024/9/6',
     log:[
       {
         tag:"fix",
-        content:"修复一个背景显示设置的问题，修复一个内核问题，修复内置图片的显示问题"
+        content:"修复搜索联想的BUG"
+      },
+      {
+        tag:"new",
+        content:"链接样式可在设置中更改，且将默认样式改为圆形"
+      },
+      {
+        tag:"change",
+        content:"链接池的拖动条改为透明效果"
+      },
+      {
+        tag:"change",
+        content:"设置界面在大屏幕上会自适应变大"
+      },
+      {
+        tag:"change",
+        content:"设置中的下拉菜单在选项多时会显示拖动条"
+      },
+      {
+        tag:"fix",
+        content:"原随机风景图片API失效，更换随机风景图片API为tu.ltyuanfang.cn"
       }
     ]
   }

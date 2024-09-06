@@ -60,7 +60,6 @@
 
   util.query(document,'main').appendChild(sayF);
 
-  var def='海内存知己，天涯若比邻'; 
   sayF.innerHTML=`<div class="say-inner"></div><div class="say-control">${util.getGoogleIcon('e5d4')}</div>`;
 
   var sayI=util.query(sayF,'div.say-inner');

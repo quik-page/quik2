@@ -1,5 +1,5 @@
 body.lite .links{
-  opacity: 0;
+  opacity: 0!important;
   pointer-events: none;
   transition: opacity .3s;
   height: calc(100% - 80px);
@@ -88,7 +88,7 @@ body.lite.showall .center .logo{
   pointer-events: none;
 }
 body.lite.showall .links{
-  opacity: 1;
+  opacity: 1!important;
   pointer-events: all;
 }
 body.lite.showall .topper .item,

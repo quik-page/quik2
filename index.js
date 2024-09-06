@@ -130,6 +130,9 @@
     onshows_fns.forEach(f=>f());
     link.cateWidthShiPei();
     isshowmain=true;
+    setTimeout(()=>{
+        document.querySelector("main").classList.add('sicon');
+    },360)
   }
   setTimeout(()=>{
     showmain();

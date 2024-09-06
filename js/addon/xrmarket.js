@@ -25,7 +25,7 @@ function loadmarket(){
 
 function xrmarketItem(addon,id){
     var li = util.element('li');
-    li.innerHTML = _REQUIRE_('./market_item.mb.html').replace(/{deficon}/g,def_addon_icon);
+    li.innerHTML = _REQUIRE_('./mb/market_item.mb.html').replace(/{deficon}/g,def_addon_icon);
     li.dataset.id = id;
     li.onclick = ()=> {
         market_l.querySelectorAll('li').forEach((li)=>{

@@ -1,4 +1,6 @@
 (()=>{
+  var def='海内存知己，天涯若比邻'; 
+
   if(!initsto.get('usersay')){
     initsto.set('usersay',def);
   }

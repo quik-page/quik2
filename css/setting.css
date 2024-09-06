@@ -1,6 +1,6 @@
 .d-c.setting_dia{
   width: 600px;
-  height: 400px;
+  height: 500px;
   padding: 0;
   overflow: hidden;
 }
@@ -113,6 +113,9 @@
 .setting-item.just-callback-item:hover{
   background-color: #f4f4f4;
 }
+.setting-item.just-callback-item .setting-item-right{
+  line-height: 40px;
+}
 .setting-item .qui-select{
   height: 30px;
   border-radius: 3px;
@@ -158,6 +161,11 @@ body.dark .setting-item .qui-select:active{
   transition: opacity .15s;
   font-size: 13px;
   color: #333;
+  max-height: 150px;
+  overflow-y: auto;
+}
+.setting-item .qui-options::-webkit-scrollbar{
+  width: 5px;
 }
 body.dark .setting-item .qui-select,
 body.dark .setting-item .qui-options{

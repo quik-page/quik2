@@ -1,4 +1,37 @@
 var updatelog={
+  "2.5.0":{
+    updates:[
+      {
+        tag:"fix",
+        content:"修复搜索联想的BUG"
+      },
+      {
+        tag:"new",
+        content:"链接样式可在设置中更改，且将默认样式改为圆形"
+      },
+      {
+        tag:"change",
+        content:"链接池的拖动条改为透明效果"
+      },
+      {
+        tag:"change",
+        content:"链接池和图标添加渐显效果"
+      },
+      {
+        tag:"change",
+        content:"设置界面在大屏幕上会自适应变大"
+      },
+      {
+        tag:"change",
+        content:"设置中的下拉菜单在选项多时会显示拖动条"
+      },
+      {
+        tag:"fix",
+        content:"原随机风景图片API失效，更换随机风景图片API为tu.ltyuanfang.cn"
+      }
+    ],
+    time:"2024/9/6"
+  },
   "2.4.4.4":{
     updates:[
       {

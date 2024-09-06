@@ -46,6 +46,7 @@
                 if(a){
                     gtimeout=setTimeout(()=>{
                         document.addEventListener('mousemove',_move,{passive:false})
+                        li.classList.add('mousing');
                     },50);
                     document.addEventListener('mouseup',_up,{passive:false});
                 }else{
@@ -116,6 +117,7 @@
                     clearTimeout(gtimeout);
                     clearTimeout(ttimeout);
                     li.classList.remove('touching');
+                    li.classList.remove('mousing');
                     setTimeout(()=>li.querySelector('a').removeEventListener('click',pv),10);
                     document.removeEventListener(a?'mousemove':'touchmove',_move)
                     document.removeEventListener(a?'mouseup':'touchend',_up)
