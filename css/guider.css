@@ -2,6 +2,9 @@
     font-size: 14px;
     padding: 6px;
 }
+.guide-card .guide-text .material-symbols-outlined{
+    font-size: 14px;
+}
 .guide-card .btn{
     float: right;
     font-size: 12px;

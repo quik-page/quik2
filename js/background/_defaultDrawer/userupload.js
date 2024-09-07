@@ -11,6 +11,11 @@
 
     // Dom
     iovuploaderf = iovuploader.getDialogDom();
+    if(!storage.checkIDB()){
+      util.query(iovuploaderf, '.pddb').innerHTML+='<span style="color:red;font-size:12px;">您的浏览器版本过低，无法上传本地文件作背景</span>';
+      util.query(iovuploaderf, '.pddb input').style.display='none';
+
+    }
     // 取消
     util.query(iovuploaderf, '.cancel').onclick = e=> {
       e.preventDefault();

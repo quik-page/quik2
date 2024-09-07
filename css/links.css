@@ -66,7 +66,7 @@
   font-size: 20px;
   line-height: 30px;
 }
-.links ul.link-list{
+.links .linkscroll{
   width: 100%;
   height:calc(100% - 37px);
   overflow-y: auto;
@@ -74,16 +74,26 @@
   padding-top: 7px;
   position: relative;
 }
-.links ul.link-list::-webkit-scrollbar-thumb{
+.links ul.link-list{
+  display: flex;
+  flex-wrap: wrap;
+}
+.links.a ul.link-list{
+  justify-content: left;
+}
+.links.b ul.link-list{
+  justify-content: center;
+}
+.links .linkscroll::-webkit-scrollbar-thumb{
   background-color: rgba(204, 204, 204, 0.404);
 }
-.links ul.link-list::-webkit-scrollbar-thumb:hover{
+.links .linkscroll::-webkit-scrollbar-thumb:hover{
   background-color: rgba(204, 204, 204, .8);
 }
-body.dark .links ul.link-list::-webkit-scrollbar-thumb{
+body.dark .links .linkscroll::-webkit-scrollbar-thumb{
   background-color: rgba(106, 106, 106, 0.404);
 }
-body.dark .links ul.link-list::-webkit-scrollbar-thumb:hover{
+body.dark .links .linkscroll::-webkit-scrollbar-thumb:hover{
   background-color: rgba(106, 106, 106, .8);
 }
 .links ul.link-list li{
@@ -117,7 +127,7 @@ body.dark .links ul.link-list::-webkit-scrollbar-thumb:hover{
     transform: scale(1.1) rotate(-6deg);
   }
 }
-.links ul.link-list .insert-line{
+.links .linkscroll .insert-line{
   position: absolute;
   display: none;
   background-color: #09f;
@@ -160,7 +170,7 @@ body.dark .links ul.link-list::-webkit-scrollbar-thumb:hover{
   border-radius: 10px;
   background-color: rgba(230, 230, 230, 0.6);
   box-shadow: none;
-  transition: all .3s;
+  transition: all .2s;
 }
 .links.round ul.link-list li a img{
   border-radius: 50%;
@@ -178,23 +188,23 @@ body.dark .links ul.link-list::-webkit-scrollbar-thumb:hover{
   background-color: rgb(210, 210, 210,.6);
   box-shadow: 0 0 5px rgba(0,0,0,.1);
 }
-.links ul.link-list.xs li{
+.links .linkscroll.xs li{
   width:49px;
   height:70px;
 }
-.links ul.link-list.xs li a img{
+.links .linkscroll.xs li a img{
   width: 24px;
   height: 24px;
   padding:6px 6px;
   margin: 4px 4px;
   border-radius: 3px;
 }
-.links ul.link-list.s li{
+.links .linkscroll.s li{
   width:60px;
   height:90px;
 }
 
-.links ul.link-list.s li a img{
+.links .linkscroll.s li a img{
   width: 30px;
   height: 30px;
   padding:10px 10px;
@@ -202,40 +212,40 @@ body.dark .links ul.link-list::-webkit-scrollbar-thumb:hover{
   border-radius: 6px;
 }
 @media(max-width:400px){
-  .links ul.link-list.s li{
+  .links .linkscroll.s li{
     width:57px;
     height:90px;
   }
-  .links ul.link-list.s li a img{
+  .links .linkscroll.s li a img{
     margin: 5px 4px;
   }
 }
-.links ul.link-list.l li{
+.links .linkscroll.l li{
   width:79px;
   height:120px;
 }
-.links ul.link-list.l li a img{
+.links .linkscroll.l li a img{
   width: 40px;
   height: 40px;
   padding:10px 10px;
   margin: 10px 9px;
   border-radius: 12px;
 }
-.links ul.link-list.l li a p{
+.links .linkscroll.l li a p{
   font-size: 15px;
 }
-.links ul.link-list.xl li{
+.links .linkscroll.xl li{
   width:98px;
   height:140px;
 }
-.links ul.link-list.xl li a img{
+.links .linkscroll.xl li a img{
   width: 40px;
   height: 40px;
   padding:20px 20px;
   margin: 10px 9px;
   border-radius: 15px;
 }
-.links ul.link-list.xl li a p{
+.links .linkscroll.xl li a p{
   font-size: 15px;
 }
 .links ul.link-list li.link-add a{
@@ -248,25 +258,25 @@ body.dark .links ul.link-list::-webkit-scrollbar-thumb:hover{
   text-align: center;
   color:#555;
 }
-.links ul.link-list.xs li.link-add a{
+.links .linkscroll.xs li.link-add a{
   width: 30px;
   height: 30px;
   margin: 5px;
   line-height: 30px;
 }
-.links ul.link-list.s li.link-add a{
+.links .linkscroll.s li.link-add a{
   width: 36px;
   height: 36px;
   margin: 12px;
   line-height: 36px;
 }
-.links ul.link-list.l li.link-add a{
+.links .linkscroll.l li.link-add a{
   width: 50px;
   height: 50px;
   margin: 15px;
   line-height: 50px;
 }
-.links ul.link-list.xl li.link-add a{
+.links .linkscroll.xl li.link-add a{
   width: 68px;
   height: 68px;
   margin: 16px;
@@ -276,15 +286,15 @@ body.dark .links ul.link-list::-webkit-scrollbar-thumb:hover{
   background-color: #e1e1e1;
 }
 
-
-@media (max-width:400px){
+@media (max-width:650px){
   .links{
-    height: calc(100% - 180px);
+    height: calc(100% - 210px);
   }
   .links.duan{
     height: calc(100% - 210px);
   }
 }
+
 @media(min-width:2000px){
   .links{
     max-width: 1200px;

@@ -1,25 +1,21 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.5.1',
+    version:'2.5.2',
     version_code:window.version_code,
     updateTime:'2024/9/7',
     log:[
       {
         tag:"fix",
-        content:"修复拖动链接排序的BUG"
+        content:"修复分组删除时的BUG"
       },
       {
-        tag:"change",
-        content:"修改“默认”分组的文字为“"+util.getGoogleIcon('e838',{type:'fill'})+"”"
-      },
-      {
-        tag:"new",
-        content:"默认分组可右键清空"
+        tag:"fix",
+        content:"修复在不支持indexedDB的浏览器的使用BUG"
       },
       {
         tag:"new",
-        content:"添加一个小眼睛图标查看壁纸"
+        content:"链接池的链接可在设置中更改为居中显示"
       },
     ]
   }

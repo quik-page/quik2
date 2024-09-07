@@ -7,6 +7,12 @@
 
   var idbsupport=localforage._getSupportedDrivers([localforage.INDEXEDDB])[0]==localforage.INDEXEDDB;
   // var idbsupport=false;
+  if(!idbsupport&&!localStorage.notdb){
+    localStorage.notdb='1';
+    setTimeout(()=>{
+      alert('浏览器版本过低，不支持indexedDB，一些功能的使用将受限！');
+    })
+  }
   var filerecv={
     get(hash,cb){
       localforage.getItem(hash).then(cb);

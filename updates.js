@@ -1,4 +1,21 @@
 var updatelog={
+  "2.5.2":{
+    updates:[
+      {
+        tag:"fix",
+        content:"修复分组删除时的BUG"
+      },
+      {
+        tag:"fix",
+        content:"修复在不支持indexedDB的浏览器的使用BUG"
+      },
+      {
+        tag:"new",
+        content:"链接池的链接可在设置中更改为居中显示"
+      },
+    ],
+    time:"2024/9/7"
+  },
   "2.5.1":{
     updates:[
       {

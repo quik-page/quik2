@@ -285,7 +285,7 @@
         });
         return;
       }
-      if (c[cate].length <= 1) {
+      if (c[cate].length <= 0) {
         delete c[cate];
         initsto.set('cate', c);
         callback&&callback({
