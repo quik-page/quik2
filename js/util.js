@@ -183,7 +183,7 @@
         }else if(u.hostname.indexOf('stear.cn')!=-1){
           _ic='https://stear.cn/assets/img/216.png';
         }else if(u.hostname.indexOf('tfseek.top')!=-1){
-          _ic='https://tfseek.top/assets/img/216.png';
+          _ic='https://stear.cn/assets/img/216.png';
         }
         this.loadimg(_ic,function(st){
           if(st){
