@@ -1,22 +1,18 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.5.2',
+    version:'2.5.2.1',
     version_code:window.version_code,
     updateTime:'2024/9/7',
     log:[
       {
         tag:"fix",
-        content:"修复分组删除时的BUG"
+        content:"修复链接拖动排序的BUG"
       },
       {
-        tag:"fix",
-        content:"修复在不支持indexedDB的浏览器的使用BUG"
-      },
-      {
-        tag:"new",
-        content:"链接池的链接可在设置中更改为居中显示"
-      },
+        tag:"change",
+        content:"修改林中木搜索引擎的链接"
+      }
     ]
   }
   if ('serviceWorker' in navigator&&!window._dev) {

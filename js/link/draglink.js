@@ -16,7 +16,7 @@
     linksg.addNewItem(drags);
     });
     function getLineLinkNum(){
-        var a=util.query(linkF,'.link-list').offsetWidth/util.query(linkF,'.link-list li').offsetWidth;
+        var a=util.query(linkF,'.link-list').getBoundingClientRect().width/util.query(linkF,'.link-list li').getBoundingClientRect().width;
         return parseInt(a);
     }
 
@@ -39,10 +39,10 @@
                     },600);
                 }
                 if(!initsto.get('draglink'))return true;
-                let startX =a? e.offsetX:(e.targetTouches[0].pageX-li.getBoundingClientRect().left);
-                let startY =a? e.offsetY:(e.targetTouches[0].pageY-li.getBoundingClientRect().top);
+                let startX =a? (e.pageX-li.getBoundingClientRect().left):(e.targetTouches[0].pageX-li.getBoundingClientRect().left);
+                let startY =a? (e.pageY-li.getBoundingClientRect().top):(e.targetTouches[0].pageY-li.getBoundingClientRect().top);
                 console.log(startX,startY);
-                console.log(li.offsetTop);
+                console.log(li.getBoundingClientRect().top);
                 if(a){
                     gtimeout=setTimeout(()=>{
                         document.addEventListener('mousemove',_move,{passive:false})
@@ -60,6 +60,8 @@
                 var b=null,n=null;
                 var jx=util.query(linkF,'.link-list').getBoundingClientRect().left;
                 var jy=util.query(linkF,'.link-list').getBoundingClientRect().top;
+                var dw=li.getBoundingClientRect().width;
+                var dh=li.getBoundingClientRect().height;
                 function _move(e){
                     e.preventDefault();
                     clearTimeout(ttimeout);
@@ -69,20 +71,19 @@
                         b.classList.add('dragging-link');
                         li.classList.add('mousing');
                         document.body.appendChild(b);
-                        b.style.width=li.offsetWidth+'px';
-                        b.style.height=li.offsetHeight+'px';
+                        b.style.width=li.getBoundingClientRect().width+'px';
+                        b.style.height=li.getBoundingClientRect().height+'px';
                     }
                     var x=(a?e.pageX:e.targetTouches[0].pageX)-startX;
                     var y=(a?e.pageY:e.targetTouches[0].pageY)-startY;
                     b.style.left=x+'px';
                     b.style.top=y+'px';
                     
-                    console.log(jx,jy);
                     var dx=x-jx+50;
                     var dy=y-jy+util.query(linkF,'.link-list').scrollTop;
-                    var dw=b.offsetWidth;
-                    var dh=b.offsetHeight;
-                    if(y-jy<0||y>util.query(linkF,'.link-list').offsetHeight+util.query(linkF,'.link-list').offsetTop){
+                    
+                    console.log(dw,dh);
+                    if(y-jy<-dh/2||y>util.query(linkF,'.link-list').getBoundingClientRect().height+util.query(linkF,'.link-list').getBoundingClientRect().top){
                         var line=util.query(linkF,'.link-list .insert-line');
                         line.style.display='none';
                         console.log('out');
@@ -181,7 +182,7 @@
         clearInterval(stt);
         stt=setInterval(()=>{
             util.query(linkF,'.link-list').scrollTop+=2;    
-            if(util.query(linkF,'.link-list').scrollTop>=util.query(linkF,'.link-list').scrollHeight-util.query(linkF,'.link-list').offsetHeight){
+            if(util.query(linkF,'.link-list').scrollTop>=util.query(linkF,'.link-list').scrollHeight-util.query(linkF,'.link-list').getBoundingClientRect().height){
                 clearInterval(stt);
             }         
         },5);

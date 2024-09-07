@@ -55,7 +55,7 @@
     },  
     "stear": {
       name: "林中木<span>赞助</span>",
-      link: "https://stear.cn/?q="
+      link: "https://tfseek.top/search?q="
     },
     "yandex": {
       name: "Yandex",

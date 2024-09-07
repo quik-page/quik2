@@ -1,4 +1,17 @@
 var updatelog={
+  "2.5.2.1":{
+    updates:[
+      {
+        tag:"fix",
+        content:"修复链接拖动排序的BUG"
+      },
+      {
+        tag:"change",
+        content:"修改林中木搜索引擎的链接"
+      }
+    ],
+    time:"2024/9/7"
+  },
   "2.5.2":{
     updates:[
       {
