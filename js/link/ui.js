@@ -109,7 +109,11 @@
     }
   }
   function init(){
-    linkF.innerHTML=_REQUIRE_('./htmls/linkinit.html').replace('{{cate-left}}',util.getGoogleIcon('e314')).replace('{{cate-right}}',util.getGoogleIcon('e315')).replace('{{cate-add}}',util.getGoogleIcon('e145'))
+    linkF.innerHTML=_REQUIRE_('./htmls/linkinit.html')
+    .replace('{{cate-left}}',util.getGoogleIcon('e314'))
+    .replace('{{cate-right}}',util.getGoogleIcon('e315'))
+    .replace('{{cate-add}}',util.getGoogleIcon('e145'))
+    .replace('{{mr}}',util.getGoogleIcon('e838',{type:'fill'}))
     link.ready(()=>{
       dcate(initsto.get('enabledCate'));
       dsize(initsto.get('linksize'));
@@ -122,6 +126,27 @@
   }
 
   var isinitcate=false;
+  var mrcateMenu=new menu({
+    list:[{
+      icon:util.getGoogleIcon('e92e'),
+      title:"清空",
+      click(){
+        confirm('确定清空默认分组的链接吗？该操作不可恢复！',function(ok){
+          if(ok){
+            link.setAll([],null,function(o){
+              if(o=='link'){
+                toast.show('清空成功')
+              }
+            });
+          }
+        })
+      }
+    }],
+    offset:{
+      top:0,
+      left:0
+    }
+  });
   function initCate(){
     console.log('initCate');
     if(isinitcate)return;
@@ -134,6 +159,15 @@
       try{util.query(linkF,'.cate-bar-items .cate-item.active').classList.remove('active');}catch(e){};
       this.classList.add('active');
       actCate();
+    }
+    util.query(linkF,'.cate-item.mr').oncontextmenu=function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      mrcateMenu.setOffset({
+        top:e.pageY,
+        left:e.pageX
+      })
+      mrcateMenu.show();
     }
     util.query(linkF,'.cate-add-btn').onclick=()=>{
       openCateEditDialog();

@@ -1,34 +1,26 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.5.0',
+    version:'2.5.1',
     version_code:window.version_code,
-    updateTime:'2024/9/6',
+    updateTime:'2024/9/7',
     log:[
       {
         tag:"fix",
-        content:"修复搜索联想的BUG"
+        content:"修复拖动链接排序的BUG"
+      },
+      {
+        tag:"change",
+        content:"修改“默认”分组的文字为“"+util.getGoogleIcon('e838',{type:'fill'})+"”"
       },
       {
         tag:"new",
-        content:"链接样式可在设置中更改，且将默认样式改为圆形"
+        content:"默认分组可右键清空"
       },
       {
-        tag:"change",
-        content:"链接池的拖动条改为透明效果"
+        tag:"new",
+        content:"添加一个小眼睛图标查看壁纸"
       },
-      {
-        tag:"change",
-        content:"设置界面在大屏幕上会自适应变大"
-      },
-      {
-        tag:"change",
-        content:"设置中的下拉菜单在选项多时会显示拖动条"
-      },
-      {
-        tag:"fix",
-        content:"原随机风景图片API失效，更换随机风景图片API为tu.ltyuanfang.cn"
-      }
     ]
   }
   if ('serviceWorker' in navigator&&!window._dev) {

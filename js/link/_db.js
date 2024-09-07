@@ -60,17 +60,28 @@
         throw '初始化未完成';
       }
       if(Array.isArray(link)&&typeof cate=='object'){
-        initsto.set('links',link,true,()=>{
-          initsto.set('cate',cate,true,()=>{
-            initsto.set('catelist',Object.keys(cate));
-            cb&&cb();
+        if(link){
+          initsto.set('links',link,true,()=>{
+            cb&&cb('link');
             doevent('change',{
               type:"all",
-              links:link,
+              links:link
+            })
+          })
+        }
+        
+        if(cate){
+          initsto.set('cate',cate,true,()=>{
+            initsto.set('catelist',Object.keys(cate));
+            cb&&cb('cate');
+            doevent('change',{
+              type:"all",
               cate:cate
             })
           })
-        })
+          
+        }
+        
       }
     },
     addLink(detail, callback) {

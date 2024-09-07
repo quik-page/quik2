@@ -46,7 +46,6 @@
                 if(a){
                     gtimeout=setTimeout(()=>{
                         document.addEventListener('mousemove',_move,{passive:false})
-                        li.classList.add('mousing');
                     },50);
                     document.addEventListener('mouseup',_up,{passive:false});
                 }else{
@@ -59,6 +58,8 @@
                 }
                 
                 var b=null,n=null;
+                var jx=util.query(linkF,'.link-list').getBoundingClientRect().left;
+                var jy=util.query(linkF,'.link-list').getBoundingClientRect().top;
                 function _move(e){
                     e.preventDefault();
                     clearTimeout(ttimeout);
@@ -66,6 +67,7 @@
                         li.querySelector('a').addEventListener('click',pv);
                         b=li.cloneNode(true);
                         b.classList.add('dragging-link');
+                        li.classList.add('mousing');
                         document.body.appendChild(b);
                         b.style.width=li.offsetWidth+'px';
                         b.style.height=li.offsetHeight+'px';
@@ -74,8 +76,8 @@
                     var y=(a?e.pageY:e.targetTouches[0].pageY)-startY;
                     b.style.left=x+'px';
                     b.style.top=y+'px';
-                    var jx=util.query(linkF,'.link-list').offsetLeft;
-                    var jy=util.query(linkF,'.link-list').offsetTop;
+                    
+                    console.log(jx,jy);
                     var dx=x-jx+50;
                     var dy=y-jy+util.query(linkF,'.link-list').scrollTop;
                     var dw=b.offsetWidth;
@@ -168,7 +170,7 @@
     function scrollingtop(){
         clearInterval(stt);
         stt=setInterval(()=>{
-            util.query(linkF,'.link-list').scrollTop--;  
+            util.query(linkF,'.link-list').scrollTop-=2;  
             if(util.query(linkF,'.link-list').scrollTop<=0){
                 clearInterval(stt);
             }           
@@ -178,7 +180,7 @@
     function scrollingbottom(){
         clearInterval(stt);
         stt=setInterval(()=>{
-            util.query(linkF,'.link-list').scrollTop++;    
+            util.query(linkF,'.link-list').scrollTop+=2;    
             if(util.query(linkF,'.link-list').scrollTop>=util.query(linkF,'.link-list').scrollHeight-util.query(linkF,'.link-list').offsetHeight){
                 clearInterval(stt);
             }         

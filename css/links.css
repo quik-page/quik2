@@ -62,6 +62,10 @@
   border-radius: 4px;
   margin: 0 2px;
 }
+.links .cate-bar .cate-item span.material-symbols-outlined{
+  font-size: 20px;
+  line-height: 30px;
+}
 .links ul.link-list{
   width: 100%;
   height:calc(100% - 37px);
@@ -87,6 +91,9 @@ body.dark .links ul.link-list::-webkit-scrollbar-thumb:hover{
   width: 71px;
   height: 100px;
   position: relative;
+}
+.links ul.link-list li:active img{
+  transform: scale(.8);
 }
 .links *{
   -webkit-user-drag: none;
@@ -153,6 +160,7 @@ body.dark .links ul.link-list::-webkit-scrollbar-thumb:hover{
   border-radius: 10px;
   background-color: rgba(230, 230, 230, 0.6);
   box-shadow: none;
+  transition: all .3s;
 }
 .links.round ul.link-list li a img{
   border-radius: 50%;

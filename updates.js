@@ -1,4 +1,25 @@
 var updatelog={
+  "2.5.1":{
+    updates:[
+      {
+        tag:"fix",
+        content:"修复拖动链接排序的BUG"
+      },
+      {
+        tag:"change",
+        content:"修改“默认”分组的文字为“"+util.getGoogleIcon('e838',{type:'fill'})+"”"
+      },
+      {
+        tag:"new",
+        content:"默认分组可右键清空"
+      },
+      {
+        tag:"new",
+        content:"添加一个小眼睛图标查看壁纸"
+      },
+    ],
+    time:"2024/9/7"
+  },
   "2.5.0":{
     updates:[
       {

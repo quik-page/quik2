@@ -81,6 +81,34 @@
     },300)
   };
 
+  var eyeicon=new iconc.icon({
+    content:util.getGoogleIcon('e8f4',{type:'fill'}),
+    offset:"br"
+  });
+
+  eyeicon.getIcon().onclick=function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    document.querySelector('main').style.opacity=0;
+    setTimeout(()=>{
+      document.querySelector('main').style.display='none';
+    },300)
+    document.querySelector('.bgf .cover').style.opacity=0;
+    document.addEventListener('click',eyefy)
+  }
+  eyeicon.getIcon().title='查看壁纸';
+
+
+  function eyefy(){
+    document.querySelector('main').style.display='block';
+    setTimeout(()=>{
+      document.querySelector('main').style.opacity=1;
+    },10)
+    document.querySelector('.bgf .cover').style.opacity='';
+    document.removeEventListener('click',eyefy)
+  }
+
+
   //时间的颜色API
   function getNowColor(){
     var date=new Date();
@@ -133,6 +161,7 @@
       }
       checkBgCoverStyle();
       ImgOrVideoSi.show();
+      eyeicon.show();
     },
     video(bgf,data){
       bgf.innerHTML='<div class="video-sp full"><div class="cover"></div><video src="" muted loop></video></div>'
@@ -143,6 +172,7 @@
       }
       checkBgCoverStyle();
       ImgOrVideoSi.show();
+      eyeicon.show();
     },
     color(bgf,data){
       bgf.innerHTML='<div class="color-sp full"></div>'
@@ -248,6 +278,7 @@
     downloadIcon.hide();
     ImgOrVideoSi.hide();
     infoIcon.hide();
+    eyeicon.hide();
   }
   
   return {
