@@ -1,4 +1,13 @@
 var updatelog={
+  "2.5.2.2":{
+    updates:[
+      {
+        tag:"fix",
+        content:"修复自定义背景上传时显示undefined的BUG"
+      }
+    ],
+    time:"2024/9/14"
+  },
   "2.5.2.1":{
     updates:[
       {

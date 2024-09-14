@@ -1,17 +1,13 @@
 !function(){
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.5.2.1',
+    version:'2.5.2.2',
     version_code:window.version_code,
-    updateTime:'2024/9/7',
+    updateTime:'2024/9/14',
     log:[
       {
         tag:"fix",
-        content:"修复链接拖动排序的BUG"
-      },
-      {
-        tag:"change",
-        content:"修改林中木搜索引擎的链接"
+        content:"修复自定义背景上传时显示undefined的BUG"
       }
     ]
   }

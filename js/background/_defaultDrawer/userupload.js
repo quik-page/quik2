@@ -94,8 +94,8 @@
     if(a){
       var j=initsto.get('userbg');
       if(j){
+        util.query(iovuploaderf,'input[type="url"]').value=j.url?j.url:'';
         if(j.type=='image'){
-          util.query(iovuploaderf,'input[type="url"]').value=j.url;
           util.query(iovuploaderf,'.uploadi').checked=true;
         }else{
           util.query(iovuploaderf,'.uploadv').checked=true;
