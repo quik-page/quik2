@@ -117,6 +117,9 @@
     custom.waitdotheme(()=>{
       showmain();
     });
+    setTimeout(()=>{
+      showmain();
+    },500);
   }
 
   var isshowmain=false;
@@ -134,9 +137,7 @@
         document.querySelector("main").classList.add('sicon');
     },360)
   }
-  setTimeout(()=>{
-    showmain();
-  },500);
+  
   
 
   var f=`@font-face {

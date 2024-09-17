@@ -13,7 +13,7 @@
             console.log('egg');
             setTimeout(()=>{
                 var audio=util.element('audio',{
-                    src:'https://quik-page.github.io/quik2/assets/nyan.mp3',
+                    src:'./assets/nyan.mp3',
                     // src:'./assets/nyan.mp3',
                     loop:true,
                     preload:true,

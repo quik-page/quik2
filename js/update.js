@@ -18,6 +18,27 @@
   if ('serviceWorker' in navigator&&!window._dev) {
     navigator.serviceWorker.ready.then(registration=> {
       window.swReg=registration;
+      if(window.location.href.indexOf('://quik.42web.io/')!=-1){
+        var ifr=util.element('iframe',{
+          src:'./version',
+        });
+        document.body.appendChild(ifr);
+        var i=0;
+        ifr.onload=function(){
+          i++;
+          if(i>=2){
+            updateBySW()
+          }
+        }
+        setTimeout(()=>{
+          updateBySW();
+        },4000)
+      }else{
+        updateBySW();
+      }
+      
+    });
+    function updateBySW(){
       quik.util.xhr('./version', r=> {
         var nv = parseInt(r);
         if (nv > version_code) {
@@ -27,7 +48,7 @@
       }, ()=> {
         console.log('获取版本失败');
       })
-    });
+    }
     navigator.serviceWorker.addEventListener('message', e=> {
       if (e.data == 'updated') {
         quik.confirm('新版本已准备就绪，是否刷新页面',v=> {
