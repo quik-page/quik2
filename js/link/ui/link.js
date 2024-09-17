@@ -1,30 +1,28 @@
 (() => {
     var menuedLi = null;
+    function getMenuedLiDetail(){
+        var index = getIndex(menuedLi, util.query(linkF, '.link-list li', true));
+        var cate = util.query(linkF, '.cate-bar-items .cate-item.active');
+        if (cate.classList.contains('mr')) {
+            cate = null
+        } else {
+            cate = cate.innerText;
+        }
+        return {cate,index};
+    }
     var linkMenu = new menu({
         list: [{
             icon: util.getGoogleIcon('e3c9'),
             title: "修改",
             click() {
-                var index = getIndex(menuedLi, util.query(linkF, '.link-list li', true));
-                var cate = util.query(linkF, '.cate-bar-items .cate-item.active');
-                if (cate.classList.contains('mr')) {
-                    cate = null
-                } else {
-                    cate = cate.innerText;
-                }
+                var {index,cate}=getMenuedLiDetail();
                 openLinkEditDialog(index, cate);
             }
         }, {
             icon: util.getGoogleIcon('e92e'),
             title: "删除",
             click() {
-                var index = getIndex(menuedLi, util.query(linkF, '.link-list li', true));
-                var cate = util.query(linkF, '.cate-bar-items .cate-item.active');
-                if (cate.classList.contains('mr')) {
-                    cate = null
-                } else {
-                    cate = cate.innerText;
-                }
+                var {index,cate}=getMenuedLiDetail();
                 link.deleteLink(cate, index, function () {
                     toast.show('删除成功')
                 })
@@ -35,8 +33,73 @@
             click() {
                 util.copyText(util.query(menuedLi, 'a').href);
             }
+        }, {
+            icon: util.getGoogleIcon('e941'),
+            title: "移动至...",
+            click() {
+                var {index,cate}=getMenuedLiDetail();
+                openMoveLinkDialog(cate,index);
+            }
         }]
     });
+
+    var movelinkdia=null,movelinkdiad=null,movecc=null;
+    function openMoveLinkDialog(cate,index){
+        if(!movelinkdia){
+            movelinkdia=new dialog({
+                class:"move-link-dialog",
+                content:_REQUIRE_('../htmls/linkmove.html'),
+            });
+            movelinkdiad=movelinkdia.getDialogDom();
+            util.query(movelinkdiad, '.cancel.btn').onclick=function(e){
+                e.preventDefault();
+                movelinkdia.close();
+            }
+            movecc=util.query(movelinkdiad,'.group-list');
+        }
+        util.query(movelinkdiad, '.ok.btn').onclick=function(e){
+            var yd=util.query(movecc,'.item.act');
+            console.log(yd);
+            if(yd){
+                var tocate=yd.classList.contains('mr')?null:util.query(yd,'.item-name').innerText;
+                var link1=linklist[index];
+                link.addLink({
+                    title:link1.title,
+                    url:link1.url,
+                    cate:tocate
+                },function(){
+                    link.deleteLink(cate,index,function(){
+                        toast.show('移动成功')
+                        movelinkdia.close();
+                    });
+                });
+
+            }else{
+                toast.show('请选择一个分组');
+            }
+        }
+        movecc.innerHTML='';
+        link.getCates(r => {
+            r.data.unshift(null);
+            r.data.forEach(c => {
+                var li=util.element('div',{
+                    class:"item"+((!c)?' mr':'')
+                });
+                li.innerHTML=`<div class="item-name">${c?c:util.getGoogleIcon('e838', { type: 'fill' })}</div><div class="item-select">${util.getGoogleIcon('e5ca')}</div>`;
+                movecc.append(li);
+                li.onclick=function(){
+                    var yd=util.query(movecc,'.item.act');
+                    if(yd){
+                        yd.classList.remove('act');
+                    }
+                    this.classList.add('act');
+                }
+            });
+        });
+        setTimeout(()=>{
+            movelinkdia.open();
+        });
+    }
 
 
     function glinkli(l) {

@@ -31,7 +31,11 @@
       }
     },
     get(){
-      return initsto.get('ivsetting').th||1;
+      var k=initsto.get('ivsetting').th;
+      if(typeof k=='undefined'){
+        return 1;
+      }
+      return k;
     },
     callback(v){
       var o=initsto.get('ivsetting');
@@ -133,8 +137,7 @@
       document.body.classList.add('t-light')
     }else if(o.th==0){
       glisten();
-      console.log(quik.custom.getColor());
-      if(quik.custom.getColor()=='dark'){
+      if(custom.getColor()=='dark'){
         document.body.classList.add('t-dark')
         document.body.classList.remove('t-light')
         b='0,0,0';
@@ -155,12 +158,16 @@
   function glisten(){
     if(listened)return;
     listened=true;
-    quik.custom.on('colorchange',_colorchange)
+    setTimeout(()=>{
+      quik.custom.on('colorchange',_colorchange)
+    })
   }
   function flisten(){
     if(!listened)return;
     listened=false;
-    quik.custom.off('colorchange',_colorchange)
+    setTimeout(()=>{
+      quik.custom.off('colorchange',_colorchange)
+    })
   }
   function _colorchange(d){
     var o=initsto.get('ivsetting');

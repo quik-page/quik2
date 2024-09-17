@@ -1,4 +1,17 @@
 var updatelog={
+  "2.5.3":{
+    updates:[
+      {
+        tag:"fix",
+        content:"紧急修复背景蒙版设置为跟随主题时起始页崩溃的恶性BUG"
+      },
+      {
+        tag:"new",
+        content:"新增链接右键移动至其他分组的功能"
+      }
+    ],
+    time:"2024/9/17"
+  },
   "2.5.2.2":{
     updates:[
       {

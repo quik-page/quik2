@@ -49,10 +49,10 @@
   var card=_REQUIRE_('./js/card/index.js');
   var guidecreator=_REQUIRE_('./js/guidecreator.js');
   var fcard=_REQUIRE_('./js/fcard/index.js');
+  var custom=_REQUIRE_('./js/custom/index.js');
   var background=_REQUIRE_('./js/background/index.js');
   var searchEditor=_REQUIRE_('./js/search/editor.js');
   var notice=_REQUIRE_('./js/notice/index.js');
-  var custom=_REQUIRE_('./js/custom/index.js');
   _REQUIRE_('./js/safe.js');
   var addon=_REQUIRE_('./js/addon/index.js');
   var sync=_REQUIRE_('./js/sync/index.js');

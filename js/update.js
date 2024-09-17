@@ -1,13 +1,17 @@
-!function(){
+(()=>{
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.5.2.2',
+    version:'2.5.3',
     version_code:window.version_code,
     updateTime:'2024/9/14',
     log:[
       {
         tag:"fix",
-        content:"修复自定义背景上传时显示undefined的BUG"
+        content:"紧急修复背景蒙版设置为跟随主题时起始页崩溃的恶性BUG"
+      },
+      {
+        tag:"new",
+        content:"新增链接右键移动至其他分组的功能"
       }
     ]
   }
@@ -73,4 +77,4 @@
     }
     return str;
   }
-}();
+})();

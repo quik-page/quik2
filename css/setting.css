@@ -63,6 +63,9 @@
   height: 40px;
   position: relative;
   width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: right;
 }
 .setting-item .setting-item-right>*{
   float: right;
