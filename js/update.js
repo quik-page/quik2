@@ -27,18 +27,18 @@
         ifr.onload=function(){
           i++;
           if(i>=2){
-            updateBySW()
+            updateBySW(registration)
           }
         }
         setTimeout(()=>{
-          updateBySW();
+          updateBySW(registration);
         },4000)
       }else{
-        updateBySW();
+        updateBySW(registration);
       }
       
     });
-    function updateBySW(){
+    function updateBySW(registration){
       quik.util.xhr('./version', r=> {
         var nv = parseInt(r);
         if (nv > version_code) {
