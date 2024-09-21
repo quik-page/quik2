@@ -1,4 +1,17 @@
 var updatelog={
+  "2.5.3.1":{
+    updates:[
+      {
+        tag:"fix",
+        content:"修复链接大小失效的BUG"
+      },
+      {
+        tag:"fix",
+        content:"修复“林中木”搜索引擎图标问题"
+      }
+    ],
+    time:"2024/9/21"
+  },
   "2.5.3":{
     updates:[
       {

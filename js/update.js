@@ -1,17 +1,17 @@
 (()=>{
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.5.3',
+    version:'2.5.3.1',
     version_code:window.version_code,
     updateTime:'2024/9/14',
     log:[
       {
         tag:"fix",
-        content:"紧急修复背景蒙版设置为跟随主题时起始页崩溃的恶性BUG"
+        content:"修复链接大小失效的BUG"
       },
       {
-        tag:"new",
-        content:"新增链接右键移动至其他分组的功能"
+        tag:"fix",
+        content:"修复“林中木”搜索引擎图标问题"
       }
     ]
   }

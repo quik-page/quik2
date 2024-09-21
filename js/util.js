@@ -180,10 +180,8 @@
           _ic='https://bing.com/favicon.ico';
         }else if(u.hostname.indexOf('www.google.com')!=-1||u.hostname.indexOf('google.com')==0){
           _ic='https://s2.loli.net/2024/08/10/dVNZ4SzFxTMpj1a.png';
-        }else if(u.hostname.indexOf('stear.cn')!=-1){
-          _ic='https://stear.cn/assets/img/216.png';
         }else if(u.hostname.indexOf('tfseek.top')!=-1){
-          _ic='https://stear.cn/assets/img/216.png';
+          _ic='https://tfseek.top/assets/img/216.png';
         }
         this.loadimg(_ic,function(st){
           if(st){

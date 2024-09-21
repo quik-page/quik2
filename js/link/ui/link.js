@@ -311,6 +311,7 @@
 
 
     function dsize(v) {
+        console.log(v);
         util.query(linkF, '.link-list').className = 'link-list ' + v;
     }
 
