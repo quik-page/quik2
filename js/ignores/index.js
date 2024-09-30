@@ -119,6 +119,7 @@
 
   var aboutDialog=new dialog({
     content:_REQUIRE_('./text/about.html').replace('{{close-btn}}',util.getGoogleIcon('e5cd')),
+    class:"def-size",
     mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN
   });
 
@@ -127,7 +128,12 @@
     aboutDialog.close();
   }
   util.query(addom,'.t.thanks a').onclick=()=>{
-    thaDialog.open();
+    if(!thaDialog){
+      drawThank();
+    }
+    setTimeout(()=>{
+      thaDialog.open();
+    },50);
   }
   setTimeout(()=>{
     util.query(addom,'.ver span').innerText=window.version.version;
@@ -144,7 +150,7 @@
       </div>
       <div class="version_list"><div></div></div>`,
       mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
-      class:"update_dia"
+      class:"update_dia def-size"
     });
   
     updom=updateDialog.getDialogDom();
@@ -198,7 +204,7 @@
     licDialog=new dialog({
       content:` <div class="close">${util.getGoogleIcon('e5cd')}</div><div class="lic-con">${getLicense()}</div>`,
       mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
-      class:"lic-dialog"
+      class:"lic-dialog def-size"
     });
   
     util.query(licDialog.getDialogDom(),'.close').onclick=()=>{
@@ -210,7 +216,7 @@
     var thankhtml=_REQUIRE_('./text/thanks.html');
     thaDialog=new dialog({
       content:`<div class="close">${util.getGoogleIcon('e5cd')}</div><div class="thank-con">${thankhtml}</div>`,
-      class:"thank-dialog",
+      class:"thank-dialog def-size",
       mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN
     });
   

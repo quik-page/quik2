@@ -164,7 +164,7 @@
         <div class="btn cancel">取消</div>
         <div class="btn ok">导出</div>
       </div>`,
-      class: "sync-dialog",
+      class: "sync-dialog auto-size",
       mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
     });
     dm = exportDataDialog.getDialogDom();
@@ -205,7 +205,7 @@
         <div class="btn cancel">取消</div>
         <div class="btn ok">导入</div>
       </div>`,
-      class: "sync-dialog",
+      class: "sync-dialog auto-size",
       mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
     });
     dm2 = importDataDialog.getDialogDom();

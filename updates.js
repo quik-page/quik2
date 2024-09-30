@@ -1,4 +1,17 @@
 var updatelog={
+  "2.5.4":{
+    updates:[
+      {
+        tag:"fix",
+        content:"修复在关于页面点击查看感谢列表时报错的BUG"
+      },
+      {
+        tag:"fix",
+        content:"整理优化窗口样式"
+      }
+    ],
+    time:"2024/9/30"
+  },
   "2.5.3.1":{
     updates:[
       {

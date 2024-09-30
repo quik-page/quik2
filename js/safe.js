@@ -118,4 +118,63 @@
     }
 
     ckline();
+
+    var txs=[
+        "当前你使用的QUIK扩展使用的网页源为国外的Github Pages，国内访问不太稳定，建议在扩展页面将页面源更换为<b>quik.42web.io</b>，在更换前记得导出数据<br>如果你没有找到该设置，请到<a href='https://quik.42web.io/intro/' target='_blank'>首页</a>下载最新版本的QUIK扩展",
+        "当前你使用的是QUIK起始页的Github Pages站点，国内访问不太稳定，建议切换至国内访问速度更快的quik.42web.io，在切换前记得导出数据"
+    ]
+    if(!initsto.get('ext_notice')){
+        if(!window.isDev){
+            if(window.location.hostname.indexOf('github.io')){
+                if(window.isExt){
+                    setTimeout(()=>{
+                        new notice({
+                            title:"提醒",
+                            content:txs[0]
+                            ,btns:[{
+                                text:"确定",
+                                style:"ok",
+                                click:()=>{
+                                    initsto.set('ext_notice',1);
+                                    sync.openExport();
+                                }
+                            },{
+                                text:"取消",
+                                click:()=>{
+                                    initsto.set('ext_notice',1);
+                                }
+                            }]
+                        }).show();
+                    }) 
+                }else{
+                    setTimeout(()=>{
+                        new notice({
+                            title:"提醒",
+                            content:txs[1]
+                            ,btns:[{
+                                text:"确定",
+                                style:"ok",
+                                click:()=>{
+                                    initsto.set('ext_notice',1);
+                                    window.open('https://quik.42web.io/');
+                                    sync.openExport();
+                                }
+                            },{
+                                text:"取消",
+                                click:()=>{
+                                    initsto.set('ext_notice',1);
+                                }
+                            }]
+                        }).show();
+                    }) 
+                }
+                
+            }
+        }
+        
+    }
+    
+
+    
+    
 })();

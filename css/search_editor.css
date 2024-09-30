@@ -1,9 +1,3 @@
-.d-c.search_editor{
-  width: 600px;
-  height: 400px;
-  padding: 0;
-  overflow: hidden;
-}
 .search_editor .neizhilist .item{
   width: calc(25% - 20px);
   height: 40px;
@@ -19,10 +13,6 @@
   margin: 7px 5px;
 }
 @media (max-width:600px){
-  .dialog.mobile-show-full .d-c.search_editor{
-    width: 100%;
-    height: 100%;
-  }
   .search_editor .neizhilist .item{
     width: calc(50% - 10px);
     margin: 5px;

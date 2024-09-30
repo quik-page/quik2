@@ -35,14 +35,6 @@
   margin: 10px;
 }
 
-.d-c.update_dia,
-.d-c.lic-dialog,
-.d-c.thank-dialog {
-  width: 600px;
-  height: 400px;
-  padding: 0;
-  overflow: hidden;
-}
 .d-c.update_dia .version_list {
   width: calc(100% - 40px);
   height: calc(100% - 60px);
@@ -85,15 +77,6 @@
   top: 3px;
   border-radius: 10px;
   left: -20px;
-}
-@media (max-width:600px){
-  .dialog.mobile-show-full .d-c.update_dia,
-  .dialog.mobile-show-full .d-c.lic-dialog,
-  .dialog.mobile-show-full .d-c.thank-dialog
-  {
-    width: 100%;
-    height: 100%;
-  }
 }
 .lic-con h1,
 .thank-con h1

@@ -139,3 +139,43 @@ body.dark .d-c .actionbar .closeBtn:hover{
   min-width: 250px;
   max-width: 700px;
 }
+
+/* 适配屏幕大小的dialog */
+.d-c.auto-size,
+.d-c.def-size
+{
+  width: 600px;
+  height: 500px;
+  padding: 0;
+  overflow: hidden;
+}
+
+@media (max-width:600px){
+  .dialog.mobile-show-full .d-c.auto-size,
+  .dialog.mobile-show-full .d-c.def-size
+  {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (min-width:1000px){
+  .d-c.auto-size{
+    width: 800px;
+  }
+}
+@media (min-width:1400px){
+  .d-c.auto-size{
+    width: 900px;
+  }
+}
+@media (min-height:800px){
+  .d-c.auto-size{
+    height: 600px;
+  }
+}
+@media (min-height:1000px){
+  .d-c.auto-size{
+    height: 800px;
+  }
+}

@@ -1,15 +1,3 @@
-.d-c.sync-dialog{
-  width: 600px;
-  height: 400px;
-  padding: 0;
-  overflow: hidden;
-}
-@media (max-width:600px){
-  .dialog.mobile-show-full .d-c.sync-dialog{
-    width: 100%;
-    height: 100%;
-  }
-}
 .sync-dialog .exportslist,.sync-dialog .importslist{
   width: 100%;
   height: calc(100% - 94px);

@@ -4,7 +4,7 @@
   dia=new dialog({
     content:_REQUIRE_('./editor.html').replace('{{close}}',util.getGoogleIcon('e5cd')),
   mobileShowtype:dialog.SHOW_TYPE_FULLSCREEN,
-    class:"search_editor"
+    class:"search_editor auto-size"
   });
 
   var d=dia.getDialogDom();

@@ -18,7 +18,7 @@
     util.query(document,'.dialogs').append(dialogF);
     var dialogC=util.query(dialogF,'.d-c');
     if(options.class){
-      dialogC.classList.add(options.class);
+      dialogC.className+=' '+options.class;
     }
     if(options.mobileShowtype==1){
       dialogF.classList.add('mobile-show-full');

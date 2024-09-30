@@ -14,7 +14,7 @@
       this.ifo=true;
       this.dialog = new dialog({
         content: `<div class="actionbar"><h1>设置</h1><div class="closeBtn">${util.getGoogleIcon('e5cd')}</div></div><ul class="setting-root"></ul>`,
-        class: "setting_dia",
+        class: "setting_dia auto-size",
         mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN
       });
       this.dialogDom = this.dialog.getDialogDom();

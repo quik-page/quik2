@@ -1,9 +1,3 @@
-.d-c.setting_dia{
-  width: 600px;
-  height: 500px;
-  padding: 0;
-  overflow: hidden;
-}
 
 /* 
 @note 适配新setting
@@ -216,10 +210,6 @@ body.dark .setting-group-title{
 }
 
 @media (max-width:600px){
-  .dialog.mobile-show-full .d-c.setting_dia{
-    width: 100%;
-    height: 100%;
-  }
   .setting-tree{
     margin:0;
   }

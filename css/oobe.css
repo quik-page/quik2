@@ -1,17 +1,7 @@
 .d-c.oobedia{
-    width: 600px;
-    height: 400px;
-    padding: 0;
-    overflow: hidden;
     position: relative;
   }
 
-  @media (max-width:600px){
-    .dialog.mobile-show-full .d-c.oobedia{
-      width: 100%;
-      height: 100%;
-    }
-  }
 
 .oobedia .part{
     width: 100%;

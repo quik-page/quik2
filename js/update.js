@@ -1,17 +1,17 @@
 (()=>{
   window.version_code = '${VERSION_CODE}';
   window.version={
-    version:'2.5.3.1',
+    version:'2.5.4',
     version_code:window.version_code,
-    updateTime:'2024/9/14',
+    updateTime:'2024/9/30',
     log:[
       {
         tag:"fix",
-        content:"修复链接大小失效的BUG"
+        content:"修复在关于页面点击查看感谢列表时报错的BUG"
       },
       {
         tag:"fix",
-        content:"修复“林中木”搜索引擎图标问题"
+        content:"整理优化窗口样式"
       }
     ]
   }

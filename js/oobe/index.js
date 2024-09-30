@@ -11,7 +11,7 @@
         all = all.replace('{{lic}}', lichtml);
         var oobeDia = new dialog({
             content: all,
-            class: 'oobedia',
+            class: 'oobedia def-size',
             mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
             clickOtherToClose: false
         })
