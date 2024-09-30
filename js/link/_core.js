@@ -49,9 +49,14 @@ var initsto = storage('link', {
               dbTool.get(ast[km].cate,(ocate)=>{
                 dbTool.delete(ast[km].cate,()=>{
                   var d=ocate;
-                  for(var k in a.cate){
-                    d[k]=compareLinks(d[k],a.cate[k]);
+                  if(d){
+                    for(var k in a.cate){
+                      d[k]=compareLinks(d[k],a.cate[k]);
+                    }
+                  }else{
+                    d=a.cate;
                   }
+                  
                   a.cate=d;
                   dbTool.set(a.cate,void 0,(hash)=>{
                     a.cate=hash;
