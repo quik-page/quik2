@@ -96,7 +96,7 @@
       title:"浏览器扩展",
       click(){
         alert('浏览器扩展尚处于测试中，只支持chromium内核的浏览器（chrome,edge,360浏览器等），暂未上传至扩展商店，请下载crx后手动安装。',function(){
-          if(location.href.indexOf('quik.web42.io')!=-1){
+          if(location.href.indexOf('quik.42web.io')!=-1){
             window.open('/intro/#h');
           }else{
             window.open('/#h');
