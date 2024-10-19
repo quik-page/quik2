@@ -74,6 +74,10 @@ body.dark .searchtypeselector{
   user-select: none;
   font-size: 18px;
 }
+.searchbox ul{
+  max-height: calc(95vh - 250px);
+  overflow-y: auto;
+}
 .searchbox ul li{
   width: calc(100% - 6px);
   margin: 3px;
@@ -212,6 +216,9 @@ body.t-dark .searchtypeselector li.active{
   }
   .searchbox.active{
     top: 15px;
+  }
+  .searchbox ul{
+    max-height: calc(96vh - 100px);
   }
 }
 @media (max-height:400px){

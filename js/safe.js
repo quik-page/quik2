@@ -73,6 +73,30 @@
         }
     });
     gaoji.addNewItem(clse);
+    var cjup=new SettingItem({
+        title:"强制更新",
+        message:"强行从远程获取最新版本并更新",
+        index:2,
+        type:"null",
+        callback(){
+            confirm('确定要强制更新吗？',r=>{
+                if(r){
+                    if(window.swReg){
+                        window.swReg.active.postMessage('update');
+                        new notice({
+                            title:"更新提示",
+                            content:"已向后台发送更新请求，请耐心等待。",
+                        }).show();
+                    }else{
+                        alert('更新完成',()=>{
+                            location.reload();
+                        })
+                    }
+                }
+            });
+        }
+    });
+    gaoji.addNewItem(cjup);
 
     mainSetting.addNewGroup(gaoji);
 

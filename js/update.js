@@ -3,15 +3,19 @@
   window.version={
     version:'2.5.4',
     version_code:window.version_code,
-    updateTime:'2024/9/30',
+    updateTime:'2024/10/19',
     log:[
       {
         tag:"fix",
-        content:"修复在关于页面点击查看感谢列表时报错的BUG"
+        content:"限制搜索联想的高度，避免溢出屏幕"
       },
       {
-        tag:"fix",
-        content:"整理优化窗口样式"
+        tag:"change",
+        content:"将图标源改回GoogleFontsAPI"
+      },
+      {
+        tag:"new",
+        content:"添加“强制更新”功能，以应急"
       }
     ]
   }

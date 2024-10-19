@@ -24,7 +24,7 @@ const gc=[
   './assets/localforage.js',
   './assets/def_addon.png',
   './assets/logo.svg',
-  'https://gstatic.loli.net/s/materialsymbolsoutlined/v164/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2'
+  'https://fonts.gstatic.com/s/materialsymbolsoutlined/v213/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2'
 ]
 
 self.addEventListener('install', (event) => {

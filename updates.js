@@ -1,4 +1,21 @@
 var updatelog={
+  "2.5.5":{
+    updates:[
+      {
+        tag:"fix",
+        content:"限制搜索联想的高度，避免溢出屏幕"
+      },
+      {
+        tag:"change",
+        content:"将图标源改回GoogleFontsAPI"
+      },
+      {
+        tag:"new",
+        content:"添加“强制更新”功能，以应急"
+      }
+    ],
+    time:"2024/10/19"
+  },
   "2.5.4":{
     updates:[
       {
