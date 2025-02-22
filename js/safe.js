@@ -100,13 +100,14 @@ var cjup = new SettingItem({
     }
 });
 
+var _i=0;
 function updateBySW(registration){
     if (window.isInframe && location.href.indexOf('://quik.42web.io/') != -1) {
         alert('因安全原因，扩展程序无法进行强制更新，请在网页端更新', function () {
             window.open('https://quik.42web.io/?forceUpdate=1');
         });
-    }else if(location.href.indexOf('://quik.42web.io/') != -1&&document.cookie.indexOf('__test')==-1){
-        toast.show('发现新版本(版本序号：' + nv + ')，正在更新');
+    }else if(location.href.indexOf('://quik.42web.io/') != -1&&_i==0){
+        _i++;
         var ifr = util.element('iframe', {
           src: './version',
           style: "opacity:0"

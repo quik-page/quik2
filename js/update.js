@@ -51,6 +51,7 @@ if ('serviceWorker' in navigator && !window._dev) {
     }
 
   });
+  var _i=0;
   function updateBySW(registration) {
     util.xhr('./version', r => {
       try{
@@ -61,7 +62,8 @@ if ('serviceWorker' in navigator && !window._dev) {
           alert('检测到新版本，安全原因无法在扩展中更新，即将打开新页面更新。', function () {
             window.open('https://quik.42web.io/?update=1');
           })
-        }else if(location.href.indexOf('://quik.42web.io/') != -1&&document.cookie.indexOf('__test')==-1){
+        }else if(location.href.indexOf('://quik.42web.io/') != -1&&_i==0){
+          _i++;
           toast.show('发现新版本(版本序号：' + nv + ')，正在更新');
           var ifr = util.element('iframe', {
             src: './version',
