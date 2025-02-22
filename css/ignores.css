@@ -22,6 +22,12 @@
   font-size: 20px;
   line-height: 40px;
 }
+.lic-con h1,
+.lic-con h2,
+.lic-con a
+{
+  color: #09f;
+}
 .about-dialog{
   display: flex;
   flex-direction: column;

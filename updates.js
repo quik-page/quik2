@@ -1,4 +1,25 @@
 var updatelog={
+  "2.7.3":{
+    updates:[
+      {
+        tag: "fix",
+        content: "修复搜索框对齐链接下600-800px的问题"
+      },
+      {
+        tag: "fix",
+        content: "尝试修复quik.42web.io端中的更新以及强制更新可能会出现的崩溃问题"
+      },
+      {
+        tag: "new",
+        content: "链接显示可记住上次选择的分组"
+      },
+      {
+        tag: "change",
+        content: "修改特别鸣谢的内容和用户协议页面的样式"
+      }
+    ],
+    time: "2025/2/22"
+  },
   "2.7.2":{
     updates:[
       {

@@ -251,7 +251,6 @@ function drawImportDialog() {
         }
       }
     })
-    console.log('set');
     setJSON(sl, op);
     importDataDialog.close();
   }

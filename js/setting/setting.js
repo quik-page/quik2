@@ -171,7 +171,6 @@ Setting.prototype = {
         }
         util.query(elr, '.check-box').addEventListener('click', function () {
           util.query(elr, '.setting-item-input').click();
-          console.log(util.query(elr, '.setting-item-input').checked);
           if (util.query(elr, '.setting-item-input').checked) {
             this.classList.add('checked');
           } else {
@@ -320,7 +319,6 @@ Setting.prototype = {
   },
   _reinitItem(group, item) {
     if (!this.ifo) return;
-    console.log(item);
     var _init;
     var itemEle = util.query(this.dialogDom, '.setting-group[data-id=' + group.id + '] .setting-item[data-id=' + item.id + ']');
     var elr = util.query(itemEle, '.setting-item-right')

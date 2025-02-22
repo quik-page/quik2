@@ -26,13 +26,11 @@ if(hissto.get('his')==undefined){
 sg.addNewItem(si);
 addNewSA({
     check(text) {
-        console.log((!!initsto.get('ob_his')) , !text);
         return (!!initsto.get('ob_his')) && !text;
     },
     get(text, getsa) {
         var a = getsa();
         var his = hissto.get('his');
-        console.log(his);
         for (let i = 0; i < his.length; i++) {
             a.push({
                 icon:util.getGoogleIconByString('history'),

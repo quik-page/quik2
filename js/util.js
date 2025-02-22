@@ -199,7 +199,6 @@ module.exports = {
           if (st2) {
             cb(u.protocol + '//' + u.host + '/favicon.ico');
           } else {
-            console.log('cbfalse');
             cb(false)
           }
         })

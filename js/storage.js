@@ -85,7 +85,6 @@ function doqueue() {
     return;
   }
   var dd = setqueue.dequeue();
-  console.log(dd);
   var mm = dd[1];
   mm.push(function () {
     doqueue();

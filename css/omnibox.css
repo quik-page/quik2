@@ -20,6 +20,11 @@
     width: 1200px;
   }
 }
+@media(max-width:800px){
+  .searchbox.alignlink{
+    width: calc(100% - 20px);
+  }
+}
 body.t-dark .searchbox,
 body.t-dark .searchtypeselector,
 body.t-light .searchbox,

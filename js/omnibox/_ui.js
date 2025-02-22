@@ -36,12 +36,10 @@ function initSearchBox() {
 
   /* 集中处理input事件 */
   inputInputEv = function () {
-    console.log('input');
     // 渲染Type
     chulitype(this.value.trim());
     saul.innerHTML = '';
     getSA(this.value.trim(), function (salist) {
-      console.log(salist);
       //记录用户原本的active
       var actli = util.query(saul, 'li.active')
       if (actli) {
@@ -60,7 +58,6 @@ function initSearchBox() {
         saul.append(li);
         li.onclick = () => {
           s.click()
-          console.log('clicked')
         };
       });
 

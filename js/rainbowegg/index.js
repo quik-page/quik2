@@ -1,7 +1,6 @@
 const omnibox=require('../omnibox');
 const util = require('../util');
 omnibox.on('beforeenter', (text) => {
-    console.log(text);
     if (text == 'rainbowcatXquik') {
         localStorage.__quik_egg__ = '1';
     }

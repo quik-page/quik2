@@ -547,7 +547,6 @@ function getAddonList() {
   return initsto.list()
 }
 
-console.log(window.addon_);
 if (!window.addon_) {
   var addonruns = [];
   getAddonList().forEach(id => {

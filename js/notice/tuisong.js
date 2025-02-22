@@ -6,7 +6,6 @@ const util = require("../util");
 var tuisongsto = storage('tuisong');
 util.initSet(tuisongsto, 'd', 0);
 var last_d = tuisongsto.get('d');
-console.log('t');
 util.xhr('/quik-notice.json', res => {
     res = JSON.parse(res);
     if (res.date > last_d) {
@@ -20,13 +19,11 @@ util.xhr('/quik-notice.json', res => {
             btns: res.btns.map((v) => {
                 var fn;
                 if (v.link) {
-                    console.log('link');
                     fn = () => {
                         tsn.hide();
                         window.open(v.link)
                     }
                 } else {
-                    console.log('hide');
                     fn = () => {
                         tsn.hide();
                     }
@@ -40,8 +37,6 @@ util.xhr('/quik-notice.json', res => {
         })
 
         tsn.show();
-
-        console.log(tsn);
     }
 }, () => {
     // 请求失败

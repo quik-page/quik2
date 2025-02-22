@@ -155,7 +155,6 @@ function drawNoticeBtn(n) {
       });
       btnel.innerText = btn.text;
       btnel.onclick = () => {
-        console.log(btn.click);
         btn.click(n);
       }
       btncon.appendChild(btnel);

@@ -237,7 +237,6 @@ function onbgdrawersign(drawer) {
 }
 
 addon.on('allrun', () => {
-  console.log('allrun');
   if (waitdraw) {
     waitdraw = null;
     initsto.set('bg', {

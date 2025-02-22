@@ -9,7 +9,6 @@ const addon=require('../addon')
 
 
 var initsto = storage('websync');
-console.log(initsto.getAll());
 if (!initsto.get('wait')) {
     initsto.set('wait', []);
 }
@@ -82,7 +81,6 @@ function unregister(session) {
     if (nsyncM == session.id) {
         initsto.remove('yesid');
         initsto.remove('last_req');
-        console.log(initsto.getAll());
         location.reload();
     }
 }
@@ -144,7 +142,6 @@ syncIcon.hide();
 function syncData() {
     return new Promise((r, j) => {
         syncM.getLastReq().then((last_req) => {
-            console.log(last_req, initsto.get('last_req'));
             if (last_req != initsto.get('last_req')) {
                 var d = syncConfictDialog.getDialogDom();
                 if (last_req == 'no') {
@@ -197,13 +194,10 @@ async function getData() {
 }
 
 function listenData() {
-    console.log('listen');
     storage.on('websync', (e) => {
-        console.log('websync');
         var reqId = Date.now();
         e.id = reqId
         pushChange(e);
-        console.log('ps');
     })
 }
 
@@ -215,7 +209,6 @@ function syncChange() {
     }
     var o = initsto.get('wait');
     var e = o[0];
-    console.log(e);
     if (!e) return;
     syncM.update(e, (reqId) => {
         if (reqId) {
@@ -243,7 +236,6 @@ function syncChange() {
 }
 
 function pushChange(e) {
-    console.log('pushChange');
     var o = initsto.get('wait');
     if (e.sp) {
         o.push(e);
@@ -260,9 +252,7 @@ function pushChange(e) {
         })
     }
     initsto.set('wait', o);
-    console.log('show', o);
     if (o.length == 1 && syncM) {
-        console.log('sync');
         syncChange();
     }
 }
@@ -277,7 +267,6 @@ function dealChange(id) {
         }
     }
     initsto.set('wait', o);
-    console.log(o, id);
     if (o.length == 0) {
         syncIcon.hide();
     }

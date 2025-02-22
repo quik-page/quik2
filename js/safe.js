@@ -89,18 +89,7 @@ var cjup = new SettingItem({
         confirm('确定要强制更新吗？', r => {
             if (r) {
                 if (window.swReg) {
-                    if (window.isInframe && location.href.indexOf('://quik.42web.io/') != -1) {
-                        alert('因安全原因，扩展程序无法进行强制更新，请在网页端更新', function () {
-                            window.open('https://quik.42web.io/?forceUpdate=1');
-                        });
-                    } else {
-                        window.swReg.active.postMessage('update');
-                        new notice({
-                            title: "更新提示",
-                            content: "已向后台发送更新请求，请耐心等待。",
-                        }).show();
-                    }
-
+                    updateBySW(window.swReg);
                 } else {
                     alert('更新完成', () => {
                         location.reload();
@@ -110,6 +99,42 @@ var cjup = new SettingItem({
         });
     }
 });
+
+function updateBySW(registration){
+    if (window.isInframe && location.href.indexOf('://quik.42web.io/') != -1) {
+        alert('因安全原因，扩展程序无法进行强制更新，请在网页端更新', function () {
+            window.open('https://quik.42web.io/?forceUpdate=1');
+        });
+    }else if(location.href.indexOf('://quik.42web.io/') != -1&&document.cookie.indexOf('__test')==-1){
+        toast.show('发现新版本(版本序号：' + nv + ')，正在更新');
+        var ifr = util.element('iframe', {
+          src: './version',
+          style: "opacity:0"
+        });
+        document.body.appendChild(ifr);
+        var i = 0;
+        ifr.onload = function () {
+          i++;
+          if (i >= 2) {
+            updateBySW(registration)
+          }
+        }
+        setTimeout(() => {
+          updateBySW(registration)
+        }, 4000)
+        new notice({
+            title: "更新提示",
+            content: "已向后台发送更新请求，请耐心等待。",
+        }).show();
+      } else {
+        
+        registration.active.postMessage('update');
+        new notice({
+            title: "更新提示",
+            content: "已向后台发送更新请求，请耐心等待。",
+        }).show();
+    }
+}
 gaoji.addNewItem(cjup);
 
 mainSetting.addNewGroup(gaoji);

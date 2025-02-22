@@ -78,7 +78,6 @@ function reinitCate() {
 }
 
 function actCate(cateEl) {
-    console.log(linkF);
     util.query(linkF, '.link-list').innerHTML = '<div class="insert-line"></div>';
     var cate = null;
     if (typeof cateEl == 'string') {
@@ -99,12 +98,18 @@ function actCate(cateEl) {
         util.query(linkF, '.cate-bar-items .cate-item.mr').classList.add('active');
     } else {
         try { util.query(linkF, '.cate-bar-items .cate-item.active').classList.remove('active'); } catch (e) { };
+        if(!(cateEl instanceof HTMLElement)){
+            actCate();
+            return;
+        }
         cateEl.classList.add('active');
         if (!cateEl.classList.contains('mr')) {
             cate = cateEl.innerText;
+        }else{
+            cate = null;
         }
     }
-
+    initsto.set('lastingCate', cate);
     drawLinks(cate);
 }
 
@@ -191,8 +196,23 @@ var enabledCateSi = new SettingItem({
 
 linksg.addNewItem(enabledCateSi);
 
+
+var remeberCateSi = new SettingItem({
+    type: 'boolean',
+    title: "记住分组",
+    message: "开启后，下次打开时会自动选择上一次的分组",
+    get() {
+        return !!initsto.get('remeberCate');
+    },
+    callback(v) {
+        initsto.set('remeberCate', v);
+    }
+});
+
+
+linksg.addNewItem(remeberCateSi);
+
 function dcate(v) {
-    actCate();
     if (v) {
         util.query(linkF, '.cate-bar').style.display = 'block';
         initCate();
@@ -200,10 +220,10 @@ function dcate(v) {
     } else {
         util.query(linkF, '.cate-bar').style.display = 'none';
     }
+    actCate(initsto.get('remeberCate')?(initsto.get('lastingCate')||null):null);
 }
 
 function initCate() {
-    console.log('initCate');
     if (isinitcate) return;
     link.getCates(r => {
         r.data.forEach(g => {

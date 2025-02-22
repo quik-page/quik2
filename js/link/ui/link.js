@@ -73,7 +73,6 @@ function openMoveLinkDialog(cate, index) {
     }
     util.query(movelinkdiad, '.ok.btn').onclick = function (e) {
         var yd = util.query(movecc, '.item.act');
-        console.log(yd);
         if (yd) {
             var tocate = yd.classList.contains('mr') ? null : util.query(yd, '.item-name').innerText;
             var link1 = getLinklist()[index];
@@ -265,7 +264,6 @@ if (!initsto.get('linkpailie')) {
 }
 
 function drawLinks(cate) {
-    console.log(cate);
     link.getLinks(cate, ls => {
         setLinklist(ls.data);
         ls.data.forEach(l => {
@@ -359,7 +357,6 @@ function dstyle() {
 
 
 function dsize(v) {
-    console.log(v);
     util.query(linkF, '.link-list').className = 'link-list ' + v;
 }
 
@@ -374,9 +371,7 @@ link.on('change', cl => {
             linklist.push(cl.detail);
             setLinklist(linklist);
         } else if (cl.type == 'change') {
-            console.log(cl.other);
             if (!(cl.other && cl.other.justindex)) {
-                console.log(cl.other);
                 linklist.splice(cl.index, 1)
                 linklist.splice(cl.detail.index, 0, cl.detail);
                 setLinklist(linklist);

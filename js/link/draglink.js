@@ -46,8 +46,6 @@ function f(li) {
             if ((!initsto.get('draglink')) || (initsto.get('linkpailie') == 'b')) return true;
             let startX = a ? (e.pageX - li.getBoundingClientRect().left) : (e.targetTouches[0].pageX - li.getBoundingClientRect().left);
             let startY = a ? (e.pageY - li.getBoundingClientRect().top) : (e.targetTouches[0].pageY - li.getBoundingClientRect().top);
-            console.log(startX, startY);
-            console.log(li.getBoundingClientRect().top);
             if (a) {
                 gtimeout = setTimeout(() => {
                     document.addEventListener('mousemove', _move, { passive: false })
@@ -87,11 +85,9 @@ function f(li) {
                 var dx = x - jx + 50;
                 var dy = y - jy + util.query(linkF, '.link-list').scrollTop;
 
-                console.log(dw, dh);
                 if (y - jy < -dh / 2 || y > util.query(linkF, '.link-list').getBoundingClientRect().height + util.query(linkF, '.link-list').getBoundingClientRect().top) {
                     var line = util.query(linkF, '.link-list .insert-line');
                     line.style.display = 'none';
-                    console.log('out');
                     n = null;
                     if (y - jy < 0) {
                         scrollingtop();
@@ -105,7 +101,6 @@ function f(li) {
                     var ne = w + h * getLineLinkNum();
                     if (linklist.length > ne) {
                         n = ne;
-                        console.log(n, h, w);
                         var line = util.query(linkF, '.link-list .insert-line');
                         line.style.top = h * dh + 7 + 'px';
                         line.style.left = w * dw + 'px';

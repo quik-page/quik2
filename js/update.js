@@ -5,17 +5,25 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.7.2',
+  version: '2.7.3',
   version_code: window.version_code,
-  updateTime: '2025/2/16',
+  updateTime: '2025/2/22',
   log: [
     {
       tag: "fix",
-      content: "修复手机端在开启搜索框对齐链接下的问题"
+      content: "修复搜索框对齐链接下600-800px的问题"
+    },
+    {
+      tag: "fix",
+      content: "尝试修复quik.42web.io端中的更新以及强制更新可能会出现的崩溃问题"
     },
     {
       tag: "new",
-      content: "搜索框可以显示搜索历史"
+      content: "链接显示可记住上次选择的分组"
+    },
+    {
+      tag: "change",
+      content: "修改特别鸣谢的内容和用户协议页面的样式"
     }
   ]
 }
@@ -45,12 +53,31 @@ if ('serviceWorker' in navigator && !window._dev) {
   });
   function updateBySW(registration) {
     util.xhr('./version', r => {
-      var nv = parseInt(r);
+      try{
+        var nv = parseInt(r);
+      }catch(e){}
       if (nv > version_code) {
         if (window.isInframe && location.href.indexOf('://quik.42web.io/') != -1) {
           alert('检测到新版本，安全原因无法在扩展中更新，即将打开新页面更新。', function () {
             window.open('https://quik.42web.io/?update=1');
           })
+        }else if(location.href.indexOf('://quik.42web.io/') != -1&&document.cookie.indexOf('__test')==-1){
+          toast.show('发现新版本(版本序号：' + nv + ')，正在更新');
+          var ifr = util.element('iframe', {
+            src: './version',
+            style: "opacity:0"
+          });
+          document.body.appendChild(ifr);
+          var i = 0;
+          ifr.onload = function () {
+            i++;
+            if (i >= 2) {
+              updateBySW(registration)
+            }
+          }
+          setTimeout(() => {
+            updateBySW(registration)
+          }, 4000)
         } else {
           toast.show('发现新版本(版本序号：' + nv + ')，正在更新');
           registration.active.postMessage('update');
