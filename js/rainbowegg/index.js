@@ -19,7 +19,7 @@ setTimeout(() => {
                 preload: true,
             });
             document.body.append(audio);
-            document.querySelector(".loading-f").innerHTML = '<p>正在加载音频中...</p><img src="https://image.gumengya.com/i/2024/08/22/66c694973aba5.gif"/>'
+            document.querySelector(".loading-f").innerHTML = '<p>正在加载音频中...</p><img src="https://image.gmya.net/i/2024/08/22/66c694973aba5.gif"/>'
             audio.oncanplaythrough = function () {
                 try { audio.play(); } catch (e) { }
                 if (!audio.paused) {

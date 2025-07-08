@@ -1,4 +1,11 @@
 var updatelog={
+  "2.7.4":{
+    updates:[{
+        tag: "fix",
+        content: "修复故梦API域名更换带来的一系列问题"
+      }],
+    time: "2025/7/8"
+  },
   "2.7.3":{
     updates:[
       {
