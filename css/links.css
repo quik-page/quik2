@@ -46,10 +46,10 @@
 .links .cate-bar .cate-item:hover,
 .links .cate-bar .cate-item.menued,
 .links .cate-bar .cate-bar-controls>*:hover{
-  background-color: #f4f4f4;
+  background-color: var(--el-hover-mild);
 }
 .links .cate-bar .cate-item.active{
-  background-color: #eeeeee;
+  background-color: var(--cate-active);
 }
 .links .cate-bar .cate-item{
   float: left;
@@ -130,7 +130,7 @@ body.dark .links .linkscroll:-webkit-scrollbar-thumb:hover{
 .links ul.link-list .insert-line{
   position: absolute;
   display: none;
-  background-color: #09f;
+  background-color: var(--theme-color);
   width: 1px;
 }
 .dragging-link{
@@ -150,7 +150,7 @@ body.dark .links .linkscroll:-webkit-scrollbar-thumb:hover{
   padding:10px 10px;
   margin: 5px 7px;
   border-radius: 10px;
-  background-color: rgba(230, 230, 230, 0.6);
+  background-color: var(--link-bg);
   box-shadow: none;
 }
 .dragging-link a p{
@@ -170,7 +170,7 @@ body.dark .links .linkscroll:-webkit-scrollbar-thumb:hover{
   transition: all .2s;
 }
 .links ul.link-list li .link-icon{
-  background-color: rgba(230, 230, 230, 0.6);
+  background-color: var(--link-bg);
   border-radius: 10px;
   box-shadow: none;
   transition: all .2s;
@@ -193,8 +193,8 @@ body.dark .links .linkscroll:-webkit-scrollbar-thumb:hover{
 .links ul.link-list li a:hover .link-icon,
 .links ul.link-list li.menued .link-icon
 {
-  background-color: rgb(210, 210, 210,.6);
-  box-shadow: 0 0 5px rgba(0,0,0,.1);
+  background-color: var(--link-menued);
+  box-shadow: 0 0 5px var(--link-menued-shadow);
 }
 
 .links ul.link-list.xs li{
@@ -338,7 +338,7 @@ body.dark .links .linkscroll:-webkit-scrollbar-thumb:hover{
 }
 
 body.t-dark .links ul.link-list li a{
-  color: #eee;
+  color: var(--text-color-dark);
 }
 body.t-dark .links ul.link-list li.link-add a{
   color: rgba(85, 85, 85, 0.8);
@@ -346,22 +346,22 @@ body.t-dark .links ul.link-list li.link-add a{
 body.t-dark .links .cate-bar .cate-item:hover,
 body.t-dark .links .cate-bar .cate-item.menued,
 body.t-dark .links .cate-bar .cate-bar-controls>*:hover{
-  background-color: rgba(220,220,220, 0.5);
+  background-color: var(--cate-active-t-dark-hover);
 }
 body.t-dark .links .cate-bar .cate-item.active{
-  background-color: rgba(220,220,220, 0.7);
+  background-color: var(--cate-active-t-dark);
 }
 body.t-dark .links .cate-bar .cate-bar-controls>*,
 body.t-dark .links .cate-bar .cate-item{
-  color: #fff;
+  color: var(--text-color-dark);
 }
 body.dark .links ul.link-list li a img{
-  background-color: rgba(75, 75, 75, 0.6);
+  background-color: var(--link-bg-dark);
 }
 body.dark .links ul.link-list li a:hover img,
 body.dark .links ul.link-list li.menued a img{
-  background-color: rgba(109, 109, 109, 0.6);
-  box-shadow: 0 0 5px rgba(255,255,255,.1);
+  background-color: var(--link-menued-dark);
+  box-shadow: 0 0 5px var(--link-menued-shadow-dark);
 }
 body.dark .links ul.link-list li.link-add a{
   background-color: rgba(85, 85, 85, 0.8);
@@ -373,12 +373,12 @@ body.dark .links ul.link-list li.link-add a:hover{
 body.dark .links .cate-bar .cate-item:hover,
 body.dark .links .cate-bar .cate-item.menued,
 body.dark .links .cate-bar .cate-bar-controls>*:hover{
-  background-color: rgba(72, 72, 72, 0.7);
+  background-color: var(--cate-active-dark-hover);
 }
 
 body.dark .links .cate-bar .cate-item.active
 {
-  background-color: rgba(102, 102, 102, 0.7);
+  background-color: var(--cate-active-dark);
 }
 .move-link-dialog{
   min-width: 300px;

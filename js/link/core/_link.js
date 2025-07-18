@@ -1,4 +1,4 @@
-let {storage}=require('../storage');
+let {storage}=require('../../storage');
 var link;
 if (storage.checkIDB()) {
     // 支持数据库

@@ -39,8 +39,8 @@
 }
 .lic-c h1{
     text-align: center;
-    color: #09f;
-    text-shadow: #aaa 0 1px 5px;
+    color: var(--theme-color);
+    text-shadow: var(--shadow-color) 0 1px 5px;
     line-height: 60px;
     font-size: 26px;
 }
@@ -61,8 +61,8 @@
 }
 .oobedia .clist .item{
     width: 200px;
-    background-color: #fff;
-    color: #09f;
+    background-color: var(--light-bg);
+    color: var(--theme-color);
     margin: 10px auto;
     text-align: center;
     line-height: 30px;
@@ -71,14 +71,14 @@
     transition: all .2s;
 }
 .oobedia .clist .item.a{
-    background-color: #09f;
-    color: #fff;
+    background-color: var(--theme-color);
+    color: var(--theme-bg-text-color);
 }
 .oobedia .clist .item.a:hover{
-    background-color: #0af;
+    background-color: var(--theme-color-mild);
 }
 .oobedia .clist .item:hover{
-    box-shadow: 0 0 3px #aaa;
+    box-shadow: 0 0 3px var(--shadow-color);
 }
 
 .oobedia .part.a2{

@@ -1,17 +1,55 @@
-let { linkF, linksg } = require('./init');
-let util = require('../../util');
-let link = require('../_link');
-const { drawLinks } = require('./link');
-const menu = require('../../menu/index');
-const { initsto } = require('../_core');
+let util=require('../../util');
+let toast=require('../../toast');
+let {initsto}=require('../core/_core');
+let link=require('../core/_link');
 const { SettingItem } = require('../../setting');
 const dialog = require('../../dialog');
-const toast = require('../../toast');
 const { confirm } = require('../../dialog/dialog_utils');
-let resetmenued;
-setTimeout(function(){
-    resetmenued=require('./z').resetmenued;
-})
+const menu = require('../../menu/index');
+
+
+var linkF,linksg,enabledCateSi;
+let catechange=()=>{};
+
+function init(_linkF,_linksg){
+    linkF=_linkF;
+    linksg=_linksg;
+    enabledCateSi = new SettingItem({
+        type: 'boolean',
+        title: "链接分组",
+        message: "(Alt+G)启用链接分组功能来管理链接",
+        get() {
+            return initsto.get('enabledCate');
+        },
+        callback(v) {
+            initsto.set('enabledCate', v);
+            dcate(v);
+        }
+    });
+    
+    
+    linksg.addNewItem(enabledCateSi);
+    
+    
+    var remeberCateSi = new SettingItem({
+        type: 'boolean',
+        title: "记住分组",
+        message: "开启后，下次打开时会自动选择上一次的分组",
+        get() {
+            return !!initsto.get('remeberCate');
+        },
+        callback(v) {
+            initsto.set('remeberCate', v);
+        }
+    });
+    
+    
+    linksg.addNewItem(remeberCateSi);
+
+    initCate();
+}
+
+let catelist=[];
 
 var menuedCate = null;
 var cateMenu = new menu({
@@ -50,7 +88,7 @@ function bcate(g) {
     li.oncontextmenu = function (e) {
         e.preventDefault();
         e.stopPropagation();
-        resetmenued();
+        menuedCate&&menuedCate.classList.remove('menued');
         menuedCate = this;
         cateMenu.setOffset({
             top: e.pageY,
@@ -61,7 +99,7 @@ function bcate(g) {
     }
 }
 
-function reinitCate() {
+function drawCate() {
     var cates = util.query(linkF, '.cate-bar-items .cate-item', true);
     cates.forEach(c => {
         if (c.classList.contains('mr')) {
@@ -70,11 +108,9 @@ function reinitCate() {
             c.remove();
         }
     })
-    link.getCates(r => {
-        r.data.forEach(g => {
-            bcate(g);
-        });
-    })
+    catelist.forEach(g => {
+        bcate(g);
+    });
 }
 
 function actCate(cateEl) {
@@ -110,7 +146,7 @@ function actCate(cateEl) {
         }
     }
     initsto.set('lastingCate', cate);
-    drawLinks(cate);
+    catechange(cate);
 }
 
 var cateeditDialog;
@@ -180,37 +216,7 @@ if (typeof initsto.get('enabledCate') == 'undefined') {
 }
 
 
-var enabledCateSi = new SettingItem({
-    type: 'boolean',
-    title: "链接分组",
-    message: "(Alt+G)启用链接分组功能来管理链接",
-    get() {
-        return initsto.get('enabledCate');
-    },
-    callback(v) {
-        initsto.set('enabledCate', v);
-        dcate(v);
-    }
-});
 
-
-linksg.addNewItem(enabledCateSi);
-
-
-var remeberCateSi = new SettingItem({
-    type: 'boolean',
-    title: "记住分组",
-    message: "开启后，下次打开时会自动选择上一次的分组",
-    get() {
-        return !!initsto.get('remeberCate');
-    },
-    callback(v) {
-        initsto.set('remeberCate', v);
-    }
-});
-
-
-linksg.addNewItem(remeberCateSi);
 
 function dcate(v) {
     if (v) {
@@ -225,11 +231,6 @@ function dcate(v) {
 
 function initCate() {
     if (isinitcate) return;
-    link.getCates(r => {
-        r.data.forEach(g => {
-            bcate(g);
-        });
-    })
     util.query(linkF, '.cate-item.mr').onclick = function () {
         try { util.query(linkF, '.cate-bar-items .cate-item.active').classList.remove('active'); } catch (e) { };
         this.classList.add('active');
@@ -345,36 +346,21 @@ var mrcateMenu = new menu({
     }
 });
 
-link.on('change', (cl) => {
-    var ac = util.query(linkF, '.cate-bar-items .cate-item.active');
-    if (cl.type == 'cateadd') {
-        reinitCate();
-        actCate(cl.cate);
-    } else if (cl.type == 'catedelete') {
-        var acate = ac.innerText;
-        reinitCate();
-        if (acate == cl.cate) {
-            actCate();
-        }
-    } else if (cl.type == 'caterename') {
-        var acate = ac.innerText;
-        reinitCate();
-        if (acate == cl.cate) {
-            actCate(cl.catename);
-        }
-    } else if (cl.type == 'all') {
-        reinitCate();
-        actCate();
-    }
-})
-
-module.exports = {
-    getMenuedCate() {
-        return menuedCate;
-    },
+module.exports={
     observeCate,
+    init,
+    getCatelist:()=>catelist,
+    setCatelist:(cl)=>{
+        catelist=cl;
+    },
+    actCate,
+    bcate,
+    drawCate,
     dcate,
     cateWidthShiPei,
-    enabledCateSi
+    catechange:(fn)=>{
+        catechange=fn;
+    },
+    enabledCateSi,
+    getMenuedCate:()=>menuedCate,
 }
-

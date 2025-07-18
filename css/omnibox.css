@@ -5,9 +5,9 @@
   left:50%;
   transform: translateX(-50%);
   width: 600px;
-  box-shadow: #ccc 0 1px 5px;
+  box-shadow: var(--shadow-mild) 0 1px 5px;
   border-radius: 20px;
-  background-color: rgb(255,255,255);
+  background-color: var(--light-bg);
   overflow: hidden;
   height: 40px;
   backdrop-filter: blur(10px);
@@ -29,12 +29,12 @@ body.t-dark .searchbox,
 body.t-dark .searchtypeselector,
 body.t-light .searchbox,
 body.t-light .searchtypeselector{
-  background-color: rgba(255,255,255,.7);
+  background-color: var(--light-bg-opa);
 }
 body.dark .searchbox,
 body.dark .searchtypeselector{
-  background-color: rgba(34, 34, 34, 0.7);
-  box-shadow: #666 0 1px 5px;
+  background-color: var(--dark-bg-opa);
+  box-shadow: var(--shadow-color-dark) 0 1px 5px;
 }
 .searchpadding{
   width: 100%;
@@ -122,11 +122,11 @@ body.dark .searchtypeselector{
 .searchbox ul li:hover,
 .searchbox ul li.active
 {
-  background-color: #eee;
+  background-color: var(--el-hover-color);
 }
 body.dark .searchbox ul li:hover,
 body.dark .searchbox ul li.active{
-  background-color: #666;
+  background-color: var(--el-hover-color-dark);
 }
 
 .searchcover{
@@ -158,17 +158,17 @@ body.dark .searchbox ul li.active{
   transition: height .3s;
   border:0;
   backdrop-filter: blur(10px);
-  background-color: rgb(255,255,255);
+  background-color: var(--light-bg);
 }
 .searchtypeselector.active{
   height: 30px;
-  box-shadow: #ccc 0 1px 3px;
-  border:#eee solid 1px;
+  box-shadow: var(--shadow-mild) 0 1px 3px;
+  border:var(--el-border) solid 1px;
 }
 body.dark .searchtypeselector.active{
   height: 30px;
-  box-shadow: #555 0 1px 3px;
-  border:#353535 solid 1px;
+  box-shadow: var(--shadow-color-dark) 0 1px 3px;
+  border:var(--el-border-dark) solid 1px;
 }
 .searchtypeselector ul{
   width: 100%;
@@ -187,23 +187,23 @@ body.dark .searchtypeselector.active{
   margin-right: 0;
 }
 .searchtypeselector li:hover{
-  background-color: #eee;
+  background-color: var(--el-hover-color);
 }
 .searchtypeselector li.active{
-  background-color: #ddd;
+  background-color: var(--el-hover-color);
 }
 body.t-dark .searchtypeselector li:hover{
-  background-color: #eee;
+  background-color: var(--el-hover-color);
 }
 
 body.dark .searchtypeselector li:hover{
-  background-color: #444;
+  background-color: var(--el-hover-color-dark);
 }
 body.dark .searchtypeselector li.active{
-  background-color: #666;
+  background-color: var(--el-hover-color-dark);
 }
 body.t-dark .searchtypeselector li.active{
-  background-color: #fff;
+  background-color: var(--light-bg);
 }
 .searchtypeselector li img{
   width: 20px;
@@ -214,7 +214,7 @@ body.t-dark .searchtypeselector li.active{
 }
 .searchtypeselector li{
   text-align: center;
-  color: #888;
+  color: var(--desc-text-color);
   user-select: none;
   cursor: pointer;
 }

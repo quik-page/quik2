@@ -1,6 +1,6 @@
 let { initsto, doevent, on, off,pushLink,writeLink,limitURL } = require('./_core');
-let util = require('../util');
-const { confirm } = require('../dialog/dialog_utils');
+let util = require('../../util');
+const { confirm } = require('../../dialog/dialog_utils');
 console.warn('浏览器不支持indexedDB，将在限制模式下使用');
 
 initsto.set('storage-mode', 'localstorage');

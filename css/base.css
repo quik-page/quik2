@@ -5,6 +5,93 @@
   word-break: break-all;
 }
 
+html{
+    --black:#000;
+    --white:#fff;
+    --gray-1:#f4f4f4;
+    --gray-1a:#f5f5f5;
+    --gray-1b:#f7f7f7;
+    --gray-1c:#fafafa;
+    --gray-2:#eee;
+    --gray-2a:#e6e6e6;
+    --gray-3:#ddd;
+    --gray-4:#ccc;
+    --gray-5:#bbb;
+    --gray-6:#aaa;
+    --gray-7:#888;
+    --gray-8:#666;
+    --gray-9:#555;
+    --gray-10:#333;
+    --gray-10a:#353535;
+    --gray-10b:#343434;
+    --gray-10c:#373737;
+
+    --theme-color-deep:#06f;
+    --theme-color:#09f;
+    --theme-color-mild:#0af;
+
+    --text-color:var(--black);
+    --text-color-mild:var(--gray-11);
+    --text-color-dark:var(--white);
+    --text-color-mild-dark:var(--gray-3);
+    --el-hover-color:var(--gray-2);
+    --el-hover-color-dark: var(--gray-9);
+    --el-hover-color-dark-opa:rgba(85,85,85,.7);
+    --el-hover-mild:var(--gray-1);
+    --el-hover-mild-dark:var(--gray-7);
+    --el-hover-mild-opa:rgba(244,244,244,0.7);
+    --el-border:var(--gray-2);
+    --el-border-dark:var(--gray-10a);
+    
+    --theme-bg-text-color:var(--white);
+    --hr-color:var(--gray-2);
+    --hr-color-dark:var(--gray-9);
+    --dark-bg:var(--gray-10);
+    --light-bg:var(--white);
+    --dark-bg-opa:rgba(51,51,51,.7);
+    --light-bg-opa:rgba(255,255,255,.7);
+    --desc-text-color:var(--gray-7);
+    --desc-text-color-dark:var(--gray-7);
+    --shadow-color:var(--gray-6);
+    --shadow-mild:var(--gray-4);
+    --shadow-color-dark:var(--gray-8);
+    --btn-color:var(--gray-2);
+    --btn-hover:var(--gray-3);
+    --btn-active:var(--gray-1a);
+    --btn-text-color:var(--gray-10);
+    --input-bottom:var(--gray-2a);
+    --action-bar-border:var(--gray-2);
+    --action-bar-border-dark:var(--gray-8);
+    --icon-btn-hover:rgba(238, 238, 238,.5);
+    --icon-btn-hover-dark:rgba(102, 102, 102, 0.4);
+    --cate-active:var(--gray-2);
+    --cate-active-t-dark:rgba(220,220,220, 0.7);
+    --cate-active-t-dark-hover:rgba(220,220,220, 0.5);
+    --cate-active-dark:rgba(102, 102, 102, 0.7);
+    --cate-active-dark-hover:rgba(72, 72, 72, 0.7);
+    --link-bg:rgba(230, 230, 230, 0.6);
+    --link-bg-dark:rgba(75, 75, 75, 0.6);
+    --link-menued:rgb(210, 210, 210,.6);
+    --link-menued-dark:rgba(109, 109, 109, 0.6);
+    --link-menued-shadow:rgba(0,0,0,.1);
+    --link-menued-shadow-dark:rgba(255,255,255,.1);
+    --lite-cover:rgba(255,255,255,.3);
+    --lite-cover-dark:rgba(0,0,0,.3);
+    --notice-progress-bg:var(--gray-2);
+    --checkbox-bg:var(--gray-3);
+    --checkbox-inner-bg:var(--gray-6);
+    --qui-select-bg:var(--gray-1b);
+    --qui-select-bg-dark:var(--gray-10c);
+    --qui-select-hover:var(--gray-1c);
+    --qui-select-hover-dark:var(--gray-10b);
+    --qui-select-active:var(--gray-4);
+    --qui-select-active-dark:var(--gray-8);
+    --qui-select-color:var(--gray-10);
+    --qui-select-color-dark:var(--gray-3);
+    --qui-select-border:var(--gray-3);
+    --qui-select-border-dark:var(--gray-8);
+}
+
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
   font-weight: normal;
@@ -24,27 +111,28 @@
 body{
   overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-color);
 }
 textarea,input{
   font-family: Consolas,Arial, Helvetica, sans-serif;
 }
 body.dark{
   background-color: #333;
-  color: #fff;
+  color: var(--text-color-dark);
   color-scheme: dark;
 }
 main .logo svg{
-  stroke: #000;
+  stroke: var(--text-color);
 }
 body.dark main .logo .timelogo,
 body.t-dark main .logo .timelogo
 {
-  color: #fff;
+  color: var(--text-color-dark);
 }
 body.dark main .logo svg,
 body.t-dark main .logo svg
 {
-  stroke: #fff;
+  stroke: var(--text-color-dark);
 }
 main .logo .timelogo{
   width: 200px;
@@ -75,12 +163,12 @@ main .logo .timelogo .t>div ._num{
   position: absolute;
 }
 ._num .num_line.show{
-  background-color: #000;
+  background-color: var(--text-color);
 }
 body.dark ._num .num_line.show,
 body.t-dark ._num .num_line.show
 {
-  background-color: #fff;
+  background-color: var(--text-color-dark);
 }
 ._num .a0,
 ._num .a1,
@@ -126,7 +214,7 @@ main .logo .timelogo .t>div.i span{
   top: 15px;
   left: 9px;
   display: block;
-  background-color: #000;
+  background-color: var(--text-color);
 }
 main .logo .timelogo .xxxx{
   text-align: center;
@@ -139,7 +227,7 @@ main .logo .timelogo .xxxx{
 body.dark main .logo .timelogo .t>div.i span,
 body.t-dark main .logo .timelogo .t>div.i span
 {
-  background-color: #fff;
+  background-color: var(--text-color-dark);
 }
 main .logo .timelogo .t>div.i span:nth-child(2){
   top: 37px;
@@ -284,7 +372,7 @@ body.dialogblur.dark ::-webkit-scrollbar-thumb:hover
   right:0;
   bottom:0;
   z-index:2;
-  background-color:#fff;
+  background-color:var(--light-bg);
   transition:opacity .1s;
 }
 .loading-f.h{
@@ -302,11 +390,11 @@ body.dialogblur.dark ::-webkit-scrollbar-thumb:hover
 .loading-p .g{
   width:100px;
   height:2px;
-  background-color:#000;
+  background-color:var(--text-color);
   animation:t-l 1s linear infinite;
 }
 body.dark .loading-p .g{
-  background-color: #fff;
+  background-color: var(--light-bg);
 }
 @keyframes t-l{
   0%{

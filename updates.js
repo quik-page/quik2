@@ -1,4 +1,25 @@
 var updatelog={
+  "2.8.0-beta":{
+    updates:[
+        {
+            tag: "new",
+            content: "新增背景颜色跟随主题功能（目前还没什么用）"
+        },
+        {
+            tag: "new",
+            content: "主题API新增添加对应背景颜色的设置"
+        },
+        {
+            tag:"new",
+            content:"使用CSS变量汇总了大部分颜色设置，使主题开发更方便"
+        },
+        {
+            tag:"fix",
+            content:"重构了链接部分代码"
+        }
+      ],
+      time: "2025/7/18"
+  },
   "2.7.4":{
     updates:[{
         tag: "fix",

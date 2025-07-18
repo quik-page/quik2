@@ -37,16 +37,16 @@
   border-radius: 50%;
 }
 .says .say-control:hover{
-  background-color: #eee;
+  background-color: var(--el-hover-color);
   cursor: pointer;
 }
 body.dark .says .say-control:hover,
 body.t-dark .says .say-control:hover
 {
-  background-color: rgba(136, 136, 136, 0.533);
+  background-color: var(--el-hover-color-dark);
 }
 body.t-dark .says{
-  color: #fff;
+  color: var(--text-color-dark);
 }
 .says:hover .say-control{
   display: block;

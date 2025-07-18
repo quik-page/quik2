@@ -1,22 +1,22 @@
 .contextMenu{
   position: absolute;
   z-index: 9999;
-  background-color: #fff;
+  background-color: var(--light-bg);
   border-radius: 5px;
-  box-shadow: #ccc 0 1px 5px;
+  box-shadow: var(--shadow-mild) 0 1px 5px;
   display: none;
   overflow: hidden;
   user-select: none;
 }
 body.dialogblur .contextMenu{
-  background-color: rgba(255,255,255,.5);
+  background-color: var(--light-bg-opa);
   backdrop-filter: blur(10px);
 }
 body.dark .contextMenu{
-  background-color: #333;
+  background-color: var(--dark-bg);
 }
 body.dialogblur.dark .contextMenu{
-  background-color: rgba(51,51,51,.5);
+  background-color: var(--dark-bg-opa);
 }
 .contextMenu.show{
   display: block;
@@ -32,10 +32,10 @@ body.dialogblur.dark .contextMenu{
   width: 80%;
   height: 1px;
   margin: 0 10%;
-  background-color: #eee;
+  background-color: var(--hr-color);
 }
 body.dark .contextMenu .hr{
-  background-color: #555;
+  background-color: var(--hr-color-dark);
 }
 .contextMenu .item>*{
   float: left;
@@ -55,8 +55,8 @@ body.dark .contextMenu .hr{
   line-height: 24px;
 }
 .contextMenu .item:hover{
-  background-color: #eee;
+  background-color: var(--el-hover-color);
 }
 body.dark .contextMenu  .item:hover{
-  background-color: #666;
+  background-color: var(--el-hover-color-dark);
 }

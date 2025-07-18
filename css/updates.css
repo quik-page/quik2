@@ -3,17 +3,17 @@
 }
 .version_item_title{
   font-size: 16px;
-  color: #000;
+  color: var(--text-color);
 }
 .version_item_update_time{
   font-size: 14px;
-  color: #333;
+  color: var(--text-color-mild);
 }
 body.dark .version_item_title{
-  color:#fff;
+  color:var(--text-color-dark);
 }
 body.dark .version_item_update_time{
-  color:#ddd;
+  color:var(--text-color-dark-mild);
 }
 .version_update{
   padding: 5px;

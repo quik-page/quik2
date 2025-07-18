@@ -7,6 +7,14 @@ const util = require("../util");
 const mainmenu=require('../menu/mainmenu');
 const addon =require('../addon');
 
+let defbg={
+    type:"default",
+    data:{
+        type:"api",
+        api:"theme"
+    }
+}
+
 var backgroundsg = new SettingGroup({
   title: "背景",
   index: 3
@@ -42,14 +50,7 @@ var initsto = storage('background', {
         a.requireAddon = addon.getAddonBySessionId(a.bg.type).url;
       } else {
         if (a.bg.data.type == 'userbg' && a.userbg.useidb) {
-          a.bg = {
-            type: "default",
-            data: {
-              type: "color",
-              light: "#fff",
-              dark: "#333"
-            }
-          }
+          a.bg = util.deepClone(defbg);
         }
       }
       if (a.userbg && a.userbg.useidb) {
@@ -142,14 +143,7 @@ function drawDialog() {
 }
 
 // 初始化用户存储
-util.initSet(initsto, 'bg', {
-  type: "default",
-  data: {
-    type: "color",
-    light: "#fff",
-    dark: "#333"
-  }
-});
+util.initSet(initsto, 'bg', defbg);
 
 
 var drawers = [];
@@ -239,14 +233,7 @@ function onbgdrawersign(drawer) {
 addon.on('allrun', () => {
   if (waitdraw) {
     waitdraw = null;
-    initsto.set('bg', {
-      type: "default",
-      data: {
-        type: "color",
-        light: "#fff",
-        dark: "#333"
-      }
-    })
+    initsto.set('bg', defbg)
     drawbg(initsto.get('bg'));
     alert('您的背景数据由于插件缺失无法显示，已为您切换为默认。')
   }

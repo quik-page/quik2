@@ -1,24 +1,16 @@
-let { initsto } = require('./_core');
+
+let { initsto } = require('./core/_core');
 let util = require('../util');
-let { SettingItem } = require('../setting/index');
-let {linksg, linkF, getLinklist, getIndex}=require('./ui/init');
-let link=require('./_link');
+let link=require('./core/_link');
 util.initSet(initsto, 'draglink', true);
-var drags = new SettingItem({
-    type: 'boolean',
-    index: 2,
-    title: "拖动排序链接(Beta)",
-    message: "（仅在链接排列靠左时生效）开启后，你可以通过拖动链接来进行排序，手机端需长按链接1s才可拖动（Beta）",
-    get() {
-        return initsto.get('draglink');
-    },
-    callback(v) {
-        initsto.set('draglink', v);
-    }
-});
+let linkMenu,getLinklist,getIndex,linkF;
 setTimeout(() => {
-    linksg.addNewItem(drags);
-});
+    linkMenu = require('./ui/link').linkMenu;
+    getLinklist = require('./ui/link').getLinklist;
+    getIndex = require('./ui/link').getIndex;
+    linkF=document.querySelector('.links');
+})
+
 function getLineLinkNum() {
     var a = util.query(linkF, '.link-list').getBoundingClientRect().width / util.query(linkF, '.link-list li').getBoundingClientRect().width;
     return parseInt(a);
@@ -33,7 +25,7 @@ function f(li) {
             if (e.which == 3) { return true; }
             if (!a) {
                 ttimeout = setTimeout(() => {
-                    resetmenued();
+                    quik.link.resetmenued();
                     menuedLi = li;
                     linkMenu.setOffset({
                         top: e.targetTouches[0].pageY,

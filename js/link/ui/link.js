@@ -1,17 +1,114 @@
-let {getIndex,linkF, getLinklist, setLinklist, linksg}=require('./init');
-let util=require('../../util');
-let link=require('../_link');
 const { SettingItem } = require('../../setting/index');
 const menu = require('../../menu');
-const { initsto } = require('../_core');
-const draglink=require('../draglink');
+const { initsto } = require('../core/_core');
 const dialog = require('../../dialog');
 const toast = require('../../toast');
 const {showOpenFilePicker} = require('../../base');
-let resetmenued;
-setTimeout(function(){
-    resetmenued=require('./z').resetmenued;
-})
+let util=require('../../util');
+const link=require('../core/_link')
+const draglink=require('../draglink')
+
+let linkF,linksg,linkSizeSi;
+
+function initlink(_linkF,_linksg){
+    linkF=_linkF;
+    linksg=_linksg;
+    linkSizeSi = new SettingItem({
+        type: 'select',
+        title: "链接大小",
+        message: "修改链接显示的大小",
+        init() {
+            return {
+                xs: "很小",
+                s: "小",
+                m: "中",
+                l: "大",
+                xl: "很大"
+            }
+        },
+        get() {
+            return initsto.get('linksize');
+        },
+        callback(v) {
+            initsto.set('linksize', v);
+            dsize(v);
+        }
+    });
+    var linkStyleSi = new SettingItem({
+        type: 'select',
+        title: "链接样式",
+        message: "修改链接显示的样式",
+        init() {
+            return {
+                def: "圆方",
+                round: "圆形",
+                square: "方形",
+            }
+        },
+        get() {
+            return initsto.get('linkstyle');
+        },
+        callback(v) {
+            initsto.set('linkstyle', v);
+            dstyle(v);
+        }
+    });
+    var linkPLSi = new SettingItem({
+        type: 'select',
+        title: "链接排列",
+        message: "修改链接的排列方式",
+        init() {
+            return {
+                a: "靠左",
+                b: "居中",
+            }
+        },
+        get() {
+            return initsto.get('linkpailie');
+        },
+        callback(v) {
+            initsto.set('linkpailie', v);
+            dstyle();
+        }
+    });
+    
+    linksg.addNewItem(linkSizeSi);
+    linksg.addNewItem(linkStyleSi);
+    linksg.addNewItem(linkPLSi);
+}
+
+var linklist = [];
+
+function drawLinks(){
+    util.query(linkF, '.link-list').innerHTML='<div class="insert-line"></div>'
+    linklist.forEach(function(link){
+        var li = glinkli(link);
+        util.query(linkF, '.link-list').append(li);
+    })
+    var li = util.element('li', {
+        class: "link-add"
+    });
+    li.innerHTML = `<a href="javascript:void(0)" class="material-symbols-outlined">&#xe145;</a>`;
+    util.query(linkF, '.link-list').append(li);
+    li.onclick = () => {
+        var cate = util.query(linkF, '.cate-bar-items .cate-item.active');
+        if (cate.classList.contains('mr')) {
+            cate = null
+        } else {
+            cate = cate.innerText;
+        }
+        openLinkEditDialog(-1, cate);
+    }
+}
+
+function getIndex(a, b) {
+    for (var i = 0; i < b.length; i++) {
+      if (b[i].isSameNode(a)) {
+        return i;
+      }
+    }
+    return -1;
+}
 
 var menuedLi = null;
 function getMenuedLiDetail() {
@@ -24,6 +121,7 @@ function getMenuedLiDetail() {
     }
     return { cate, index };
 }
+
 var linkMenu = new menu({
     list: [{
         icon: util.getGoogleIcon('e3c9'),
@@ -57,6 +155,42 @@ var linkMenu = new menu({
     }]
 });
 
+function glinkli(l) {
+    var li = util.element('li');
+    li.innerHTML = `<a href="${l.url}" target="_blank" rel="noopener noreferer"><div class="link-icon"><img/></div><p></p></a>`
+    util.query(li, 'p').innerText = l.title;
+    if(l.icon){
+        util.query(li, 'img').src=l.icon;
+        util.query(li, 'img').classList.add('load');
+    }else{
+        util.getFavicon(l.url, favicon => {
+            if (favicon) {
+                util.query(li, 'img').src = favicon;
+            } else {
+                util.query(li, 'img').src = util.createIcon(l.title[0]);
+            }
+            util.query(li, 'img').onload = function () {
+                this.classList.add('load');
+            }
+        });
+    }
+    
+    li.oncontextmenu = function (e) {
+        e.preventDefault()
+        e.stopPropagation();
+        menuedLi&&menuedLi.classList.remove('menued');
+        menuedLi = this;
+        linkMenu.setOffset({
+            top: e.pageY,
+            left: e.pageX
+        })
+        this.classList.add('menued');
+        linkMenu.show();
+    }
+    draglink(li);
+    return li;
+}
+
 var movelinkdia = null, movelinkdiad = null, movecc = null;
 function openMoveLinkDialog(cate, index) {
     if (!movelinkdia) {
@@ -75,7 +209,7 @@ function openMoveLinkDialog(cate, index) {
         var yd = util.query(movecc, '.item.act');
         if (yd) {
             var tocate = yd.classList.contains('mr') ? null : util.query(yd, '.item-name').innerText;
-            var link1 = getLinklist()[index];
+            var link1 = linklist[index];
             link.addLink({
                 title: link1.title,
                 url: link1.url,
@@ -115,42 +249,6 @@ function openMoveLinkDialog(cate, index) {
 }
 
 
-function glinkli(l) {
-    var li = util.element('li');
-    li.innerHTML = `<a href="${l.url}" target="_blank" rel="noopener noreferer"><div class="link-icon"><img/></div><p></p></a>`
-    util.query(li, 'p').innerText = l.title;
-    if(l.icon){
-        util.query(li, 'img').src=l.icon;
-        util.query(li, 'img').classList.add('load');
-    }else{
-        util.getFavicon(l.url, favicon => {
-            if (favicon) {
-                util.query(li, 'img').src = favicon;
-            } else {
-                util.query(li, 'img').src = util.createIcon(l.title[0]);
-            }
-            util.query(li, 'img').onload = function () {
-                this.classList.add('load');
-            }
-        });
-    }
-    
-    li.oncontextmenu = function (e) {
-        e.preventDefault()
-        e.stopPropagation();
-        resetmenued();
-        menuedLi = this;
-        linkMenu.setOffset({
-            top: e.pageY,
-            left: e.pageX
-        })
-        this.classList.add('menued');
-        linkMenu.show();
-    }
-    draglink(li);
-    return li;
-}
-
 var linkaddDialog;
 
 function openLinkEditDialog(index, cate) {
@@ -187,7 +285,7 @@ function openLinkEditDialog(index, cate) {
     setTimeout(() => {
         linkaddDialog.open();
         var d = linkaddDialog.getDialogDom();
-        var ll = getLinklist().length;
+        var ll = linklist.length;
         if (index == -1) {
             _n('添加链接', '添加', '', '', ll, ll, (e) => {
                 e.preventDefault();
@@ -213,7 +311,6 @@ function openLinkEditDialog(index, cate) {
 
             },'');
         } else {
-            var linklist=getLinklist();
             _n('修改链接', '修改', linklist[index].url, linklist[index].title, ll - 1, index, (e) => {
                 e.preventDefault();
                 var url = util.query(d, '.link-add-url').value;
@@ -263,93 +360,6 @@ if (!initsto.get('linkpailie')) {
     initsto.set('linkpailie', 'a');
 }
 
-function drawLinks(cate) {
-    link.getLinks(cate, ls => {
-        setLinklist(ls.data);
-        ls.data.forEach(l => {
-            var li = glinkli(l);
-            util.query(linkF, '.link-list').append(li);
-        })
-        var li = util.element('li', {
-            class: "link-add"
-        });
-        li.innerHTML = `<a href="javascript:void(0)" class="material-symbols-outlined">&#xe145;</a>`;
-        util.query(linkF, '.link-list').append(li);
-        li.onclick = () => {
-            var cate = util.query(linkF, '.cate-bar-items .cate-item.active');
-            if (cate.classList.contains('mr')) {
-                cate = null
-            } else {
-                cate = cate.innerText;
-            }
-            openLinkEditDialog(-1, cate);
-        }
-    })
-}
-
-var linkSizeSi = new SettingItem({
-    type: 'select',
-    title: "链接大小",
-    message: "修改链接显示的大小",
-    init() {
-        return {
-            xs: "很小",
-            s: "小",
-            m: "中",
-            l: "大",
-            xl: "很大"
-        }
-    },
-    get() {
-        return initsto.get('linksize');
-    },
-    callback(v) {
-        initsto.set('linksize', v);
-        dsize(v);
-    }
-});
-var linkStyleSi = new SettingItem({
-    type: 'select',
-    title: "链接样式",
-    message: "修改链接显示的样式",
-    init() {
-        return {
-            def: "圆方",
-            round: "圆形",
-            square: "方形",
-        }
-    },
-    get() {
-        return initsto.get('linkstyle');
-    },
-    callback(v) {
-        initsto.set('linkstyle', v);
-        dstyle(v);
-    }
-});
-var linkPLSi = new SettingItem({
-    type: 'select',
-    title: "链接排列",
-    message: "修改链接的排列方式",
-    init() {
-        return {
-            a: "靠左",
-            b: "居中",
-        }
-    },
-    get() {
-        return initsto.get('linkpailie');
-    },
-    callback(v) {
-        initsto.set('linkpailie', v);
-        dstyle();
-    }
-});
-
-linksg.addNewItem(linkSizeSi);
-linksg.addNewItem(linkStyleSi);
-linksg.addNewItem(linkPLSi);
-
 
 function dstyle() {
     linkF.className = 'links ' + initsto.get('linkstyle') + ' ' + initsto.get('linkpailie');
@@ -360,60 +370,17 @@ function dsize(v) {
     util.query(linkF, '.link-list').className = 'link-list ' + v;
 }
 
-link.on('change', cl => {
-    var actcate = util.query(linkF, '.cate-bar-items .cate-item.active');
-    var linklist = getLinklist();
-    if (!actcate) return;
-    if (cl.cate == actcate.innerText || (cl.cate == null && actcate.classList.contains('mr'))) {
-        if (cl.type == 'add') {
-            var li = glinkli(cl.detail);
-            util.query(linkF, '.link-list').insertBefore(li, util.query(linkF, '.link-list .link-add'));
-            linklist.push(cl.detail);
-            setLinklist(linklist);
-        } else if (cl.type == 'change') {
-            if (!(cl.other && cl.other.justindex)) {
-                linklist.splice(cl.index, 1)
-                linklist.splice(cl.detail.index, 0, cl.detail);
-                setLinklist(linklist);
-                var lis = util.query(linkF, '.link-list li', true);
-                var tli = lis[cl.index];
-                if (cl.index < cl.detail.index) {
-                    util.query(linkF, '.link-list').insertBefore(tli, lis[cl.detail.index + 1]);
-                } else {
-                    util.query(linkF, '.link-list').insertBefore(tli, lis[cl.detail.index]);
-                }
-                util.query(tli, 'a').href = cl.detail.url;
-                util.query(tli, 'p').innerText = cl.detail.title;
-                if(cl.detail.icon){
-                    util.query(tli, 'img').src=cl.detail.icon;
-                    util.query(tli, 'img').classList.add('load');
-                }else{
-                    util.getFavicon(cl.detail.url, favicon => {
-                        if (favicon) {
-                            util.query(tli, 'img').src = favicon;
-                        } else {
-                            util.query(tli, 'img').src = util.createIcon(cl.detail.title[0]);
-                        }
-                    });
-                }
-                
-            }
-        } else if (cl.type == 'delete') {
-            var li = util.query(linkF, '.link-list li', true)[cl.index];
-            li.remove();
-            linklist.splice(cl.index, 1);
-            setLinklist(linklist);
-        }
-    }
 
-})
-
-module.exports={
+module.exports = {
+    initlink,
     drawLinks,
-    dstyle,
+    getLinklist:()=>linklist,
+    setLinklist:(l)=>linklist=l,
     dsize,
-    getMenuedLi() {
-        return menuedLi;
-    },
-    linkSizeSi
+    dstyle,
+    glinkli,
+    linkSizeSi,
+    getMenuedLi:()=>menuedLi,
+    linkMenu,
+    getIndex
 }

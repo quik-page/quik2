@@ -8,9 +8,16 @@ if (!initsto.get('themea')) {
 }
 
 var ys = ['dark', 't-dark', 't-light', 'dialogblur', 'lite', 'hiden', 'showall'];
-var themes = {
-    'def': "默认主题"
+var themesd = {
+    'def': {
+        name:"默认主题",
+        color:['#fff','#333']
+    }
 };
+
+var themes={
+    'def':'默认主题'
+}
 
 var si = new SettingItem({
     index: 0,
@@ -29,6 +36,7 @@ var si = new SettingItem({
     }
 });
 tyGroup.addNewItem(si);
+let nowtheme='def';
 
 function doTheme(f) {
     if (ys.indexOf(f) != -1) {
@@ -43,6 +51,7 @@ function doTheme(f) {
         }
     })
     document.body.classList.add(f);
+    nowtheme=f;
     doevent('dotheme', []);
     if (!isdotheme) {
         isdotheme = true;
@@ -59,8 +68,10 @@ function waitdotheme(f) {
     }
 }
 
-function addTheme(f, n) {
+function addTheme(f, n,detail={}) {
     themes[f] = n;
+    detail.name=n;
+    themesd[f]=detail;
     si.reInit();
     if (wait && f == initsto.get('themea')) {
         wait = false;
@@ -104,5 +115,7 @@ module.exports = {
     addTheme,
     removeTheme,
     setTheme,
-    waitdotheme
+    waitdotheme,
+    getTheme:()=>nowtheme,
+    getThemeDetail:()=>themesd[nowtheme]
 }

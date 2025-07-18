@@ -16,6 +16,7 @@ var {
 } = require('./_defaultDrawer/userupload.js');
 
 var { colorChange, _listensetbg2 } = require('./_defaultDrawer/zdycolor.js');
+const custom = require('../custom/index.js');
 
 var tab1, setbg, tab2, tab3;
 _listensetbg(function (r) {
@@ -169,6 +170,22 @@ function getBingWallPaperInfo(fn) {
 // @note 这里需要一个定时器用于api背景 时间的颜色
 var timeb = null;
 
+let themedo=false;
+
+function docthem(){
+    let g=custom.getThemeDetail().color||[]
+    draws.color(document.querySelector('.bgf'),{
+        light:g[0]||'#fff',
+        dark:g[1]||'#333'
+    })
+}
+
+custom.on('dotheme',function(){
+    if(themedo)
+    docthem();
+})
+
+
 var draws = {
   img(bgf, data) {
     bgf.innerHTML = '<div class="img-sp full"><div class="cover"></div><img src="' + (data.url || neizhiImg[data.index].img) + '"/></div>';
@@ -245,6 +262,10 @@ var draws = {
           draws.color(bgf, getNowColor());
         }, 200)
         break;
+      case 'theme':
+        themedo=true;
+        docthem();
+        break;
     }
   },
   userbg(bgf, data) {
@@ -316,8 +337,8 @@ function selectbgitem(data) {
     } else if (data.data.type == 'userbg') {
       util.query(tab1, '.zdy .bgitem').classList.add('selected');
     } else if (data.data.type == 'api') {
-      if (data.data.api == 'time') {
-        util.query(tab2, '.api .bgitem').classList.add('selected');
+      if (data.data.api == 'theme'||data.data.api=='time') {
+        util.query(tab2, `.api .bgitem[data-api="${data.data.api}"]`).classList.add('selected');
       } else {
         util.query(tab1, `.api .bgitem[data-api="${data.data.api}"]`).classList.add('selected');
       }
@@ -337,6 +358,7 @@ function _reset() {
   ImgOrVideoSi.hide();
   infoIcon.hide();
   eyeicon.hide();
+  themedo=false;
 }
 
 module.exports = {
@@ -438,17 +460,22 @@ module.exports = {
         colorChange();
       }
       var cd = getNowColor();
-      util.query(tab2, '.api .color-left').style.backgroundColor = cd.light;
-      util.query(tab2, '.api .color-right').style.backgroundColor = cd.dark;
-      util.query(tab2, '.api .left').onclick = function () {
-        e.setbg({
-          type: e.type,
-          data: {
-            type: "api",
-            api: this.parentElement.getAttribute('data-api')
-          }
-        })
-      }
+      util.query(tab2, '.api .color-left',true)[1].style.backgroundColor = cd.light;
+      util.query(tab2, '.api .color-right',true)[1].style.backgroundColor = cd.dark;
+      var ce=custom.getThemeDetail().color||[];
+      util.query(tab2, '.api .color-left').style.backgroundColor=ce[0]||'#fff';
+      util.query(tab2, '.api .color-right').style.backgroundColor=ce[1]||'#333';
+      util.query(tab2, '.api .left',true).forEach(el=>{
+        el.onclick = function () {
+            e.setbg({
+              type: e.type,
+              data: {
+                type: "api",
+                api: this.parentElement.getAttribute('data-api')
+              }
+            })
+        }
+      });
 
       // pushTab 自定义
       tab3 = e.pushBgTab({

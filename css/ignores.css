@@ -26,7 +26,7 @@
 .lic-con h2,
 .lic-con a
 {
-  color: #09f;
+  color: var(--theme-color);
 }
 .about-dialog{
   display: flex;
@@ -84,7 +84,7 @@
   content: "";
   width: 10px;
   height: 10px;
-  background-color: #0072ff;
+  background-color: var(--theme-color);
   position: absolute;
   top: 3px;
   border-radius: 10px;
@@ -110,6 +110,6 @@
   margin-left:15px;
 }
 .thank-con ul li a{
-  color:#09f;
+  color:var(--theme-color);
   text-decoration: none;
 }

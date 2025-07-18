@@ -19,7 +19,7 @@
 .setting-group-title{
   font-size: 15px;
   font-weight: bold;
-  color: #06f;
+  color: var(--theme-color-deep);
   padding: 10px 7px;
   padding-bottom: 7px;
 }
@@ -43,7 +43,7 @@
 .setting-item-message{
   line-height: 12px;
   font-size: 12px;
-  color: #888;
+  color: var(--desc-text-color);
 }
 .setting-item.no-message .setting-item-title{
   line-height: 40px;
@@ -69,7 +69,7 @@
 .setting-item .setting-item-right input[type="password"]{
   border:0;
   outline: 0;
-  border-bottom: #e6e6e6 solid 1px;
+  border-bottom: var(--input-bottom) solid 1px;
   background-color: transparent;
   color: inherit;
   padding: 2px;
@@ -79,7 +79,7 @@
 .setting-item .setting-item-right input[type="text"]:focus,
 .setting-item .setting-item-right input[type="number"]:focus,
 .setting-item .setting-item-right input[type="password"]:focus{
-  border-bottom-color: #09f;
+  border-bottom-color: var(--theme-color);
 }
 
 .setting-item .null-click .material-symbols-outlined{
@@ -92,8 +92,8 @@
   height: 10px;
   margin: 15px 5px;
   border-radius: 20px;
-  background-color: #ddd;
-  box-shadow: #ccc 0 0 3px;
+  background-color: var(--checkbox-bg);
+  box-shadow: var(--shadow-mild) 0 0 3px;
   transition: all .3s;
   position: relative;
 }
@@ -104,14 +104,14 @@
   top: -5px;
   height: 20px;
   border-radius: 20px;
-  background-color: #aaa;
-  box-shadow: #aaa 0 0 3px;
+  background-color: var(--checkbox-inner-bg);
+  box-shadow: var(--shadow-color) 0 0 3px;
   transition: all .3s;
 }
 .setting-item .setting-item-right .check-box.checked .check-box-inner{
-  background-color: #09f;
+  background-color: var(--theme-color);
   left: 20px;
-  box-shadow: #09f 0 0 3px;
+  box-shadow: var(--theme-color) 0 0 3px;
 }
 .setting-item .setting-item-right .check-box+input{
   display: none;
@@ -127,7 +127,7 @@
   width: 10%;
 }
 .setting-item.just-callback-item:hover{
-  background-color: #f4f4f4;
+  background-color: var(--el-hover-mild);
 }
 .setting-item.just-callback-item .setting-item-right{
   line-height: 40px;
@@ -143,32 +143,32 @@
   cursor: pointer;
   font-size: 13px;
   transition: all .15s;
-  color: #333;
-  border: #ddd solid 1px;
-  background-color: #f7f7f7;
+  color: var(--qui-select-color);
+  border: var(--qui-select-border) solid 1px;
+  background-color: var(--qui-select-bg);
 }
 .setting-item .qui-select:hover{
-  box-shadow: #ccc 0 1px 3px;
-  background-color: #fafafa;
+  box-shadow: var(--shadow-mild) 0 1px 3px;
+  background-color: var(--qui-select-hover);
 }
 .setting-item .qui-select:active{
-  box-shadow: #ccc 0 1px 1px;
-  background-color: #ccc;
+  box-shadow: var(--shadow-mild) 0 1px 1px;
+  background-color: var(--qui-select-active);
 }
 body.dark .setting-item .qui-select:hover{
-  box-shadow: #666 0 1px 3px;
-  background-color: #343434;
+  box-shadow: var(--shadow-color-dark) 0 1px 3px;
+  background-color: var(--qui-select-hover-dark);
 }
 body.dark .setting-item .qui-select:active{
-  box-shadow: #666 0 1px 1px;
-  background-color: #666;
+  box-shadow: var(--shadow-color-dark) 0 1px 1px;
+  background-color: var(--qui-select-active-dark);
 }
 .setting-item .qui-options{
   position: absolute;
   top: 37px;
   right: 0;
   z-index: 2;
-  background-color: #fff;
+  background-color: var(--light-bg);
   border-radius: 3px;
   width: 100%;
   opacity: 0;
@@ -176,7 +176,7 @@ body.dark .setting-item .qui-select:active{
   user-select: none;
   transition: opacity .15s;
   font-size: 13px;
-  color: #333;
+  color: var(--text-color-mild);
   max-height: 150px;
   overflow-y: auto;
 }
@@ -185,19 +185,19 @@ body.dark .setting-item .qui-select:active{
 }
 body.dark .setting-item .qui-select,
 body.dark .setting-item .qui-options{
-  background-color: #373737;
-  color: #ddd;
+  background-color: var(--qui-select-bg-dark);
+  color: var(--qui-select-color-dark);
 }
 body.dark .setting-item .qui-select{
-  border-color: #666;
+  border-color: var(--qui-select-border-dark);
 }
 body.dark .setting-item .qui-options.active{
-  box-shadow: #666 0 1px 3px;
+  box-shadow: var(--shadow-color-dark) 0 1px 3px;
 }
 .setting-item .qui-options.active{
   opacity: 1;
   pointer-events: all;
-  box-shadow: #aaa 0 1px 3px;
+  box-shadow: var(--shadow-color) 0 1px 3px;
 }
 .setting-item .qui-options .qui-option{
   line-height: 30px;
@@ -209,22 +209,22 @@ body.dark .setting-item .qui-options.active{
   cursor: pointer;
 }
 .setting-item .qui-options .qui-option.selected{
-  background-color: #eee;
+  background-color: var(--el-hover-color);
 }
 .setting-item .qui-options .qui-option:hover{
-  background-color: #f4f4f4;
+  background-color: var(--el-hover-mild);
 }
 body.dark .setting-item .qui-options .qui-option.selected{
-  background-color: #444;
+  background-color: var(--el-hover-color-dark);
 }
 body.dark .setting-item .qui-options .qui-option:hover{
-  background-color: #3a3a3a;
+  background-color: var(--el-hover-color-dark);
 }
 body.dark .setting-item.just-callback-item:hover{
-  background-color: #444;
+  background-color: var(--el-hover-color-dark);
 }
 body.dark .setting-group-title{
-  color: #0af;
+  color: var(--theme-color-mild);
 }
 
 @media (max-width:600px){

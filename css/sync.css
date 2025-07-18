@@ -34,7 +34,7 @@
   display: flex;
   justify-content: left;
   align-items: center;
-  color: #888;
+  color: var(--desc-text-color);
   height: 24px;
 }
 .sync-dialog .importslist .item select{
@@ -46,8 +46,8 @@
 .sync-dialog .importslist .item .installbtn{
   float: left;
   font-size: 12px;
-  background-color: #09f;
-  color: #fff;
+  background-color: var(--theme-color);
+  color: var(--theme-bg-text-color);
   padding: 5px;
   line-height: 15px;
   margin:13px 3px;

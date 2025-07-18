@@ -5,13 +5,25 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.7.4',
+  version: '2.8.0-beta',
   version_code: window.version_code,
-  updateTime: '2025/7/8',
+  updateTime: '2025/7/18',
   log: [
     {
-      tag: "fix",
-      content: "修复故梦API域名更换带来的一系列问题"
+        tag: "new",
+        content: "新增背景颜色跟随主题功能（目前还没什么用）"
+    },
+    {
+        tag: "new",
+        content: "主题API新增添加对应背景颜色的设置"
+    },
+    {
+        tag:"new",
+        content:"使用CSS变量汇总了大部分颜色设置，使主题开发更方便"
+    },
+    {
+        tag:"fix",
+        content:"重构了链接部分代码"
     }
   ]
 }

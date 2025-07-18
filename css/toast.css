@@ -8,10 +8,10 @@
   min-width: 200px;
   text-align: center;
   font-size: 16px;
-  color: #333;
-  background-color: #fff;
+  color: var(--text-color-mild);
+  background-color: var(--light-bg);
   z-index:999;
-  box-shadow: #aaa 0 1px 5px;
+  box-shadow: var(--shadow-color) 0 1px 5px;
   border-radius: 40px;
   display: none;
   transition: top .3s;
@@ -21,9 +21,9 @@
   display: block;
 }
 body.dark .toast{
-  background-color: #333;
-  box-shadow: #000 0 1px 5px;
-  color: #fff;
+  background-color: var(--dark-bg);
+  box-shadow: var(--shadow-color-dark) 0 1px 5px;
+  color: var(--text-color-dark);
 }
 @keyframes toastin {
   0%{

@@ -1,5 +1,5 @@
-var {storage,dbTool}=require('../storage');
-var getEventHandle=require('../event');
+var {storage,dbTool}=require('../../storage');
+var getEventHandle=require('../../event');
 
 var initsto = storage('link', {
   sync: true,
@@ -98,9 +98,9 @@ function compareLinks(a,b){
     return a;
   }
   for(var i=0;i<a.length;i++){
-    if(!b.find(function(v){
+    if(b.find(function(v){
       return v.title==a[i].title&&v.url==a[i].url;
-    })){
+    }).length==0){
       b.push(a[i]);
     }
   }

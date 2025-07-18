@@ -59,14 +59,14 @@
   line-height: 16px;
 }
 .d-c.bg_d .tab_con .tabitem:hover{
-  background-color: #eee;
+  background-color: var(--el-hover-color);
 }
 body.dark .d-c.bg_d .tab_con .tabitem:hover{
-  background-color: #666;
+  background-color: var(--el-hover-color-dark);
 }
 .d-c.bg_d .tab_con .tabitem.active{
-  color: #fff;
-  background-color: #09f!important;
+  color: var(--theme-bg-text-color);
+  background-color: var(--theme-color)!important;
 }
 .d-c.bg_d .scroll_con{
   margin: 0 10px;
@@ -83,13 +83,13 @@ body.dark .d-c.bg_d .tab_con .tabitem:hover{
 }
 .d-c.bg_d .scroll_con .unit-item .unit-title{
   font-size: 15px;
-  color: #06f;
+  color: var(--theme-color-deep);
   font-weight: bold;
   line-height: 20px;
   padding: 10px 0;
 }
 body.dark .d-c.bg_d .scroll_con .unit-item .unit-title{
-  color: #0af;
+  color: var(--theme-color-mild);
 }
 .d-c.bg_d .scroll_con .unit-item .unit-content{
   width: 100%;
@@ -189,8 +189,8 @@ body.dark .d-c.bg_d .scroll_con .unit-item .unit-title{
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #09f;
-  color: #fff;
+  background-color: var(--theme-color);
+  color: var(--theme-bg-text-color);
 }
 .d-c.bg_d .scroll_con .bgitem.full .left .noBg span{
   font-size: 36px;
@@ -208,7 +208,7 @@ body.dark .d-c.bg_d .scroll_con .unit-item .unit-title{
 }
 .d-c.bg_d .scroll_con .bgitem .right .bg-message{
   font-size: 12px;
-  color: #666;
+  color: var(--desc-text-color);
 }
 .d-c.bg_d .textarea{
   width: calc(100% - 25px);
@@ -222,7 +222,7 @@ body.dark .d-c.bg_d .scroll_con .unit-item .unit-title{
   font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 }
 .d-c.bg_d .textarea:focus{
-  border-color: #09f;
+  border-color: var(--theme-color);
 }
 .d-c.bg_d p{
   padding-top: 10px;
@@ -230,7 +230,7 @@ body.dark .d-c.bg_d .scroll_con .unit-item .unit-title{
   padding-bottom: 5px;
 }
 .d-c.bg_d p a{
-  color: #09f;
+  color: var(--theme-color);
   text-decoration: none;
 }
 .d-c.bg_d br{
@@ -243,17 +243,17 @@ body.dark .d-c.bg_d .scroll_con .unit-item .unit-title{
   border:0;
   outline: 0;
   cursor: pointer;
-  box-shadow: #aaa 0 1px 2px;
-  background-color: #eee;
-  color: #333;
+  box-shadow: var(--shadow-color) 0 1px 2px;
+  background-color: var(--btn-color);
+  color: var(--btn-text-color);
   border-radius: 2px;
   margin: 5px;
 }
 .d-c.bg_d .gjzdysetbtn:hover{
-  background-color: #ddd;
+  background-color: var(--btn-hover);
 }
 .d-c.bg_d .gjzdysetbtn:active{
-  background-color: #f5f5f5;
+  background-color: var(--btn-active);
 }
 .d-c.bg_d .gjzdysetbtn.seted{
   background-color: #aaa!important;
@@ -296,6 +296,9 @@ body.dark .u-se:hover{
 }
 .u-se p{
   line-height:40px;
+  margin: 0!important;
+  height: 40px!important;
+  padding: 0!important;
 }
 .u-se p:nth-child(1){
   float: left;

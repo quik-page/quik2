@@ -183,8 +183,7 @@ console.timeEnd('cssminify');
 console.time('htmlbuild');
 let _h = fs.readFileSync(path.join(__dirname, 'index.html')).toString().replace(/<!-- dev -->[\s\S]*<!-- dev end -->/g, '')
   .replace('index.css', 'index.bundle.css')
-  .replace('index.js', 'index.bundle.js')
-  .replace('type="text/cjs"', '')
+  .replace('index.dev.js', 'index.bundle.js')
   .replace('<!-- register sw -->', `<script>
 // register sw
 if('serviceWorker' in navigator&&!window.isExtNative){

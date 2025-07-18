@@ -20,20 +20,20 @@
   margin-left: 10px;
   cursor: pointer;
   user-select: none;
-  color:#000;
+  color:var(--text-color);
 }
 .addon-bar .l .item:hover{
-  background-color: #eee;
+  background-color: var(--el-hover-color);
 }
 body.dark .addon-bar .l .item{
-  color: #fff;
+  color: var(--text-color-dark);
 }
 body.dark .addon-bar .l .item:hover{
-  background-color: #555;
+  background-color: var(--el-hover-color-dark);
 }
 .addon-bar .l .item.active{
-  background: #09f!important;
-  color: #fff;
+  background: var(--theme-color)!important;
+  color: var(--theme-bg-text-color);
 }
 .d-c.addon-dialog .content{
   width: 100%;
@@ -48,37 +48,37 @@ body.dark .addon-bar .l .item:hover{
 .d-c.addon-dialog .p ul li{
   height: 60px;
   width: 100%;
-  border-bottom: #eee solid 1px;
+  border-bottom: var(--hr-color) solid 1px;
   overflow: hidden;
   transition: all .2s;
 }
 body.dark .d-c.addon-dialog .p ul li{
-  border-bottom: #555 solid 1px;
+  border-bottom: var(--hr-color-dark) solid 1px;
 }
 .d-c.addon-dialog .p ul li:hover{
-  background-color: #f4f4f4;
+  background-color: var(--el-hover-mild);
 }
 body.dialogblur .d-c.addon-dialog .p ul li:hover{
-  background-color: rgba(244, 244, 244, 0.7);
+  background-color: var(--el-hover-mild-opa);
 }
 body.dark .d-c.addon-dialog .p ul li:hover{
-  background-color: #555;
+  background-color: var(--el-hover-color-dark);
 }
 body.dialogblur.dark .d-c.addon-dialog .p ul li:hover{
-  background-color: rgba(85,85,85,.7);
+  background-color: var(--el-hover-color-dark-opa);
 }
 body.dark .d-c.addon-dialog .p ul li.active{
-  background-color: #333;
+  background-color: var(--dark-bg);
 }
 body.dialogblur.dark .d-c.addon-dialog .p ul li.active{
-  background-color: rgba(51,51,51,.7);
+  background-color: var(--dark-bg-opa);
 }
 .d-c.addon-dialog .p ul li.active{
   height: 200px;
-  background-color: #fff;
+  background-color: var(--light-bg);
 }
 body.dialogblur .d-c.addon-dialog .p ul li.active{
-  background-color: rgba(255,255,255,.7);
+  background-color: var(--light-bg-opa);
 }
 .d-c.addon-dialog .p ul li .n{
   overflow: hidden;
@@ -89,13 +89,13 @@ body.dialogblur .d-c.addon-dialog .p ul li.active{
   height: 600px;
 }
 .d-c.addon-dialog .p ul li .d .website{
-  color: #888;
+  color: var(--desc-text-color);
   font-size: 14px;
   text-indent: 2em;
   padding-bottom: 5px;
 }
 .d-c.addon-dialog .p ul li .d .desc{
-  color: #888;
+  color: var(--desc-text-color);
   font-size: 14px;
   text-indent: 2em;
   height: 80px;
@@ -177,7 +177,7 @@ body.dialogblur .d-c.addon-dialog .p ul li.active{
 }
 .d-c.addon-dialog .p ul li .ds .message{
   line-height: 20px;
-  color: #888;
+  color: var(--desc-text-color);
   font-size: 12px;
 }
 .d-c.addon-dialog .p ul li .ds .message span{
@@ -220,7 +220,7 @@ body.dialogblur .d-c.addon-dialog .p ul li.active{
   padding-top: 5px;
 }
 .addon_install_ui .ma .sth p.version{
-  color: #888;
+  color: var(--desc-text-color);
 }
 .addon_install_ui .ma .progress{
   width: 100%;
@@ -229,7 +229,7 @@ body.dialogblur .d-c.addon-dialog .p ul li.active{
 .addon_install_ui .ma .progress .r{
   width: 0;
   height: 5px;
-  background: #09f;
+  background: var(--theme-color);
   transition: all .3s;
 }
 .addon_install_ui .ma .progress.error .r{

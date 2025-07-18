@@ -9,17 +9,17 @@
 }
 .topper .item:hover,
 .bottomer .item:hover{
-  background-color: rgb(238, 238, 238,.5);
+  background-color: var(--icon-btn-hover);
 }
 body.dark .topper .item:hover,
 body.dark .bottomer .item:hover,
 body.t-dark .topper .item:hover,
 body.t-dark .bottomer .item:hover{
-  background-color: rgba(102, 102, 102, 0.4);
+  background-color: var(--icon-btn-hover-dark);
 }
 body.t-dark .topper .item,
 body.t-dark .bottomer .item{
-  color: #fff;
+  color: var(--text-color-dark);
 }
 
 .topper .item .material-symbols-outlined,

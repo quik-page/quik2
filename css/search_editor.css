@@ -3,7 +3,7 @@
   height: 40px;
   margin: 10px;
   border-radius: 10px;
-  background-color: #f4f4f4;
+  background-color: var(--el-hover-mild);
   float: left;
   cursor: pointer;
   user-select: none;
@@ -23,7 +23,7 @@
   overflow-y: auto;
   height: calc(100% - 115px);
   padding: 10px;
-  border-bottom: #eee solid 1px;
+  border-bottom: var(--el-border) solid 1px;
 }
 .search_editor .list>*{
   width: 100%;
@@ -40,8 +40,8 @@
 }
 
 .search_editor .neizhilist .item.active{
-  background-color: #09f;
-  color: #fff;
+  background-color: var(--theme-color);
+  color: var(--theme-bg-text-color);
 }
 .search_editor .neizhilist .item img{
   width: 20px;
@@ -92,11 +92,11 @@
   border:0;outline: 0;
   height: 30px;
   width: 100%;
-  color: #666;
+  color: var(--desc-text-color);
   background-color: transparent;
 }
 .search_editor .searchlist .item .url input:focus{
-  color: #000;
+  color: var(--text-color);
 }
 .search_editor .searchlist .item .remove{
   line-height: 30px;
@@ -106,7 +106,7 @@
   cursor: pointer;
 }
 .search_editor .searchlist .item .remove:hover{
-  background-color: #eee;
+  background-color: var(--el-hover-color);
 }
 .search_editor .searchlist .item .remove .material-symbols-outlined{
   font-size: 16px;
@@ -115,19 +115,19 @@
 .search_editor .searchlist .addnewitem{
   width: 100%;
   height: 30px;
-  color: #888;
+  color: var(--desc-text-color);
   font-size: 14px;
   text-align: center;
   line-height: 30px;
   cursor: pointer;
-  background-color: #f4f4f4;
+  background-color: var(--el-hover-mild);
   border-radius: 4px;
 }
 .search_editor .searchlist .addnewitem .material-symbols-outlined{
   font-size: inherit;
 }
 .search_editor .searchlist .addnewitem:hover{
-  background-color: #eee;
+  background-color: var(--el-hover-color);
 }
 body.dark .search_editor .searchlist .addnewitem{
   background-color: #383838;
@@ -139,14 +139,14 @@ body.dark .search_editor .searchlist .item .url input{
   color: #aaa;
 }
 body.dark .search_editor .searchlist .item .url input:focus{
-  color: #fff;
+  color: var(--text-color);
 }
 body.dark .search_editor .searchlist .item .remove:hover{
   background-color: #222;
 }
 body.dark .search_editor .neizhilist .item{
-  background-color: #444;
+  background-color: var(--el-hover-color-dark);
 }
 body.dark .search_editor .neizhilist .item.active{
-  background-color: #09f;
+  background-color: var(--theme-color);
 }

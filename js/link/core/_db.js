@@ -1,6 +1,6 @@
 let { initsto, doevent, on, off,writeLink,pushLink } = require('./_core');
-let util = require('../util');
-const { confirm } = require('../dialog/dialog_utils');
+let util = require('../../util');
+const { confirm } = require('../../dialog/dialog_utils');
 initsto.set('storage-mode', 'db');
 
 var defLinks = [{

@@ -14,6 +14,8 @@ module.exports = {
     setTheme: theme.setTheme,
     addTheme: theme.addTheme,
     removeTheme: theme.removeTheme,
+    getTheme: theme.getTheme,
+    getThemeDetail: theme.getThemeDetail,
     isTimeLogo() {
         return logo.get() == 'b'
     },

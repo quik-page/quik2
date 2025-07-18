@@ -8,8 +8,8 @@
 .guide-card .btn{
     float: right;
     font-size: 12px;
-    background-color: #09f;
-    color: #fff;
+    background-color: var(--theme-color);
+    color: var(--theme-bg-text-color);
     padding: 5px;
     border-radius: 5px;
     cursor: pointer;
