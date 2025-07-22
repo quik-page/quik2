@@ -6,12 +6,13 @@ const util = require("../util");
 var tuisongsto = storage('tuisong');
 util.initSet(tuisongsto, 'd', 0);
 var last_d = tuisongsto.get('d');
+console.log('last_d', last_d);
 util.xhr('/quik-notice.json', res => {
     res = JSON.parse(res);
     if (res.date > last_d) {
         setTimeout(() => {
             tuisongsto.set('d', res.date);
-        }, 10000)
+        }, 5000)
 
         var tsn = new notice({
             content: res.content,

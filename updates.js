@@ -1,4 +1,17 @@
 var updatelog={
+"2.8.1-beta":{
+    updates:[
+        {
+            tag: "new",
+            content: "新增插件自动检测更新功能（设置可关闭）"
+        },
+        {
+            tag:"fix",
+            content:"修复了安全模式无效的问题"
+        }
+    ],
+    time: "2025/7/22"
+},
   "2.8.0-beta":{
     updates:[
         {

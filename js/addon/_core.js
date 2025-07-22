@@ -546,22 +546,24 @@ async function loadMarketData() {
 function getAddonList() {
   return initsto.list()
 }
+setTimeout(function(){
+    if (!window.addon_) {
+        var addonruns = [];
+        getAddonList().forEach(id => {
+          if (!initsto.get(id).disabled) {
+            addonruns.push(runAddon(id));
+          }
+        })
+        try {
+          Promise.all(addonruns).then(() => {
+            setTimeout(() => {
+              evn.doevent('allrun', []);
+            }, 100)
+          })
+        } catch (e) { };
+      }
+})
 
-if (!window.addon_) {
-  var addonruns = [];
-  getAddonList().forEach(id => {
-    if (!initsto.get(id).disabled) {
-      addonruns.push(runAddon(id));
-    }
-  })
-  try {
-    Promise.all(addonruns).then(() => {
-      setTimeout(() => {
-        evn.doevent('allrun', []);
-      }, 100)
-    })
-  } catch (e) { };
-}
 
 
 function enable(id) {
