@@ -80,6 +80,35 @@ var clse = new SettingItem({
     }
 });
 gaoji.addNewItem(clse);
+
+var clse2 = new SettingItem({
+    title: "还原设置",
+    message: "还原QUIK起始页的默认设置",
+    index: 2,
+    type: "null",
+    callback() {
+        confirm('确定要还原设置为默认吗？', r => {
+            if (r) {
+                let a=JSON.parse(localStorage.quik2);
+                a.setting={};
+                a.hello={};
+                delete a.link.draglink;
+                delete a.link.enabledCate;
+                delete a.link.lastingCate;
+                delete a.link.linkpailie;
+                delete a.link.linksize;
+                delete a.link.linkstyle;
+                localStorage.quik2 = JSON.stringify(a);
+                alert('已还原默认设置，刷新页面后生效。', function () {
+                    window.location.reload();
+                })
+            }
+        });
+    }
+});
+gaoji.addNewItem(clse2);
+
+
 var cjup = new SettingItem({
     title: "强制更新",
     message: "强行从远程获取最新版本并更新",

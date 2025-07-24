@@ -1,0 +1,45 @@
+.theme-dialog .scroll_con {
+    padding: 10px 20px;
+    overflow-y: auto;
+    height: calc(100% - 60px);
+}
+
+.theme-dialog h2 {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--theme-color-deep);
+    line-height: 30px;
+    padding: 10px 0;
+}
+
+.theme-dialog .ztselects {
+    overflow: hidden;
+}
+
+.theme-dialog .theme-item {
+    width: calc(25% - 20px);
+    height: 40px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: var(--el-hover-mild);
+    float: left;
+    cursor: pointer;
+    user-select: none;
+    transition: all .3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.theme-dialog .theme-item.active {
+    background-color: var(--theme-color);
+    color: var(--theme-bg-text-color);
+}
+
+body.dark .theme-dialog .theme-item  {
+    background-color: var(--el-hover-color-dark);
+}
+
+body.dark .theme-dialog .theme-item.active {
+    background-color: var(--theme-color);
+}
