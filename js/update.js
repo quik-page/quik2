@@ -5,25 +5,17 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.8.2-beta',
+  version: '2.8.3-beta',
   version_code: window.version_code,
-  updateTime: '2025/7/24',
+  updateTime: '2025/7/27',
   log: [
     {
         tag: "new",
-        content: "(Beta)QUIK起始页主题大更新！支持复选多个主题为页面添加不同主题的组合效果！"
-    },
-    {
-        tag:"new",
-        content:"新增还原设置功能"
-    },
-    {
-        tag:"change",
-        content:"移除busuanzi统计代码"
+        content: "提供数据出错的应急设置"
     },
     {
         tag:"fix",
-        content:"修复了链接对比导入时的代码错误"
+        content:"修复#safe在直接修改url的情况下无法启动安全模式的问题"
     }
   ]
 }

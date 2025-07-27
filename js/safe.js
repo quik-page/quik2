@@ -7,7 +7,14 @@ const notice=require('./notice');
 const { alert, confirm, prompt } = require('./dialog/dialog_utils');
 
 var initsto = storage('safe');
-window.addEventListener('hashchange', hashcl);
+window.ign=false;
+window.addEventListener('hashchange', ()=>{
+    if(window.ign){
+        window.ign=false;
+        return;
+    }
+    window.location.reload();
+});
 window.addEventListener('visibilitychange', () => {
     if (document.visibilityState == 'hidden') {
         document.body.style.display = 'none';
@@ -23,6 +30,7 @@ function hashcl() {
         hash = hash.split(';')[1];
     }
     if (hash == 'safe') {
+        window.ign=true;
         location.hash = '#' + (cjhash ? cjhash + ';' : '');
         window.addon_ = true;
         alert('已阻止所有插件运行，请修改设置或删除插件');
@@ -107,6 +115,62 @@ var clse2 = new SettingItem({
     }
 });
 gaoji.addNewItem(clse2);
+
+var stol = new SettingItem({
+    title: "清除指定数据",
+    message: "请在开发者指导下应急用",
+    index: 2,
+    type: "null",
+    callback() {
+        alert('该设置请在开发者指导下使用！', ()=> {
+            prompt('如要清除整个库，输入1，如要清除具体键值，输入2，列出库列表输入3，列出键列表输入4', t => {
+                var a=JSON.parse(localStorage.quik2);
+                if (t=='1') {
+                    prompt('输入要清除的库', k => {
+                        if(k){
+                            a[k]={};
+                            localStorage.quik2 = JSON.stringify(a);
+                            alert('已清除'+k+'库！', function () {
+                                window.location.reload();
+                            })
+                        }
+                    })
+                }else if(t=='2'){
+                    prompt('输入要清除的库', k => {
+                        if(k){
+                           prompt('输入要清除的键值', v => {
+                               if(v){
+                                    try{
+                                        delete a[k][v];
+                                    }catch(e){
+                                        alert('该键值不存在！');
+                                    }
+                                    localStorage.quik2 = JSON.stringify(a);
+                                    alert('已清除'+k+'库的'+v+'键值！', function () {
+                                        window.location.reload();
+                                    })
+                               }
+                           }) 
+                        }
+                    })
+                }else if(t=='3'){
+                    alert(Object.keys(a).join('\n'));
+                }else if(t=='4'){
+                    prompt('输入要列出库的键值', k => {
+                        if(k){
+                            if(a[k]){
+                                alert(Object.keys(a[k]).join('\n'));
+                            }else{
+                                alert('该库不存在！');
+                            }
+                        }
+                    })
+                }
+            })
+        });
+    }
+});
+gaoji.addNewItem(stol);
 
 
 var cjup = new SettingItem({

@@ -1,4 +1,17 @@
 var updatelog={
+"2.8.3-beta":{
+    updates:[
+        {
+            tag: "new",
+            content: "提供数据出错的应急设置"
+        },
+        {
+            tag:"fix",
+            content:"修复#safe在直接修改url的情况下无法启动安全模式的问题"
+        }
+      ],
+    time: "2025/7/27"
+},
 "2.8.2-beta":{
     updates:[
         {
