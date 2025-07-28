@@ -1,4 +1,21 @@
 var updatelog={
+"2.8.4-beta":{
+    updates:[
+        {
+            tag: "fix",
+            content: "修复无法自定义纯色背景颜色的问题"
+        },
+        {
+            tag:"fix",
+            content:"修复在从必应背景切换至其他时info面板残留的问题"
+        },
+        {
+            tag:"fix",
+            content:"修复主题选择面板取消选择时未按预期工作的问题"
+        }
+      ],
+    time: "2025/7/28"
+},
 "2.8.3-beta":{
     updates:[
         {

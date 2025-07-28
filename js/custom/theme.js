@@ -67,7 +67,8 @@ function doTheme(f,justadd) {
         return not;
     }
     document.body.classList.forEach((a) => {
-        if (ys.indexOf(a) == -1) {
+        if (!ys.includes(a)) {
+            console.log(a);
             document.body.classList.remove(a);
         }
     })

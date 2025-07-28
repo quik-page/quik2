@@ -5,17 +5,21 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.8.3-beta',
+  version: '2.8.4-beta',
   version_code: window.version_code,
-  updateTime: '2025/7/27',
+  updateTime: '2025/7/28',
   log: [
     {
-        tag: "new",
-        content: "提供数据出错的应急设置"
+        tag: "fix",
+        content: "修复无法自定义纯色背景颜色的问题"
     },
     {
         tag:"fix",
-        content:"修复#safe在直接修改url的情况下无法启动安全模式的问题"
+        content:"修复在从必应背景切换至其他时info面板残留的问题"
+    },
+    {
+        tag:"fix",
+        content:"修复主题选择面板取消选择时未按预期工作的问题"
     }
   ]
 }

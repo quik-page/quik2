@@ -15,7 +15,7 @@ var {
   setl
 } = require('./_defaultDrawer/userupload.js');
 
-var { colorChange, _listensetbg2 } = require('./_defaultDrawer/zdycolor.js');
+var { colorChange, _listensetbg2,init } = require('./_defaultDrawer/zdycolor.js');
 const custom = require('../custom/index.js');
 
 var tab1, setbg, tab2, tab3;
@@ -359,6 +359,7 @@ function _reset() {
   infoIcon.hide();
   eyeicon.hide();
   themedo=false;
+  infoCard.hide();
 }
 
 module.exports = {
@@ -442,6 +443,7 @@ module.exports = {
         tab: "纯色",
         content: require('./htmls/colorbgtab.html')
       });
+      init(tab2);
       var c = initsto.get('usercolor');
       util.query(tab2, '.zdy .color-left').style.backgroundColor = c.light;
       util.query(tab2, '.zdy .color-right').style.backgroundColor = c.dark;

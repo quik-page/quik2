@@ -69,4 +69,8 @@ function _listensetbg2(fn) {
   _sbfn.push(fn);
 }
 
-module.exports = { colorChange, _listensetbg2 };
+var tab2;
+function init(_tab2){
+    tab2 = _tab2;
+}
+module.exports = { colorChange, _listensetbg2,init };
