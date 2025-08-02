@@ -57,6 +57,9 @@ function doTheme(f,justadd) {
         doevent('dotheme', []);
         return;
     }
+    if(!f){
+        f='def';
+    }
     nowtheme=f;
     let fs=f.split('|');
     let not=0;
@@ -68,9 +71,8 @@ function doTheme(f,justadd) {
     if(not!=0){
         return not;
     }
-    document.body.classList.forEach((a) => {
+    document.body.className.split(' ').forEach((a) => {
         if (!ys.includes(a)) {
-            console.log(a);
             document.body.classList.remove(a);
         }
     })
