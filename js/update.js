@@ -5,21 +5,17 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.8.4-beta',
+  version: '2.8.5-beta',
   version_code: window.version_code,
-  updateTime: '2025/7/28',
+  updateTime: '2025/8/2',
   log: [
     {
         tag: "fix",
-        content: "修复无法自定义纯色背景颜色的问题"
+        content: "修复颜色主题推荐背景颜色显示错误的问题"
     },
     {
-        tag:"fix",
-        content:"修复在从必应背景切换至其他时info面板残留的问题"
-    },
-    {
-        tag:"fix",
-        content:"修复主题选择面板取消选择时未按预期工作的问题"
+        tag:"change",
+        content:"优化背景以图片或视频（包括API）显示时的右下角的操作图标"
     }
   ]
 }

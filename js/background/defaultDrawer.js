@@ -17,6 +17,7 @@ var {
 
 var { colorChange, _listensetbg2,init } = require('./_defaultDrawer/zdycolor.js');
 const custom = require('../custom/index.js');
+const contextMenu = require('../menu/index.js');
 
 var tab1, setbg, tab2, tab3;
 _listensetbg(function (r) {
@@ -42,17 +43,57 @@ if (window.isExt) {
   neizhiImg = require('./_defaultDrawer/neizhi.json');
 }
 
-var refreshApiIcon = new icon({
-  content: util.getGoogleIcon('e86a'),
-  offset: "br",
-  important: true
+let bgczMenuLists=[
+    {
+        icon:util.getGoogleIcon('e86a'),
+        title:'刷新',
+        click: function () {
+            var a = document.querySelector('.bgf .full img');
+            if (a) {
+                a.style.opacity = '0';
+            }
+            var _ = this;
+            setTimeout(() => {
+                refreshFn.call(_);
+            }, 300)
+        }
+    },
+    {
+        icon:util.getGoogleIcon('f090'),
+        title:'下载',
+        click: function () {
+            window.open(document.querySelector(".bgf img").src);
+        }
+    },
+    {
+        icon:util.getGoogleIcon('e8f4', { type: 'fill' }),
+        title:'查看壁纸',
+        click: function () {
+            document.querySelector('main').style.opacity = 0;
+            setTimeout(() => {
+                document.querySelector('main').style.display = 'none';
+            }, 300)
+            document.querySelector('.bgf .cover').style.opacity = 0;
+            document.addEventListener('click', eyefy)
+        }
+    }
+];
+let bgczMenu=new contextMenu({
+    list: [],
+    offset:{
+        right:5,
+        bottom:50
+    }
+})
+
+let bgczIcon=new icon({
+    content: util.getGoogleIcon('e5d4'),
+    offset: "br",
+    important: true
 });
-var downloadIcon = new icon({
-  content: util.getGoogleIcon('f090'),
-  offset: "br"
-});
-downloadIcon.getIcon().onclick = () => {
-  window.open(document.querySelector(".bgf img").src);
+bgczIcon.getIcon().onclick = function (e) {
+    e.stopPropagation();
+    bgczMenu.show();
 }
 
 var infoIcon = new icon({
@@ -88,42 +129,28 @@ infoIcon.getIcon().onclick = () => {
 }
 infoIcon.getIcon().title = '显示壁纸详情';
 
-refreshApiIcon.getIcon().onclick = function () {
-  var a = document.querySelector('.bgf .full img');
-  if (a) {
-    a.style.opacity = '0';
-  }
-  var _ = this;
-  setTimeout(() => {
-    refreshFn.call(_);
-  }, 300)
-};
-
-var eyeicon = new icon({
-  content: util.getGoogleIcon('e8f4', { type: 'fill' }),
-  offset: "br"
-});
-
-eyeicon.getIcon().onclick = function (e) {
-  e.preventDefault();
-  e.stopPropagation();
-  document.querySelector('main').style.opacity = 0;
-  setTimeout(() => {
-    document.querySelector('main').style.display = 'none';
-  }, 300)
-  document.querySelector('.bgf .cover').style.opacity = 0;
-  document.addEventListener('click', eyefy)
-}
-eyeicon.getIcon().title = '查看壁纸';
-
-
+let inclick=false;
 function eyefy() {
+    if(!inclick){
+        inclick=true;
+        return;
+    }
   document.querySelector('main').style.display = 'block';
   setTimeout(() => {
     document.querySelector('main').style.opacity = 1;
   }, 10)
   document.querySelector('.bgf .cover').style.opacity = '';
   document.removeEventListener('click', eyefy)
+  inclick=false;
+}
+
+function rnMenu(t){
+    let n=[];
+    for(let i=0;i<t.length;i++){
+        n.push(bgczMenuLists[t[i]]);
+    }
+    console.log(n);
+    bgczMenu.setList(n);
 }
 
 
@@ -173,7 +200,9 @@ var timeb = null;
 let themedo=false;
 
 function docthem(){
+    console.log(custom.getThemeDetail());
     let g=custom.getThemeDetail().color||[]
+    console.log(g);
     draws.color(document.querySelector('.bgf'),{
         light:g[0]||'#fff',
         dark:g[1]||'#333'
@@ -194,7 +223,8 @@ var draws = {
     }
     checkBgCoverStyle();
     ImgOrVideoSi.show();
-    eyeicon.show();
+    bgczIcon.show();
+    rnMenu([2]);
   },
   video(bgf, data) {
     bgf.innerHTML = '<div class="video-sp full"><div class="cover"></div><video src="" muted loop></video></div>'
@@ -205,7 +235,8 @@ var draws = {
     }
     checkBgCoverStyle();
     ImgOrVideoSi.show();
-    eyeicon.show();
+    bgczIcon.show();
+    rnMenu([2]);
   },
   color(bgf, data) {
     bgf.innerHTML = '<div class="color-sp full"></div>'
@@ -218,26 +249,27 @@ var draws = {
   },
   api: function api(bgf, data) {
     function showAcgOrFj(a) {
-      refreshApiIcon.show();
-      refreshApiIcon.getIcon().classList.add('round-anim');
+        bgczIcon.show();
+        rnMenu([0,2]);
       a.getImg((d) => {
-        refreshApiIcon.getIcon().classList.remove('round-anim');
         draws.img(bgf, {
           url: d.url
         });
         if (d.candownload) {
-          downloadIcon.show();
+            rnMenu([0,1,2]);
+        }else{
+            rnMenu([0,2]);
         }
       })
       refreshFn = () => {
-        refreshApiIcon.getIcon().classList.add('round-anim');
         a.getImg((d) => {
-          refreshApiIcon.getIcon().classList.remove('round-anim');
           draws.img(bgf, {
             url: d.url
           });
           if (d.candownload) {
-            downloadIcon.show();
+            rnMenu([0,1,2]);
+          }else{
+            rnMenu([0,2]);
           }
         })
       }
@@ -250,11 +282,11 @@ var draws = {
         showAcgOrFj(fjbg);
         break;
       case 'bing':
+        bgczIcon.show();
         draws.img(bgf, {
           url: "https://bing.shangzhenyang.com/api/1080p"
         });
-        downloadIcon.show();
-        infoIcon.show();
+        rnMenu([1,2])
         break;
       case 'time':
         // at ../defaultDrawer.js dot-timeb
@@ -351,15 +383,13 @@ function selectbgitem(data) {
 
 function _reset() {
   document.body.classList.remove('t-dark');
-  refreshApiIcon.hide();
   refreshFn = () => { }
   clearInterval(timeb);
-  downloadIcon.hide();
   ImgOrVideoSi.hide();
   infoIcon.hide();
-  eyeicon.hide();
   themedo=false;
   infoCard.hide();
+  bgczIcon.hide();
 }
 
 module.exports = {

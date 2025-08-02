@@ -1,4 +1,17 @@
 var updatelog={
+"2.8.5-beta":{
+    updates:[
+        {
+            tag: "fix",
+            content: "修复颜色主题推荐背景颜色显示错误的问题"
+        },
+        {
+            tag:"change",
+            content:"优化背景以图片或视频（包括API）显示时的右下角的操作图标"
+        }
+    ],
+    time: "2025/8/2"
+},
 "2.8.4-beta":{
     updates:[
         {

@@ -53,9 +53,11 @@ let nowtheme='def';
 
 function doTheme(f,justadd) {
     if(justadd){
-        document.body.classList.add(f);        
+        document.body.classList.add(f);      
+        doevent('dotheme', []);
         return;
     }
+    nowtheme=f;
     let fs=f.split('|');
     let not=0;
     for(let i=0;i<fs.length;i++){
@@ -76,7 +78,6 @@ function doTheme(f,justadd) {
     fs.forEach((a) => {
         document.body.classList.add(a);        
     })
-    nowtheme=f;
     doevent('dotheme', []);
     if (!isdotheme) {
         isdotheme = true;
@@ -205,7 +206,9 @@ module.exports = {
     getTheme:()=>nowtheme,
     getThemeDetail:()=>{
         let fs=nowtheme.split('|');
+        console.log(fs);
         for(let i=0;i<fs.length;i++){
+            if(!themesd[fs[i]])continue;
             if(themesd[fs[i]].type=='global'||themesd[fs[i]].type=='color'){
                 return {
                     themes:fs.map(a=>themesd[a]),
