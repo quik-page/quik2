@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修复</title>
+</head>
+<body>
+    <h1>修复</h1>
+    <p>正在修复</p>
+    <script>
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            console.log(registrations);
+            registrations.forEach(function(registration) {
+                registration.active.postMessage('update');
+            })
+        })
+
+        window.addEventListener('messgae',function(e){
+            if (e.data == 'updated') {
+                document.querySelector('p').textContent = '修复成功';
+            }
+        })
+    </script>
+</body>
+</html>
