@@ -1,4 +1,21 @@
 var updatelog={
+"2.8.6-beta":{
+    updates:[
+        {
+            tag: "fix",
+            content: "修复Alt+G快捷键失效的问题"
+        },
+        {
+            tag:"fix",
+            content: "修复用户自定义背景图片时输入全空值刷新后页面无法打开的问题"
+        },
+        {
+            tag:"fix",
+            content: "提供特殊设置以解决手机端浏览器不听我禁用默认上下文菜单导致无法修改链接的问题"
+        }
+    ],
+    time:"2025/8/11"
+},
 "2.8.5-beta":{
     updates:[
         {

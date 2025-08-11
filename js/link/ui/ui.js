@@ -156,8 +156,8 @@ module.exports={
     },
     setShowCate(v) {
         initsto.set('enabledCate', v);
-    dcate(v);
-        enabledCateSi.reGet();
+        cateui.dcate(v);
+        cateui.enabledCateSi.reGet();
     },
     getLinkSize() {
         return initsto.get('linksize');

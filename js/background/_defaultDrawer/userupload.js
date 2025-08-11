@@ -1,4 +1,5 @@
 const dialog = require("../../dialog");
+const { alert } = require("../../dialog/dialog_utils");
 const { storage } = require("../../storage");
 const util = require("../../util");
 const { initsto } = require("../core");
@@ -34,6 +35,10 @@ function drawIovUploader() {
     var url = util.query(iovuploaderf, 'input[type="url"]').value;
     // File?
     var file = util.query(iovuploaderf, 'input[type="file"]').files[0];
+    if((!url)&&(!file)){
+        alert('你至少写一个啊！');
+        return;
+    }
     // 先把背景设置对话框中的图片src重置
     seti('');
     if (file) {

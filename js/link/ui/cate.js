@@ -346,7 +346,7 @@ var mrcateMenu = new menu({
     }
 });
 
-module.exports={
+let ex={
     observeCate,
     init,
     getCatelist:()=>catelist,
@@ -361,6 +361,11 @@ module.exports={
     catechange:(fn)=>{
         catechange=fn;
     },
-    enabledCateSi,
     getMenuedCate:()=>menuedCate,
 }
+
+Object.defineProperty(ex,'enabledCateSi',{
+    get:()=>enabledCateSi
+})
+
+module.exports=ex;

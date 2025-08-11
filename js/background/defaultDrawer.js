@@ -217,6 +217,7 @@ custom.on('dotheme',function(){
 
 var draws = {
   img(bgf, data) {
+    if((!data.url)&&typeof data.index=='undefined')return;
     bgf.innerHTML = '<div class="img-sp full"><div class="cover"></div><img src="' + (data.url || neizhiImg[data.index].img) + '"/></div>';
     bgf.querySelector('img').onload = function () {
       this.style.opacity = '1';
@@ -227,6 +228,7 @@ var draws = {
     rnMenu([2]);
   },
   video(bgf, data) {
+    if((!data.url)&&typeof data.index=='undefined')return;
     bgf.innerHTML = '<div class="video-sp full"><div class="cover"></div><video src="" muted loop></video></div>'
     util.query(bgf, '.video-sp video').src = data.url || neizhiImg[data.index].img;
     util.query(bgf, '.video-sp video').oncanplay = function () {

@@ -6,7 +6,8 @@ const toast = require('../../toast');
 const {showOpenFilePicker} = require('../../base');
 let util=require('../../util');
 const link=require('../core/_link')
-const draglink=require('../draglink')
+const draglink=require('../draglink');
+const { icon } = require('../../iconc');
 
 let linkF,linksg,linkSizeSi;
 
@@ -71,10 +72,53 @@ function initlink(_linkF,_linksg){
             dstyle();
         }
     });
+    var nlinkeditSi=new SettingItem({
+        type:'boolean',
+        title:"移动端链接操作适配",
+        message:"开启后将在右下角显示铅笔图标，点击后单击链接即可进行修改操作",
+        get(){
+            return initsto.get('touchoe')
+        },
+        callback(v){
+            initsto.set('touchoe',v);
+            if(v){
+                touchmodeicon.show();
+            }else{
+                touchmodeicon.hide();
+                setTimeout(()=>{
+                    toucheditmode=false;
+                })
+            }
+        }
+    })
     
     linksg.addNewItem(linkSizeSi);
     linksg.addNewItem(linkStyleSi);
     linksg.addNewItem(linkPLSi);
+    linksg.addNewItem(nlinkeditSi);
+}
+
+let touchmodeicon=new icon({
+    content:util.getGoogleIcon('e3c9'),
+    offset:'br',
+    class:"touchingmode"
+})
+if(initsto.get('touchoe')){
+    touchmodeicon.show();
+}else{
+    touchmodeicon.hide();
+}
+
+touchmodeicon.getIcon().onclick=function(){
+    if(this.classList.contains('active')){
+        toucheditmode=false;
+        this.classList.remove('active');
+        toast.show('点击修改模式关闭')
+    }else{
+        toucheditmode=true;
+        this.classList.add('active');
+        toast.show('点击修改模式开启')
+    }
 }
 
 var linklist = [];
@@ -155,6 +199,8 @@ var linkMenu = new menu({
     }]
 });
 
+let toucheditmode=false;
+
 function glinkli(l) {
     var li = util.element('li');
     li.innerHTML = `<a href="${l.url}" target="_blank" rel="noopener noreferer"><div class="link-icon"><img/></div><p></p></a>`
@@ -175,7 +221,7 @@ function glinkli(l) {
         });
     }
     
-    li.oncontextmenu = function (e) {
+    function contextmenu(e) {
         e.preventDefault()
         e.stopPropagation();
         menuedLi&&menuedLi.classList.remove('menued');
@@ -187,6 +233,18 @@ function glinkli(l) {
         this.classList.add('menued');
         linkMenu.show();
     }
+    util.query(li,'a').onclick=function(e){
+        if(toucheditmode){
+            e.preventDefault();
+        }
+    }
+    li.onclick=function(e){
+        if(toucheditmode){
+            e.preventDefault();
+            contextmenu.call(this,e);
+        }
+    }
+    li.oncontextmenu=contextmenu;
     draglink(li);
     return li;
 }

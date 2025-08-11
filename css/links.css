@@ -434,3 +434,6 @@ body.dark .move-link-dialog .group-list .item.act{
 .link-add-icon-upload{
   width: 50px;
 }
+.touchingmode.active{
+    background-color: #09f!important;
+}
