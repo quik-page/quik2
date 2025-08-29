@@ -1,3 +1,5 @@
+// 提供重写的showOpenFilePicker方法和Onshow事件
+
 function showOpenFilePicker() {
     return new Promise((resolve, reject) => {
       var inp = document.createElement('input');
@@ -17,6 +19,7 @@ function Onshow(f) {
   onshows_fns.push(f)
 }
 
+// 当页面模块加载完成，页面显示时调用，详见index.js
 function getShowFns(){
     return onshows_fns;
 }

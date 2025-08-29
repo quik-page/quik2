@@ -5,21 +5,13 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.8.6-beta',
+  version: '2.8.7-beta',
   version_code: window.version_code,
-  updateTime: '2025/8/11',
+  updateTime: '2025/8/29',
   log: [
     {
         tag: "fix",
-        content: "修复Alt+G快捷键失效的问题"
-    },
-    {
-        tag:"fix",
-        content: "修复用户自定义背景图片时输入全空值刷新后页面无法打开的问题"
-    },
-    {
-        tag:"fix",
-        content: "提供特殊设置以解决手机端浏览器不听我禁用默认上下文菜单导致无法修改链接的问题"
+        content: "修复当选择背景蒙版为跟随主题时出现严重BUG的问题"
     }
   ]
 }

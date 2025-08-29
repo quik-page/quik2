@@ -1,3 +1,5 @@
+// 数据相关设置和页面高级操作
+
 let {storage}=require('./storage');
 let {SettingGroup,SettingItem, mainSetting}=require('./setting/index');
 const { cateWidthShiPei } = require('./link/index');
@@ -7,15 +9,15 @@ const notice=require('./notice');
 const { alert, confirm, prompt } = require('./dialog/dialog_utils');
 
 var initsto = storage('safe');
-window.ign=false;
+window.ign=false; //是否忽略接下来的hashchange
 window.addEventListener('hashchange', ()=>{
     if(window.ign){
         window.ign=false;
         return;
     }
-    window.location.reload();
+    window.location.reload(); // 不忽略则刷新
 });
-window.addEventListener('visibilitychange', () => {
+window.addEventListener('visibilitychange', () => {// 用于降低页面CPU占用
     if (document.visibilityState == 'hidden') {
         document.body.style.display = 'none';
     } else {
@@ -24,15 +26,16 @@ window.addEventListener('visibilitychange', () => {
     }
 })
 function hashcl() {
+    // 处理hash，hash往往决定页面的模式
     var hash = location.hash.slice(1), cjhash;
-    if (hash.indexOf(';') != -1) {
+    if (hash.indexOf(';') != -1) { // 因为浏览器扩展会将插件id以 id;hash 的形式传入
         cjhash = hash.split(';')[0];
         hash = hash.split(';')[1];
     }
-    if (hash == 'safe') {
-        window.ign=true;
-        location.hash = '#' + (cjhash ? cjhash + ';' : '');
-        window.addon_ = true;
+    if (hash == 'safe') {//安全模式
+        window.ign=true; // 忽略接下来的hash变化
+        location.hash = '#' + (cjhash ? cjhash + ';' : ''); // 设置hash为空，再次刷新即可退出安全模式
+        window.addon_ = true; // 此处阻止插件活动
         alert('已阻止所有插件运行，请修改设置或删除插件');
     }
 }
@@ -53,7 +56,7 @@ var xnse = new SettingItem({
     },
     callback(n) {
         initsto.set('xnse', n);
-        doxnse(n);
+        doxnse(n);// -> 239
     }
 });
 gaoji.addNewItem(xnse);
@@ -70,7 +73,8 @@ var clse = new SettingItem({
                     prompt('请在下方输入“clearAll”，并再次确定是否要清除所有数据，此操作无法恢复。', t => {
                         if (t == 'clearAll') {
                             var k = storage('oobe')
-                            var s = k.getAll();
+                            var s = k.getAll(); 
+                            // 保留oobe数据，这样清除后就不会再次显示欢迎界面
                             localStorage.quik2 = JSON.stringify({
                                 oobe: s
                             })
@@ -78,7 +82,7 @@ var clse = new SettingItem({
                                 location.reload();
                             });
                         } else {
-                            t && c();
+                            t && c(); // t为空则退出，t不为空则认为输错，则重开再输一遍
                         }
                     })
                 }
@@ -182,8 +186,9 @@ var cjup = new SettingItem({
         confirm('确定要强制更新吗？', r => {
             if (r) {
                 if (window.swReg) {
-                    updateBySW(window.swReg);
+                    updateBySW(window.swReg); //存在serviceWoker则通知更新
                 } else {
+                    // 不存在则刷新即可
                     alert('更新完成', () => {
                         location.reload();
                     })
@@ -195,12 +200,13 @@ var cjup = new SettingItem({
 
 var _i=0;
 function updateBySW(registration){
+    // quik.42web.io若在iframe中更新则无法通过cookie校验
     if (window.isInframe && location.href.indexOf('://quik.42web.io/') != -1) {
         alert('因安全原因，扩展程序无法进行强制更新，请在网页端更新', function () {
             window.open('https://quik.42web.io/?forceUpdate=1');
         });
     }else if(location.href.indexOf('://quik.42web.io/') != -1&&_i==0){
-        _i++;
+        _i++;// 多次调用确保通过cookie校验
         var ifr = util.element('iframe', {
           src: './version',
           style: "opacity:0"
@@ -210,18 +216,18 @@ function updateBySW(registration){
         ifr.onload = function () {
           i++;
           if (i >= 2) {
-            updateBySW(registration)
+            updateBySW(registration) // 多次调用确保通过cookie校验
           }
         }
         setTimeout(() => {
-          updateBySW(registration)
+          updateBySW(registration) // 多次调用确保通过cookie校验
         }, 4000)
         new notice({
             title: "更新提示",
             content: "已向后台发送更新请求，请耐心等待。",
         }).show();
       } else {
-        
+        // 通知serviceWorker更新
         registration.active.postMessage('update');
         new notice({
             title: "更新提示",
@@ -233,10 +239,12 @@ gaoji.addNewItem(cjup);
 
 mainSetting.addNewGroup(gaoji);
 
+// 处理无动效
 function doxnse(n) {
     if (n) {
         var s = util.element('style');
         s.id = 'xnse';
+        // 就是全none
         s.innerHTML = '*{filter:none!important;backdrop-filter:none!important;animation:none!important;transition:none!important;}';
         document.head.append(s);
     } else {
@@ -248,6 +256,8 @@ function doxnse(n) {
 
 doxnse(!!initsto.get('xnse'));
 
+
+// 网络检测
 window.addEventListener('offline', ckline)
 window.addEventListener('online', ckline)
 

@@ -1,3 +1,4 @@
+// 提供通用事件构建器，调用getEventHandle()即可返回一个独立的事件构建容器
 var events = [];
 function getEventHandle() {
   var ev_i = events.length;

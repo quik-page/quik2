@@ -34,7 +34,7 @@ require('./oobe/index.js');
 require('./rainbowegg/index.js');
 require('./hello/index.js');
 
-
+// 公共API不能直接操作插件，需要复写方法
 var _upaddon = {};
 var pbls = ['runAddon', 'enable', 'disable', 'upupdate', 'upinstallByUrl', 'upinstallByOfficialMarket', 'upuninstall', 'installByLocal'];
 for (var k in addon) {

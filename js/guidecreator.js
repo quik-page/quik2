@@ -1,8 +1,15 @@
+// 提供方便的引导卡片构建器
 const card = require("./card");
 const util = require("./util");
 
 module.exports = {
-    create(steps, cb, istopper){
+    /**
+     * 创建引导
+     * @param {Array<Object>} steps 每步提供text和offset{top,left,bottom,right}
+     * @param {Function} cb 引导完成回调
+     * @param {Boolean} istopper z-index是否高于dialog，默认false
+     */
+    create(steps, cb, istopper=false){
         if (steps.length == 0) { cb(); return; }
         var _card = new card({
             content: "<div class=\"guide-text\"></div><div class=\"btn ok\">确定</div>",

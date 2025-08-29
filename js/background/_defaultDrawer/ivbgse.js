@@ -1,6 +1,7 @@
 const { SettingItem, Setting, SettingGroup } = require("../../setting/index");
 const util = require("../../util");
 const { initsto, backgroundsg } = require("../core");
+const custom =require('../../custom');
 util.initSet(initsto, 'ivsetting', {
   mb: 50,
   isbr: false,

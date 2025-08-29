@@ -1,4 +1,13 @@
 var updatelog={
+"2.8.7-beta":{
+    updates: [
+        {
+            tag: "fix",
+            content: "修复当选择背景蒙版为跟随主题时出现严重BUG的问题"
+        }
+    ],
+    time:"2025/8/29"
+},
 "2.8.6-beta":{
     updates:[
         {
