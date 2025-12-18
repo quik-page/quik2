@@ -2,7 +2,8 @@ const dialog = require('../dialog/index');
 const guidecreator = require('../guidecreator');
 const {storage} = require('../storage');
 const util = require('../util');
-const ignores=require('../ignores')
+const ignores=require('../ignores');
+const sync=require("../sync");
 
 var initsto = storage('oobe');
 if (!initsto.get('agree')) {

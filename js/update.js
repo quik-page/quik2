@@ -5,13 +5,21 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.8.7-beta',
+  version: '2.8.8',
   version_code: window.version_code,
-  updateTime: '2025/8/29',
+  updateTime: '2025/12/18',
   log: [
     {
         tag: "fix",
-        content: "修复当选择背景蒙版为跟随主题时出现严重BUG的问题"
+        content: "修复当选择bing背景时info图标不显示的bug"
+    },
+    {
+        tag: "fix",
+        content: "修复在最开始时点击导入数据无反应的bug"
+    },
+    {
+        tag: "change",
+        content: "在插件页没有安装任何插件时添加文本提示"
     }
   ]
 }

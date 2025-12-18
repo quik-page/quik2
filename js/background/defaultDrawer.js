@@ -285,6 +285,7 @@ var draws = {
         break;
       case 'bing':
         bgczIcon.show();
+        infoIcon.show();
         draws.img(bgf, {
           url: "https://bing.shangzhenyang.com/api/1080p"
         });

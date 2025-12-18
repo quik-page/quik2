@@ -6,6 +6,7 @@ var def_addon_icon = window.isExt ? ("chrome-extension://" + window.extid + "/as
 
 var addon_l = util.query(addon_dialog_d, '.content .p.gl ul');
 function xraddon(id) {
+    addon_l.querySelector(".noaddon").style.display="none";
   var addon = core.getAddonBySessionId(id);
   if (addon.type == 'dev') {
     addon.name = '开发者端口：' + addon.url;
@@ -125,6 +126,9 @@ core.on('update', e => {
 core.on('uninstall', e => {
   var li = util.query(addon_l, 'li[data-id="' + e.id + '"]');
   if (li) { li.remove() }
+  if(!util.query(addon_l,"li")){
+    addon_l.querySelector(".noaddon").style.display="";
+  }
 })
 
 module.exports={

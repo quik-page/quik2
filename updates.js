@@ -1,4 +1,21 @@
 var updatelog={
+"2.8.8":{
+    updates:[
+        {
+            tag: "fix",
+            content: "修复当选择bing背景时info图标不显示的bug"
+        },
+        {
+            tag: "fix",
+            content: "修复在最开始时点击导入数据无反应的bug"
+        },
+        {
+            tag: "change",
+            content: "在插件页没有安装任何插件时添加文本提示"
+        }
+    ],
+    time:"2025/12/18"
+},
 "2.8.7-beta":{
     updates: [
         {

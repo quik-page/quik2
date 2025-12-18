@@ -286,3 +286,12 @@ body.dialogblur .d-c.addon-dialog .p ul li.active{
 .d-c.addon-dialog .p.ma ul{
   height: calc(100% - 36px);
 }
+
+.noaddon{
+    color: #888;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
