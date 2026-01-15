@@ -4,6 +4,7 @@ let link=require('../core/_link');
 let {initsto}=require('../core/_core')
 let linkui=require('./link');
 let cateui=require('./cate');
+let fulinkui=require('./fulink');
 
 var linkF = util.element('div', {
     class: "links"
@@ -41,8 +42,10 @@ function init() {
         
     linkui.initlink(linkF,linksg);
     cateui.init(linkF,linksg);
+    fulinkui.init(linkF,linksg);
     link.ready(() => {
         cateui.dcate(initsto.get('enabledCate'));
+        fulinkui.stS(initsto.get('enabledCate'));
         linkui.dsize(initsto.get('linksize'));
         linkui.dstyle(initsto.get('linkstyle'));
         setTimeout(function () {

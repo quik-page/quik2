@@ -1,4 +1,13 @@
 var updatelog={
+"2.8.9":{
+    updates:[
+        {
+            tag: "new",
+            content: "添加显示所有分组链接的设置项"
+        }
+      ],
+    time:"2026/1/15"
+},
 "2.8.8":{
     updates:[
         {

@@ -5,21 +5,13 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.8.8',
+  version: '2.8.9',
   version_code: window.version_code,
-  updateTime: '2025/12/18',
+  updateTime: '2026/1/15',
   log: [
     {
-        tag: "fix",
-        content: "修复当选择bing背景时info图标不显示的bug"
-    },
-    {
-        tag: "fix",
-        content: "修复在最开始时点击导入数据无反应的bug"
-    },
-    {
-        tag: "change",
-        content: "在插件页没有安装任何插件时添加文本提示"
+        tag: "new",
+        content: "添加显示所有分组链接的设置项"
     }
   ]
 }

@@ -156,13 +156,19 @@ function getIndex(a, b) {
 
 var menuedLi = null;
 function getMenuedLiDetail() {
-    var index = getIndex(menuedLi, util.query(linkF, '.link-list li', true));
-    var cate = util.query(linkF, '.cate-bar-items .cate-item.active');
-    if (cate.classList.contains('mr')) {
-        cate = null
-    } else {
-        cate = cate.innerText;
+    var index = getIndex(menuedLi, util.query(menuedLi.parentElement, 'li', true));
+    var cate;
+    if(linkF.classList.contains("fu")){
+        cate=menuedLi.parentElement.getAttribute('data-cate')||null;
+    }else{
+        cate = util.query(linkF, '.cate-bar-items .cate-item.active');
+        if (cate.classList.contains('mr')) {
+            cate = null
+        } else {
+            cate = cate.innerText;
+        }
     }
+    
     return { cate, index };
 }
 
@@ -201,7 +207,7 @@ var linkMenu = new menu({
 
 let toucheditmode=false;
 
-function glinkli(l) {
+function glinkli(l,pz={}) {
     var li = util.element('li');
     li.innerHTML = `<a href="${l.url}" target="_blank" rel="noopener noreferer"><div class="link-icon"><img/></div><p></p></a>`
     util.query(li, 'p').innerText = l.title;
@@ -245,7 +251,9 @@ function glinkli(l) {
         }
     }
     li.oncontextmenu=contextmenu;
-    draglink(li);
+    if(!(pz&&pz.nodrag)){
+        draglink(li);
+    }
     return li;
 }
 
@@ -263,47 +271,54 @@ function openMoveLinkDialog(cate, index) {
         }
         movecc = util.query(movelinkdiad, '.group-list');
     }
-    util.query(movelinkdiad, '.ok.btn').onclick = function (e) {
-        var yd = util.query(movecc, '.item.act');
-        if (yd) {
-            var tocate = yd.classList.contains('mr') ? null : util.query(yd, '.item-name').innerText;
-            var link1 = linklist[index];
-            link.addLink({
-                title: link1.title,
-                url: link1.url,
-                cate: tocate
-            }, function () {
-                link.deleteLink(cate, index, function () {
-                    toast.show('移动成功')
-                    movelinkdia.close();
-                });
-            });
-
-        } else {
-            toast.show('请选择一个分组');
+    let link1={};
+    link.getLinks(cate,(a)=>{
+        if(a.code!=0){
+            return;
         }
-    }
-    movecc.innerHTML = '';
-    link.getCates(r => {
-        r.data.unshift(null);
-        r.data.forEach(c => {
-            var li = util.element('div', {
-                class: "item" + ((!c) ? ' mr' : '')
-            });
-            li.innerHTML = `<div class="item-name">${c ? c : util.getGoogleIcon('e838', { type: 'fill' })}</div><div class="item-select">${util.getGoogleIcon('e5ca')}</div>`;
-            movecc.append(li);
-            li.onclick = function () {
-                var yd = util.query(movecc, '.item.act');
-                if (yd) {
-                    yd.classList.remove('act');
-                }
-                this.classList.add('act');
+        link1=a.data[index];
+        util.query(movelinkdiad, '.ok.btn').onclick = function (e) {
+            var yd = util.query(movecc, '.item.act');
+            if (yd) {
+                var tocate = yd.classList.contains('mr') ? null : util.query(yd, '.item-name').innerText;
+                link.addLink({
+                    title: link1.title,
+                    url: link1.url,
+                    cate: tocate
+                }, function () {
+                    link.deleteLink(cate, index, function () {
+                        toast.show('移动成功')
+                        movelinkdia.close();
+                    });
+                });
+    
+            } else {
+                toast.show('请选择一个分组');
             }
+        }
+        movecc.innerHTML = '';
+        link.getCates(r => {
+            r.data.unshift(null);
+            r.data.forEach(c => {
+                var li = util.element('div', {
+                    class: "item" + ((!c) ? ' mr' : '')
+                });
+                li.innerHTML = `<div class="item-name">${c ? c : util.getGoogleIcon('e838', { type: 'fill' })}</div><div class="item-select">${util.getGoogleIcon('e5ca')}</div>`;
+                movecc.append(li);
+                li.onclick = function () {
+                    var yd = util.query(movecc, '.item.act');
+                    if (yd) {
+                        yd.classList.remove('act');
+                    }
+                    this.classList.add('act');
+                }
+            });
         });
-    });
-    setTimeout(() => {
-        movelinkdia.open();
-    });
+        setTimeout(() => {
+            movelinkdia.open();
+        });
+    })
+    
 }
 
 
@@ -420,12 +435,12 @@ if (!initsto.get('linkpailie')) {
 
 
 function dstyle() {
-    linkF.className = 'links ' + initsto.get('linkstyle') + ' ' + initsto.get('linkpailie');
+    linkF.className = 'links ' + initsto.get('linkstyle') + ' ' + initsto.get('linkpailie')+ " "+(initsto.get("showfulink")?"fu":"");
 }
 
 
 function dsize(v) {
-    util.query(linkF, '.link-list').className = 'link-list ' + v;
+    util.query(linkF, '.link-list',true).forEach(l=>{l.className = 'link-list ' + v});
 }
 
 
@@ -440,5 +455,9 @@ module.exports = {
     linkSizeSi,
     getMenuedLi:()=>menuedLi,
     linkMenu,
-    getIndex
+    getIndex,
+    isTouchEdit(){
+        return toucheditmode;
+    },
+    openLinkEditDialog
 }

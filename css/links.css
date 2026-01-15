@@ -51,7 +51,7 @@
 .links .cate-bar .cate-item.active{
   background-color: var(--cate-active);
 }
-.links .cate-bar .cate-item{
+.links .cate-item{
   float: left;
   line-height: 30px;
   height: 30px;
@@ -61,6 +61,16 @@
   user-select: none;
   border-radius: 4px;
   margin: 0 2px;
+  min-width: 3em;
+  text-align: center;
+}
+.links.fu .cate-item{
+    float: none;
+    width: max-content;
+    cursor: pointer;
+}
+.links .cate-bar .cate-item.mr{
+    min-width: 1em;
 }
 .links .cate-bar .cate-item span.material-symbols-outlined{
   font-size: 20px;
@@ -437,3 +447,15 @@ body.dark .move-link-dialog .group-list .item.act{
 .touchingmode.active{
     background-color: #09f!important;
 }
+.fulink-con
+{
+    display:none;
+}
+.links.fu>*{
+    display: none!important;
+}
+.links.fu .fulink-con{
+    display: block!important;
+}
+
+

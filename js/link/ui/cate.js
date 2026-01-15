@@ -6,6 +6,8 @@ const { SettingItem } = require('../../setting');
 const dialog = require('../../dialog');
 const { confirm } = require('../../dialog/dialog_utils');
 const menu = require('../../menu/index');
+const { stS } = require('./fulink');
+const { isTouchEdit } = require('./link');
 
 
 var linkF,linksg,enabledCateSi;
@@ -23,6 +25,7 @@ function init(_linkF,_linksg){
         },
         callback(v) {
             initsto.set('enabledCate', v);
+            stS(v);
             dcate(v);
         }
     });
@@ -73,6 +76,12 @@ var cateMenu = new menu({
                 }
             });
         }
+    }, {
+        icon: util.getGoogleIcon('E89E'),
+        title: "打开",
+        click() {
+            actCate(menuedCate);
+        }
     }]
 });
 
@@ -82,7 +91,15 @@ function bcate(g) {
     });
     li.innerText = g;
     util.query(linkF, '.cate-bar-items').append(li);
-    li.onclick = function () {
+    gcate(li);
+}
+
+function gcate(li){
+    li.onclick = function (e) {
+        if(isTouchEdit()){
+            li.oncontextmenu.call(this,e);
+            return;
+        }
         actCate(this)
     }
     li.oncontextmenu = function (e) {
@@ -361,6 +378,7 @@ let ex={
     catechange:(fn)=>{
         catechange=fn;
     },
+    gcate,
     getMenuedCate:()=>menuedCate,
 }
 
