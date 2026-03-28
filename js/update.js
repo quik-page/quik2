@@ -5,13 +5,13 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.8.9',
+  version: '2.8.10',
   version_code: window.version_code,
-  updateTime: '2026/1/15',
+  updateTime: '2026/3/28',
   log: [
     {
-        tag: "new",
-        content: "添加显示所有分组链接的设置项"
+        tag: "fix",
+        content: "修复二次元图片API加载缓慢的问题"
     }
   ]
 }

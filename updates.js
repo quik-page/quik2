@@ -1,4 +1,13 @@
 var updatelog={
+"2.8.10":{
+    updates:[
+        {
+            tag: "fix",
+            content: "修复二次元图片API加载缓慢的问题"
+        }
+      ],
+    time:"2026/3/28"
+},
 "2.8.9":{
     updates:[
         {
