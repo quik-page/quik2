@@ -15,7 +15,7 @@ if (initsto.get('enabled')) {
       set_key(__key)
     }
   } else {
-    sayF.style.display = 'none';
+    sayF.hide();
     typesi.hide();
   }
 

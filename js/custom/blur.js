@@ -1,16 +1,16 @@
 const { SettingItem, tyGroup } = require("../setting/index");
-const { initsto } = require("./core");
-
+const { stp } = require("./core");
+const bd=document.body;
 var si = new SettingItem({
   index: 3,
   title: "毛玻璃效果",
   message: "为所有内容开启毛玻璃效果，可能会影响性能。",
   type: "boolean",
   get() {
-    return !!initsto.get('dialogblur');
+    return !!stp.dialogblur;
   },
   callback(v) {
-    initsto.set('dialogblur', v);
+    stp.dialogblur = v;
     d(v);
   }
 })
@@ -19,21 +19,21 @@ tyGroup.addNewItem(si);
 
 function d(v) {
   if (v) {
-    document.body.classList.add('dialogblur');
+    bd.addClass('dialogblur');
   } else {
-    document.body.classList.remove('dialogblur');
+    bd.removeClass('dialogblur');
   }
 }
 
-d(initsto.get('dialogblur'));
+d(stp.dialogblur);
 module.exports = {
   set(a) {
     a = !!a;
-    initsto.set('dialogblur', a);
+    stp.dialogblur=a;
     d(a);
     si.reGet();
   },
   get() {
-    return initsto.get('dialogblur');
+    return stp.dialogblur;
   }
 };

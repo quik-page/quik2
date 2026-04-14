@@ -1,7 +1,8 @@
 const getEventHandle = require("../event");
-const {storage} = require("../storage");
+const {storage, gS} = require("../storage");
+const toast = require("../toast");
 
-var initsto = storage('search', {
+storage('search', {
   sync: true,
   title: "搜索引擎",
   desc: "搜索引擎配置",
@@ -14,6 +15,9 @@ var initsto = storage('search', {
     ast[k] = a;
   }
 });
+
+let StP=gS().search;
+
 var keyword = "%keyword%";
 var deftypelist = {
   "bing": "",
@@ -22,14 +26,8 @@ var deftypelist = {
   "sogou": "",
   "google": "",
 };
-if (!initsto.get('typelist')) {
-  initsto.set('typelist', deftypelist);
-}
-if (!initsto.get('type')) {
-  initsto.set('type', "bing");
-}
-
-var events = {};
+if (!StP.typelist) StP.typelist = deftypelist;
+if (!StP.type) StP.type = "bing";
 var neizhi = {
   "bing": {
     name: "必应",
@@ -50,10 +48,6 @@ var neizhi = {
   "sogou": {
     name: "搜狗",
     link: "https://www.sogou.com/sogou?query="
-  },
-  "stear": {
-    name: "林中木<span>赞助</span>",
-    link: "https://tfseek.top/search?q="
   },
   "yandex": {
     name: "Yandex",
@@ -105,17 +99,9 @@ var neizhi = {
     name: "抖音",
     link: "https://www.douyin.com/search/%s?ug_source=lenovo_stream"
   },
-  "duckduckgo": {
-    name: "DuckDuckGo",
-    link: "https://duckduckgo.com/?q="
-  },
   "stackoverflow": {
     name: "StackOverflow",
     link: "https://stackoverflow.com/nocaptcha?s="
-  },
-  "yahoo": {
-    name: "Yahoo",
-    link: "https://hk.search.yahoo.com/search?p="
   },
   "mdn": {
     name: "MDN",
@@ -129,18 +115,13 @@ var neizhi = {
     name: "头条搜索",
     link: "https://so.toutiao.com/search?dvpf=pc&keyword="
   },
-
-  "fsearch": {
-    name: "F搜",
-    link: "https://fsoufsou.com/search?q="
-  },
 }
 
 var getSearchType = () => {
-  if (neizhi[initsto.get('type')]) {
-    return neizhi[initsto.get('type')].link + '%keyword%';
+  if (neizhi[StP.type]) {
+    return neizhi[StP.type].link + '%keyword%';
   } else {
-    return initsto.get('typelist')[initsto.get('type')];
+    return StP.typelist[StP.type];
   }
 }
 var { on, off, doevent } = getEventHandle();
@@ -149,39 +130,57 @@ var setSearchList = (newList) => {
   if (Object.keys(newList).length == 0) {
     throw new Error('newList is empty');
   }
-  initsto.set('typelist', newList);
-  var oldList = initsto.get('typelist');
+  var oldList = StP.typelist;
+  StP.typelist = newList;
   doevents('typelistchange');
-  var t = initsto.get('type');
+  var t = StP.type;
   if (oldList[t] != newList[t]) {
     doevents('nowtypechange');
   }
 }
 var getSearchTypeList = () => {
-  return initsto.get('typelist')
+  return cloneObj(StP.typelist);
 }
 var setSearchType = (type) => {
-  initsto.set('type', type);
+  StP.type = type;
+  checkGoogle();
   doevents('nowtypechange');
 }
+
+function checkGoogle(){
+    if(StP.type!="google")return;
+    if(isUd(window.isOutGoogle)){
+        setTimeout(checkGoogle, 1000);
+        return;
+    }
+    if(isOutGoogle){
+        toast.show("当前网络环境对Google的访问存在限制")
+    }
+}
+
+setTimeout(checkGoogle, 1000);
+
 var getSearchTypeIndex = () => {
-  return initsto.get('type');
+    // to avoid neizhi list change
+    if(!StP.typelist[StP.type]){
+        if(!neizhi[StP.type]){
+            StP.type="bing";
+        }
+    }
+  return StP.type;
 }
 
 var retob = {
-  getSearchType: getSearchType,
-  on: on,
-  setSearchList: setSearchList,
-  getSearchTypeList: getSearchTypeList,
-  setSearchType: setSearchType,
-  getSearchTypeIndex: getSearchTypeIndex,
-  neizhi: neizhi
+  getSearchType,
+  on,
+  off,
+  setSearchList,
+  getSearchTypeList,
+  setSearchType,
+  getSearchTypeIndex,
+  neizhi,
+  keywordText:keyword
 }
-
-Object.defineProperty(retob, 'keywordText', {
-  get() {
-    return keyword;
-  }
-});
+// why do such that?
 
 module.exports = retob;

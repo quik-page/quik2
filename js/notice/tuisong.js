@@ -1,17 +1,15 @@
 const notice = require("./index");
-const {storage} = require("../storage");
-const util = require("../util");
+const {gS} = require("../storage");
 
 // 一些重要通知的推送
-var tuisongsto = storage('tuisong');
-util.initSet(tuisongsto, 'd', 0);
-var last_d = tuisongsto.get('d');
+const stp=gS("tuisong");
+if(isUd(stp.d))stp.d=0;
+var last_d = stp.d;
 console.log('last_d', last_d);
-util.xhr('/quik-notice.json', res => {
-    res = JSON.parse(res);
+get('/quik-notice.json').then(res => {
     if (res.date > last_d) {
         setTimeout(() => {
-            tuisongsto.set('d', res.date);
+            stp.d=res.date;
         }, 5000)
 
         var tsn = new notice({

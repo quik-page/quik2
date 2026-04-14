@@ -1,5 +1,3 @@
-const util = require("../util");
-
 var allDialog = [], d_index = 1, idmax = 0;
 
 /**
@@ -12,30 +10,28 @@ var allDialog = [], d_index = 1, idmax = 0;
  */
 var dialog = function (options) {
   this.options = options;
-  var dialogF = util.element('div', {
-    class: "dialog",
-  });
-  dialogF.innerHTML = `<div class="d-b"></div><div class="d-c">${options.content}</div>`;
-  util.query(document, '.dialogs').append(dialogF);
-  var dialogC = util.query(dialogF, '.d-c');
+  var dialogF = el('.dialog');
+  dialogF.html(`<div class="d-b"></div><div class="d-c">${options.content}</div>`);
+  $('.dialogs').append(dialogF);
+  var dialogC = dialogF.$('.d-c');
   if (options.class) {
     dialogC.className += ' ' + options.class;
   }
   if (options.mobileShowtype == 1) {
-    dialogF.classList.add('mobile-show-full');
+    dialogF.addClass('mobile-show-full');
   }
   this.element = dialogF;
   this.id = idmax;
   idmax++;
-  dialogF.setAttribute('data-id', this.id);
+  dialogF.attr('data-id', this.id);
   if (typeof options.clickOtherToClose == 'undefined') {
     this.clickOtherToClose = true;
   } else {
     this.clickOtherToClose = options.clickOtherToClose;
   }
   if (this.clickOtherToClose) {
-    dialogF.querySelector('.d-b').addEventListener('click', function () {
-      getDialogById(this.parentElement.getAttribute('data-id')).close();
+    dialogF.$('.d-b').on('click', function () {
+      getDialogById(this.parent().attr('data-id')).close();
     })
   }
 
@@ -62,7 +58,7 @@ dialog.iframeDialogBuilder = function (url, mobileShowtype = 1) {
     mobileShowtype: mobileShowtype
   });
   var q = d.getDialogDom();
-  util.query(q, '.closebtn').onclick = () => {
+  q.$('.closebtn').onclick = () => {
     d.close();
   }
   this.closed = true;
@@ -72,20 +68,20 @@ dialog.getDialogById = getDialogById;
 
 dialog.prototype = {
   open() {
-    this.element.classList.add('show');
-    this.element.style.zIndex = d_index;
+    this.element.addClass('show');
+    this.element.css("z-index",d_index);
     d_index++;
     this.closed = false;
     if (this.onopen) {
       this.onopen();
     }
-    util.query(this.element, 'img[data-src]', true).forEach(function (lazyimg) {
-      lazyimg.src = lazyimg.getAttribute('data-src');
+    this.element.$$('img[data-src]').forEach(function (lazyimg) {
+      lazyimg.src = lazyimg.attr('data-src');
       lazyimg.removeAttribute('data-src');
     })
   },
   close() {
-    this.element.classList.remove('show');
+    this.element.removeClass('show');
     this.closed = true;
     if (this.onclose) {
       this.onopen();
@@ -96,7 +92,7 @@ dialog.prototype = {
     allDialog.splice(allDialog.indexOf(this), 1);
   },
   getDialogDom() {
-    return util.query(this.element, '.d-c');
+    return this.element.$('.d-c');
   }
 }
 module.exports= dialog;

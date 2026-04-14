@@ -1,4 +1,4 @@
-const initsto = require("./core");
+const {initsto,stp} = require("./core");
 
 var Setting = require('./setting.js');
 var SettingGroup = require('./setting_group.js');
@@ -19,5 +19,6 @@ module.exports= {
   SettingItem,
   mainSetting,
   tyGroup,
-  settingSto: initsto
+  settingSto: initsto,
+  settingStp: stp
 }

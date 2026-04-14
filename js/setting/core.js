@@ -1,4 +1,4 @@
-const {storage} = require("../storage");
+const {storage,gS} = require("../storage");
 
 var initsto=storage('setting',{
     title:"设置",
@@ -6,4 +6,9 @@ var initsto=storage('setting',{
     sync:true
   })
 
-module.exports=initsto;
+let stp=gS().setting;
+
+module.exports={
+    initsto,
+    stp
+};

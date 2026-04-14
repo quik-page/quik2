@@ -129,10 +129,10 @@ var aboutDialog = new dialog({
 });
 
 var addom = aboutDialog.getDialogDom();
-util.query(addom, '.close').onclick = () => {
+addom.$('.close').onclick = () => {
   aboutDialog.close();
 }
-util.query(addom, '.t.thanks a').onclick = () => {
+addom.$('.t.thanks a').onclick = () => {
   if (!thaDialog) {
     drawThank();
   }
@@ -141,7 +141,7 @@ util.query(addom, '.t.thanks a').onclick = () => {
   }, 50);
 }
 setTimeout(() => {
-  util.query(addom, '.ver span').innerText = window.version.version;
+  addom.$('.ver span').text(window.version.version);
 });
 
 var updateDialog, updom;
@@ -159,23 +159,23 @@ function innerUpdate() {
   });
 
   updom = updateDialog.getDialogDom();
-  util.query(updom, '.version_list div').innerHTML = '正在加载更新日志...'
-  util.query(updom, '.closeBtn').onclick = () => {
+  updom.$('.version_list div').html('正在加载更新日志...');
+  updom.$('.closeBtn').onclick = () => {
     updateDialog.close();
   }
   isinner = true;
-  var s = util.element('script', {
+  var s = el('script', {
     src: "./updates.js"
   })
   document.body.append(s);
   window.connectUpdates = function (updatelog) {
-    util.query(updom, '.version_list div').innerHTML = (() => {
+    updom.$('.version_list div').html((() => {
       var s = '';
       for (var k in updatelog) {
         s += formatVersion(k, updatelog[k]);
       }
       return s;
-    })();
+    })());
     window.connectUpdates = null;
   }
   s.onload = () => {
@@ -211,7 +211,7 @@ function drawLic() {
     class: "lic-dialog def-size"
   });
 
-  util.query(licDialog.getDialogDom(), '.close').onclick = () => {
+  licDialog.getDialogDom().$('.close').onclick = () => {
     licDialog.close();
   }
 }
@@ -224,7 +224,7 @@ function drawThank() {
     mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN
   });
 
-  util.query(thaDialog.getDialogDom(), '.close').onclick = () => {
+  thaDialog.getDialogDom().$('.close').onclick = () => {
     thaDialog.close();
   }
 }

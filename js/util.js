@@ -39,69 +39,13 @@ window.addEventListener('message', function (e) {
 module.exports = {
   // https://blog.csdn.net/qq_25257229/article/details/117969685
   deepClone(target) {
-    const map = new WeakMap()
-
-    function isObject(target) {
-      return typeof target === 'object' && target
-    }
-
-    function clone(data) {
-      if (!isObject(data)) {
-        return data
-      }
-      if ([Date, RegExp].includes(data.constructor)) {
-        return new data.constructor(data)
-      }
-      const exist = map.get(data)
-      if (exist) {
-        return exist
-      }
-      if (data instanceof Map) {
-        const result = new Map()
-        map.set(data, result)
-        data.forEach((val, key) => {
-          if (isObject(val)) {
-            result.set(key, clone(val))
-          } else {
-            result.set(key, val)
-          }
-        })
-        return result
-      }
-      if (data instanceof Set) {
-        const result = new Set()
-        map.set(data, result)
-        data.forEach(val => {
-          if (isObject(val)) {
-            result.add(clone(val))
-          } else {
-            result.add(val)
-          }
-        })
-        return result
-      }
-      const keys = Reflect.ownKeys(data)
-      const allDesc = Object.getOwnPropertyDescriptors(data)
-      const result = Object.create(Object.getPrototypeOf(data), allDesc)
-      map.set(data, result)
-      keys.forEach(key => {
-        const val = data[key]
-        if (isObject(val)) {
-          result[key] = clone(val)
-        } else {
-          result[key] = val
-        }
-      })
-      return result
-    }
-
-    return clone(target)
+    return cloneObj(target);
   },
   requestByExt(details) {
     idmax++;
     details.id = idmax;
     extRequests.push(details);
-    var d = this.deepClone(details);
+    var d = cloneObj(details);
     for (var k in d) {
       if (typeof d[k] == 'function') {
         d[k] = { _t: "fn", _n: k }
@@ -167,11 +111,7 @@ module.exports = {
     }
   },
   element(tagname, options = {}) {
-    var a = document.createElement(tagname);
-    for (var i in options) {
-      a.setAttribute(i, options[i]);
-    }
-    return a;
+    return el(tagname, options);
   },
   query(element, qstr, isall) {
     return element['querySelector' + (isall ? 'All' : '')](qstr);
@@ -271,56 +211,26 @@ module.exports = {
     }
   },
   xhr(url, cb, err) {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState == 4) {
-        if (xhr.status == 200) {
-          cb(xhr.responseText);
-        } else if (xhr.status >= 400) {
-          err && err({
-            status: xhr.status,
-            statusText: xhr.statusText,
-            readyState: xhr.readyState,
-            responseText: xhr.responseText
-          });
-        }
-      }
-    }
-    xhr.onerror = function () {
-      err && err({
-        status: xhr.status,
-        statusText: xhr.statusText,
-        readyState: xhr.readyState,
-        responseText: xhr.responseText
-      });
-    }
-    xhr.open('GET', url, true);
-    xhr.send();
+    get(url,"text").then(cb).catch((e)=>{
+        err&err(e);
+    })
     return {
-      abort() {
-        xhr.abort();
-      }
+      abort() {cb=()=>{}/* todo */}
     }
   },
   checkSession(session) {
     return session.isSession && session.session_token === "Hvm_session_token_eoi1j2j";
   },
   getRandomHashCache() {
-    return Math.random().toString(36).slice(2) + Date.now().toString(36);
+    return getRandomCode();
   },
   copyText(value) {
-    if (window.isExt) {
-      parent.postMessage({
-        type: "copy",
-        text: value
-      }, '*');
-    } else {
-      if (navigator.clipboard) {
+    if (navigator.clipboard) {
         navigator.clipboard.writeText(value);
-      } else {
-        const input = document.createElement('input');
+    } else {
+        const input = el('input');
         input.value = value;
-        input.style.display = 'none';
+        input.hide();
         // 将input元素添加到文档中
         document.body.appendChild(input);
         // 模拟键盘事件以触发复制操作
@@ -328,8 +238,13 @@ module.exports = {
         document.execCommand('copy');
         // 从文档中移除input元素
         document.body.removeChild(input);
-      }
     }
+    if (window.isExt) {
+      parent.postMessage({
+        type: "copy",
+        text: value
+      }, '*');
+    } 
     toast.show('复制成功');
   },
   getGoogleIcon(unicode, d) {

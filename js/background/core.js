@@ -50,7 +50,7 @@ var initsto = storage('background', {
         a.requireAddon = addon.getAddonBySessionId(a.bg.type).url;
       } else {
         if (a.bg.data.type == 'userbg' && a.userbg.useidb) {
-          a.bg = util.deepClone(defbg);
+          a.bg = cloneObj(defbg);
         }
       }
       if (a.userbg && a.userbg.useidb) {

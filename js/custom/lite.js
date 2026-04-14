@@ -1,20 +1,21 @@
 const guidecreator = require("../guidecreator");
 const link = require("../link/index");
-const { initsto } = require("../omnibox/_core");
+const { stp } = require("../omnibox/_core");
 const { SettingItem, tyGroup } = require("../setting/index");
 const util = require("../util");
+const bd=document.body;
 
-util.initSet(initsto, 'linkblur', true);
+if(isUd(stp.linkblur))stp.linkblur=true;
 var si = new SettingItem({
   index: 2,
   title: "极简模式",
   message: "(Alt+X)隐藏所有图标和链接，点击LOGO显示",
   type: "boolean",
   get() {
-    return !!initsto.get('lite');
+    return !!stp.lite;
   },
   callback(v) {
-    initsto.set('lite', v);
+    stp.lite=v;
     d(v);
   }
 })
@@ -24,36 +25,34 @@ var si2 = new SettingItem({
   message: "链接页面背景一般模糊显示，关闭后正常显示",
   type: "boolean",
   get() {
-    return initsto.get('linkblur');
+    return stp.linkblur;
   },
   callback(v) {
-    initsto.set('linkblur', v);
+    stp.linkblur=v;
     linkblur(v);
   }
 })
 
 tyGroup.addNewItem(si);
 tyGroup.addNewItem(si2);
-var liteBack = util.element('div', {
-  class: "liteback"
-});
+var liteBack = el(".liteback");
 
-liteBack.innerHTML = util.getGoogleIcon('e5ce');
-document.querySelector('main .center').appendChild(liteBack);
-liteBack.addEventListener('click', () => {
-  document.body.classList.remove('showall');
-  document.body.classList.add('hiden');
+liteBack.html(util.getGoogleIcon('e5ce'));
+$('main .center').appendChild(liteBack);
+liteBack.on('click', () => {
+  bd.removeClass('showall');
+  bd.addClass('hiden');
 })
 
 function d(v) {
-  document.body.classList.remove('hiden');
-  document.body.classList.remove('showall');
+  bd.removeClass('hiden');
+  bd.removeClass('showall');
   if (v) {
-    document.body.classList.add('lite');
-    document.body.classList.add('hiden');
+    bd.addClass('lite');
+    bd.addClass('hiden');
     si2.show();
-    if (!initsto.get('lite_firsted')) {
-      var imglogopos = document.querySelector('main .logo .imglogo').getBoundingClientRect();
+    if (!stp.lite_firsted) {
+      var imglogopos = $('main .logo .imglogo').getRect();
       guidecreator.create([{
         text: "点击LOGO就可以显示链接和所有图标",
         offset: window.innerWidth > 600 ? {
@@ -64,11 +63,11 @@ function d(v) {
           left: imglogopos.left
         }
       }], function () {
-        initsto.set('lite_firsted', true)
+        stp.lite_firsted = true;
       })
     }
   } else {
-    document.body.classList.remove('lite');
+    bd.removeClass('lite');
     link.cateWidthShiPei();
     si2.hide();
   }
@@ -76,28 +75,28 @@ function d(v) {
 
 function linkblur(v) {
   if (v) {
-    document.querySelector('main').classList.remove('noblur');
+    $('main').removeClass('noblur');
   } else {
-    document.querySelector('main').classList.add('noblur');
+    $('main').addClass('noblur');
   }
 }
 
-document.querySelector("main .center .logo").addEventListener('click', () => {
-  document.body.classList.add('showall');
-  document.body.classList.remove('hiden');
+$("main .center .logo").on('click', () => {
+  bd.addClass('showall');
+  bd.removeClass('hiden');
   link.cateWidthShiPei();
 })
 
-d(initsto.get('lite'));
-linkblur(initsto.get('linkblur'));
+d(stp.lite);
+linkblur(stp.linkblur);
 module.exports = {
   set(a) {
     a = !!a;
-    initsto.set('lite', a);
+    stp.lite=a;
     d(a);
     si.reGet();
   },
   get() {
-    return initsto.get('lite');
+    return stp.lite;
   }
 };

@@ -1,7 +1,7 @@
 const { SettingItem } = require("../../setting/index");
-const { storage } = require("../../storage");
+const { gS } = require("../../storage");
 const util = require("../../util");
-const { addNewSA, initsto, sg } = require("../_core");
+const { addNewSA,stp, sg } = require("../_core");
 const { setValue } = require("../_ui");
 
 var si = new SettingItem({
@@ -10,27 +10,27 @@ var si = new SettingItem({
     type: 'boolean',
     message: "开启后，搜索框为空时将显示历史记录（300字以上不计入，最多15条）",
     get() {
-        return !!initsto.get('ob_his');
+        return !!stp.ob_his;
     },
     callback(value) {
-        initsto.set('ob_his', value);
+        stp.ob_his = value;
         return true;
     }
 })
 
-var hissto=storage('omhis');
-if(hissto.get('his')==undefined){
-    hissto.set('his',[]);
+let hisstp=gS("omhis");
+if(hisstp.his==undefined){
+    hisstp.his=[];
 }
 
 sg.addNewItem(si);
 addNewSA({
     check(text) {
-        return (!!initsto.get('ob_his')) && !text;
+        return (!!stp.ob_his) && !text;
     },
     get(text, getsa) {
         var a = getsa();
-        var his = hissto.get('his');
+        var his = hisstp.his;
         for (let i = 0; i < his.length; i++) {
             a.push({
                 icon:util.getGoogleIconByString('history'),

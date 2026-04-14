@@ -1,4 +1,4 @@
-const { mainSetting, settingSto,SettingGroup,SettingItem } = require("../setting/index");
+const { mainSetting, settingStp,settingSto,SettingGroup,SettingItem } = require("../setting/index");
 const getEventHandle = require("../event");
 const util = require("../util");
 var searchUtil = require("../search/util.js");
@@ -9,6 +9,7 @@ setTimeout(function(){
 })
 
 var initsto = settingSto;
+let stp=settingStp;
 var { on, off, doevent } = getEventHandle();
 var sg = new SettingGroup({
   title: "搜索框",
@@ -20,14 +21,14 @@ var k = {
   enter: [],
 }
 
-if (initsto.get('ob_justsearch') == undefined) {
-  initsto.set('ob_justsearch', false);
+if (isUd(stp.ob_justsearch)) {
+  stp.ob_justsearch = false;
 }
-if (initsto.get('ob_http') == undefined) {
-  initsto.set('ob_http', false);
+if (isUd(stp.ob_http)) {
+  stp.ob_http = false;
 }
-if (initsto.get('ob_enable') == undefined) {
-  initsto.set('ob_enable', true);
+if (isUd(stp.ob_enable)) {
+  stp.ob_enable = true;
 }
 var sawait = [], sis = [];
 
@@ -101,7 +102,7 @@ var addNewSA = function (options) {
 
 
 function checkUrl(text) {
-  if (initsto.get('ob_justsearch')) {
+  if (stp.ob_justsearch) {
     return false;
   }
   return util.checkUrl(text);
@@ -123,7 +124,7 @@ function initNative() {
     check: checkUrl,
     enter(text) {
       if (text.indexOf('://') == -1) {
-        text = ((!!initsto.get('ob_http')) ? 'https://' : 'http://') + text;
+        text = ((!!stp.ob_http) ? 'https://' : 'http://') + text;
       }
       open(text);
     },
@@ -194,7 +195,7 @@ function initNative() {
           text: text,
           click() {
             if (text.indexOf('://') == -1) {
-              text = ((!!initsto.get('ob_http')) ? 'https://' : 'http://') + text;
+              text = ((!!stp.ob_http) ? 'https://' : 'http://') + text;
             }
             open(text);
           }
@@ -225,10 +226,10 @@ var sic = new SettingItem({
   type: 'boolean',
   message: "关闭将不显示搜索框",
   get() {
-    return !!initsto.get('ob_enable');
+    return !!stp.ob_enable;
   },
   callback(value) {
-    initsto.set('ob_enable', value);
+    stp.ob_enable = value;
     if (value && !init_state) {
       initNative();
     }
@@ -244,10 +245,10 @@ var si = new SettingItem({
   type: 'boolean',
   message: "打开后，搜索框将失去打开链接的功能",
   get() {
-    return !!initsto.get('ob_justsearch');
+    return !!stp.ob_justsearch;
   },
   callback(value) {
-    initsto.set('ob_justsearch', value);
+    stp.ob_justsearch = value
     if (value) {
       ui.getInput().placeholder = '搜索'
     } else {
@@ -263,10 +264,10 @@ var si2 = new SettingItem({
   type: 'boolean',
   message: "打开后，搜索框打开链接在默认情况下使用HTTPS",
   get() {
-    return !!initsto.get('ob_http');
+    return !!stp.ob_http;
   },
   callback(value) {
-    initsto.set('ob_http', value);
+    stp.ob_http = value
     return true;
   }
 })
@@ -291,8 +292,9 @@ module.exports = {
   addNewSA: addNewSA,
   searchUtil: searchUtil,
   initsto: initsto,
+  stp:stp,
   setJustSearch(value) {
-    initsto.set('ob_justsearch', value);
+    stp.ob_justsearch=value;
     si.reGet();
   },
   isInit,

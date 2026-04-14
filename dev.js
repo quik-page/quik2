@@ -4,22 +4,37 @@ const path = require('path');
 const watchDir = path.join(__dirname, 'js');
 const outputFile = path.join(__dirname, 'index.dev.js');
 
-
+const codeCache={};
 function getCode(path) {
     return new Promise((resolve, reject) => {
+        if(codeCache[path]){
+            resolve(codeCache[path]);
+            return;
+        }
         fs.readFile(path, (err, data) => {
             if (err) {
                 console.log('err');
                 reject(err);
             } else {
-                resolve(data.toString() + '\n');
+                let r=data.toString()+'\n';
+                codeCache[path]=r;
+                resolve(r);
             }
         })
     })
 }
 
 var reg = /(?<!\.)require\s*\(.*?\)/g;
-var defCode = `(function(modules){var ranmodules={};function require(e){ranmodules[e]||run(e);return ranmodules[e].exports}function run(e){var r={exports:{}};ranmodules[e]=r,modules[e](require,r);}run(0);})({`;
+var defCode = `(function(modules){
+    var ranmodules={};
+    function require(e){
+        ranmodules[e]||run(e);return ranmodules[e].exports
+    }
+    function run(e){
+        var r={exports:{}};
+        ranmodules[e]=r;
+        modules[e](require,r);
+    }run(0);})({`;
 
 var d = {
     '.css': function (code) {
@@ -43,14 +58,13 @@ var d = {
 function installExt(ext, func) {
     d[ext] = func;
 }
-
-async function build(path) {
-    var codes = {
-        code: {},
-        id: {},
-        length: 0,
-    };
-    await parseRem(path, codes);
+var codes = {
+    code: {},
+    id: {},
+    length: 0,
+};
+async function build(path,re) {
+    await parseRem(path, codes,'',re);
     var code = defCode + (() => {
         var str = '';
         for (var i = 0; i < codes.length; i++) {
@@ -61,7 +75,7 @@ async function build(path) {
     return code;
 }
 
-async function parseRem(src, codes, rootPath = '') {
+async function parseRem(src, codes, rootPath = '',re=false) {
     if (src[0] === '.' && rootPath) {
         src = path.join(rootPath, src);
     }
@@ -84,7 +98,7 @@ async function parseRem(src, codes, rootPath = '') {
 
     }
 
-    if (codes.id[src]) return codes.id[src];
+    if (codes.id[src]&&(!re)) return codes.id[src];
     let code;
     try {
         code = await getCode(src);
@@ -96,9 +110,15 @@ async function parseRem(src, codes, rootPath = '') {
         }))
 
     }
-    codes.length++;
-    var id = codes.length - 1;
-    codes.id[src] = id;
+    var id;
+    if(re){
+        id=codes.id[src];
+    }else{
+        codes.length++;
+        id = codes.length - 1;
+        codes.id[src] = id;
+    }
+    
     if (path.extname(src) === '.js' || path.extname(src) === '.cjs') {
         var requires = code.match(reg);
         if (requires) {
@@ -138,11 +158,12 @@ let nd=Date.now(),sc;
     console.log('编译完成，耗时：'+(Date.now()-nd)+'ms');
     
     // 监听js目录下的文件变化
-    fs.watch(watchDir, { recursive: true }, async () => {
+    fs.watch(watchDir, { recursive: true }, async (type,filename) => {
+        delete codeCache[path.join(watchDir,filename)];
         if(Date.now()-sc<1000) return;
         console.log('监听到文件变化，重新编译');
         sc=nd=Date.now();
-        let code = await build(path.join(__dirname, 'index.js'));
+        let code = await build(path.join(watchDir, filename),true);
         fs.writeFileSync(outputFile, code);
         console.log('编译完成，耗时：'+(Date.now()-nd)+'ms');
         nd=Date.now();

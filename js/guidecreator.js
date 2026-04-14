@@ -1,6 +1,5 @@
 // 提供方便的引导卡片构建器
 const card = require("./card");
-const util = require("./util");
 
 module.exports = {
     /**
@@ -21,7 +20,7 @@ module.exports = {
         var _cd = _card.getCardDom();
         var j = 0;
         function dostep() {
-            util.query(_cd, '.guide-text').innerHTML = steps[j].text;
+            _cd.$('.guide-text').html(steps[j].text);
             if (_card.isShow) {
                 _card.setOffset(steps[j].offset, 300);
             } else {
@@ -30,7 +29,7 @@ module.exports = {
             }
         }
         dostep();
-        util.query(_cd, '.btn.ok').addEventListener('click', () => {
+        _cd.$('.btn.ok').on('click', () => {
             j++;
             if (j >= steps.length) {
                 _card.hide(300);

@@ -48,7 +48,7 @@ let bgczMenuLists=[
         icon:util.getGoogleIcon('e86a'),
         title:'刷新',
         click: function () {
-            var a = document.querySelector('.bgf .full img');
+            var a = $('.bgf .full img');
             if (a) {
                 a.style.opacity = '0';
             }
@@ -62,19 +62,19 @@ let bgczMenuLists=[
         icon:util.getGoogleIcon('f090'),
         title:'下载',
         click: function () {
-            window.open(document.querySelector(".bgf img").src);
+            window.open($(".bgf img").src);
         }
     },
     {
         icon:util.getGoogleIcon('e8f4', { type: 'fill' }),
         title:'查看壁纸',
         click: function () {
-            document.querySelector('main').style.opacity = 0;
+            $('main').style.opacity = 0;
             setTimeout(() => {
-                document.querySelector('main').style.display = 'none';
+                $('main').hide();
             }, 300)
-            document.querySelector('.bgf .cover').style.opacity = 0;
-            document.addEventListener('click', eyefy)
+            $('.bgf .cover').style.opacity = 0;
+            document.on('click', eyefy)
         }
     }
 ];
@@ -119,10 +119,10 @@ infoIcon.getIcon().onclick = () => {
     infoCard.show(400);
     getBingWallPaperInfo(function (r) {
       var infoCardF = infoCard.getCardDom();
-      util.query(infoCardF, '.copyright').innerText = r.copyright;
-      util.query(infoCardF, '.second').innerText = r.second_copyright;
-      util.query(infoCardF, '.title').innerText = r.title;
-      util.query(infoCardF, '.link').href = r.link;
+      infoCardF.$('.copyright').text(r.copyright);
+      infoCardF.$('.second').text(r.second_copyright);
+      infoCardF.$('.title').text(r.title);
+      infoCardF.$('.link').href = r.link;
     })
   }
 
@@ -135,12 +135,12 @@ function eyefy() {
         inclick=true;
         return;
     }
-  document.querySelector('main').style.display = 'block';
+  $('main').show();
   setTimeout(() => {
-    document.querySelector('main').style.opacity = 1;
+    $('main').style.opacity = 1;
   }, 10)
-  document.querySelector('.bgf .cover').style.opacity = '';
-  document.removeEventListener('click', eyefy)
+  $('.bgf .cover').style.opacity = '';
+  document.off('click', eyefy)
   inclick=false;
 }
 
@@ -169,8 +169,7 @@ function getBingWallPaperInfo(fn) {
   if (infocache) {
     fn(infocache);
   } else {
-    util.xhr('https://bing.shangzhenyang.com/api/json', r => {
-      r = JSON.parse(r);
+    get('https://bing.shangzhenyang.com/api/json').then(r => {
       var a = r.images[0];
       var b = a.copyright.split('(');
       b[1] = '(' + b[1];
@@ -181,7 +180,7 @@ function getBingWallPaperInfo(fn) {
         title: a.title
       };
       fn(infocache)
-    }, () => {
+    }).catch(() => {
       fn({
         copyright: "加载失败",
         second_copyright: "(© Bing)",
@@ -203,7 +202,7 @@ function docthem(){
     console.log(custom.getThemeDetail());
     let g=custom.getThemeDetail().color||[]
     console.log(g);
-    draws.color(document.querySelector('.bgf'),{
+    draws.color($('.bgf'),{
         light:g[0]||'#fff',
         dark:g[1]||'#333'
     })
@@ -218,7 +217,7 @@ custom.on('dotheme',function(){
 var draws = {
   img(bgf, data) {
     if((!data.url)&&typeof data.index=='undefined')return;
-    bgf.innerHTML = '<div class="img-sp full"><div class="cover"></div><img src="' + (data.url || neizhiImg[data.index].img) + '"/></div>';
+    bgf.html('<div class="img-sp full"><div class="cover"></div><img src="' + (data.url || neizhiImg[data.index].img) + '"/></div>');
     bgf.querySelector('img').onload = function () {
       this.style.opacity = '1';
     }
@@ -229,9 +228,9 @@ var draws = {
   },
   video(bgf, data) {
     if((!data.url)&&typeof data.index=='undefined')return;
-    bgf.innerHTML = '<div class="video-sp full"><div class="cover"></div><video src="" muted loop></video></div>'
-    util.query(bgf, '.video-sp video').src = data.url || neizhiImg[data.index].img;
-    util.query(bgf, '.video-sp video').oncanplay = function () {
+    bgf.html('<div class="video-sp full"><div class="cover"></div><video src="" muted loop></video></div>')
+    bgf.$('.video-sp video').src = data.url || neizhiImg[data.index].img;
+    bgf.$('.video-sp video').oncanplay = function () {
       this.play();
       this.style.opacity = '1';
     }
@@ -241,13 +240,12 @@ var draws = {
     rnMenu([2]);
   },
   color(bgf, data) {
-    bgf.innerHTML = '<div class="color-sp full"></div>'
-    if (!util.query(document.head, 'style.colorSpControl')) {
-      var style = document.createElement('style');
-      style.className = 'colorSpControl';
+    bgf.html('<div class="color-sp full"></div>')
+    if (!document.head.$('style.colorSpControl')) {
+      var style = el('style.colorSpControl');
       document.head.appendChild(style);
     }
-    util.query(document.head, 'style.colorSpControl').innerHTML = `.color-sp{background-color:${data.light};}body.dark .color-sp{background-color:${data.dark};}`
+    document.head.$('style.colorSpControl').html(`.color-sp{background-color:${data.light};}body.dark .color-sp{background-color:${data.dark};}`);
   },
   api: function api(bgf, data) {
     function showAcgOrFj(a) {
@@ -308,7 +306,7 @@ var draws = {
     var a = initsto.get('userbg');
     if (!a) return;
 
-    document.body.classList.add('t-dark');
+    document.body.addClass('t-dark');
     if (a.type == 'video') {
       var b = a.useidb;
       if (b) {
@@ -338,54 +336,53 @@ var draws = {
     }
   },
   zdy(bgf, data) {
-    if (!util.query(bgf, '.zdy-sp')) {
-      bgf.innerHTML = '<div class="zdy-sp full"></div>'
+    if (!bgf.$('.zdy-sp')) {
+      bgf.html('<div class="zdy-sp full"></div>');
     }
-    if (!util.query(document.head, 'style.zdySpControl')) {
-      var style = document.createElement('style');
-      style.className = 'zdySpControl';
+    if (!document.head.$('style.zdySpControl')) {
+      var style = el('style.zdySpControl');
       document.head.appendChild(style);
     }
-    util.query(document.head, 'style.zdySpControl').innerHTML = `.zdy-sp{background:${data.light};}body.dark .zdy-sp{background:${data.dark};}`
+    document.head.$('style.zdySpControl').html(`.zdy-sp{background:${data.light};}body.dark .zdy-sp{background:${data.dark};}`);
   }
 }
 
 function dol(){
-  util.query(tab1, '.noBg').style.display = 'none';
-    util.query(tab1, '.hasBg').style.display = 'block';
-    util.query(tab1, '.zdy .editbtn').style.display = 'block';
+  tab1.$('.noBg').hide()
+    tab1.$('.hasBg').show()
+    tab1.$('.zdy .editbtn').show()
 }
 
 setl(dol);
 
 
 function selectbgitem(data) {
-  util.query(tab1, '.bgitem', true).forEach(it => {
-    it.classList.remove('selected');
+  tab1.$$('.bgitem').forEach(it => {
+    it.removeClass('selected');
   })
-  util.query(tab2, '.bgitem', true).forEach(it => {
-    it.classList.remove('selected');
+  tab2.$$('.bgitem').forEach(it => {
+    it.removeClass('selected');
   })
   if (data.type == 'default') {
     if (data.data.type == 'img') {
-      try { util.query(tab1, `.neizhi .bgitem[data-id="${data.data.index}"]`).classList.add('selected'); } catch (e) { }
+      try { tab1.$(`.neizhi .bgitem[data-id="${data.data.index}"]`).addClass('selected'); } catch (e) { }
     } else if (data.data.type == 'userbg') {
-      util.query(tab1, '.zdy .bgitem').classList.add('selected');
+      tab1.$('.zdy .bgitem').addClass('selected');
     } else if (data.data.type == 'api') {
       if (data.data.api == 'theme'||data.data.api=='time') {
-        util.query(tab2, `.api .bgitem[data-api="${data.data.api}"]`).classList.add('selected');
+        tab2.$(`.api .bgitem[data-api="${data.data.api}"]`).addClass('selected');
       } else {
-        util.query(tab1, `.api .bgitem[data-api="${data.data.api}"]`).classList.add('selected');
+        tab1.$(`.api .bgitem[data-api="${data.data.api}"]`).addClass('selected');
       }
     } else if (data.data.type == 'color') {
-      util.query(tab2, '.zdy .bgitem').classList.add('selected');
+      tab2.$('.zdy .bgitem').addClass('selected');
     }
   }
 }
 
 
 function _reset() {
-  document.body.classList.remove('t-dark');
+  document.body.removeClass('t-dark');
   refreshFn = () => { }
   clearInterval(timeb);
   ImgOrVideoSi.hide();
@@ -407,15 +404,15 @@ module.exports = {
       });
 
       if (!hasUploadedImg()) {
-        util.query(tab1, '.hasBg').style.display = 'none';
-        util.query(tab1, '.zdy .editbtn').style.display = 'none';
+        tab1.$('.hasBg').hide()
+        tab1.$('.zdy .editbtn').hide()
       } else {
-        util.query(tab1, '.noBg').style.display = 'none';
+        tab1.$('.noBg').hide()
         getUserUploadUrl((url) => {
-          util.query(tab1, '.zdy .left img').src = url;
+          tab1.$('.zdy .left img').src = url;
         })
       }
-      util.query(tab1, '.zdy .left').addEventListener('click', () => {
+      tab1.$('.zdy .left').on('click', () => {
         if (hasUploadedImg()) {
           e.setbg({
             type: e.type,
@@ -427,44 +424,44 @@ module.exports = {
           uploadIov();
         }
       })
-      util.query(tab1, '.zdy .editbtn').addEventListener('click', () => {
+      tab1.$('.zdy .editbtn').on('click', () => {
         uploadIov(true);
       });
 
       // 内置图片
-      var u = util.query(tab1, '.neizhi .unit-content');
+      var u = tab1.$('.neizhi .unit-content');
       var _ = this;
       neizhiImg.forEach((im, id) => {
         var bgitem = util.element('div', {
           class: "bgitem def",
           'data-id': id,
         });
-        bgitem.innerHTML = '<div class="left"><img data-src="' + im.thumbnail + '" loading="lazy"/></div>'
+        bgitem.html('<div class="left"><img data-src="' + im.thumbnail + '" loading="lazy"/></div>');
         u.appendChild(bgitem);
-        util.query(bgitem, '.left').onclick = () => {
+        bgitem.$('.left').onclick = () => {
           e.setbg({
             type: e.type,
             data: {
               type: "img",
-              index: parseInt(bgitem.getAttribute('data-id'))
+              index: parseInt(bgitem.attr('data-id'))
             }
           })
         }
       });
 
-      var se = util.query(tab1, '.u-se');
+      var se = tab1.$('.u-se');
       se.onclick = () => {
         ImgOrVideoSi.callback();
       }
 
       // API
-      util.query(tab1, '.api.unit-item .left', true).forEach(l => {
-        l.addEventListener('click', () => {
+      tab1.$$('.api.unit-item .left').forEach(l => {
+        l.on('click', () => {
           e.setbg({
             type: e.type,
             data: {
               type: "api",
-              api: l.parentElement.getAttribute('data-api')
+              api: l.parent().attr('data-api')
             }
           })
         });
@@ -478,9 +475,9 @@ module.exports = {
       });
       init(tab2);
       var c = initsto.get('usercolor');
-      util.query(tab2, '.zdy .color-left').style.backgroundColor = c.light;
-      util.query(tab2, '.zdy .color-right').style.backgroundColor = c.dark;
-      util.query(tab2, '.zdy .left').onclick = () => {
+      tab2.$('.zdy .color-left').style.backgroundColor = c.light;
+      tab2.$('.zdy .color-right').style.backgroundColor = c.dark;
+      tab2.$('.zdy .left').onclick = () => {
         var c = initsto.get('usercolor');
         e.setbg({
           type: e.type,
@@ -491,22 +488,22 @@ module.exports = {
           }
         })
       }
-      util.query(tab2, '.zdy .btn').onclick = () => {
+      tab2.$('.zdy .btn').onclick = () => {
         colorChange();
       }
       var cd = getNowColor();
-      util.query(tab2, '.api .color-left',true)[1].style.backgroundColor = cd.light;
-      util.query(tab2, '.api .color-right',true)[1].style.backgroundColor = cd.dark;
+      tab2.$$('.api .color-left')[1].style.backgroundColor = cd.light;
+      tab2.$$('.api .color-right')[1].style.backgroundColor = cd.dark;
       var ce=custom.getThemeDetail().color||[];
-      util.query(tab2, '.api .color-left').style.backgroundColor=ce[0]||'#fff';
-      util.query(tab2, '.api .color-right').style.backgroundColor=ce[1]||'#333';
-      util.query(tab2, '.api .left',true).forEach(el=>{
-        el.onclick = function () {
+      tab2.$('.api .color-left').style.backgroundColor=ce[0]||'#fff';
+      tab2.$('.api .color-right').style.backgroundColor=ce[1]||'#333';
+      tab2.$$('.api .left').forEach(El=>{
+        El.onclick = function () {
             e.setbg({
               type: e.type,
               data: {
                 type: "api",
-                api: this.parentElement.getAttribute('data-api')
+                api: this.parent().attr('data-api')
               }
             })
         }
@@ -519,17 +516,17 @@ module.exports = {
       });
       var _l_ = initsto.get('custombglight');
       var _d_ = initsto.get('custombgdark');
-      util.query(tab3, '.gjzdytlight').value = _l_ ? _l_ : '';
-      util.query(tab3, '.gjzdytdark').value = _d_ ? _d_ : '';
-      util.query(tab3, '.gjzdysetbtn').onclick = () => {
-        initsto.set('custombglight', util.query(tab3, '.gjzdytlight').value);
-        initsto.set('custombgdark', util.query(tab3, '.gjzdytdark').value);
+      tab3.$('.gjzdytlight').value = _l_ ? _l_ : '';
+      tab3.$('.gjzdytdark').value = _d_ ? _d_ : '';
+      tab3.$('.gjzdysetbtn').onclick = () => {
+        initsto.set('custombglight', tab3.$('.gjzdytlight').value);
+        initsto.set('custombgdark', tab3.$('.gjzdytdark').value);
         e.setbg({
           type: e.type,
           data: {
             type: 'zdy',
-            dark: util.query(tab3, '.gjzdytdark').value,
-            light: util.query(tab3, '.gjzdytlight').value
+            dark: tab3.$('.gjzdytdark').value,
+            light: tab3.$('.gjzdytlight').value
           }
         })
         quik.toast.show('设置成功')
@@ -540,7 +537,7 @@ module.exports = {
       });
     },
     cancel(n) {
-      n.bgf.innerHTML = '';
+      n.bgf.html('');
       _reset();
     },
     draw(n) {

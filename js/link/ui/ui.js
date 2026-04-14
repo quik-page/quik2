@@ -6,11 +6,9 @@ let linkui=require('./link');
 let cateui=require('./cate');
 let fulinkui=require('./fulink');
 
-var linkF = util.element('div', {
-    class: "links"
-});
+var linkF =el(".links");
 
-util.query(document, 'main .center').append(linkF);
+$('main .center').append(linkF);
 
 var linksg = new SettingGroup({
     title: "链接",
@@ -81,7 +79,7 @@ link.on('change',function(cl){
         cateui.actCate();
         return;
     }
-    var actcate = util.query(linkF, '.cate-bar-items .cate-item.active');
+    var actcate = linkF.$('.cate-bar-items .cate-item.active');
     if(cl.type.indexOf('cate')!=-1){
         var acate = actcate.innerText;
         link.getCates(data=>{
@@ -100,10 +98,10 @@ link.on('change',function(cl){
     }
     var linklist = linkui.getLinklist();
     if(!actcate) return;
-    if (cl.cate == actcate.innerText || (cl.cate == null && actcate.classList.contains('mr'))) {
+    if (cl.cate == actcate.text() || (cl.cate == null && actcate.hasClass('mr'))) {
         if (cl.type == 'add') {
             var li = linkui.glinkli(cl.detail);
-            util.query(linkF, '.link-list').insertBefore(li, util.query(linkF, '.link-list .link-add'));
+            linkF.$('.link-list').insertBefore(li, linkF.$('.link-list .link-add'));
             linklist.push(cl.detail);
             linkui.setLinklist(linklist);
         } else if (cl.type == 'change') {
@@ -111,18 +109,18 @@ link.on('change',function(cl){
                 linklist.splice(cl.index, 1)
                 linklist.splice(cl.detail.index, 0, cl.detail);
                 linkui.setLinklist(linklist);
-                var lis = util.query(linkF, '.link-list li', true);
+                var lis = linkF.$$('.link-list li');
                 var tli = lis[cl.index];
                 if (cl.index < cl.detail.index) {
-                    util.query(linkF, '.link-list').insertBefore(tli, lis[cl.detail.index + 1]);
+                    linkF.$('.link-list').insertBefore(tli, lis[cl.detail.index + 1]);
                 } else {
-                    util.query(linkF, '.link-list').insertBefore(tli, lis[cl.detail.index]);
+                    linkF.$('.link-list').insertBefore(tli, lis[cl.detail.index]);
                 }
                 util.query(tli, 'a').href = cl.detail.url;
                 util.query(tli, 'p').innerText = cl.detail.title;
                 if(cl.detail.icon){
                     util.query(tli, 'img').src=cl.detail.icon;
-                    util.query(tli, 'img').classList.add('load');
+                    util.query(tli, 'img').addClass('load');
                 }else{
                     util.getFavicon(cl.detail.url, favicon => {
                         if (favicon) {
@@ -135,7 +133,7 @@ link.on('change',function(cl){
                 
             }
         } else if (cl.type == 'delete') {
-            var li = util.query(linkF, '.link-list li', true)[cl.index];
+            var li = linkF.$$('.link-list li')[cl.index];
             li.remove();
             linklist.splice(cl.index, 1);
             linkui.setLinklist(linklist);
@@ -144,8 +142,8 @@ link.on('change',function(cl){
 })
 
 function resetmenued(){
-    linkui.getMenuedLi()&&linkui.getMenuedLi().classList.remove('menued');
-    cateui.getMenuedCate()&&cateui.getMenuedCate().classList.remove('menued');
+    linkui.getMenuedLi()&&linkui.getMenuedLi().removeClass('menued');
+    cateui.getMenuedCate()&&cateui.getMenuedCate().removeClass('menued');
 }
 
 document.addEventListener('click', resetmenued)

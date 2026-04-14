@@ -1,32 +1,27 @@
-const {storage} = require("../../storage");
+const {gS} = require("../../storage");
 const util = require("../../util");
 const { refsay, openSayDetailsDialog,getNowSay } = require("../core");
 
-var jinrishicisto = storage('jrsc');
+var stp = gS('jrsc');
 var jinrishici = {}, tokenStorageKey = "jinrishici-token";
 function request(callback, url) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("get", url);
-  xhr.withCredentials = false;
-  xhr.send();
-  xhr.onreadystatechange = () => {
-    if (4 === xhr.readyState) {
-      var res = JSON.parse(xhr.responseText);
-      if ("success" === res.status) {
+  get(url).then(res=>{
+    if ("success" === res.status) {
         callback(res)
-      } else {
+    } else {
         console.error("今日诗词API加载失败，错误原因：" + res.errMessage)
-      }
     }
-  }
+  }).catch(err=>{
+    console.error("今日诗词API加载失败，错误原因：",err);
+  })
 }
 jinrishici.load = (callback) => {
-  var key = jinrishicisto.get(tokenStorageKey);
+  var key = stp[tokenStorageKey];
   if (key) {
     return request(callback, "https://v2.jinrishici.com/one.json?client=browser-sdk/1.2&X-User-Token=" + encodeURIComponent(key))
   } else {
     return request((res) => {
-      jinrishicisto.set(tokenStorageKey, res.token);
+      stp[tokenStorageKey]=res.token;
       callback(res);
     }, "https://v2.jinrishici.com/one.json?client=browser-sdk/1.2")
   }

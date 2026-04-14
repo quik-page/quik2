@@ -2,7 +2,7 @@
 
 function showOpenFilePicker() {
     return new Promise((resolve, reject) => {
-      var inp = document.createElement('input');
+      var inp = el('input');
       inp.type = 'file';
       document.body.append(inp);
       inp.style.display = 'none';

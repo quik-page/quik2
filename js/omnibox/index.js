@@ -1,7 +1,7 @@
 var core = require('./_core.js')
 var ui = require('./_ui.js')
 
-var _isen = core.initsto.get('ob_enable')
+var _isen = core.stp.ob_enable;
 if (_isen && !core.isInit()) {
   core.initNative();
 }

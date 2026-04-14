@@ -1,13 +1,11 @@
 const util = require("../util");
 
-var fcF = util.element('div', {
-    class: "fcard-frame"
-});
+var fcF = el('.fcard-frame');
 var fcFclicked = false;
-fcF.addEventListener('click', () => {
+fcF.on('click', () => {
     fcFclicked = true;
 })
-document.querySelector('main').append(fcF);
+$('main').append(fcF);
 
 var idmax = 0;
 var fcards = [];
@@ -16,28 +14,28 @@ function fcard(options) {
     this.content = options.content;
     idmax++;
     this.id = idmax;
-    var fel = util.element('div', {
+    var fel = el('div', {
         class: "fcard" + (options.class ? " " + options.class : "")
     });
-    fel.innerHTML = '<div class="content">' + this.content + '<div>';
+    fel.html('<div class="content">' + this.content + '<div>');
     fcF.insertBefore(fel, fcF.firstChild);
     this.el = fel;
     fcards.push(this);
     this.isShow = true;
-    mobZDIcon.style.display = '';
+    mobZDIcon.css("display",'');
 }
 
 fcard.prototype = {
     show() {
-        this.el.style.display = 'block';
+        this.el.show();
         this.isShow = true;
-        mobZDIcon.style.display = '';
+        mobZDIcon.css("display",'');
     },
     hide() {
-        this.el.style.display = 'none';
+        this.el.hide();
         this.isShow = false;
         if (checkAllHide()) {
-            mobZDIcon.style.display = 'none';
+            mobZDIcon.hide();
         };
     },
     getFCardDom() {
@@ -48,7 +46,7 @@ fcard.prototype = {
         this.el = null;
         fcards.splice(fcards.indexOf(this), 1);
         if (checkAllHide()) {
-            mobZDIcon.style.display = 'none';
+            mobZDIcon.hide();
         };
     }
 }
@@ -72,24 +70,22 @@ function checkAllHide() {
     return true;
 }
 
-var mobZDIcon = util.element('div', {
-    class: "fcard-mob-zd"
-});
-mobZDIcon.innerHTML = util.getGoogleIcon('e5cc');
-mobZDIcon.style.display = 'none';
-document.querySelector('main').append(mobZDIcon);
+var mobZDIcon = el('.fcard-mob-zd');
+mobZDIcon.html(util.getGoogleIcon('e5cc'));
+mobZDIcon.hide();
+$('main').append(mobZDIcon);
 mobZDIcon.onclick = function (e) {
     fcFclicked = true;
-    fcF.classList.add('show')
-    this.classList.add('hide');
+    fcF.addClass('show')
+    this.addClass('hide');
 }
-document.addEventListener('click', () => {
+document.on('click', () => {
     if (fcFclicked) {
         fcFclicked = false;
         return;
     }
-    fcF.classList.remove('show');
-    mobZDIcon.classList.remove('hide');
+    fcF.removeClass('show');
+    mobZDIcon.removeClass('hide');
 })
 
 

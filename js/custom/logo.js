@@ -1,13 +1,11 @@
 const { SettingItem, tyGroup } = require("../setting/index");
 const util = require("../util");
-const { initsto } = require("./core");
+const { stp } = require("./core");
 
-var logoF = document.querySelector('main .center .logo');
-if (initsto.get('timelogo')) {
-  initsto.set('logo', 'b');
-  initsto.remove('timelogo')
-} else if (!initsto.get('logo')) {
-  initsto.set('logo', 'a')
+var logoF = $('main .center .logo');
+// timelogo can be removed 
+if (!stp.logo) {
+  stp.logo='a';
 }
 var si = new SettingItem({
   index: 4,
@@ -22,10 +20,10 @@ var si = new SettingItem({
     }
   },
   get() {
-    return initsto.get('logo');
+    return stp.logo;
   },
   callback(v) {
-    initsto.set('logo', v);
+    stp.logo = v;
     d(v);
   }
 })
@@ -36,15 +34,15 @@ var sitime = new SettingItem({
   message: "开启后时间LOGO下方将显示日期",
   type: "boolean",
   get() {
-    return !!initsto.get('timelogo_x');
+    return !!stp.timelogo_x;
   },
   callback(v) {
-    initsto.set('timelogo_x', v);
+    stp.timelogo_x = v;
     dtx(v);
   }
 })
 
-util.query(logoF, '.timelogo .h').innerHTML = util.query(logoF, '.timelogo .m').innerHTML = createNum() + createNum();
+logoF.$('.timelogo .h').innerHTML = logoF.$('.timelogo .m').innerHTML = createNum() + createNum();
 function createNum() {
   var h = '';
   for (var i = 0; i < 7; i++) {
@@ -68,11 +66,11 @@ function setNum(_num, num) {
   }
   var f = m[num];
   for (var i = 0; i < 7; i++) {
-    var _l = util.query(_num, '.a' + i);
+    var _l = _num.$('.a' + i);
     if (f[i] == '1') {
-      _l.classList.add('show');
+      _l.addClass('show');
     } else {
-      _l.classList.remove('show');
+      _l.removeClass('show');
     }
   }
 }
@@ -85,13 +83,13 @@ function doTime() {
     var da = new Date();
     var h = util.b0(da.getHours()).toString();
     var m = util.b0(da.getMinutes()).toString();
-    var hs = util.query(logoF, '.timelogo .h ._num', true)
-    var ms = util.query(logoF, '.timelogo .m ._num', true)
+    var hs = logoF.$$('.timelogo .h ._num')
+    var ms = logoF.$$('.timelogo .m ._num')
     setNum(hs[0], h[0]);
     if (h[0] == '1') {
-      util.query(logoF, '.timelogo .t').style.marginLeft = '-13px';
+      logoF.$('.timelogo .t').style.marginLeft = '-13px';
     } else {
-      util.query(logoF, '.timelogo .t').style.marginLeft = '';
+      logoF.$('.timelogo .t').style.marginLeft = '';
     }
     setNum(hs[1], h[1]);
     setNum(ms[0], m[0]);
@@ -99,51 +97,49 @@ function doTime() {
   }
   setInterval(z, 1000);
   z();
-  var xxxx = util.element('div', {
-    class: "xxxx"
-  })
-  util.query(logoF, '.timelogo').append(xxxx);
+  var xxxx = el(".xxxx");
+  logoF.$('.timelogo').append(xxxx);
   var da = new Date();
   xxxx.innerHTML = da.getFullYear() + ' 年 ' + (da.getMonth() + 1) + ' 月 ' + da.getDate() + ' 日 星期' + '日一二三四五六'[da.getDay()];
-  dtx(initsto.get('timelogo_x'))
+  dtx(stp.timelogo_x);
 }
 function dtx(v) {
   if (!isdotime) return;
   if (v) {
-    util.query(logoF, '.timelogo').classList.add('showxx');
+    logoF.$('.timelogo').addClass('showxx');
   } else {
-    util.query(logoF, '.timelogo').classList.remove('showxx');
+    logoF.$('.timelogo').removeClass('showxx');
   }
 }
 
 function d(v) {
-  util.query(logoF, '.timelogo').style.display = 'none';
-  util.query(logoF, '.imglogo').style.display = 'none';
+  logoF.$('.timelogo').hide();
+  logoF.$('.imglogo').hide();
   sitime.hide();
   if (v == 'a') {
-    util.query(logoF, '.imglogo').style.display = 'block';
+    logoF.$('.imglogo').show();
   } else if (v == 'b') {
-    util.query(logoF, '.timelogo').style.display = 'block';
+    logoF.$('.timelogo').show();
     doTime();
     sitime.show();
   }
 
 }
-d(initsto.get('logo'));
+d(stp.logo);
 
 tyGroup.addNewItem(si);
 tyGroup.addNewItem(sitime);
-if (initsto.get('logo') != 'b') {
+if (stp.logo != 'b') {
   sitime.hide();
 }
 
 module.exports = {
   set(a) {
-    initsto.set('logo', a);
+    stp.logo=a;
     d(a);
     si.reGet();
   },
   get() {
-    return initsto.get('logo');
+    return stp.logo;
   }
 }

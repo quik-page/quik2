@@ -61,16 +61,14 @@ var initsto = storage('says', {
 
 //   var sayTypes=['user','jinrishici','hitokoto'];
 
-var sayF = util.element('div', {
-  class: "says"
-});
+var sayF = el(".says")
 
-util.query(document, 'main').appendChild(sayF);
+$('main').appendChild(sayF);
 
 sayF.innerHTML = `<div class="say-inner"></div><div class="say-control">${util.getGoogleIcon('e5d4')}</div>`;
 
-var sayI = util.query(sayF, 'div.say-inner');
-var sayC = util.query(sayF, 'div.say-control');
+var sayI = sayF.$('div.say-inner');
+var sayC = sayF.$('div.say-control');
 var sayMenu = new menu({
   list: [],
 });
@@ -81,7 +79,7 @@ var sayinfoDialog = new dialog({
 });
 
 var infd = sayinfoDialog.getDialogDom();
-util.query(infd, 'div.closeBtn').onclick = () => {
+infd.$('div.closeBtn').onclick = () => {
   sayinfoDialog.close();
 }
 
@@ -145,11 +143,11 @@ function refsay(key, cb) {
   if (!sayTypes[key]) {
     throw 'key不存在';
   }
-  sayI.innerText = '...';
+  sayI.text('...');
   sayI.title = '加载中';
   sayTypes[key].callback().then((say) => {
-    sayI.innerText = say.say;
-    sayI.setAttribute('title', say.title);
+    sayI.text(say.say);
+    sayI.attr('title', say.title);
     nowSay = say;
     cb && cb();
   })
@@ -160,7 +158,7 @@ function getNowSay() {
 }
 
 function openSayDetailsDialog(op) {
-  util.query(infd, 'ul').innerHTML = (() => {
+  infd.$('ul').innerHTML = (() => {
     var str = '';
     for (var k in op) {
       str += '<li><b>' + k + ':</b> ' + op[k] + '</li>';
@@ -222,10 +220,10 @@ var showsi = new SettingItem({
     initsto.set('enabled', v);
     if (v) {
       setSayType(initsto.get('saytype'));
-      sayF.style.display = '';
+      sayF.css("display","");
       typesi.show();
     } else {
-      sayF.style.display = 'none';
+      sayF.hide();
       typesi.hide();
     }
   },

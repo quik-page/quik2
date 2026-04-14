@@ -1,36 +1,32 @@
 const { SettingItem } = require("../setting");
 const util = require("../util");
-const { initsto, getSA, enter, searchUtil, getType, sg, doevent } = require("./_core");
+const { stp, getSA, enter, searchUtil, getType, sg, doevent } = require("./_core");
 const {Onshow}=require('../base');
 
 var searchbox, searchcover, icon, input, submit, saul, searchpadding, inputInputEv;
-searchpadding = util.element('div', {
+searchpadding = el('div', {
   class: "searchpadding"
 })
 
-util.query(document, 'main .center').append(searchpadding);
+$('main .center').append(searchpadding);
 
 function initSearchBox() {
 
-  searchbox = util.element('div', {
-    class: "searchbox"
-  });
+  searchbox = el('.searchbox');
 
-  searchcover = util.element('div', {
-    class: "cover searchcover"
-  })
+  searchcover = el('.cover.searchcover');
 
-  searchbox.innerHTML = require('./htmls/searchbox.html').replace('{i}', initsto.get('ob_autofocus') ? 'autofocus' : '');
+  searchbox.html(require('./htmls/searchbox.html').replace('{i}', stp.ob_autofocus ? 'autofocus' : ''));
 
-  util.query(document, 'main').append(searchbox);
-  util.query(document, 'main').append(searchcover);
+  $('main').append(searchbox);
+  $('main').append(searchcover);
 
-  icon = util.query(searchbox, 'div.icon');
-  input = util.query(searchbox, 'div.input input');
-  submit = util.query(searchbox, 'div.submit');
-  saul = util.query(searchbox, 'ul.sas');
+  icon = searchbox.$('div.icon');
+  input = searchbox.$('div.input input');
+  submit = searchbox.$('div.submit');
+  saul = searchbox.$('ul.sas');
 
-  if (initsto.get('ob_justsearch')) {
+  if (stp.ob_justsearch) {
     input.placeholder = '搜索'
   }
 
@@ -38,23 +34,23 @@ function initSearchBox() {
   inputInputEv = function () {
     // 渲染Type
     chulitype(this.value.trim());
-    saul.innerHTML = '';
+    saul.html("");
     getSA(this.value.trim(), function (salist) {
       //记录用户原本的active
-      var actli = util.query(saul, 'li.active')
+      var actli = saul.$('li.active')
       if (actli) {
         actli = {
-          icon: util.query(actli, 'div.saicon').innerHTML,
-          text: util.query(actli, 'div.sa_text').innerText,
+          icon: actli.$('div.saicon').html(),
+          text: actli.$('div.sa_text').text(),
         }
       }
 
       // 渲染搜索联想
-      saul.innerHTML = '';
+      saul.html("");
       salist.forEach(s => {
-        var li = util.element('li');
-        li.innerHTML = `<div class="saicon">${s.icon}</div><div class="sa_text"></div>`;
-        li.querySelector('.sa_text').innerText = s.text;
+        var li = el('li');
+        li.html(`<div class="saicon">${s.icon}</div><div class="sa_text"></div>`);
+        li.$('.sa_text').text(s.text);
         saul.append(li);
         li.onclick = () => {
           s.click()
@@ -63,9 +59,9 @@ function initSearchBox() {
 
       // 恢复用户原本的active
       if (actli) {
-        util.query(saul, 'li', true).forEach(li => {
-          if (util.query(li, 'div.saicon').innerHTML && util.query(li, 'div.sa_text').innerHTML == actli.text) {
-            li.classList.add('active');
+        saul.$$('li').forEach(li => {
+          if (li.$('div.saicon').html() && li.$('div.sa_text').html() == actli.text) {
+            li.addClass('active');
           }
         })
       }
@@ -79,7 +75,7 @@ function initSearchBox() {
   /* 集中处理keydown事件 */
   input.onkeydown = function (e) {
     if (e.key == 'Enter') {
-      var actli = util.query(saul, 'li.active')
+      var actli = saul.$('li.active')
       if (actli) {
         // 当有li为ACTIVE状态时执行li.click事件
         actli.click();
@@ -90,45 +86,45 @@ function initSearchBox() {
     } else if (e.key == 'ArrowUp') {
       e.preventDefault();
       // 上一个搜索联想
-      var actli = util.query(saul, 'li.active')
+      var actli = saul.$('li.active')
       if (actli) {
-        actli.classList.remove('active');
-        if (actli.previousElementSibling) {
-          actli.previousElementSibling.classList.add('active');
+        actli.removeClass('active');
+        if (actli.prev()) {
+          actli.prev().addClass('active');
         }
       }
     } else if (e.key == 'ArrowDown') {
       e.preventDefault();
       // 下一个搜索联想
-      var actli = util.query(saul, 'li.active')
+      var actli = saul.$('li.active')
       if (actli) {
-        if (actli.nextElementSibling) {
-          actli.classList.remove('active');
-          actli.nextElementSibling.classList.add('active');
+        if (actli.next()) {
+          actli.removeClass('active');
+          actli.next().addClass('active');
         }
       } else {
-        util.query(saul, 'li').classList.add('active');
+        saul.$('li').addClass('active');
       }
     } else if (e.key == 'ArrowRight') {
-      var actli = util.query(saul, 'li.active');
+      var actli = saul.$('li.active');
       if (actli) {
-        input.value = util.query(actli, '.sa_text').innerText;
+        input.value = actli.$( '.sa_text').text();
         inputInputEv.call(this);
       }
     } else if (e.key == 'Tab') {
       e.preventDefault();
       if (e.shiftKey) {
-        if (util.query(sct, 'li.active').previousElementSibling) {
-          util.query(sct, 'li.active').previousElementSibling.click();
+        if (sct.$('li.active').prev()) {
+          sct.$('li.active').prev().click();
         } else {
-          var lis = util.query(sct, 'li', true);
+          var lis = sct.$$('li');
           lis[lis.length - 2].click();
         }
       } else {
-        if (!util.query(sct, 'li.active').nextElementSibling.classList.contains('add')) {
-          util.query(sct, 'li.active').nextElementSibling.click();
+        if (!sct.$('li.active').next().hasClass('add')) {
+          sct.$('li.active').next().click();
         } else {
-          util.query(sct, 'li').click();
+          sct.$('li').click();
         }
       }
 
@@ -137,36 +133,36 @@ function initSearchBox() {
 
   var blurtimeout;
   // ...
-  input.addEventListener('focus', _focus);
+  input.on('focus', _focus);
   function _focus() {
     clearTimeout(blurtimeout)
-    searchcover.classList.add('active');
-    searchbox.classList.add('active');
+    searchcover.addClass('active');
+    searchbox.addClass('active');
     doevent('focus', [input]);
   }
   // ...
-  input.addEventListener('blur', function () {
-    this.classList.remove('active');
+  input.on('blur', function () {
+    this.removeClass('active');
     blurtimeout = setTimeout(() => {
       if (hasmousedown) {
         mouseupf = function () {
           setTimeout(() => {
-            searchcover.classList.remove('active');
-            searchbox.classList.remove('active');
+            searchcover.removeClass('active');
+            searchbox.removeClass('active');
           }, 10)
         }
       } else {
-        searchcover.classList.remove('active');
-        searchbox.classList.remove('active');
+        searchcover.removeClass('active');
+        searchbox.removeClass('active');
       }
     })
     doevent('blur', [input]);
   });
 
-  document.addEventListener('mousedown', _down);
-  document.addEventListener('touchstart', _down);
-  document.addEventListener('mouseup', _up);
-  document.addEventListener('touchend', _up);
+  document.on('mousedown', _down);
+  document.on('touchstart', _down);
+  document.on('mouseup', _up);
+  document.on('touchend', _up);
   var hasmousedown = false, mouseupf = function () { };
   function _down() {
     hasmousedown = true;
@@ -183,68 +179,66 @@ function initSearchBox() {
   }
 
   // 搜索引擎选择
-  var sct = util.element('div', {
-    class: 'searchtypeselector'
-  })
-  sct.innerHTML = '<ul></ul>'
-  util.query(document, 'main .center').insertBefore(sct, searchpadding.nextElementSibling);
+  var sct = el('.searchtypeselector');
+  sct.html('<ul></ul>');
+  $('main .center').insertBefore(sct, searchpadding.next());
   function chuliSearchTypeSelector() {
-    var ul = util.query(sct, 'ul');
+    var ul = sct.$('ul');
     var nowset = searchUtil.getSearchTypeIndex();
-    ul.innerHTML = '';
+    ul.html("");
     var list = searchUtil.getSearchTypeList();
     for (var k in list) {
-      var li = util.element('li');
-      li.innerHTML = '<img/>';
+      var li = el('li');
+      li.html('<img/>');
       (function (li, k) {
         if (!list[k] && searchUtil.neizhi[k]) {
           list[k] = searchUtil.neizhi[k].link;
         }
         util.getFavicon(list[k], function (fav) {
           if (fav) {
-            li.querySelector('img').src = fav;
+            li.$('img').src = fav;
           } else {
-            li.querySelector('img').src = util.createIcon('s');
+            li.$('img').src = util.createIcon('s');
           }
         })
       })(li, k)
 
-      li.setAttribute('data-type', k);
+      li.attr('data-type', k);
       ul.append(li);
       if (k == nowset) {
-        li.classList.add('active');
+        li.addClass('active');
       }
       li.onclick = function () {
-        var actli = util.query(sct, 'ul li.active');
-        actli && actli.classList.remove('active');
-        this.classList.add('active');
-        searchUtil.setSearchType(this.getAttribute('data-type'));
-        sct.classList.remove('active');
+        var actli = sct.$('ul li.active');
+        actli && actli.removeClass('active');
+        this.addClass('active');
+        searchUtil.setSearchType(this.attr('data-type'));
+        sct.removeClass('active');
       }
     }
-    var li = util.element('li');
-    li.classList.add('add')
-    li.innerHTML = util.getGoogleIcon('e145');
+    var li = el('li');
+    li.addClass('add')
+    li.html(util.getGoogleIcon('e145'));
     ul.append(li);
     li.onclick = function () {
       quik.searchEditor.open();
     }
-    sct.style.width = util.query(ul, 'li', true).length * 36 - 6 + 'px';
+    sct.style.width = ul.$$('li').length * 36 - 6 + 'px';
   }
-  icon.addEventListener('click', function () {
+  icon.on('click', function () {
     // 避免link遮挡底部
-    if (sct.classList.contains('active')) {
-      sct.classList.remove('active');
-      document.querySelector('main .links').classList.remove('duan');
+    if (sct.hasClass('active')) {
+      sct.removeClass('active');
+      $('main .links').removeClass('duan');
     } else {
-      sct.classList.add('active');
-      document.querySelector('main .links').classList.add('duan');
+      sct.addClass('active');
+      $('main .links').addClass('duan');
     }
   })
 
 
   searchUtil.on('nowtypechange', function () {
-    if (icon.getAttribute('data-teshu') == ':searchtype') {
+    if (icon.attr('data-teshu') == ':searchtype') {
       chulitype(input.value, true);
     }
   })
@@ -256,7 +250,7 @@ function initSearchBox() {
   // 初始化处理（默认是搜索模式）
   chulitype('');
   gshowb();
-  if (initsto.get('ob_autofocus')) {
+  if (stp.ob_autofocus) {
     // @note 这样才能生效，也许是因为浏览器还没渲染好吧
     // @edit at 2024年1月30日 15点10分
     Onshow(() => {
@@ -267,8 +261,8 @@ function initSearchBox() {
     })
   }
 
-  if(initsto.get('ob_alignlink')){
-    searchbox.classList.add('alignlink');
+  if(stp.ob_alignlink){
+    searchbox.addClass('alignlink');
   }
 
 }
@@ -281,25 +275,25 @@ function initSearchBox() {
 function chulitype(text, isMust) {
   var i = getType(text);
   if (i.icon[0] == ':') {
-    if ((!isMust) && icon.getAttribute('data-teshu') == i.icon) return;
-    icon.setAttribute('data-teshu', i.icon);
+    if ((!isMust) && icon.attr('data-teshu') == i.icon) return;
+    icon.attr('data-teshu', i.icon);
     var _ts = chuliteshuicon(i.icon);
     if (_ts instanceof Promise) {
       _ts.then(function (r) {
-        icon.innerHTML = r;
+        icon.html(r);
       })
     } else {
-      icon.innerHTML = _ts;
+      icon.html(_ts);
     }
   } else {
-    icon.innerHTML = i.icon;
+    icon.html(i.icon);
     icon.removeAttribute('data-teshu');
   }
   if (i.submit[0] == ':') {
-    submit.setAttribute('data-teshu', i.submit);
-    submit.innerHTML = chuliteshusubmit(i.submit);
+    submit.attr('data-teshu', i.submit);
+    submit.html(chuliteshusubmit(i.submit));
   } else {
-    submit.innerHTML = i.submit;
+    submit.html(i.submit);
     submit.removeAttribute('data-teshu');
   }
 
@@ -337,8 +331,8 @@ function chuliteshusubmit(submit) {
   return "";
 }
 
-if (initsto.get('ob_autofocus') == undefined) {
-  initsto.set('ob_autofocus', false);
+if (isUd(stp.ob_autofocus)) {
+  stp.ob_autofocus=false;
 }
 
 
@@ -348,10 +342,10 @@ var si = new SettingItem({
   type: 'boolean',
   message: "打开页面自动聚焦搜索框",
   get() {
-    return !!initsto.get('ob_autofocus');
+    return !!stp.ob_autofocus;
   },
   callback(value) {
-    initsto.set('ob_autofocus', value);
+    stp.ob_autofocus=value;
     return true;
   }
 })
@@ -363,10 +357,10 @@ var si2 = new SettingItem({
   type: 'boolean',
   message: "关闭后聚焦搜索框时不再出现背景蒙版",
   get() {
-    return !initsto.get('ob_notshowb');
+    return !stp.ob_notshowb;
   },
   callback(value) {
-    initsto.set('ob_notshowb', !value);
+    stp.ob_notshowb = !value;
     gshowb();
     return true;
   }
@@ -378,10 +372,10 @@ var si3 = new SettingItem({
   type: 'boolean',
   message: "背景蒙版模糊（可能会影响性能）",
   get() {
-    return initsto.get('ob_bblur');
+    return stp.ob_bblur;
   },
   callback(value) {
-    initsto.set('ob_bblur', value);
+    stp.ob_bblur = value;
     gshowb();
     return true;
   }
@@ -394,14 +388,14 @@ var si4 = new SettingItem({
   type: 'boolean',
   message: "使搜索框长度对齐链接部分",
   get() {
-    return initsto.get('ob_alignlink');
+    return stp.ob_alignlink;
   },
   callback(value) {
-    initsto.set('ob_alignlink', value);
+    stp.ob_alignlink = value;
     if(value){
-      searchbox.classList.add('alignlink');
+      searchbox.addClass('alignlink');
     }else{
-      searchbox.classList.remove('alignlink');
+      searchbox.removeClass('alignlink');
     }
     return true;
   }
@@ -409,16 +403,16 @@ var si4 = new SettingItem({
 sg.addNewItem(si4);
 
 function gshowb() {
-  if (initsto.get('ob_notshowb')) {
-    searchcover.classList.add('notshow');
+  if (stp.ob_notshowb) {
+    searchcover.addClass('notshow');
     si3.hide();
   } else {
-    searchcover.classList.remove('notshow');
+    searchcover.removeClass('notshow');
     si3.show();
-    if (initsto.get('ob_bblur')) {
-      searchcover.classList.add('blur');
+    if (stp.ob_bblur) {
+      searchcover.addClass('blur');
     } else {
-      searchcover.classList.remove('blur');
+      searchcover.removeClass('blur');
     }
   }
 }
@@ -428,14 +422,14 @@ function uiEnable(a) {
     if (!searchbox) {
       initSearchBox();
     }
-    searchbox.style.display = 'block';
+    searchbox.show();
     searchpadding.style.height = '';
     si.show();
     si2.show();
     si3.show();
   } else {
     if (searchbox) {
-      searchbox.style.display = 'none';
+      searchbox.hide();
     }
     searchpadding.style.height = '20px';
     si.hide();
@@ -457,10 +451,10 @@ module.exports = {
     input.blur();
   },
   isblur() {
-    return !input.classList.contains('active');
+    return !input.hasClass('active');
   },
   setAutoFocus(value) {
-    initsto.set('ob_autofocus', value);
+    stp.ob_autofocus = value;
     si.reGet();
   },
   getInput() {

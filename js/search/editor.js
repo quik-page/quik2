@@ -15,40 +15,39 @@ function drawAll() {
   var d = dia.getDialogDom();
   var neizhi = omnibox.neizhi;
   var list = omnibox.getSearchTypeList();
-  var neizhilist_f = util.query(d, '.neizhilist');
+  var neizhilist_f = d.$('.neizhilist');
   for (var k in neizhi) {
-    var item = util.element('div', {
-      class: "item",
+    var item = el('.item', {
       'data-k': k
     });
-    item.innerHTML = '<img/><div>' + neizhi[k].name + '</div>';
+    item.html('<img/><div>' + neizhi[k].name + '</div>');
     ((k, item) => {
       util.getFavicon(neizhi[k].link, (fav) => {
         if (fav) {
-          util.query(item, 'img').src = fav;
+          item.$("img").src = fav;
         } else {
-          util.query(item, 'img').src = util.createIcon('s');
+          item.$("img").src = util.createIcon('s');
         }
       });
     })(k, item)
 
     neizhilist_f.append(item);
     if (k == 'bing') {
-      item.addEventListener('click', () => {
+      item.on('click', () => {
         toast.show('该项不可取消')
       })
     } else {
-      item.addEventListener('click', function () {
-        if (this.classList.contains('active')) {
-          this.classList.remove('active');
+      item.on('click', function () {
+        if (this.hasClass('active')) {
+          this.removeClass('active');
         } else {
-          this.classList.add('active');
+          this.addClass('active');
         }
       })
     }
 
-    if (list.hasOwnProperty(k)) {
-      item.classList.add('active');
+    if (k in list) {
+      item.addClass('active');
       delete list[k];
     }
   }
@@ -62,12 +61,12 @@ function drawAll() {
       '</div>';
   }
   str += `<div class="addnewitem">${util.getGoogleIcon('e145')} 添加自定义的搜索引擎</div>`
-  util.query(d, '.searchlist').innerHTML = str;
+  d.$('.searchlist').innerHTML = str;
 
-  util.query(d, '.searchlist .item', true).forEach(item => {
+  d.$$('.searchlist .item').forEach(item => {
     clitem(item);
   });
-  util.query(d, '.searchlist .addnewitem').onclick = () => {
+  d.$('.searchlist .addnewitem').onclick = () => {
     var item = util.element('div', {
       class: 'item',
       'data-k': "user_" + Date.now().toString().slice(3)
@@ -75,22 +74,22 @@ function drawAll() {
     item.innerHTML = '<div class="icon"><img src="https://cn.bing.com/favicon.ico"/></div>' +
       '<div class="url"><input value="https://cn.bing.com/search?q=%keyword%"/></div>' +
       '<div class="remove">' + util.getGoogleIcon('e5cd') + '</div>';
-    util.query(d, '.searchlist').insertBefore(item, util.query(d, '.searchlist .addnewitem'));
+    d.$('.searchlist').insertBefore(item, d.$('.searchlist .addnewitem'));
     clitem(item, true);
   }
 
 
   function clitem(item, a) {
     if (!a) {
-      util.getFavicon(list[item.getAttribute('data-k')], (fav) => {
+      util.getFavicon(list[item.attr('data-k')], (fav) => {
         if (fav) {
-          util.query(item, '.icon img').src = fav;
+          item.$('.icon img').src = fav;
         } else {
-          util.query(item, '.icon img').src = util.createIcon('s');
+          item.$('.icon img').src = util.createIcon('s');
         }
       })
     }
-    util.query(item, '.url input').oninput = function () {
+    item.$('.url input').oninput = function () {
       // @note 隐藏用户输入了不正确的URL的报错
       // @edit at 2024/1/30 15:28
       try {
@@ -106,19 +105,19 @@ function drawAll() {
         // 用户输入了不正确的URL
       }
     }
-    util.query(item, '.remove').onclick = function () {
+    item.$('.remove').onclick = function () {
       this.parentElement.remove();
     }
   }
-  util.query(d, '.closeBtn').onclick = util.query(d, '.cancel.btn').onclick = () => {
+  d.$('.closeBtn').onclick = d.$('.cancel.btn').onclick = () => {
     dia.close();
   }
-  util.query(d, '.ok.btn').onclick = () => {
+  d.$('.ok.btn').onclick = () => {
     var nlist = {};
-    util.query(d, '.searchlist .item', true).forEach(item => {
+    d.$$('.searchlist .item').forEach(item => {
       nlist[item.dataset.k] = item.querySelector('.url input').value;
     });
-    util.query(d, '.neizhilist .item.active', true).forEach(item => {
+    d.$$('.neizhilist .item.active').forEach(item => {
       nlist[item.dataset.k] = '';
     });
     list = nlist;

@@ -6,11 +6,9 @@ const { getCates,getLinks,on } = require("../core/_link");
 const { glinkli, openLinkEditDialog } = require("./link");
 
 
-let fulinkF=util.element("div",{
-    class:"fulink-con linkscroll"
-});
+let fulinkF=el("div.fulink-con.linkscroll");
 function drawFulink(){
-    fulinkF.parentElement.classList.add("fu");
+    fulinkF.parent().addClass("fu");
     fulinkF.innerHTML=`<div class="cate-item" data-mr>${util.getGoogleIcon('e838', { type: 'fill' })}</div><ul class="link-list" data-mr></ul>`;
     getLinks(null,(a)=>{
         if(a.code!=0)return;
@@ -19,13 +17,11 @@ function drawFulink(){
             let li=glinkli(l,{
                 nodrag:true
             });
-            util.query(fulinkF,".link-list[data-mr]").append(li);
+            fulinkF.$(".link-list[data-mr]").append(li);
         })
-        var li = util.element('li', {
-            class: "link-add"
-        });
+        var li = el('li.link-add');
         li.innerHTML = `<a href="javascript:void(0)" class="material-symbols-outlined">&#xe145;</a>`;
-        util.query(fulinkF,".link-list[data-mr]").append(li);
+        fulinkF.$(".link-list[data-mr]").append(li);
         li.onclick = () => {
             openLinkEditDialog(-1, null);
         }
@@ -35,7 +31,7 @@ function drawFulink(){
         let c=require("./cate");
         let d=a.data;
         for(let k of d){
-            let tF=util.element("div",{
+            let tF=el("div",{
                 class:"cate-item",
                 'data-cate':k
             });
@@ -44,7 +40,7 @@ function drawFulink(){
             tF.onclick=function(e){
                 this.oncontextmenu.call(this,e);
             }
-            let lF=util.element("ul",{
+            let lF=el("ul",{
                 class:"link-list",
                 'data-cate':k
             });
@@ -57,9 +53,7 @@ function drawFulink(){
                     });
                     lF.append(li);
                 })
-                var li = util.element('li', {
-                    class: "link-add"
-                });
+                var li = el('li.link-add');
                 li.innerHTML = `<a href="javascript:void(0)" class="material-symbols-outlined">&#xe145;</a>`;
                 lF.append(li);
                 li.onclick = () => {
@@ -74,46 +68,46 @@ function drawFulink(){
 on("change",(cl)=>{
     console.log(cl);
     
-    if(!fulinkF.parentElement.classList.contains('fu'))return;
+    if(!fulinkF.parent().classList.contains('fu'))return;
     if(cl.type=="all"||cl.type.indexOf("cate")!=-1){
         drawFulink();return;
     }
     let lsF;
     if(cl.cate){
-        lsF=util.query(fulinkF, '.link-list[data-cate="'+cl.cate+'"]');
+        lsF=fulinkF.$( '.link-list[data-cate="'+cl.cate+'"]');
     }else{
-        lsF=util.query(fulinkF,".link-list[data-mr]");
+        lsF=fulinkF.$(".link-list[data-mr]");
     }
     if(cl.type=='add'){
         var li = glinkli(cl.detail,{nodrag:true});
         lsF.insertBefore(li, util.query(lsF,".link-add"));
     }else if (cl.type == 'change') {
         if (!(cl.other && cl.other.justindex)) {
-            var lis = util.query(lsF, 'li', true);
+            var lis = lsF.$$('li');
             var tli = lis[cl.index];
             if (cl.index < cl.detail.index) {
                 lsF.insertBefore(tli, lis[cl.detail.index + 1]);
             } else {
                 lsF.insertBefore(tli, lis[cl.detail.index]);
             }
-            util.query(tli, 'a').href = cl.detail.url;
-            util.query(tli, 'p').innerText = cl.detail.title;
+            tli.$('a').href = cl.detail.url;
+            tli.$('p').innerText = cl.detail.title;
             if(cl.detail.icon){
-                util.query(tli, 'img').src=cl.detail.icon;
-                util.query(tli, 'img').classList.add('load');
+                tli.$('img').src=cl.detail.icon;
+                tli.$('img').addClass('load');
             }else{
                 util.getFavicon(cl.detail.url, favicon => {
                     if (favicon) {
-                        util.query(tli, 'img').src = favicon;
+                        tli.$('img').src = favicon;
                     } else {
-                        util.query(tli, 'img').src = util.createIcon(cl.detail.title[0]);
+                        tli.$('img').src = util.createIcon(cl.detail.title[0]);
                     }
                 });
             }
             
         }
     }else if (cl.type == 'delete') {
-        var li = util.query(lsF, 'li', true)[cl.index];
+        var li = lsF.$$('li')[cl.index];
         li.remove();
     }
 })
@@ -131,7 +125,7 @@ function init(linkF,linksg){
             if(v){
                 drawFulink();
             }else{
-                linkF.classList.remove("fu");
+                linkF.removeClass("fu");
                 require("./cate").cateWidthShiPei();
             }
         }

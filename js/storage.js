@@ -1,5 +1,6 @@
 const { alert } = require("./dialog/dialog_utils");
 const getEventHandle = require("./event");
+const reactive = require("./reactive");
 const util = require("./util");
 
 if (!localStorage.quik2) {
@@ -94,79 +95,76 @@ function doqueue() {
 }
 var jl = {};
 
+// Use Proxy to rebuild
+const sto=JSON.parse(localStorage.quik2);
+
+const resto=reactive(sto,util.fangdou(function(){
+    evn.doevent("storage",[]);
+    localStorage.quik2=JSON.stringify(sto);
+},50));
+
 var f = function (ck, details) {
   if (typeof ck === 'string') {
-    if (!JSON.parse(localStorage.getItem("quik2"))[ck]) {
-      setAll({});
-    }
+    if (!resto[ck]) resto[ck] = {};
     jl[ck] = details;
     function get(k, useidb, callback) {
       if (!useidb) {
-        return getAll()[ck][k];
+        return cloneObj(resto[ck][k]);
       } else {
         if (!idbsupport) {
           throw new Error('indexedDB is not support in this browser');
         }
-        filerecv.get(getAll()[ck][k], file => {
-          callback(file);
+        filerecv.get(resto[ck][k], file => {
+            callback&&callback(file);
         });
       }
     }
     function set(k, v, useidb, callback) {
       if (!useidb) {
-        var a = getAll();
-        a[ck][k] = v;
-        setAll(a[ck]);
+        resto[ck][k] = v;
       } else {
         if (!idbsupport) {
           throw new Error('indexedDB is not support in this browser');
         }
         filerecv.set(v, get(k), hash => {
-          var a = getAll();
-          a[ck][k] = hash;
-          setAll(a[ck]);
-          callback(hash);
+          resto[ck][k] = hash;
+          callback&&callback(hash);
         })
       }
-
     }
     function remove(k, useidb, callback) {
-      var a = getAll();
       if (!useidb) {
-        delete a[ck][k]
-        setAll(a[ck]);
+        delete resto[ck][k];
       } else {
         if (!idbsupport) {
           throw new Error('indexedDB is not support in this browser');
         }
-        filerecv.delete(a[ck][k], () => {
-          var a = getAll();
-          delete a[ck][k];
-          setAll(a[ck]);
-          callback();
+        filerecv.delete(resto[ck][k], () => {
+          delete resto[ck][k];
+          callback&&callback();
         });
       }
     }
-    function getAll() {
-      return JSON.parse(localStorage.getItem("quik2"));
-    }
-    function setAll(ob) {
-      var a = getAll();
-      a[ck] = ob;
-      localStorage.setItem("quik2", JSON.stringify(a));
-      evn.doevent('storage', [{
-        key: ck,
-        value: ob
-      }])
-      if (details && (!details.websync) && details.sync) {
-        evn.doevent('websync', [{
-          key: ck,
-          value: ob
-        }])
-      }
-    }
+    // function getAll() {
+    //   return JSON.parse(localStorage.getItem("quik2"));
+    // }
+    // function setAll(ob) {
+    //   var a = getAll();
+    //   a[ck] = ob;
+    //   localStorage.setItem("quik2", JSON.stringify(a));
+    //   evn.doevent('storage', [{
+    //     key: ck,
+    //     value: ob
+    //   }])
+    //   if (details && (!details.websync) && details.sync) {
+    //     evn.doevent('websync', [{
+    //       key: ck,
+    //       value: ob
+    //     }])
+    //   }
+    // }
     function list() {
-      return Object.keys(getAll()[ck]);
+      return Object.keys(sto[ck]);
     }
     function websync(option) {
       evn.doevent('websync', [{
@@ -182,17 +180,17 @@ var f = function (ck, details) {
       remove: remove,
       list: list,
       getAll() {
-        return getAll()[ck];
+        return sto[ck];
       },
       clear() {
-        var a = getAll()[ck];
+        let a=resto[ck];
         for (var k in a) {
-          var b = k[a];
+          var b = a[k];
           if (typeof b == 'string' && b.startsWith('^')) {
             filerecv.delete(b);
           }
         }
-        setAll({});
+        resto[ck]={};
       }
     }
   } else {
@@ -215,7 +213,17 @@ module.exports = {
     return jl;
   },
   getAllStorage() {
-    return JSON.parse(localStorage.getItem("quik2"));
+    return cloneObj(sto);
+  },
+  gS:(ck)=>{
+    if(ck){
+        if(!resto[ck])resto[ck]={};
+
+        return resto[ck];
+    }else{
+        return resto;
+    }
+    
   },
   dbTool: filerecv
 };

@@ -1,6 +1,6 @@
 const { SettingItem } = require("../../setting/index");
 const util = require("../../util");
-const { addNewSA, initsto, sg } = require("../_core");
+const { addNewSA,stp, sg } = require("../_core");
 const { setValue } = require("../_ui");
 
 var si = new SettingItem({
@@ -9,10 +9,10 @@ var si = new SettingItem({
     type: 'boolean',
     message: "搜索框输入=自动计算后面的内容",
     get() {
-        return !!initsto.get('ob_cal');
+        return !!stp.ob_cal;
     },
     callback(value) {
-        initsto.set('ob_cal', value);
+        stp.ob_cal = value;
         return true;
     }
 })
@@ -20,7 +20,7 @@ var si = new SettingItem({
 sg.addNewItem(si);
 addNewSA({
     check(text) {
-        return (!!initsto.get('ob_cal')) && text[0] == '='
+        return (!!stp.ob_cal) && text[0] == '='
     },
     get(text, getsa) {
         var a = getsa();

@@ -112,11 +112,11 @@ if(initsto.get('touchoe')){
 touchmodeicon.getIcon().onclick=function(){
     if(this.classList.contains('active')){
         toucheditmode=false;
-        this.classList.remove('active');
+        this.removeClass('active');
         toast.show('点击修改模式关闭')
     }else{
         toucheditmode=true;
-        this.classList.add('active');
+        this.addClass('active');
         toast.show('点击修改模式开启')
     }
 }
@@ -124,18 +124,18 @@ touchmodeicon.getIcon().onclick=function(){
 var linklist = [];
 
 function drawLinks(){
-    util.query(linkF, '.link-list').innerHTML='<div class="insert-line"></div>'
+    linkF.$('.link-list').innerHTML='<div class="insert-line"></div>'
     linklist.forEach(function(link){
         var li = glinkli(link);
-        util.query(linkF, '.link-list').append(li);
+        linkF.$('.link-list').append(li);
     })
-    var li = util.element('li', {
+    var li = el('li', {
         class: "link-add"
     });
     li.innerHTML = `<a href="javascript:void(0)" class="material-symbols-outlined">&#xe145;</a>`;
-    util.query(linkF, '.link-list').append(li);
+    linkF.$('.link-list').append(li);
     li.onclick = () => {
-        var cate = util.query(linkF, '.cate-bar-items .cate-item.active');
+        var cate = linkF.$('.cate-bar-items .cate-item.active');
         if (cate.classList.contains('mr')) {
             cate = null
         } else {
@@ -156,12 +156,12 @@ function getIndex(a, b) {
 
 var menuedLi = null;
 function getMenuedLiDetail() {
-    var index = getIndex(menuedLi, util.query(menuedLi.parentElement, 'li', true));
+    var index = getIndex(menuedLi, menuedLi.parent().$$('li'));
     var cate;
     if(linkF.classList.contains("fu")){
-        cate=menuedLi.parentElement.getAttribute('data-cate')||null;
+        cate=menuedLi.parent().attr('data-cate')||null;
     }else{
-        cate = util.query(linkF, '.cate-bar-items .cate-item.active');
+        cate = linkF.$('.cate-bar-items .cate-item.active');
         if (cate.classList.contains('mr')) {
             cate = null
         } else {
@@ -193,7 +193,7 @@ var linkMenu = new menu({
         icon: util.getGoogleIcon('e14d'),
         title: "复制链接",
         click() {
-            util.copyText(util.query(menuedLi, 'a').href);
+            util.copyText(menuedLi.$('a').href);
         }
     }, {
         icon: util.getGoogleIcon('e941'),
@@ -208,21 +208,21 @@ var linkMenu = new menu({
 let toucheditmode=false;
 
 function glinkli(l,pz={}) {
-    var li = util.element('li');
+    var li = el('li');
     li.innerHTML = `<a href="${l.url}" target="_blank" rel="noopener noreferer"><div class="link-icon"><img/></div><p></p></a>`
-    util.query(li, 'p').innerText = l.title;
+    li.$('p').innerText = l.title;
     if(l.icon){
-        util.query(li, 'img').src=l.icon;
-        util.query(li, 'img').classList.add('load');
+        li.$('img').src=l.icon;
+        li.$('img').addClass('load');
     }else{
         util.getFavicon(l.url, favicon => {
             if (favicon) {
-                util.query(li, 'img').src = favicon;
+                li.$('img').src = favicon;
             } else {
-                util.query(li, 'img').src = util.createIcon(l.title[0]);
+                li.$('img').src = util.createIcon(l.title[0]);
             }
-            util.query(li, 'img').onload = function () {
-                this.classList.add('load');
+            li.$('img').onload = function () {
+                this.addClass('load');
             }
         });
     }
@@ -230,13 +230,13 @@ function glinkli(l,pz={}) {
     function contextmenu(e) {
         e.preventDefault()
         e.stopPropagation();
-        menuedLi&&menuedLi.classList.remove('menued');
+        menuedLi&&menuedLi.removeClass('menued');
         menuedLi = this;
         linkMenu.setOffset({
             top: e.pageY,
             left: e.pageX
         })
-        this.classList.add('menued');
+        this.addClass('menued');
         linkMenu.show();
     }
     util.query(li,'a').onclick=function(e){
@@ -278,7 +278,7 @@ function openMoveLinkDialog(cate, index) {
         }
         link1=a.data[index];
         util.query(movelinkdiad, '.ok.btn').onclick = function (e) {
-            var yd = util.query(movecc, '.item.act');
+            var yd = movecc.$('.item.act');
             if (yd) {
                 var tocate = yd.classList.contains('mr') ? null : util.query(yd, '.item-name').innerText;
                 link.addLink({
@@ -300,17 +300,17 @@ function openMoveLinkDialog(cate, index) {
         link.getCates(r => {
             r.data.unshift(null);
             r.data.forEach(c => {
-                var li = util.element('div', {
+                var li = el('div', {
                     class: "item" + ((!c) ? ' mr' : '')
                 });
                 li.innerHTML = `<div class="item-name">${c ? c : util.getGoogleIcon('e838', { type: 'fill' })}</div><div class="item-select">${util.getGoogleIcon('e5ca')}</div>`;
                 movecc.append(li);
                 li.onclick = function () {
-                    var yd = util.query(movecc, '.item.act');
+                    var yd = movecc.$('.item.act');
                     if (yd) {
-                        yd.classList.remove('act');
+                        yd.removeClass('act');
                     }
-                    this.classList.add('act');
+                    this.addClass('act');
                 }
             });
         });
@@ -333,19 +333,19 @@ function openLinkEditDialog(index, cate) {
         // @note 将cancel按钮修改为div，防止表单submit到cancel
         // @edit at 2024/1/30 15:20
         var d = linkaddDialog.getDialogDom();
-        util.query(d, '.cancel.btn').onclick = function (e) {
+        d.$( '.cancel.btn').onclick = function (e) {
             e.preventDefault();
             linkaddDialog.close();
         }
 
-        util.query(d,'.link-add-icon-upload').onclick=function(e){
+        d.$('.link-add-icon-upload').onclick=function(e){
             showOpenFilePicker().then(files=>{
                 // file to base64
                 var reader = new FileReader();
                 reader.readAsDataURL(files[0]);
                 reader.onload = function () {
                     var base64 = reader.result;
-                    var icon=util.query(d, '.link-add-icon');
+                    var icon=d.$( '.link-add-icon');
                     icon.value=base64;
                 }
                 reader.onerror = function (error) {
@@ -360,65 +360,93 @@ function openLinkEditDialog(index, cate) {
         var d = linkaddDialog.getDialogDom();
         var ll = linklist.length;
         if (index == -1) {
-            _n('添加链接', '添加', '', '', ll, ll, (e) => {
-                e.preventDefault();
-                var url = util.query(d, '.link-add-url').value;
-                if (url.indexOf('://') == -1) {
-                    url = 'http://' + url;
-                }
-                var title = util.query(d, '.link-add-title').value;
-                var index3 = util.query(d, '.link-add-index').value;
-                index3 = index3 == '' ? ll : (index3 - 0);
-                var icon=util.query(d, '.link-add-icon').value;
-
-                link.addLink({
-                    url, title, index: index3, cate,icon
-                }, r => {
-                    if (r.code != 0) {
-                        toast.show(r.msg);
-                    } else {
-                        toast.show('添加成功')
-                        linkaddDialog.close();
-                    }
+            if(linkF.hasClass("fu")){
+                link.getLinks(cate,(a)=>{
+                    ll=a.data.length;
+                    _rthen();
                 })
-
-            },'');
+            }else{
+                _rthen();
+            }
+            function _rthen(){
+                _n('添加链接', '添加', '', '', ll, ll, (e) => {
+                    e.preventDefault();
+                    var url = d.$( '.link-add-url').value;
+                    if (url.indexOf('://') == -1) {
+                        url = 'http://' + url;
+                    }
+                    var title = d.$( '.link-add-title').value;
+                    var index3 = d.$( '.link-add-index').value;
+                    index3 = index3 == '' ? ll : (index3 - 0);
+                    var icon=d.$( '.link-add-icon').value;
+    
+                    link.addLink({
+                        url, title, index: index3, cate,icon
+                    }, r => {
+                        if (r.code != 0) {
+                            toast.show(r.msg);
+                        } else {
+                            toast.show('添加成功')
+                            linkaddDialog.close();
+                        }
+                    })
+    
+                },'');
+            }
+           
         } else {
-            _n('修改链接', '修改', linklist[index].url, linklist[index].title, ll - 1, index, (e) => {
-                e.preventDefault();
-                var url = util.query(d, '.link-add-url').value;
-                if (url.indexOf('://') == -1) {
-                    url = 'http://' + url;
-                }
-                var title = util.query(d, '.link-add-title').value;
-                var index2 = util.query(d, '.link-add-index').value;
-                var icon=util.query(d, '.link-add-icon').value;
-                index2 = index2 == '' ? index : (index2 - 0);
-                link.changeLink(cate, index, {
-                    url: url,
-                    title: title,
-                    index: index2,
-                    icon:icon
-                }, (back) => {
-                    if (back.code != 0) {
-                        toast.show(back.msg);
-                    } else {
-                        toast.show('修改成功')
-                        linkaddDialog.close();
-                    }
+            let u=linklist[index].url;
+            let t=linklist[index].title;
+            let ic=linklist[index].icon;
+            if(linkF.hasClass("fu")){
+                link.getLinks(cate,(a)=>{
+                    let lst=a.data;
+                    u=lst[index].url;
+                    t=lst[index].title;
+                    ic=lst[index].icon;
+                    ll=lst.length;
+                    _then();
                 })
-            },linklist[index].icon);
+            }else{
+                _then();
+            }
+            function _then(){
+                _n('修改链接', '修改', u, t, ll - 1, index, (e) => {
+                    e.preventDefault();
+                    var url = d.$( '.link-add-url').value;
+                    if (url.indexOf('://') == -1) {
+                        url = 'http://' + url;
+                    }
+                    var title = d.$( '.link-add-title').value;
+                    var index2 = d.$( '.link-add-index').value;
+                    var icon=d.$( '.link-add-icon').value;
+                    index2 = index2 == '' ? index : (index2 - 0);
+                    link.changeLink(cate, index, {
+                        url: url,
+                        title: title,
+                        index: index2,
+                        icon:icon
+                    }, (back) => {
+                        if (back.code != 0) {
+                            toast.show(back.msg);
+                        } else {
+                            toast.show('修改成功')
+                            linkaddDialog.close();
+                        }
+                    })
+                },ic);
+            }
         }
 
         function _n(a, b, c, e, f, g, h,icon) {
-            util.query(d, 'h1').innerHTML = a;
-            util.query(d, '.ok.btn').innerHTML = b;
-            util.query(d, 'input.link-add-url').value = c;
-            util.query(d, 'input.link-add-title').value = e;
-            util.query(d, 'input.link-add-index').setAttribute('max', f);
-            util.query(d, 'input.link-add-index').value = g;
-            util.query(d, 'input.link-add-icon').value=icon||'';
-            util.query(d, 'form').onsubmit = h;
+            d.$( 'h1').innerHTML = a;
+            d.$( '.ok.btn').innerHTML = b;
+            d.$( 'input.link-add-url').value = c;
+            d.$( 'input.link-add-title').value = e;
+            d.$( 'input.link-add-index').setAttribute('max', f);
+            d.$( 'input.link-add-index').value = g;
+            d.$( 'input.link-add-icon').value=icon||'';
+            d.$( 'form').onsubmit = h;
         }
     })
 }
@@ -440,7 +468,7 @@ function dstyle() {
 
 
 function dsize(v) {
-    util.query(linkF, '.link-list',true).forEach(l=>{l.className = 'link-list ' + v});
+    linkF.$$('.link-list').forEach(l=>{l.className = 'link-list ' + v});
 }
 
 

@@ -1,21 +1,22 @@
 const notice = require("../notice/index");
 const { SettingItem, SettingGroup, mainSetting } = require("../setting/index");
-const { storage } = require("../storage");
+const { storage, gS } = require("../storage");
 const toast = require("../toast");
-const util = require("../util");
 
-var sto = storage('hello', {
+storage('hello', {
     sync: true,
     title: "QUIK问候",
     desc: "QUIK问候配置文件"
 });
 
+let stp=gS().hello;
 
-if (!sto.get('init')) {
-    sto.set('name', '');
-    sto.set('birth', '');
-    sto.set('init', true);
-    sto.set('enable', true);
+
+if (!stp.init) {
+    stp.name = '';
+    stp.birth = '';
+    stp.init = true;
+    stp.enable = true;
 }
 
 
@@ -30,10 +31,10 @@ var si1 = new SettingItem({
     title: "启用问候",
     message: "即每日打开页面时自动弹出的问候",
     get: function () {
-        return sto.get('enable');
+        return stp.enable;
     },
     callback: function (v) {
-        sto.set('enable', v);
+        stp.enable=v;
         if (v) {
             si2.show();
             si3.show();
@@ -49,10 +50,10 @@ var si2 = new SettingItem({
     title: "称呼",
     message: "问候时的称呼",
     get: function () {
-        return sto.get('name');
+        return stp.name;
     },
     callback: function (v) {
-        sto.set('name', v);
+        stp.name=v;
     }
 })
 
@@ -61,7 +62,7 @@ var si3 = new SettingItem({
     title: "生日",
     message: "格式：月日，如：0910（也许我们会祝你生日快乐呢？）",
     get: function () {
-        return sto.get('birth');
+        return stp.birth;
     },
     check: function (v) {
         if (v == '') return true;
@@ -72,7 +73,7 @@ var si3 = new SettingItem({
         return isv;
     },
     callback: function (v) {
-        sto.set('birth', v);
+        stp.birth=v;
     }
 })
 
@@ -101,41 +102,30 @@ function randomGet(arr) {
             r = arr[Math.floor(Math.random() * arr.length - 1) + 1];
         }
     }
-    return r.replace("$0", sto.get('name')).replace("$1", sto.get('name') ? sto.get('name') + '，' : '').replace("$2", sto.get('name') ? '，' + sto.get('name') : '');
+    if(stp.name){
+        return r.replace(/\$\d/g,'');
+    }else{
+        return r.replace("$0", stp.name).replace(/\$[12]/g, stp.name + '，');
+    }
+    
 }
 
 function sayHello(h) {
-    if (h >= 0 && h <= 1) {
-        toast.show(randomGet(times.midnight))
-    }
-    if (2 <= h && h <= 4) {
-        toast.show(randomGet(times.ev))
-    }
-    if (5 <= h && h <= 7) {
-        toast.show(randomGet(times.early))
-    }
-    if (8 <= h && h <= 11) {
-        toast.show(randomGet(times.am))
-    }
-    if (12 <= h && h <= 13) {
-        toast.show(randomGet(times.noon))
-    }
-    if (14 <= h && h <= 18) {
-        toast.show(randomGet(times.pm))
-    }
-    if (19 <= h && h <= 21) {
-        toast.show(randomGet(times.night))
-    }
-    if (h >= 22) {
-        toast.show(randomGet(times.midnight))
-    }
+    let q='midnight';
+    if (2 <= h && h <= 4) q="ev";
+    else if (5 <= h && h <= 7) q="early";
+    else if (8 <= h && h <= 11) q="am";
+    else if (12 <= h && h <= 13) q="noon";
+    else if (14 <= h && h <= 18) q="pm";
+    else if (19 <= h && h <= 21) q="night";
+
+    toast.show(randomGet(times[q]));
 }
 
-if (sto.get('enable')) {
+if (stp.enable) {
     if (!sessionStorage.getItem('hello')) {
         sayHello(new Date().getHours());
-        util.xhr('https://static-wzdh.2345.com/tools/yjc?date=' + formatDate(new Date()), function (res) {
-            res = JSON.parse(res);
+        get('https://static-wzdh.2345.com/tools/yjc?date=' + formatDate(new Date())).then((res)=> {
             if (res.code == 200) {
                 if (res.data.html.jiri) {
                     new notice({
@@ -172,8 +162,8 @@ function formatDate(date) {
 
 
 
-if (sto.get('birth')) {
-    var b = sto.get('birth');
+if (stp.birth) {
+    var b = stp.birth;
     var m = b.substr(0, 2);
     var d = b.substr(2, 4);
     var n = new Date();

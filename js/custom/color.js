@@ -1,9 +1,10 @@
 const { SettingItem, tyGroup } = require("../setting/index");
-const { on, off, initsto,doevent } = require("./core");
-
+const toast = require("../toast");
+const { on, off,stp,doevent } = require("./core");
+const bd=document.body;
 var n = null;
-if (!initsto.get('theme')) {
-  initsto.set('theme', 'a');
+if (!stp.theme) {
+  stp.theme="a";
 }
 var si = new SettingItem({
   index: 1,
@@ -11,10 +12,10 @@ var si = new SettingItem({
   type: "select",
   message: '',
   get() {
-    return initsto.get('theme');
+    return stp.theme;
   },
   callback(v) {
-    initsto.set('theme', v);
+    stp.theme=v;
     checkTheme(v);
   },
   init() {
@@ -30,20 +31,20 @@ var _g = 3;
 function checkTheme(v) {
   if (_g != 3) { _g = false; }
   if (v == 'b') {
-    document.body.classList.add('dark');
+    bd.addClass('dark');
     doevent('colorchange', ['dark']);
     n = 'dark';
   } else if (v == 'a') {
-    document.body.classList.remove('dark');
+    bd.removeClass('dark');
     doevent('colorchange', ['light']);
     n = 'light'
   } else if (v == 'c') {
     if (new Date().getHours() >= 18 || new Date().getHours() < 6) {
-      document.body.classList.add('dark');
+      bd.addClass('dark');
       doevent('colorchange', ['dark']);
       n = 'dark';
     } else {
-      document.body.classList.remove('dark');
+      bd.removeClass('dark');
       doevent('colorchange', ['light']);
       n = 'light'
     }
@@ -56,34 +57,34 @@ function checkTheme(v) {
         _g = true;
       }
     } else {
-      toast('你的浏览器不支持此功能')
+      toast.show('你的浏览器不支持此功能');
     }
   }
 }
 function listenTheme() {
   var d = window.matchMedia('(prefers-color-scheme: dark)');
-  d.matches ? document.body.classList.add('dark') : document.body.classList.remove('dark');
+  d.matches ? bd.addClass('dark') : bd.removeClass('dark');
   d.addEventListener('change', e => {
     if (e.matches) {
-      document.body.classList.add('dark');
+      bd.addClass('dark');
       doevent('colorchange', ['dark']);
       n = 'dark';
     } else {
-      document.body.classList.remove('dark');
+      bd.removeClass('dark');
       doevent('colorchange', ['light']);
       n = 'light'
     }
   });
 }
 
-checkTheme(initsto.get('theme'));
+checkTheme(stp.theme);
 
 function getTheme() {
   return n;
 }
 module.exports = {
   setTheme(v) {
-    initsto.set('theme', v);
+    stp.theme=v;
     checkTheme(v);
     si.reGet();
   },

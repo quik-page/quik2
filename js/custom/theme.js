@@ -1,12 +1,12 @@
 const { alert } = require("../dialog/dialog_utils");
 const { SettingItem, tyGroup } = require("../setting/index");
-const { initsto,doevent } = require("./core");
+const { stp,doevent } = require("./core");
 const addon =require('../addon');
 const dialog = require("../dialog");
 const util = require("../util");
-
-if (!initsto.get('themea')) {
-    initsto.set('themea', 'def');
+const bd=document.body;
+if (!stp.themea) {
+    stp.themea = 'def';
 }
 
 var ys = ['dark', 't-dark', 't-light', 'dialogblur', 'lite', 'hiden', 'showall'];
@@ -44,7 +44,7 @@ var selectthemeDia=new dialog({
 })
 
 var std=selectthemeDia.getDialogDom();
-util.query(std,'.closeBtn').onclick=function(){
+std.$('.closeBtn').onclick=function(){
     selectthemeDia.close();
 }
 
@@ -53,7 +53,7 @@ let nowtheme='def';
 
 function doTheme(f,justadd) {
     if(justadd){
-        document.body.classList.add(f);      
+        bd.addClass(f);      
         doevent('dotheme', []);
         return;
     }
@@ -71,15 +71,15 @@ function doTheme(f,justadd) {
     if(not!=0){
         return not;
     }
-    document.body.className.split(' ').forEach((a) => {
+    bd.className.split(' ').forEach((a) => {
         if(!a.trim())return;
         if (!ys.includes(a)) {
-            document.body.classList.remove(a);
+            bd.removeClass(a);
         }
     })
     console.log(fs);
     fs.forEach((a) => {
-        document.body.classList.add(a);        
+        bd.addClass(a);        
     })
     doevent('dotheme', []);
     if (!isdotheme) {
@@ -106,7 +106,7 @@ function addTheme(f, n,detail={}) {
     detail.name=n;
     themesd[f]=detail;
     si.reInit();
-    let glsit=initsto.get('themea').split('|');
+    let glsit=stp.themea.split('|');
     if (wait && glsit.indexOf(f) != -1) {
         wait--;
         doTheme(f,true);
@@ -120,8 +120,8 @@ function addTheme(f, n,detail={}) {
 function removeTheme(f) {
     if (f == 'def') { return }
     delete themes[f]
-    if (initsto.get('themea') == f) {
-        initsto.set('themea', 'def')
+    if (stp.themea == f) {
+        stp.themea = 'def';
         si.reGet();
     }
     si.reInit();
@@ -131,52 +131,51 @@ function setTheme(f) {
     if (!themes[f]) {
         return;
     }
-    initsto.set('themea', f);
+    stp.themea = f;
     doTheme(f);
     si.reGet();
 }
 
-var wait = doTheme(initsto.get('themea'));
+var wait = doTheme(stp.themea);
 wait=typeof wait=='number'?wait:0;
 var isinitselect=false;
 
 function gtitm(nm){
     let type=themesd[nm].type||'global';
-    let nf=util.element('div',{
-        class:"theme-item",
-        'data-id':nm,
+    let nf=el('.theme-item',{
+        'data-id':nm
     })
-    nf.innerText=themesd[nm].name;
+    nf.text(themesd[nm].name);
     if(type=='global'){
-        util.query(std,'.ztselects.ty').append(nf);
+        std.$('.ztselects.ty').append(nf);
     }else if(type=='color'){
-        util.query(std,'.ztselects.co').append(nf);
+        std.$('.ztselects.co').append(nf);
     }else if(type=='structure'){
-        util.query(std,'.ztselects.st').append(nf);
+        std.$('.ztselects.st').append(nf);
     }
 
     nf.onclick=function(){
         let type=this.parentNode.classList[1];
         if(type=='ty'){
-            util.query(std,'.ztselects .active',true).forEach(a=>a.classList.remove('active'));
-            this.classList.add('active');
+            std.$$('.ztselects .active').removeClass('active');
+            this.addClass('active');
         }else if(type=='co'){
-            util.query(std,'.ztselects.ty .active',true).forEach(a=>a.classList.remove('active'));
-            util.query(std,'.ztselects.co .active',true).forEach(a=>a.classList.remove('active'));
-            this.classList.add('active');
+            std.$$('.ztselects.ty .active').removeClass('active');
+            std.$$('.ztselects.co .active').removeClass('active');
+            this.addClass('active');
         }else if(type=='st'){
-            util.query(std,'.ztselects.ty .active',true).forEach(a=>a.classList.remove('active'));
-            if(this.classList.contains('active')){
-                this.classList.remove('active');
+            std.$$('.ztselects.ty .active').removeClass('active');
+            if(this.hasClass('active')){
+                this.removeClass('active');
             }else{
-                this.classList.add('active');
+                this.addClass('active');
             }
         }
 
-        let f=util.query(std,'.theme-item.active',true);
-        f=Array.prototype.slice.call(f);
-        f=f.map(a=>a.getAttribute('data-id')).join('|');
-        initsto.set('themea', f);
+        let f=std.$$('.theme-item.active');
+        f=toRealArray(f);
+        f=f.map(a=>a.attr('data-id')).join('|');
+        stp.themea=f;
         console.log(f);
         doTheme(f);
 
@@ -184,7 +183,7 @@ function gtitm(nm){
 }
 addon.on('allrun', () => {
     if (wait!=0) {
-        initsto.set('themea', 'def');
+        stp.themea='def';
         doTheme('def');
         alert('您的主题由于插件缺失无法显示，已为您切换为默认。');
     }
@@ -193,9 +192,9 @@ addon.on('allrun', () => {
         gtitm(nm);
     }
 
-    let acs=initsto.get('themea').split('|');
+    let acs=stp.themea.split('|');
     for(ac of acs){
-        util.query(std,'[data-id="'+ac+'"]').classList.add('active');
+        std.$('[data-id="'+ac+'"]').addClass('active');
     }
     isinitselect=true;
 })

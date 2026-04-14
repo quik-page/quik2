@@ -10,7 +10,7 @@ function quik1() {
       content: "正在加载模块..."
   })
   d.open();
-  var s = util.element('script', {
+  var s = el('script', {
       src: "./quik1.js"
   })
   document.body.append(s);
@@ -47,15 +47,15 @@ function openExport() {
       continue;
     }
     var j = jl[k];
-    var li = document.createElement('div');
-    li.classList.add('item');
-    li.innerHTML = `<input type="checkbox"/><div class="message">
+    var li = el('div');
+    li.addClass('item');
+    li.html(`<input type="checkbox"/><div class="message">
         <div class="title">${j.title || k}</div>
         <div class="desc">${j.desc || ''}</div>
-      </div>`;
+      </div>`);
     li.dataset.key = k;
-    util.query(dm, '.exportslist').appendChild(li);
-    util.query(li, 'input').checked = true;
+    dm.$('.exportslist').appendChild(li);
+    li.$('input').checked = true;
   }
   setTimeout(() => {
     exportDataDialog.open();
@@ -105,30 +105,30 @@ mainSetting.addNewGroup(sg);
 
 
 function importaixr(j, k, jl) {
-  var li = document.createElement('div');
+  var li = el('div');
   if (!jl[k] && j.addon) {
     var addo = addon.getAddonByUrl(j.addon);
     if (!addo) {
-      li.classList.add('item');
+      li.addClass('item');
       var ismarket = false;
       if (j.addon.indexOf('market:') == 0) {
         ismarket = true;
       }
       setlihtml(j.addon)
       function setlihtml(_d) {
-        li.innerHTML = `<input type="checkbox" disabled/><div class="message">
+        li.html(`<input type="checkbox" disabled/><div class="message">
             <div class="title">${j.title || k}</div>
             <div class="desc">需要安装插件以同步：${_d}</div>
           </div>
-          <div class="installbtn">安装</div>`;
-        var installbtn = li.querySelector('.installbtn');
-        installbtn.addEventListener('click', function () {
-          if (this.classList.contains('ing')) return;
-          if (this.classList.contains('err')) {
-            this.classList.remove('err');
+          <div class="installbtn">安装</div>`);
+        var installbtn = li.$('.installbtn');
+        installbtn.on('click', function () {
+          if (this.hasClass('ing')) return;
+          if (this.hasClass('err')) {
+            this.removeClass('err');
           }
-          this.innerHTML = '安装中...';
-          this.classList.add('ing');
+          this.html('安装中...');
+          this.addClass('ing');
           var p;
           if (ismarket) {
             p = addon.installByOfficialMarket(j.addon.replace('market:', ''));
@@ -136,8 +136,8 @@ function importaixr(j, k, jl) {
             p = addon.installByUrl(j.addon);
           }
           p.on('error', () => {
-            installbtn.innerHTML = '安装失败';
-            installbtn.classList.add('err');
+            installbtn.html('安装失败');
+            installbtn.addClass('err');
           })
           p.on('wait', (r) => {
             r(true);
@@ -151,27 +151,27 @@ function importaixr(j, k, jl) {
         })
       }
       li.dataset.key = k;
-      util.query(dm2, '.importslist').appendChild(li);
+      dm2.$('.importslist').appendChild(li);
 
       return;
     }
   }
   if (!jl[k]) return;
-  li.classList.add('item');
-  li.innerHTML = `<input type="checkbox"/><div class="message">
+  li.addClass('item');
+  li.html(`<input type="checkbox"/><div class="message">
       <div class="title">${j.title || k}</div>
       <div class="desc">${j.desc || ''}</div>
-    </div>`;
+    </div>`);
   if (jl[k].compare) {
     li.innerHTML += `<select>
         <option value="compare">对比</option>
         <option value="rewrite">覆盖</option>
       </select>`
-    util.query(li, 'select').value = "compare";
+    li.$('select').value = "compare";
   }
   li.dataset.key = k;
-  util.query(dm2, '.importslist').appendChild(li);
-  util.query(li, 'input').checked = true;
+  dm2.$('.importslist').appendChild(li);
+  li.$('input').checked = true;
 }
 
 var sl = null;
@@ -194,13 +194,13 @@ function drawExportDialog() {
     mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
   });
   dm = exportDataDialog.getDialogDom();
-  util.query(dm, '.closeBtn').onclick = util.query(dm, '.cancel').onclick = () => {
+  dm.$('.closeBtn').onclick = dm.$('.cancel').onclick = () => {
     exportDataDialog.close();
   }
-  util.query(dm, '.ok').onclick = () => {
+  dm.$('.ok').onclick = () => {
     var op = [];
-    util.query(dm, '.exportslist .item', true).forEach(l => {
-      if (util.query(l, 'input').checked) {
+    dm.$$('.exportslist .item').forEach(l => {
+      if (l.$('input').checked) {
         op.push(l.dataset.key);
       }
     })
@@ -213,7 +213,7 @@ function drawExportDialog() {
 
 
 function download(data, filename) {
-  var a = document.createElement('a');
+  var a = el('a');
   a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
   a.download = filename;
   a.click();
@@ -235,17 +235,17 @@ function drawImportDialog() {
     mobileShowtype: dialog.SHOW_TYPE_FULLSCREEN,
   });
   dm2 = importDataDialog.getDialogDom();
-  util.query(dm2, '.closeBtn').onclick = util.query(dm2, '.cancel').onclick = () => {
+  dm2.$('.closeBtn').onclick = dm2.$('.cancel').onclick = () => {
     sl = null;
     importDataDialog.close();
   }
 
-  util.query(dm2, '.ok').onclick = () => {
+  dm2.$('.ok').onclick = () => {
     var op = {};
-    util.query(dm2, '.importslist .item', true).forEach((l) => {
-      if (util.query(l, 'input').checked) {
-        if (util.query(l, 'select')) {
-          op[l.dataset.key] = util.query(l, 'select').value;
+    dm2.$$('.importslist .item').forEach((l) => {
+      if (l.$('input').checked) {
+        if (l.$('select')) {
+          op[l.dataset.key] = l.$('select').value;
         } else {
           op[l.dataset.key] = 'rewrite';
         }

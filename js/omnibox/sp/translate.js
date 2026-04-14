@@ -1,6 +1,6 @@
 const { SettingItem } = require("../../setting/index");
 const util = require("../../util");
-const { addNewSA, initsto, sg } = require("../_core");
+const { addNewSA,stp, sg } = require("../_core");
 const { setValue } = require("../_ui");
 var si = new SettingItem({
     title: "自动翻译",
@@ -8,10 +8,10 @@ var si = new SettingItem({
     type: 'boolean',
     message: "搜索框输入非中文时自动翻译为中文",
     get() {
-        return !!initsto.get('ob_tran');
+        return !!stp.ob_tran;
     },
     callback(value) {
-        initsto.set('ob_tran', value);
+        stp.ob_tran = value;
         return true;
     }
 })
@@ -20,7 +20,7 @@ sg.addNewItem(si);
 var _t_re, _t_timeout;
 addNewSA({
     check(text) {
-        return (!!initsto.get('ob_tran')) && (!util.checkUrl(text)) && checkLang(text);
+        return (!!stp.ob_tran) && (!util.checkUrl(text)) && checkLang(text);
     },
     get(text, getsa) {
         return new Promise(function (r, j) {

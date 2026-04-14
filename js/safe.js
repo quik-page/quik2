@@ -1,6 +1,6 @@
 // 数据相关设置和页面高级操作
 
-let {storage}=require('./storage');
+let {gS,storage}=require('./storage');
 let {SettingGroup,SettingItem, mainSetting}=require('./setting/index');
 const { cateWidthShiPei } = require('./link/index');
 const util = require('./util');
@@ -8,20 +8,20 @@ const { icon } = require('./iconc');
 const notice=require('./notice');
 const { alert, confirm, prompt } = require('./dialog/dialog_utils');
 
-var initsto = storage('safe');
+var stp = gS('safe');
 window.ign=false; //是否忽略接下来的hashchange
-window.addEventListener('hashchange', ()=>{
+window.on('hashchange', ()=>{
     if(window.ign){
         window.ign=false;
         return;
     }
     window.location.reload(); // 不忽略则刷新
 });
-window.addEventListener('visibilitychange', () => {// 用于降低页面CPU占用
+window.on('visibilitychange', () => {// 用于降低页面CPU占用
     if (document.visibilityState == 'hidden') {
-        document.body.style.display = 'none';
+        document.body.hide();
     } else {
-        document.body.style.display = 'block';
+        document.body.show();
         cateWidthShiPei();
     }
 })
@@ -52,10 +52,10 @@ var xnse = new SettingItem({
     index: 1,
     type: "boolean",
     get() {
-        return !!initsto.get('xnse')
+        return !!stp.xnse
     },
     callback(n) {
-        initsto.set('xnse', n);
+        stp.xnse = n;
         doxnse(n);// -> 239
     }
 });
@@ -242,24 +242,58 @@ mainSetting.addNewGroup(gaoji);
 // 处理无动效
 function doxnse(n) {
     if (n) {
-        var s = util.element('style');
+        var s = el('style');
         s.id = 'xnse';
         // 就是全none
         s.innerHTML = '*{filter:none!important;backdrop-filter:none!important;animation:none!important;transition:none!important;}';
         document.head.append(s);
     } else {
-        try {
-            document.getElementById('xnse').remove();
-        } catch (error) { }
+        try{
+        $('#xnse').remove();
+        }catch(e){}
     }
 }
 
-doxnse(!!initsto.get('xnse'));
+doxnse(!!stp.xnse);
 
 
 // 网络检测
-window.addEventListener('offline', ckline)
-window.addEventListener('online', ckline)
+window.on('offline', ckline)
+window.on('online', ckline)
+
+function pingLine(cb){
+    let isOutLine=true;
+    let isOutGoogle=true;
+    let checkOut=(ok)=>{
+        if(ok)isOutLine=false;
+    }
+    util.loadimg("https://www.baidu.com/favicon.ico?_="+Date.now(),checkOut)
+    util.loadimg("https://www.bilibili.com/favicon.ico?_="+Date.now(),checkOut)
+    util.loadimg("https://www.douyin.com/favicon.ico?_="+Date.now(),checkOut)
+    util.loadimg("https://www.google.com/favicon.ico?_="+Date.now(),(ok)=>{
+        if(ok){
+            isOutGoogle=false;
+            isOutLine=false;
+        }
+    })
+    setTimeout(()=>{
+        cb(isOutLine,isOutGoogle);
+    },1500)
+}
+
+function setLineNotice(){
+    pingLine((isOutLine,isOutGoogle)=>{
+        window.isOutGoogle=isOutGoogle;
+        if (isOutLine) {
+            lineErrNotice.show()
+            lineErrNotice.focus();
+            offlineIcon.show();
+        } else {
+            lineErrNotice.hide();
+            offlineIcon.hide();
+        }
+    });
+}
 
 var offlineIcon = new icon({
     content: util.getGoogleIcon('f239'),
@@ -267,10 +301,30 @@ var offlineIcon = new icon({
     important: true
 })
 offlineIcon.getIcon().style.color = 'red';
-
+offlineIcon.getIcon().on("click",()=>{
+    if(window.navigator.onLine){
+        lineErrNotice.show();
+        lineErrNotice.focus();
+    }else{
+        offlineNotice.show();
+        offlineNotice.focus();
+    }
+})
 var offlineNotice = new notice({
     title: "断网提醒",
     content: "您的网络已断开，请尽快重连！"
+})
+var lineErrNotice = new notice({
+    title: "断网提醒",
+    content: "您的网络似乎不可用，请检查您的代理服务器或网络设置！",
+    btns:[{
+        text:"重试",
+        click(){
+            lineErrNotice.hide();
+            offlineIcon.hide();
+            setLineNotice();
+        }
+    }]
 })
 
 function ckline() {
@@ -281,7 +335,12 @@ function ckline() {
     } else {
         offlineNotice.hide();
         offlineIcon.hide();
+        setLineNotice();
     }
 }
-
-ckline();
+window.on("load",()=>{
+    ckline();
+    setInterval(()=>{
+        if(window.navigator.onLine&&(!window.isOutLine)&&document.visibilityState=="visible")setLineNotice();
+    },10000);
+});

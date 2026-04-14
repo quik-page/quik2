@@ -1,3 +1,4 @@
+require("./js/qui-core.js");
 const { getShowFns } = require('./js/base.js');
 require('./js/requirein.js'); // 导入执行所有模块
 var { waitdotheme }= require('./js/custom/index.js');

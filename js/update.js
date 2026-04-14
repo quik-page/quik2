@@ -5,13 +5,17 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.8.10',
+  version: '2.8.11',
   version_code: window.version_code,
-  updateTime: '2026/3/28',
+  updateTime: '2026/4/14',
   log: [
     {
         tag: "fix",
-        content: "修复二次元图片API加载缓慢的问题"
+        content: "修复全分组显示修改时显示不正确的问题"
+    },
+    {
+        tag: "change",
+        content: "使用新架构构建（Beta）"
     }
   ]
 }
@@ -19,7 +23,7 @@ if ('serviceWorker' in navigator && !window._dev) {
   navigator.serviceWorker.ready.then(registration => {
     window.swReg = registration;
     if (window.location.href.indexOf('://quik.42web.io/') != -1) {
-      var ifr = util.element('iframe', {
+      var ifr = el('iframe', {
         src: './version',
         style: "opacity:0"
       });
@@ -53,7 +57,7 @@ if ('serviceWorker' in navigator && !window._dev) {
         }else if(location.href.indexOf('://quik.42web.io/') != -1&&_i==0){
           _i++;
           toast.show('发现新版本(版本序号：' + nv + ')，正在更新');
-          var ifr = util.element('iframe', {
+          var ifr = el('iframe', {
             src: './version',
             style: "opacity:0"
           });
@@ -99,7 +103,7 @@ function showVersion() {
 </div><div class="footer"><div class="btn ok">我知道了</div></div>`,
       class: "update_dialog"
     });
-    util.query(version_dia.getDialogDom(), '.btn.ok').onclick = () => {
+    version_dia.getDialogDom().$('.btn.ok').onclick = () => {
       version_dia.close();
     }
   }

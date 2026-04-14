@@ -1,5 +1,3 @@
-const util = require("../util");
-
 /**
  * @class contextMenu
  * @param {Object} options 
@@ -8,36 +6,29 @@ const util = require("../util");
  */
 var contextMenu = function (options) {
   this.options = options;
-  var el = util.element('div', {
-    class: "contextMenu",
-  });
+  var El = el(".contextMenu");
   if (options.offset) {
-    el.style.top = options.offset.top + "px";
-    el.style.left = options.offset.left + "px";
-    el.style.bottom = options.offset.bottom + "px";
-    el.style.right = options.offset.right + "px";
+    for(let k in options.offset){
+        El.css(k,options.offset[k]+"px");
+    }
   }
-  drawList(options.list, el);
-  document.body.appendChild(el);
-  this.element = el;
+  drawList(options.list, El);
+  document.body.appendChild(El);
+  this.element = El;
 }
 
-function drawList(list, el) {
+function drawList(list, El) {
   list.forEach(function (itemr) {
     if (itemr.type == 'hr') {
-      var item = util.element('div', {
-        class: "hr"
-      });
-      el.appendChild(item);
+      var item = el(".hr");
+      El.appendChild(item);
     } else {
-      var item = util.element('div', {
-        class: "item"
-      });
-      item.innerHTML = `<div class="icon">${itemr.icon}</div><div class="title">${itemr.title}</div>`;
+      var item = el(".item")
+      item.html(`<div class="icon">${itemr.icon}</div><div class="title">${itemr.title}</div>`);
       item.onclick = function () {
         itemr.click();
       }
-      el.appendChild(item);
+      El.appendChild(item);
     }
 
   })
@@ -45,27 +36,27 @@ function drawList(list, el) {
 
 contextMenu.prototype = {
   show() {
-    resetmenu(this.element);
-    this.element.classList.add('show');
-    this.element.style.height = 'auto';
-    var h = this.element.getBoundingClientRect().height;
-    this.element.style.height = '0px';
-    this.element.style.transition = 'height .2s';
-    var _this = this;
+    let te=this.element;
+    resetmenu(te);
+    te.addClass('show');
+    te.style.height = 'auto';
+    var h = te.getRect().height;
+    te.style.height = '0px';
+    te.style.transition = 'height .2s';
     setTimeout(() => {
-      _this.element.style.height = h + 'px';
+      te.style.height = h + 'px';
     })
   },
   hide() {
-    this.element.style.height = '0px';
-    var _this = this;
+    let te=this.element;
+    te.style.height = '0px';
     setTimeout(() => {
-      _this.element.style.transition = 'none';
-      _this.element.classList.remove('show');
+      te.style.transition = 'none';
+      te.classList.remove('show');
     }, 200)
   },
   isShow() {
-    return this.element.classList.contains('show');
+    return this.element.hasClass('show');
   },
   destroy() {
     this.element.remove();
@@ -73,44 +64,39 @@ contextMenu.prototype = {
   setOffset(offset) {
     this.options.offset = offset;
     var options = this.options, el = this.element;
-    el.style.top = "";
-    el.style.left = "";
-    el.style.bottom = "";
-    el.style.right = "";
+    el.css({
+        top:"",
+        left:"",
+        bottom:"",
+        right:""
+    })
     if (options.offset) {
-      if (typeof options.offset.top == 'number') {
-        el.style.top = options.offset.top + "px";
-      } else {
-        el.style.bottom = options.offset.bottom + "px";
-      }
-      if (typeof options.offset.left == 'number') {
-        el.style.left = options.offset.left + "px";
-      } else {
-        el.style.right = options.offset.right + "px";
+      for(let k in options.offset){
+          el.css(k,options.offset[k]+"px");
       }
     }
   },
   setList(list) {
     this.options.list = list;
     var el = this.element;
-    el.innerHTML = "";
+    el.html('');
     drawList(list, el);
   }
 };
 
-document.addEventListener('click', () => {
+document.on('click', () => {
   resetmenu();
 });
-document.addEventListener('contextmenu', () => {
+document.on('contextmenu', () => {
   resetmenu();
 });
 function resetmenu(el) {
-  document.querySelectorAll(".contextMenu").forEach(e => {
+  $$(".contextMenu").forEach(e => {
     if (el && e.isSameNode(el)) return;
     e.style.height = '0px';
     setTimeout(() => {
       e.style.transition = 'none';
-      e.classList.remove('show');
+      e.removeClass('show');
     }, 200)
   })
 }

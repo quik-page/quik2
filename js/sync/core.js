@@ -112,15 +112,18 @@ async function setJSON(json, config) {
   for (var k in ast) {
     o[k] = ast[k];
   }
-  localStorage.quik2 = JSON.stringify(o);
-  alert('数据导入成功，请重新加载页面', () => {
-    if (location.hash.indexOf(';') != -1) {
-      location.hash = location.hash.split(';')[0] + ';newnow'
-    } else {
-      location.hash = '#newnow'
-    }
-    location.reload();
-  })
+  setTimeout(()=>{
+    localStorage.quik2 = JSON.stringify(o);
+    alert('数据导入成功，请重新加载页面', () => {
+        if (location.hash.indexOf(';') != -1) {
+          location.hash = location.hash.split(';')[0] + ';newnow'
+        } else {
+          location.hash = '#newnow'
+        }
+        location.reload();
+      })
+  },100);// to wait proxy
+  
 }
 
 module.exports = { getJSON, setJSON }

@@ -1,6 +1,7 @@
 let { initsto, doevent, on, off,writeLink,pushLink } = require('./_core');
 let util = require('../../util');
 const { confirm } = require('../../dialog/dialog_utils');
+const toast = require('../../toast');
 initsto.set('storage-mode', 'db');
 
 var defLinks = [{
@@ -25,7 +26,9 @@ var initState = 0, readySatae = 3;
 var readyfn = [];
 function init() {
   // 初始化默认分组
+  console.log(initsto.get('links'));
   if (!initsto.get('links')) {
+    console.log('初始化默认链接');
     initsto.set('links', defLinks, true, () => {
       initState++;
       if (initState == readySatae) {
@@ -441,6 +444,16 @@ module.exports = {
     }
     if (cate) {
       initsto.get('cate', true, c => {
+        if(!c){
+            callback({
+                code: -1,
+                msg: "分组异常，正在恢复初始状态"
+            });
+            initsto.clear();
+            setTimeout(()=>{
+                location.reload();
+            },1000)
+        }
         if (!c[cate]) {
           callback && callback({
             code: -1,
@@ -456,6 +469,16 @@ module.exports = {
       });
     } else {
       initsto.get('links', true, c => {
+        console.log(c);
+        if(!c){
+            localStorage.__Link_yc="111";
+            toast.show("分组异常，正在恢复初始状态")
+            initsto.clear();
+            setTimeout(()=>{
+                location.reload();
+            },1000)
+            return;
+        }
         callback && callback({
           code: 0,
           msg: "获取成功",

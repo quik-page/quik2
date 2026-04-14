@@ -1,10 +1,8 @@
-const util = require("../util");
-
 var icners = {
-  tl: util.query(document, '.topper .left'),
-  tr: util.query(document, '.topper .right'),
-  bl: util.query(document, '.bottomer .left'),
-  br: util.query(document, '.bottomer .right'),
+  tl: $('.topper .left'),
+  tr: $('.topper .right'),
+  bl: $('.bottomer .left'),
+  br: $('.bottomer .right'),
 }
 
 /**
@@ -19,14 +17,14 @@ var icners = {
 var icon = function (options) {
   this.content = options.content;
   this.width = options.width;
-  var ic = util.element('div', {
+  var ic = el('div', {
     class: "item" + (options.class ? (' ' + options.class) : '') + (options.important ? ' important' : ''),
   });
   icners[options.offset].append(ic);
-  ic.innerHTML = this.content;
+  ic.html(this.content);
   this.element = ic;
   if (this.width) {
-    ic.style.width = this.width + 'px';
+    ic.css("width" ,this.width + 'px');
   }
 }
 icon.prototype = {
@@ -35,24 +33,24 @@ icon.prototype = {
   },
   setIcon(content) {
     this.content = content;
-    this.element.innerHTML = this.content;
+    this.element.html(this.content);
   },
   setWidth(w) {
     this.width = w;
     if (this.width) {
-      ic.style.width = this.width + 'px';
+      ic.css("width", this.width + 'px');
     }
   },
   getWidth() {
     return this.width;
   },
   show() {
-    this.element.classList.remove('hide');
-    this.element.classList.add('show');
+    this.element.removeClass('hide');
+    this.element.addClass('show');
   },
   hide() {
-    this.element.classList.add('hide');
-    this.element.classList.remove('show');
+    this.element.addClass('hide');
+    this.element.removeClass('show');
   }
 }
 module.exports.icon = icon;

@@ -1,12 +1,12 @@
 const dialog = require('../dialog/index');
 const guidecreator = require('../guidecreator');
-const {storage} = require('../storage');
+const {gS} = require('../storage');
 const util = require('../util');
 const ignores=require('../ignores');
 const sync=require("../sync");
 
-var initsto = storage('oobe');
-if (!initsto.get('agree')) {
+var stp = gS('oobe');
+if (!stp.agree) {
     var lichtml = ignores.lic;
     var i = 0;
     var all = require('./htmls/all.html');
@@ -23,30 +23,30 @@ if (!initsto.get('agree')) {
     })
     var d = oobeDia.getDialogDom();
 
-    util.query(d, '.part.a1 .btn.ok').onclick = () => {
-        initsto.set('agree', true);
+    d.$('.part.a1 .btn.ok').onclick = () => {
+        stp.agree = true;
         nextPart();
     }
 
-    util.query(d, '.part.a1 .btn.cancel').onclick = () => {
+    d.$('.part.a1 .btn.cancel').onclick = () => {
         location.href = 'about:blank'
     }
-    util.query(d, '.part.a2 .item.a').onclick = () => {
+    d.$('.part.a2 .item.a').onclick = () => {
         nextPart();
     }
-    util.query(d, '.part.a2 .item.b').onclick = () => {
+    d.$('.part.a2 .item.b').onclick = () => {
         nextPart();
         sync.openImport();
     }
-    util.query(d, '.part.a2 .item.c').onclick = () => {
+    d.$('.part.a2 .item.c').onclick = () => {
         nextPart();
         sync.openQUIK1();
     }
 
     function nextPart() {
         if (i > 0) {
-            util.query(d, '.part.a' + i).classList.remove('show');
-            util.query(d, '.part.a' + i).classList.add('n');
+            d.$('.part.a' + i).removeClass('show');
+            d.$('.part.a' + i).addClass('n');
         }
         if (i == parts.length) {
             oobeDia.close();
@@ -55,7 +55,7 @@ if (!initsto.get('agree')) {
         }
         i++;
         setTimeout(() => {
-            util.query(d, '.part.a' + i).classList.add('show');
+            d.$('.part.a' + i).addClass('show');
         }, 200);
     }
     nextPart();
@@ -64,7 +64,7 @@ if (!initsto.get('agree')) {
     showguide();
 }
 function showguide() {
-    if (!initsto.get('guided')) {
+    if (!stp.guided) {
         guidecreator.create([
             {
                 text: "点击左下角的" + util.getGoogleIcon('e8b8', { type: "fill" }) + "就可以打开设置，你可以在设置里个性化你的QUIK起始页",
@@ -102,7 +102,7 @@ function showguide() {
                 }
             }
         ], () => {
-            initsto.set('guided', true);
+            stp.guided = true;
         })
     }
 }

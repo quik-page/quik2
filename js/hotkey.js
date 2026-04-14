@@ -4,7 +4,7 @@ let { mainSetting } = require('./setting/index.js');
 let {setLite,isLite}=require('./custom/index.js');
 let {setShowCate,isShowCate}=require('./link/index.js');
 
-document.addEventListener('keydown', function (e) {
+document.on('keydown', function (e) {
     if (e.key == 's' && e.altKey) { // Alt+S打开设置
         e.preventDefault();
         mainSetting.open();

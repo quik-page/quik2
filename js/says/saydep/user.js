@@ -1,12 +1,13 @@
 const dialog = require("../../dialog");
-const { initsto } = require("../../omnibox/_core");
+const { settingStp } = require("../../setting");
 const util = require("../../util");
 const { refsay, getNowSay } = require("../core");
 
   var def='海内存知己，天涯若比邻'; 
+  let stp=settingStp;
 
-  if(!initsto.get('usersay')){
-    initsto.set('usersay',def);
+  if(!stp.usersay){
+    stp.usersay=def;
   }
 
   var sayseditordialog=null;
@@ -19,12 +20,12 @@ const { refsay, getNowSay } = require("../core");
       // @note 将cancel按钮修改为div，防止表单submit到cancel
       // @edit at 2024/1/30 15:20
       var d=sayseditordialog.getDialogDom();
-      util.query(d,'.cancel.btn').onclick=()=>{
+      d.$('.cancel.btn').onclick=()=>{
         sayseditordialog.close();
       }
-      util.query(d,'.ok.btn').onclick=()=>{
-        var v=util.query(d,'.says-input').value;
-        initsto.set('usersay',v);
+      d.$('.ok.btn').onclick=()=>{
+        var v=d.$('.says-input').value;
+        stp.usersay=v;
         refsay('user');
         sayseditordialog.close();
       }
@@ -32,7 +33,7 @@ const { refsay, getNowSay } = require("../core");
     setTimeout(()=>{
       var d=sayseditordialog.getDialogDom();
       sayseditordialog.open();
-      util.query(d,'.says-input').value=initsto.get('usersay');
+      d.$('.says-input').value=stp.usersay;
     })
   }
   module.exports= {
@@ -41,7 +42,7 @@ const { refsay, getNowSay } = require("../core");
     callback(){
       return new Promise((resolve,reject)=>{
         resolve({
-        say:initsto.get('usersay'),
+        say:stp.usersay,
         title:"点击修改"});
       });
     },

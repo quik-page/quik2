@@ -1,16 +1,14 @@
 
-var notice_con = document.querySelector(".notice-con");
-var notip = document.querySelector(".no-notice-tip");
+var notice_con = $(".notice-con");
+var notip = $(".no-notice-tip");
 const { icon } = require('../iconc');
 const util = require('../util');
 var notice_mb = require('./notice.mb.html');
-var focus_con = document.querySelector(".focus-notice");
+var focus_con = $(".focus-notice");
 var hasNew = 0;
 var noticeclick = false;
 function notice(details) {
-  this.el = util.element('div', {
-    class: "notice-item"
-  });
+  this.el = el('.notice-item');
   notice_con.appendChild(this.el);
   this.title = details.title;
   this.content = details.content;
@@ -21,16 +19,16 @@ function notice(details) {
 }
 notice.prototype = {
   show(time) {
-    notip.classList.remove('show');
+    notip.removeClass('show');
     r(1);
     clearTimeout(this._timeouthide);
-    this.el.classList.add('show');
-    this.el.addEventListener('click', function (e) {
+    this.el.addClass('show');
+    this.el.on('click', function (e) {
       noticeclick = true;
     })
     var _ = this;
-    this.el.style.display = 'block';
-    this.el.style.animation = 'noticein .3s';
+    this.el.show();
+    this.el.css("animation", 'noticein .3s');
 
     if (time) {
       setTimeout(() => {
@@ -39,15 +37,15 @@ notice.prototype = {
     }
   },
   hide() {
-    this.el.classList.remove('show');
-    if (!document.querySelector(".notice-con .notice-item.show")) {
-      notip.classList.add('show');
+    this.el.removeClass('show');
+    if (!$(".notice-con .notice-item.show")) {
+      notip.addClass('show');
       r(0);
     }
-    this.el.style.animation = 'noticeout .3s';
+    this.el.css("animation", 'noticeout .3s');
     var _ = this;
     this._timeouthide = setTimeout(() => {
-      _.el.style.display = 'none';
+      _.el.hide();
     }, 300)
   },
   focus() {
@@ -95,7 +93,7 @@ function g() {
   var readyFocusNotice = focus_arr[0];
   var cloneNoticeEl = readyFocusNotice.el.cloneNode(true);
   focus_con.appendChild(cloneNoticeEl);
-  util.query(cloneNoticeEl, '.notice-close-btn').onclick = function () {
+  cloneNoticeEl.$('.notice-close-btn').onclick = function () {
     clearTimeout(focus_timeout);
     cloneNoticeEl.remove();
     readyFocusNotice.hide();
@@ -124,8 +122,8 @@ function g() {
 }
 
 function drawNotice(n) {
-  n.el.innerHTML = notice_mb.replace('{{close-btn}}', util.getGoogleIcon('e5cd'));
-  util.query(n.el, '.notice-close-btn').onclick = () => {
+  n.el.html(notice_mb.replace('{{close-btn}}', util.getGoogleIcon('e5cd')));
+  n.el.$('.notice-close-btn').onclick = () => {
     n.hide();
   }
   drawNoticeTitle(n);
@@ -135,25 +133,25 @@ function drawNotice(n) {
 }
 
 function drawNoticeTitle(n) {
-  var titleel = util.query(n.el, '.notice-title');
-  titleel.innerHTML = n.title;
+  var titleel = n.el.$('.notice-title');
+  titleel.html(n.title);
 }
 
 function drawNoticeContent(n) {
-  var contentel = util.query(n.el, '.notice-content');
-  contentel.innerHTML = n.content;
+  var contentel = n.el.$('.notice-content');
+  contentel.html(n.content);
 }
 
 function drawNoticeBtn(n) {
-  var btncon = util.query(n.el, '.notice-btns');
-  btncon.innerHTML = '';
+  var btncon = n.el.$('.notice-btns');
+  btncon.html('');
   for (var i = 0; i < n.btns.length; i++) {
     (i => {
       var btn = n.btns[i];
-      var btnel = util.element('div', {
+      var btnel = el('div', {
         class: "btn" + (btn.style ? " " + btn.style : ""),
       });
-      btnel.innerText = btn.text;
+      btnel.text(btn.text);
       btnel.onclick = () => {
         btn.click(n);
       }
@@ -165,11 +163,11 @@ function drawNoticeBtn(n) {
 
 function drawNoticeProgress(n) {
   if (!n.useprogress) {
-    util.query(n.el, '.notice-progress').style.display = "none";
+    n.el.$('.notice-progress').hide();
     return;
   }
-  var progressel = util.query(n.el, '.notice-progress .p div');
-  progressel.style.width = n.progress * 100 + "%";
+  var progressel = n.el.$('.notice-progress .p div');
+  progressel.css("width", n.progress * 100 + "%");
 }
 // mobile适配
 var mbicon = new icon({
@@ -178,16 +176,16 @@ var mbicon = new icon({
   class: "notice-icon"
 });
 
-window.addEventListener('resize', () => { r() });
-mbicon.getIcon().addEventListener('click', () => {
-  document.querySelector(".notice-sc").classList.add('show');
+window.on('resize', () => { r() });
+mbicon.getIcon().on('click', () => {
+  $(".notice-sc").addClass('show');
 })
-document.querySelector(".notice-sc").addEventListener('click', function () {
+$(".notice-sc").on('click', function () {
   if (noticeclick) {
     noticeclick = false;
     return;
   }
-  this.classList.remove('show');
+  this.removeClass('show');
 })
 function r(a) {
   if (typeof a == "undefined") {

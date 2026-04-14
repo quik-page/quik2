@@ -1,7 +1,5 @@
-const util = require("../util");
-
-var cardcon = util.query(document, '.cards');
-var topcardcon = util.query(document, '.top.cards');
+var cardcon = $('.cards');
+var topcardcon = $('.top.cards');
 
 /**
  * 
@@ -21,27 +19,27 @@ var card = function (detail) {
   this.width = detail.width;
   this.height = detail.height;
   this.offset = detail.offset;
-  var c_el = util.element('div', {
-    class: "card",
-  })
+  var c_el = el('.card');
 
-  c_el.innerHTML = detail.content;
-  c_el.style.width = detail.width + "px";
-  c_el.style.height = detail.height + "px";
+  c_el.html(detail.content);
+  c_el.css({
+    width: detail.width + "px",
+    height: detail.height + "px",
+  })
   if (detail.class) {
-    c_el.classList.add(detail.class);
+    c_el.addClass(detail.class);
   }
 
   if (detail.offset) {
     if (typeof detail.offset.top == 'number') {
-      c_el.style.top = detail.offset.top + "px";
+      c_el.css("top",detail.offset.top + "px");
     } else if (typeof detail.offset.bottom == 'number') {
-      c_el.style.bottom = detail.offset.bottom + "px";
+      c_el.css("bottom",detail.offset.bottom + "px");
     }
     if (typeof detail.offset.left == 'number') {
-      c_el.style.left = detail.offset.left + "px";
+      c_el.css("left",detail.offset.left + "px");
     } else if (typeof detail.offset.right == 'number') {
-      c_el.style.right = detail.offset.right + "px";
+      c_el.css("right",detail.offset.right + "px");
     }
   }
   this.el = c_el;
@@ -57,29 +55,29 @@ card.prototype = {
   show(transition) {
     var _ = this;
     _.isShow = true;
-    this.el.style.display = 'block';
+    this.el.show();
     if (transition && transition > 0) {
-      this.el.style.transition = 'all ' + transition + 'ms';
+        this.el.css("transition", "all " + transition + "ms");
       this.el.offsetHeight;
       setTimeout(() => {
-        _.el.style.transition = 'none';
+        _.el.css("transition", "none");
       }, transition);
     }
-    this.el.style.opacity = '1';
+    this.el.css("opacity", "1");
   },
   hide(transition) {
     var _ = this;
     _.isShow = false;
     if (transition && transition > 0) {
-      this.el.style.transition = 'all ' + transition + 'ms';
+        this.el.css("transition", "all " + transition + "ms");
       setTimeout(() => {
-        _.el.style.transition = 'none';
-        _.el.style.display = 'none';
+        _.el.css("transition","none");
+        _.el.hide();
       }, transition);
     } else {
-      this.el.style.display = 'none';
+      this.el.hide();
     }
-    this.el.style.opacity = '0';
+    this.el.css("opacity", "0");
   },
   destroy() {
     this.el.remove();
@@ -98,45 +96,46 @@ card.prototype = {
   },
   setWidth(width) {
     this.width = width;
-    this.el.style.width = width + 'px';
+    this.el.css("width", width + 'px');
   },
   setHeight(height) {
-    this.el.style.height = height + 'px';
+    this.height = height;
+    this.el.css("height", height + 'px');
   },
   setOffset(offset, transition) {
-    var _ = this;
+    var _ = this,w=window.innerWidth,h=window.innerHeight;
     var old = this.offset;
     if (transition && transition > 0) {
-      this.el.style.transition = 'all ' + transition + 'ms';
+      this.el.css("transition", "all " + transition + "ms");
       var _ck = this.el.getBoundingClientRect();
       if (typeof offset.top == 'number') {
         if (typeof old.bottom == 'number') {
-          this.el.style.bottom = (window.innerHeight - offset.top - _ck.height) + "px";
+            this.el.css("bottom", (h - offset.top - _ck.height) + "px");
         } else {
-          this.el.style.top = offset.top + "px";
+          this.el.css("top", offset.top + "px");
         }
       } else if (typeof offset.bottom == 'number') {
         if (typeof old.top == 'number') {
-          this.el.style.top = (window.innerHeight - offset.bottom - _ck.height) + "px";
+          this.el.css("top",(h - offset.bottom - _ck.height) + "px");
         } else {
-          this.el.style.bottom = offset.bottom + "px";
+          this.el.css("bottom", offset.bottom + "px");
         }
       }
       if (typeof offset.left == 'number') {
         if (typeof old.right == 'number') {
-          this.el.style.right = (window.innerWidth - offset.left - _ck.width) + "px";
+          this.el.css("right",(w - offset.left - _ck.width) + "px");
         } else {
-          this.el.style.left = offset.left + "px";
+          this.el.css("left", offset.left + "px");
         }
       } else if (typeof offset.right == 'number') {
         if (typeof old.left == 'number') {
-          this.el.style.left = (window.innerWidth - offset.right - _ck.width) + "px";
+          this.el.css("left",(w - offset.right - _ck.width) + "px");
         } else {
-          this.el.style.right = offset.right + "px";
+          this.el.css("right", offset.right + "px");
         }
       }
       setTimeout(() => {
-        _.el.style.transition = 'none';
+        _.el.css("transition","none");
         sz.call(_);
       }, transition);
     } else {
@@ -144,19 +143,21 @@ card.prototype = {
     }
     function sz() {
       this.offset = offset;
-      this.el.style.top = 'auto';
-      this.el.style.left = 'auto';
-      this.el.style.bottom = 'auto';
-      this.el.style.right = 'auto';
+      this.el.css({
+        top:"auto",
+        left:"auto",
+        right:"auto",
+        bottom:"auto"
+      })
       if (typeof offset.top == 'number') {
-        this.el.style.top = offset.top + "px";
+        this.el.css("top",offset.top + "px");
       } else if (typeof offset.bottom == 'number') {
-        this.el.style.bottom = offset.bottom + "px";
+        this.el.css("bottom", offset.bottom + "px");
       }
       if (typeof offset.left == 'number') {
-        this.el.style.left = offset.left + "px";
+        this.el.css("left", offset.left + "px");
       } else if (typeof offset.right == 'number') {
-        this.el.style.right = offset.right + "px";
+        this.el.css("right", offset.right + "px");
       }
     }
 

@@ -1,22 +1,18 @@
-const util = require("./util");
-
-var to = util.element('div', {
-  class: "toast"
-})
+var to = el(".toast");
 
 var g = null, g2 = null;
-util.query(document, 'body').append(to);
+document.body.append(to);
 module.exports= {
   show(value, time) {
-    to.innerHTML = value;
-    to.classList.add('show');
-    to.style.animation = "toastin .3s";
+    to.html(value);
+    to.addClass('show');
+    to.css("animation", "toastin .3s");
     clearTimeout(g);
     clearTimeout(g2);
     g = setTimeout(() => {
-      to.style.animation = "toastout .3s";
+      to.css("animation", "toastout .3s");
       g2 = setTimeout(() => {
-        to.classList.remove('show');
+        to.removeClass('show');
       }, 298);
     }, time ? time : 2000);
   }
