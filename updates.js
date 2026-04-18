@@ -1,4 +1,17 @@
 var updatelog={
+"2.8.11":{
+    updates: [
+        {
+            tag: "fix",
+            content: "修复全分组显示修改时显示不正确的问题"
+        },
+        {
+            tag: "change",
+            content: "使用新架构构建（Beta）"
+        }
+      ],
+    time:"2026/4/14",
+},
 "2.8.10":{
     updates:[
         {

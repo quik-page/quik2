@@ -173,7 +173,7 @@ function gtitm(nm){
         }
 
         let f=std.$$('.theme-item.active');
-        f=toRealArray(f);
+        f=ToRealArray(f);
         f=f.map(a=>a.attr('data-id')).join('|');
         stp.themea=f;
         console.log(f);

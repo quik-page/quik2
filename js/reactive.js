@@ -2,9 +2,6 @@ function reactive(obj,onchange=()=>1){
     return new Proxy(obj,{
         get(target,key){
             if(typeof target[key]=="object"&&target[key]!=null){
-                // if(Array.isArray(target[key])){
-                //     return target[key];
-                // }
                 return reactive(target[key],onchange);
             }else{
                 return target[key];
