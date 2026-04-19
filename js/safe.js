@@ -339,4 +339,6 @@ function ckline() {
     }
 }
 // 一次就够了
-if(window.navigator.onLine&&(!window.isOutLine))setLineNotice();
+window.on("load",()=>{
+    if(window.navigator.onLine&&(!window.isOutLine))setLineNotice();
+})
