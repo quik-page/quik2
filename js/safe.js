@@ -338,9 +338,5 @@ function ckline() {
         setLineNotice();
     }
 }
-window.on("load",()=>{
-    ckline();
-    setInterval(()=>{
-        if(window.navigator.onLine&&(!window.isOutLine)&&document.visibilityState=="visible")setLineNotice();
-    },10000);
-});
+// 一次就够了
+if(window.navigator.onLine&&(!window.isOutLine))setLineNotice();
