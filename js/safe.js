@@ -257,43 +257,9 @@ function doxnse(n) {
 doxnse(!!stp.xnse);
 
 
-// 网络检测
+// 网络检测 
 window.on('offline', ckline)
 window.on('online', ckline)
-
-function pingLine(cb){
-    let isOutLine=true;
-    let isOutGoogle=true;
-    let checkOut=(ok)=>{
-        if(ok)isOutLine=false;
-    }
-    util.loadimg("https://www.baidu.com/favicon.ico?_="+Date.now(),checkOut)
-    util.loadimg("https://www.bilibili.com/favicon.ico?_="+Date.now(),checkOut)
-    util.loadimg("https://www.douyin.com/favicon.ico?_="+Date.now(),checkOut)
-    util.loadimg("https://www.google.com/favicon.ico?_="+Date.now(),(ok)=>{
-        if(ok){
-            isOutGoogle=false;
-            isOutLine=false;
-        }
-    })
-    setTimeout(()=>{
-        cb(isOutLine,isOutGoogle);
-    },1500)
-}
-
-function setLineNotice(){
-    pingLine((isOutLine,isOutGoogle)=>{
-        window.isOutGoogle=isOutGoogle;
-        if (isOutLine) {
-            lineErrNotice.show()
-            lineErrNotice.focus();
-            offlineIcon.show();
-        } else {
-            lineErrNotice.hide();
-            offlineIcon.hide();
-        }
-    });
-}
 
 var offlineIcon = new icon({
     content: util.getGoogleIcon('f239'),
@@ -301,30 +267,10 @@ var offlineIcon = new icon({
     important: true
 })
 offlineIcon.getIcon().style.color = 'red';
-offlineIcon.getIcon().on("click",()=>{
-    if(window.navigator.onLine){
-        lineErrNotice.show();
-        lineErrNotice.focus();
-    }else{
-        offlineNotice.show();
-        offlineNotice.focus();
-    }
-})
+
 var offlineNotice = new notice({
     title: "断网提醒",
     content: "您的网络已断开，请尽快重连！"
-})
-var lineErrNotice = new notice({
-    title: "断网提醒",
-    content: "您的网络似乎不可用，请检查您的代理服务器或网络设置！",
-    btns:[{
-        text:"重试",
-        click(){
-            lineErrNotice.hide();
-            offlineIcon.hide();
-            setLineNotice();
-        }
-    }]
 })
 
 function ckline() {
@@ -335,10 +281,7 @@ function ckline() {
     } else {
         offlineNotice.hide();
         offlineIcon.hide();
-        setLineNotice();
     }
 }
-// 一次就够了
-window.on("load",()=>{
-    if(window.navigator.onLine&&(!window.isOutLine))setLineNotice();
-})
+
+ckline();

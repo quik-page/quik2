@@ -92,7 +92,7 @@ async function parseRem(src, codes, rootPath = '') {
   }
 
   if (codes.id[src]) return codes.id[src];
-  console.log(src);
+//   console.log(src);
   let code;
   try {
     code = await getCode(src);

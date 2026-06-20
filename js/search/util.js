@@ -143,22 +143,9 @@ var getSearchTypeList = () => {
 }
 var setSearchType = (type) => {
   StP.type = type;
-  checkGoogle();
   doevents('nowtypechange');
 }
 
-function checkGoogle(){
-    if(StP.type!="google")return;
-    if(isUd(window.isOutGoogle)){
-        setTimeout(checkGoogle, 1000);
-        return;
-    }
-    if(isOutGoogle){
-        toast.show("当前网络环境对Google的访问存在限制")
-    }
-}
-
-setTimeout(checkGoogle, 1000);
 
 var getSearchTypeIndex = () => {
     // to avoid neizhi list change

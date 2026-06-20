@@ -5,17 +5,13 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.8.11',
+  version: '2.8.12',
   version_code: window.version_code,
-  updateTime: '2026/4/14',
+  updateTime: '2026/6/20',
   log: [
     {
-        tag: "fix",
-        content: "修复全分组显示修改时显示不正确的问题"
-    },
-    {
-        tag: "change",
-        content: "使用新架构构建（Beta）"
+        tag: "del",
+        content: "删除“更可信的网络检测”"
     }
   ]
 }

@@ -1,4 +1,13 @@
 var updatelog={
+"2.8.12":{
+    updates:[
+        {
+            tag: "del",
+            content: "删除“更可信的网络检测”"
+        }
+      ],
+    time:"2026/6/20"
+},
 "2.8.11":{
     updates: [
         {
