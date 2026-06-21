@@ -1,4 +1,13 @@
 var updatelog={
+"2.8.13":{
+    updates:[
+        {
+            tag: "new",
+            content: "用户可上传多张背景图片，每次随机选择一张"
+        }
+      ],
+    time:"2026/6/21"
+},
 "2.8.12":{
     updates:[
         {

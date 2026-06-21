@@ -18,16 +18,91 @@ var {
 var { colorChange, _listensetbg2,init } = require('./_defaultDrawer/zdycolor.js');
 const custom = require('../custom/index.js');
 const contextMenu = require('../menu/index.js');
+const toast = require('../toast.js');
+const { dbTool } = require('../storage.js');
 
 var tab1, setbg, tab2, tab3;
-_listensetbg(function (r) {
-  setbg(r);
+_listensetbg(function (r,i) {
+    setbg(r);
 })
-_listensetbg2(function (r) {
-  setbg(r);
+
+let menuedubg;
+let ubgMenu=new contextMenu({
+    list:[{
+        icon:util.getGoogleIcon('e92e'),
+        title:'删除',
+        click:function(){
+            let ul=initsto.get("userbgs");
+            let index=menuedubg.index();
+            if(ul[index].checked&&ul.filter(e=>e.checked).length==1){
+                toast.show("必须保留一个用于显示");
+            }else{
+                ul.splice(index,1);
+                menuedubg.remove();
+                initsto.set("userbgs",ul);
+                toast.show("删除成功")
+                let l=initsto.get("bg");
+                if(l.type=="default"&&l.data.type=="userbg"){
+                    setbg(l); // refresh
+                }
+            }
+        }
+    }]
 })
-_listenseti(function(i){
-  util.query(getd(), '.zdy .left img').src = i;
+function gubg(r,i){
+    let ubg=el(".ubg",{},'<img>');
+    tab1.$(".ubgs").append(ubg);
+    getUserUploadUrl(url=>{
+        console.log(url);
+      ubg.$("img").src=url;
+    },r)
+    if(r.checked){
+        ubg.addClass("active");
+    }
+    ubg.onclick = function () {
+        let ul=initsto.get("userbgs");
+        let index=ubg.index();
+        if(ul[index].checked){
+            if(ul.filter(e=>e.checked).length==1){
+                toast.show("必须保留一个用于显示");
+                return;
+            }else{
+                ul[index].checked=false;
+                this.removeClass("active");
+                initsto.set("userbgs",ul);
+            }
+        }else{
+            ul[index].checked=true;
+            this.addClass("active");
+            initsto.set("userbgs",ul);
+        }
+        let l=initsto.get("bg");
+        if(l.type=="default"&&l.data.type=="userbg"){
+            setbg(l); // refresh
+        }
+    }
+    ubg.oncontextmenu = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        menuedubg = this;
+        ubgMenu.show();
+        ubgMenu.setOffset({
+            top:e.pageY,
+            left:e.pageX
+        })
+    }
+}
+_listensetbg2(function (r,i) {
+    setbg(r)
+})
+_listenseti(function(r,i){
+//   util.query(getd(), '.zdy .left img').src = i;
+    gubg(r,i);
+    tab1.$(".ubgs").css("width",190*(i+1)+20+"px");
+    let l=initsto.get("bg");
+    if(l.type=="default"&&l.data.type=="userbg"){
+        setbg(l); // refresh
+    }
 })
 
 
@@ -303,17 +378,18 @@ var draws = {
   },
   userbg(bgf, data) {
     // 图片或视频
-    var a = initsto.get('userbg');
-    if (!a) return;
+    var a = initsto.get('userbgs').filter(e=>e.checked);
+    if (!a||a.length==0) return;
+    a=a[Math.floor(Math.random()*a.length)];
 
     document.body.addClass('t-dark');
     if (a.type == 'video') {
       var b = a.useidb;
       if (b) {
-        initsto.get('upload', true, (blob) => {
-          draws.video(bgf, {
-            url: URL.createObjectURL(blob)
-          })
+        dbTool.get(a.src,(blob)=>{
+            draws.video(bgf, {
+                url: URL.createObjectURL(blob)
+            })
         })
       } else {
         draws.video(bgf, {
@@ -323,10 +399,10 @@ var draws = {
     } else if (a.type == 'image') {
       var b = a.useidb;
       if (b) {
-        initsto.get('upload', true, (blob) => {
-          draws.img(bgf, {
-            url: URL.createObjectURL(blob)
-          })
+        dbTool.get(a.src,(blob)=>{
+            draws.img(bgf, {
+                url: URL.createObjectURL(blob)
+            })
         })
       } else {
         draws.img(bgf, {
@@ -412,6 +488,13 @@ module.exports = {
           tab1.$('.zdy .left img').src = url;
         })
       }
+
+      let ubgl=initsto.get("userbgs");
+      ubgl.forEach((item,i)=>{
+        gubg(item,i);
+      })
+      tab1.$(".ubgs").css("width",190*ubgl.length+20+"px");
+
       tab1.$('.zdy .left').on('click', () => {
         if (hasUploadedImg()) {
           e.setbg({

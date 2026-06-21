@@ -5,13 +5,13 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.8.12',
+  version: '2.8.13',
   version_code: window.version_code,
-  updateTime: '2026/6/20',
+  updateTime: '2026/6/21',
   log: [
     {
-        tag: "del",
-        content: "删除“更可信的网络检测”"
+        tag: "new",
+        content: "用户可上传多张背景图片，每次随机选择一张"
     }
   ]
 }

@@ -324,3 +324,52 @@ body.dark .u-se:hover{
   font-size: 16px;
   padding: 10px 0;
 }
+
+.ubglist{
+    width: 100%;
+    overflow-x: auto;
+    height: 130px;
+}
+
+.ubgs{
+    height: 120px;
+    overflow: hidden;
+    width: 10px;
+}
+
+.ubg{
+    width: 170px;
+    height: 100px;
+    float: left;
+    margin: 10px;
+    overflow: hidden;
+    border-radius: 10px;
+    position: relative;
+}
+
+.ubg img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.ubg.active::after{
+    content:'\e876';
+    font-family: 'Material Symbols Outlined';
+    background-color: var(--theme-color);
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    display: block;
+    box-shadow: #888 0 0 5px;
+}
+
+.ubglist:has(.ubgs:empty){
+    display: none;
+}

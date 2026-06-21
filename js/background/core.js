@@ -36,10 +36,8 @@ var eventHandle = getEventHandle();
 var on = eventHandle.on;
 var off = eventHandle.off;
 var doevent = eventHandle.doevent;
-var bgf = util.element('div', {
-  class: "bgf"
-});
-util.query(document, 'body').appendChild(bgf);
+var bgf = el('.bgf');
+document.body.appendChild(bgf);
 var initsto = storage('background', {
   sync: true,
   get() {
