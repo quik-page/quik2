@@ -189,7 +189,8 @@ function formatVersion(v, fv) {
     "del": "删除",
     "fix": "修复",
     "change": "修改",
-    "thanks": "感谢"
+    "thanks": "感谢",
+    "ad": "广告"
   };
   var _fv = fv.updates;
   for (var i = 0; i < _fv.length; i++) {

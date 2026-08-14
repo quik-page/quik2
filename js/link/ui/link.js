@@ -1,6 +1,6 @@
 const { SettingItem } = require('../../setting/index');
 const menu = require('../../menu');
-const { initsto } = require('../core/_core');
+const { initsto, doevent } = require('../core/_core');
 const dialog = require('../../dialog');
 const toast = require('../../toast');
 const {showOpenFilePicker} = require('../../base');
@@ -210,6 +210,13 @@ let toucheditmode=false;
 function glinkli(l,pz={}) {
     var li = el('li');
     li.innerHTML = `<a href="${l.url}" target="_blank" rel="noopener noreferer"><div class="link-icon"><img/></div><p></p></a>`
+    li.$("a").on("click",function(){
+        doevent('openlink',{
+            url:l.url,
+            title:l.title,
+            cate:$(".cate-item.active").text()
+        })
+    })
     li.$('p').innerText = l.title;
     if(l.icon){
         li.$('img').src=l.icon;

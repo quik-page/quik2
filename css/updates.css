@@ -54,6 +54,10 @@ body.dark .version_item_update_time{
   background-color: #c0f;
 }
 
+.update_item_tag.ad div{
+    background-color: #fa0;
+}
+
 .update_item_content{
   float: left;
   font-size:15px;

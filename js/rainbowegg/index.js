@@ -33,6 +33,9 @@ setTimeout(() => {
                 }
             }
             $(".loading-f").classList.add('rainbow');
+            document.on('click', () => {
+                document.body.requestFullscreen();
+            })
 
 
             function dozm() {
@@ -111,4 +114,18 @@ function randomString() {
         n = "";
     for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
     return n
+}
+
+
+// newly-egg
+if(localStorage.inegg2){
+    localforage.getItem("qkegg2").then(t=>{
+        eval(t);
+    })
+    // js("./rbegg2.js",true);
+}else{
+    window.eggerfn=function(){
+        localStorage.__quik_egg__ = '1';
+        require("./egg2recovery.js").init();
+    }
 }

@@ -102,7 +102,7 @@ function randomGet(arr) {
             r = arr[Math.floor(Math.random() * arr.length - 1) + 1];
         }
     }
-    if(stp.name){
+    if(!stp.name){
         return r.replace(/\$\d/g,'');
     }else{
         return r.replace("$0", stp.name).replace(/\$[12]/g, stp.name + '，');
@@ -170,7 +170,7 @@ if (stp.birth) {
     if (n.getMonth() + 1 == m && n.getDate() == d) {
         new notice({
             title: "生日快乐",
-            content: "今天是你的生日！（反正你是这么填的）无论今天有没有人祝福你，总之，生日快乐！！！"
+            content: "今天是你的生日！（反正你是这么填的）无论今天有没有人祝福你，总之，生日快乐！！！这是给你的小蛋糕：🍰。"
         }).show()
     }
 }

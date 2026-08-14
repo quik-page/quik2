@@ -323,10 +323,10 @@ var draws = {
     document.head.$('style.colorSpControl').html(`.color-sp{background-color:${data.light};}body.dark .color-sp{background-color:${data.dark};}`);
   },
   api: function api(bgf, data) {
-    function showAcgOrFj(a) {
+    function showAcgOrFj(a,b="") {
         bgczIcon.show();
         rnMenu([0,2]);
-      a.getImg((d) => {
+      a["getImg"+b]((d) => {
         draws.img(bgf, {
           url: d.url
         });
@@ -337,7 +337,7 @@ var draws = {
         }
       })
       refreshFn = () => {
-        a.getImg((d) => {
+        a["getImg"+b]((d) => {
           draws.img(bgf, {
             url: d.url
           });
@@ -353,6 +353,12 @@ var draws = {
       case 'acg':
         showAcgOrFj(acgbg);
         break;
+      case 'acg2':
+        showAcgOrFj(acgbg,2);
+      break;
+      case 'acg3':
+        showAcgOrFj(acgbg,3);
+      break;
       case 'fj':
         showAcgOrFj(fjbg);
         break;

@@ -319,12 +319,13 @@ function cateWidthShiPei() {
     // @note 清除上次width的影响 （除非width>100000px）
     util.query(linkF, '.cate-bar-items').style.width = '100000px';
     // 强行渲染
-    cates[0].offsetHeight;
+    cates[0].offsetWidth;
     var w = 0;
     cates.forEach(function (c) {
+        // console.log(c.getBoundingClientRect().width+4);
         // edit at 2024年1月29日 15点37分
         // @note 因为加了margin
-        w += c.getBoundingClientRect().width + 4;
+        w += c.getBoundingClientRect().width + 10;
     })
     util.query(linkF, '.cate-bar-items').style.width = w + 'px';
     checkScrollBtn.call(util.query(linkF, '.cate-bar-scrolls'));
@@ -362,6 +363,7 @@ var mrcateMenu = new menu({
         left: 0
     }
 });
+
 
 let ex={
     observeCate,

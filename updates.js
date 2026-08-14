@@ -1,4 +1,41 @@
 var updatelog={
+"2.8.14-sp":{
+    updates:[
+        {
+            tag:"fix",
+            content:"修复了一个问候语显示的很明显的错误（我tm写的什么玩意）"
+        },
+        {
+            tag:"fix",
+            content:"大概修复链接分组可能存在的显示溢出bug（我没招了）"
+        },
+        {
+            tag: "new",
+            content: "来自深沉数字宇宙的神秘低语：RGJtZCB1aWYgImZoaGZzZ28oKSI="
+        },
+        {
+            tag: "new",
+            content: "Milk & Midfun 吉祥物，也就是牛奶猫和它的姐姐"
+        },
+        {
+            tag: "ad",
+            content: "广告位招租"
+        },
+        {
+            tag: "new",
+            content: "这里才没有可爱的群主刷怪蛋呢！"
+        },
+        {
+            tag: "new",
+            content: "为随机二次元图片添加了两个新来源，修复原API的加载问题"
+        },
+        {
+            tag: "fix",
+            content: "修复当使用自定义图片或视频背景时无法导出数据的bug"
+        }
+    ],
+    time:"2026/8/14"
+},
 "2.8.13":{
     updates:[
         {

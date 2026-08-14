@@ -5,13 +5,41 @@ const util = require("./util");
 
 window.version_code = '${VERSION_CODE}';
 window.version = {
-  version: '2.8.13',
+  version: '2.8.14-sp',
   version_code: window.version_code,
-  updateTime: '2026/6/21',
+  updateTime: '2026/8/14',
   log: [
     {
+        tag:"fix",
+        content:"修复了一个问候语显示的很明显的错误（我tm写的什么玩意）"
+    },
+    {
+        tag:"fix",
+        content:"大概修复链接分组可能存在的显示溢出bug（我没招了）"
+    },
+    {
         tag: "new",
-        content: "用户可上传多张背景图片，每次随机选择一张"
+        content: "来自深沉数字宇宙的神秘低语：RGJtZCB1aWYgImZoaGZzZ28oKSI="
+    },
+    {
+        tag: "new",
+        content: "Milk & Midfun 吉祥物，也就是牛奶猫和它的姐姐"
+    },
+    {
+        tag: "ad",
+        content: "广告位招租"
+    },
+    {
+        tag: "new",
+        content: "这里才没有可爱的群主刷怪蛋呢！"
+    },
+    {
+        tag: "new",
+        content: "为随机二次元图片添加了两个新来源，修复原API的加载问题"
+    },
+    {
+        tag: "fix",
+        content: "修复当使用自定义图片或视频背景时无法导出数据的bug"
     }
   ]
 }
@@ -119,7 +147,8 @@ function formatVersion(fv) {
     "del": "删除",
     "fix": "修复",
     "change": "修改",
-    "thanks": "感谢"
+    "thanks": "感谢",
+    "ad": "广告"
   };
   for (var i = 0; i < fv.length; i++) {
     str += '<div class="update_item"><div class="update_item_tag ' + fv[i].tag + '"><div>' + gl[fv[i].tag] + '</div></div><div class="update_item_content">' + fv[i].content + '</div></div>'

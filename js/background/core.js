@@ -44,21 +44,19 @@ var initsto = storage('background', {
     return new Promise((resolve, reject) => {
       var a = initsto.getAll();
       delete a.upload;
+      if(a.userbgs){
+        a.userbgs=a.userbgs.filter(e=>!e.useidb);
+      }
       if (a.bg.type != 'default') {
         a.requireAddon = addon.getAddonBySessionId(a.bg.type).url;
       } else {
-        if (a.bg.data.type == 'userbg' && a.userbg.useidb) {
+        if (a.bg.data.type == 'userbg' && (!a.userbgs.find(e=>e.checked))) {
           a.bg = cloneObj(defbg);
         }
       }
-      if (a.userbg && a.userbg.useidb) {
-        delete a.userbg;
-        alert('不支持同步用户上传的背景', function () {
-          resolve(a);
-        })
-      } else {
+      alert('不支持同步用户上传的背景', function () {
         resolve(a);
-      }
+      })
     });
   },
   rewrite(ast, k, a) {
